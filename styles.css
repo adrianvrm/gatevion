@@ -428,181 +428,124 @@
 
 
 /* =========================================================
-   Premium CSS polish pack — non-breaking visual enhancements
-   (No layout changes: only colors, effects, transitions)
+   Premium details (CSS-only, no layout changes)
+   - Section titles highlighted elegantly
+   - Subtle section backgrounds
+   - Hairline separators that don't shift layout
    ========================================================= */
 
-/* --- Global rendering finesse --- */
-html { scroll-behavior: smooth; }
-body {
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-rendering: optimizeLegibility;
-  font-variant-numeric: tabular-nums;
-  font-feature-settings: "ss01","ss02","tnum","cv01","cv02";
-}
-
-/* --- Theme tokens (opt-in via var()) --- */
+/* Theme tokens */
 :root{
-  --ink: #0f172a;            /* slate-900 */
-  --ink-2: #1f2937;          /* gray-800 */
-  --muted: #64748b;          /* slate-500 */
-  --line: #e6ecf6;
-  --elev: 0 10px 24px rgba(2,6,23,.08);
+  --ink:#0f172a;
+  --muted:#64748b;
+  --accent:#0a84ff;           /* cool premium blue */
+  --accent-2:#2563eb;
+  --hairline: linear-gradient(90deg, rgba(15,23,42,.06), rgba(15,23,42,.22), rgba(15,23,42,.06));
+  --paper: radial-gradient(1200px 600px at 100% -10%, rgba(37,99,235,.05), transparent 40%),
+           radial-gradient(1000px 500px at -10% 100%, rgba(2,6,23,.03), transparent 45%);
+  --card-bg: linear-gradient(180deg,#ffffff,#fbfbfd);
+  --line:#e9eef7;
+  --elev: 0 10px 24px rgba(2,6,23,.07);
   --elev-soft: 0 6px 16px rgba(2,6,23,.06);
-  --elev-inner: inset 0 1px 0 #fff;
-  --accent: #0a84ff;         /* premium blue accent, subtle */
-  --accent-2: #2563eb;       /* hover */
-  --success: #16a34a;
+  --inner: inset 0 1px 0 #fff;
 }
 
-/* --- Links & subtle hover underline --- */
-a { text-decoration: none; }
-a:hover { text-decoration: none; }
-a.underline, .nav a {
-  position: relative;
-}
-a.underline::after, .nav a::after{
-  content:""; position:absolute; left:0; right:100%; bottom:-2px; height:2px;
-  background: linear-gradient(90deg, var(--accent), transparent);
-  transition: right .25s ease;
-}
-a.underline:hover::after, .nav a:hover::after{ right:0; }
-
-/* --- Topbar polish (kept solid) --- */
-.topbar{
-  background:#fff !important;
-  box-shadow: 0 8px 24px rgba(2,6,23,.06), 0 1px 0 rgba(2,6,23,.08);
-  transition: box-shadow .25s ease, background .25s ease;
-}
-
-/* --- Buttons micro-interactions (sizes unchanged) --- */
-.btn, .button, button {
-  position: relative;
-  transition: transform .12s ease, box-shadow .2s ease, background .2s ease, border-color .2s ease;
-  will-change: transform;
-}
-.btn:hover, .button:hover, button:hover {
-  transform: translateY(-1px);
-  box-shadow: var(--elev);
-}
-.btn:active, .button:active, button:active {
-  transform: translateY(0);
-  box-shadow: var(--elev-soft);
-}
-.btn-primary, .button.primary {
-  background: linear-gradient(180deg, var(--accent), var(--accent-2));
-  border-color: rgba(0,0,0,.08);
-  color: #fff;
-  box-shadow: 0 10px 20px rgba(37,99,235,.18), 0 1px 0 rgba(255,255,255,.6) inset;
-}
-.btn-primary:hover, .button.primary:hover {
-  filter: brightness(1.02);
-}
-.btn-primary:active, .button.primary:active {
-  filter: brightness(.98);
-}
-
-/* --- Inputs & selects: premium focus ring (no size change) --- */
-.input, input[type="text"], input[type="email"], input[type="tel"], .select, select, .dp-input, .tp-input {
-  transition: box-shadow .18s ease, border-color .18s ease, background-color .25s ease;
-  box-shadow: var(--elev-inner);
+/* Body subtle background texture (keeps hero clean) */
+body{
   background-color:#fff;
-}
-.input:focus, input:focus, .select:focus, select:focus, .dp-input:focus, .tp-input:focus {
-  border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(10,132,255,.14), var(--elev-inner);
-  outline: none;
-}
-/* Placeholder subtlety */
-::placeholder{ color: #94a3b8; opacity: .9; }
-
-/* --- Hero ticker: pause on hover (no layout impact) --- */
-.hero-left .ticker:hover .ticker-track{ animation-play-state: paused; }
-.hero-left .ticker-chip {
-  transition: transform .18s ease, box-shadow .25s ease, background .25s ease;
-}
-.hero-left .ticker-chip:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 8px 22px rgba(2,6,23,.08), var(--elev-inner);
+  background-image: var(--paper);
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
-/* --- Cards / glass containers --- */
-.card, .glass {
-  background: linear-gradient(180deg, #ffffff, #fbfbfd);
-  border: 1px solid var(--line);
+/* Hairline separators via pseudo, no layout shift */
+section{ position: relative; }
+section:not(.hero)::before{
+  content:""; position:absolute; left:0; right:0; top:0; height:1px; background: var(--hairline);
+  pointer-events:none; z-index:0;
+}
+
+/* Alternate ultra-soft backgrounds for depth */
+section:not(.hero):nth-of-type(even){
+  background-image: radial-gradient(800px 360px at 80% -10%, rgba(37,99,235,.035), transparent 55%);
+}
+
+/* Section title highlight (works with plain <h2>) */
+section .wrap > h2,
+section h2.section-title,
+.section-title{
+  position: relative;
+  color: var(--ink);
+  font-weight: 900;
+  letter-spacing: -0.01em;
+  line-height: 1.1;
+  text-wrap: balance;
+}
+/* Accent underline */
+section .wrap > h2::after,
+section h2.section-title::after,
+.section-title::after{
+  content:""; display:block; height:3px; width:72px; margin-top:12px;
+  background: linear-gradient(90deg, var(--accent), rgba(37,99,235,.0));
+  border-radius: 999px;
+  box-shadow: 0 6px 16px rgba(37,99,235,.25);
+}
+/* Tiny accent spark before title */
+section .wrap > h2::before,
+section h2.section-title::before,
+.section-title::before{
+  content:""; position:absolute; left:-14px; top:.35em; width:8px; height:8px;
+  background: radial-gradient(circle at 30% 30%, #fff, var(--accent) 60%);
+  border-radius: 50%;
+  box-shadow: 0 0 0 3px rgba(10,132,255,.12);
+}
+
+/* Cards/containers keep premium but subtle */
+.card,.glass{
+  background: var(--card-bg);
+  border:1px solid var(--line);
   box-shadow: var(--elev-soft);
   transition: box-shadow .25s ease, transform .18s ease, border-color .25s ease;
 }
-.card:hover, .glass:hover{
-  box-shadow: var(--elev);
-  transform: translateY(-1px);
+.card:hover,.glass:hover{ box-shadow: var(--elev); transform: translateY(-1px); }
+
+/* Inputs focus style kept premium (no size change) */
+.input, input[type="text"], input[type="email"], input[type="tel"], .select, select, .dp-input, .tp-input{
+  box-shadow: var(--inner);
+  transition: box-shadow .18s ease, border-color .18s ease, background-color .25s ease;
+}
+.input:focus, input:focus, .select:focus, select:focus, .dp-input:focus, .tp-input:focus{
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(10,132,255,.14), var(--inner);
+  outline: none;
 }
 
-/* --- Section dividers: luxe hairline --- */
-.section-divider, .hr, hr {
-  border: 0;
-  height: 1px;
-  background: linear-gradient(90deg, rgba(2,6,23,.04), rgba(2,6,23,.18), rgba(2,6,23,.04));
+/* Buttons micro-hover */
+.button, .btn{
+  transition: transform .12s ease, box-shadow .2s ease;
 }
+.button:hover, .btn:hover{ transform: translateY(-1px); box-shadow: var(--elev); }
+.button:active, .btn:active{ transform: translateY(0); box-shadow: var(--elev-soft); }
 
-/* --- FAQ polish --- */
+/* Ticker chips: subtle hover only */
+.hero-left .ticker-chip{ transition: transform .18s ease, box-shadow .25s ease; }
+.hero-left .ticker-chip:hover{ transform: translateY(-1px); box-shadow: 0 8px 18px rgba(2,6,23,.08), var(--inner); }
+
+/* FAQ visual enhancement if exists */
 .faq-item{
   border:1px solid var(--line);
-  border-radius: 14px;
+  border-radius:14px;
   background: linear-gradient(180deg,#fff,#fafbff);
-  box-shadow: var(--elev-inner);
+  box-shadow: var(--inner);
   transition: box-shadow .25s ease, border-color .25s ease, transform .18s ease;
 }
-.faq-item:hover{
-  transform: translateY(-1px);
-  box-shadow: var(--elev);
-  border-color: rgba(2,6,23,.08);
-}
-.faq-item summary{
-  list-style: none;
-  cursor: pointer;
-  font-weight: 700;
-  color: var(--ink);
-}
-.faq-item summary::-webkit-details-marker{ display:none; }
-.faq-item[open]{ border-color: rgba(2,6,23,.12); }
+.faq-item:hover{ transform: translateY(-1px); box-shadow: var(--elev); border-color: rgba(2,6,23,.10); }
+.faq-item summary{ font-weight:700; color:var(--ink); }
+.faq-item[open]{ border-color: rgba(2,6,23,.14); }
 
-/* --- Badges (assurance row) subtle float on hover --- */
-.assurance-row .chip-ghost{
-  transition: transform .18s ease, box-shadow .25s ease;
-}
-.assurance-row .chip-ghost:hover{
-  transform: translateY(-1px);
-  box-shadow: var(--elev);
-}
-
-/* --- Header nav burger (mobile) glow on open (assuming .nav-open on body) --- */
-@media (max-width: 768px){
-  .topbar .burger:focus-visible { box-shadow: 0 0 0 3px rgba(10,132,255,.18); }
-  body.nav-open .topbar{ box-shadow: 0 14px 30px rgba(2,6,23,.12), 0 1px 0 rgba(2,6,23,.08); }
-}
-
-/* --- CTA subtle sheen effect (opt-in: add .cta-sheen to a primary button) --- */
-.cta-sheen{
-  position: relative;
-  overflow: hidden;
-}
-.cta-sheen::after{
-  content:""; position:absolute; top:-120%; left:-20%;
-  width: 60%; height: 300%;
-  background: linear-gradient(120deg, rgba(255,255,255,0) 20%, rgba(255,255,255,.45) 40%, rgba(255,255,255,0) 60%);
-  transform: rotate(25deg);
-  animation: sheen 5s linear infinite;
-}
-@keyframes sheen {
-  0% { transform: translateX(-120%) rotate(25deg); opacity:.6; }
-  100%{ transform: translateX(220%) rotate(25deg); opacity:.6; }
-}
-
-/* --- Reduced motion respect --- */
-@media (prefers-reduced-motion: reduce){
-  * { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; }
-  .hero-left .ticker:hover .ticker-track{ animation-play-state: running; }
-  .cta-sheen::after{ display:none; }
+/* Keep hero fixed-left behavior intact */
+@media (min-width:1024px){
+  .hero .wrap{ align-items: flex-start !important; }
+  .hero-left, .hero-right{ align-self: flex-start !important; }
 }
