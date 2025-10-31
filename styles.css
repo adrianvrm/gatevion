@@ -752,39 +752,3 @@ section h2.section-title::before,
 
 /* Keep popover pickers above the stage glow */
 #ui-portal, .popover{ z-index: 200000 !important; }
-
-
-/* === Premium ticker refinements (no layout change) === */
-.hero-left .ticker-chip{
-  letter-spacing: .01em;
-}
-.hero-left .ticker-chip svg{
-  width:14px; height:14px; flex:0 0 14px;
-  stroke: currentColor;
-  fill: none;
-  stroke-width: 1.8;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  shape-rendering: geometricPrecision;
-  vector-effect: non-scaling-stroke;
-  opacity: .92;
-}
-.hero-left .ticker{
-  background: linear-gradient(180deg,#ffffff,#f6f9ff);
-  border-color: #e5eaf4;
-}
-/* Subtle highlight on hover & accessible focus */
-.hero-left .ticker-chip:hover{
-  text-shadow: 0 0 1px rgba(15,23,42,.06);
-}
-.hero-left .ticker-chip:focus-visible{
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(37,99,235,.18), inset 0 1px 0 #fff;
-}
-/* High-contrast edges to avoid band blending into background */
-.hero-left .ticker::before{ background: linear-gradient(90deg,#fff, rgba(255,255,255,0)); }
-.hero-left .ticker::after { background: linear-gradient(270deg,#fff, rgba(255,255,255,0)); }
-
-@media (prefers-reduced-motion: reduce){
-  .hero-left .ticker-track{ animation: none; }
-}
