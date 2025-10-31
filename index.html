@@ -1,23 +1,121 @@
-<!doctype html><html lang="ro"><head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Gatevion — Broker premium închirieri auto</title>
-<link rel="icon" href="/favicon.ico">
-<style>:root{--ink:#0b1f2a;--teal:#0f6e66;--bg:#fff;--muted:#5b6778}
-*{box-sizing:border-box}html,body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial}
-.wrap{max-width:980px;margin:0 auto;padding:24px}.hero{background:linear-gradient(120deg,#0b1f2a,#0b3b3b);color:#fff;border-radius:16px;padding:36px;margin-top:20px}
-.btn{display:inline-flex;gap:8px;align-items:center;background:var(--teal);color:#fff;border:none;border-radius:14px;padding:12px 16px;cursor:pointer;text-decoration:none}
-.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:12px;margin-top:16px}
-.card{border:1px solid #e6e8eb;border-radius:14px;padding:14px}.col-4{grid-column:span 4}@media(max-width:840px){.col-4{grid-column:1/-1}}
-footer{margin:28px 0;color:#6c7683;font-size:14px}</style></head>
-<body><div class="wrap">
-<header><strong>Gatevion</strong> — Premium Car Rental Broker</header>
-<section class="hero"><h1>Închirieri auto la aeroport — clar, securizat, premium</h1>
-<p>Trimite solicitarea în 2 pași, documentele sunt încărcate securizat, iar cererea rămâne <strong>PENDING</strong> până la accept/decline. Nu se face plată online.</p>
-<a class="btn" href="./rezervare.html">Rezervă acum</a></section>
-<section class="grid">
-<div class="card col-4"><strong>Standard</strong><p class="muted">Cel mai mic preț · date fixe</p></div>
-<div class="card col-4"><strong>Flex</strong><p class="muted">Modifici perioada fără stres</p></div>
-<div class="card col-4"><strong>Otopeni & Băneasa</strong><p class="muted">Focalizare aeroport</p></div>
+<!doctype html>
+<html lang="ro">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Gatevion — Broker premium închirieri auto (Otopeni & Băneasa)</title>
+<link rel="canonical" href="https://gatevion.ro/"/>
+<meta name="description" content="Gatevion — broker premium pentru închirieri auto la aeroport. Solicitarea rămâne în PENDING până la accept/decline. Pachete Standard/Flex. Încărcare CI & permis. RO/EN."/>
+<meta property="og:title" content="Gatevion — Premium Car Rental Broker"/>
+<meta property="og:type" content="website"/>
+<meta property="og:url" content="https://gatevion.ro/"/>
+<meta property="og:description" content="Închirieri auto la aeroport — clar, securizat, premium. Cererea rămâne PENDING până la accept/decline."/>
+<link rel="icon" href="/assets/favicon.svg"/>
+<link rel="stylesheet" href="/assets/styles.css"/>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Gatevion",
+  "url": "https://gatevion.ro",
+  "logo": "https://gatevion.ro/assets/favicon.svg",
+  "sameAs": []
+}
+</script>
+</head>
+<body>
+<header class="nav">
+  <div class="container inner">
+    <div class="brand"><span class="logo"></span><span>Gatevion</span></div>
+    <nav class="navlinks">
+      <a href="#why">De ce</a>
+      <a href="#packages">Pachete</a>
+      <a href="#airports">Aeroporturi</a>
+      <a href="#faq">Întrebări</a>
+      <a class="btn" href="/rezervare.html">Rezervă</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="container fade">
+    <span class="badge">Broker premium · Încredere totală</span>
+    <h1>Închirieri auto la aeroport — clar, securizat, premium</h1>
+    <p class="sub">Trimite solicitarea în <strong>2 pași</strong>, încarci documentele securizat, iar cererea rămâne <strong>PENDING</strong> până la accept/decline. Plata se face doar după confirmare.</p>
+    <div class="chips">
+      <div class="chip">3D Secure-ready</div>
+      <div class="chip">Parteneri verificați</div>
+      <div class="chip">RO + EN</div>
+    </div>
+    <div class="cta">
+      <a class="btn" href="/rezervare.html">Rezervă acum</a>
+      <a class="btn ghost" href="#why">Cum funcționează</a>
+    </div>
+  </div>
 </section>
-<footer>© <span id="y"></span> Gatevion</footer>
-</div><script>document.getElementById('y').textContent=new Date().getFullYear()</script></body></html>
+
+<section id="why" class="section">
+  <div class="container">
+    <h2>De ce Gatevion</h2>
+    <p class="muted">Siguranță, transparență, control — fără presiune de timp.</p>
+    <div class="grid" style="margin-top:12px">
+      <div class="col-4"><div class="card fade"><strong>Siguranță totală</strong><p class="muted">Upload criptat în UE, scan AV, acces doar staff autorizat. Plata se finalizează doar după confirmare.</p></div></div>
+      <div class="col-4"><div class="card fade" style="animation-delay:.05s"><strong>Fără presiune</strong><p class="muted">Solicitarea rămâne PENDING până la decizia partenerului. Primești update pe email/SMS.</p></div></div>
+      <div class="col-4"><div class="card fade" style="animation-delay:.1s"><strong>Parteneri verificați</strong><p class="muted">Răspunsurile partenerilor sunt auditate. Alegem opțiunea de încredere, la preț corect.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<section id="packages" class="section" style="background:var(--fog)">
+  <div class="container">
+    <h2>Alege pachetul potrivit</h2>
+    <p class="muted">Standard pentru cel mai mic preț • Flex pentru schimbarea perioadei</p>
+    <div class="grid" style="margin-top:12px">
+      <div class="col-6"><div class="card fade">
+        <div style="display:flex;justify-content:space-between;align-items:center"><strong>Standard</strong><span class="muted">date fixe</span></div>
+        <ul style="margin:10px 0 0 18px;color:var(--muted)"><li>Cel mai bun preț disponibil</li><li>Fără modificarea perioadei după trimitere</li><li>Plata se finalizează doar după confirmare</li></ul>
+        <div style="margin-top:12px"><a class="btn" href="/rezervare.html">Rezervă Standard</a></div>
+      </div></div>
+      <div class="col-6"><div class="card fade" style="animation-delay:.05s">
+        <div style="display:flex;justify-content:space-between;align-items:center"><strong>Flex</strong><span class="muted">modifici perioada</span></div>
+        <ul style="margin:10px 0 0 18px;color:var(--muted)"><li>Schimbi perioada fără stres</li><li>Termeni clari, fără surprize</li><li>Status PENDING până la accept/decline</li></ul>
+        <div style="margin-top:12px"><a class="btn" href="/rezervare.html">Rezervă Flex</a></div>
+      </div></div>
+    </div>
+  </div>
+</section>
+
+<section id="airports" class="section">
+  <div class="container">
+    <h2>Otopeni & Băneasa</h2>
+    <p class="muted">Acoperire rapidă pentru sosiri comerciale și zboruri business/private.</p>
+    <div class="grid" style="margin-top:12px">
+      <div class="col-6"><div class="card fade"><strong>Otopeni (OTP)</strong><p class="muted">Preluare/retur la aeroport sau în proximitate, în funcție de partener.</p></div></div>
+      <div class="col-6"><div class="card fade" style="animation-delay:.05s"><strong>Băneasa (BBU)</strong><p class="muted">Zboruri private & corporate, timpi de așteptare minimizați.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<section id="faq" class="section" style="background:var(--fog)">
+  <div class="container">
+    <h2>Întrebări frecvente</h2>
+    <div class="grid" style="margin-top:12px">
+      <div class="col-6"><div class="card fade"><strong>Se blochează bani la trimitere?</strong><p class="muted">Nu. Plata se finalizează doar după ce un partener acceptă rezervarea.</p></div></div>
+      <div class="col-6"><div class="card fade" style="animation-delay:.05s"><strong>Cât durează confirmarea?</strong><p class="muted">Nu afișăm un timp-limită. Primești notificări; rămâne PENDING până la accept/decline.</p></div></div>
+      <div class="col-6"><div class="card fade" style="animation-delay:.1s"><strong>Ce documente sunt necesare?</strong><p class="muted">CI & permis (față/verso). Încărcare criptată, retenție limitată, acces doar personal autorizat.</p></div></div>
+      <div class="col-6"><div class="card fade" style="animation-delay:.15s"><strong>Ce înseamnă Flex?</strong><p class="muted">Posibilitatea de a modifica perioada fără stres, pe o politică clară.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<footer class="section">
+  <div class="container">
+    <hr class="sep"/>
+    <div class="foot">
+      <div><strong>Gatevion</strong> — Premium Car Rental Broker</div>
+      <div>Termeni • Politică • Cookies</div>
+    </div>
+  </div>
+</footer>
+</body>
+</html>
