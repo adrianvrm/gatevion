@@ -1,5 +1,8 @@
 // Close all popovers util
-function closeAllPopovers(){ document.querySelectorAll('.popover.open').forEach(p=> p.classList.remove('open')); }
+function closeAllPopovers(){
+  document.querySelectorAll('.popover.open').forEach(p=> p.classList.remove('open'));
+  document.querySelectorAll('.field.active').forEach(f=> f.classList.remove('active'));
+}
 
 // Config data
 const AIRPORTS = [
@@ -25,12 +28,12 @@ function makeCalendar(date, selectedISO, minISO){
   const todayISO = fmtISO(new Date());
   const minBound = minISO || todayISO; // block past days by default
 
-  let html = '<header><button class="icon-btn" data-cal="prev" aria-label="Luna anterioară">‹</button><div class="month">'+RO_MONTHS[month]+' '+year+'</div><div class="nav"><button class="icon-btn" data-cal="today" aria-label="Astăzi">•</button><button class="icon-btn" data-cal="next" aria-label="Luna următoare">›</button></div></header>';
-  html += '<div class="cal-grid">';
+  let html = '<header><button class=\"icon-btn\" data-cal=\"prev\" aria-label=\"Luna anterioară\">‹</button><div class=\"month\">'+RO_MONTHS[month]+' '+year+'</div><div class=\"nav\"><button class=\"icon-btn\" data-cal=\"today\" aria-label=\"Astăzi\">•</button><button class=\"icon-btn\" data-cal=\"next\" aria-label=\"Luna următoare\">›</button></div></header>';
+  html += '<div class=\"cal-grid\">';
   // DOW
-  for(const d of RO_DOW){ html += '<div class="cal-dow">'+d+'</div>'; }
+  for(const d of RO_DOW){ html += '<div class=\"cal-dow\">'+d+'</div>'; }
   // Leading blanks (previous month)
-  for(let i=0;i<startOffset;i++){ html += '<div class="cal-day muted"></div>'; }
+  for(let i=0;i<startOffset;i++){ html += '<div class=\"cal-day muted\"></div>'; }
   // Month days
   for(let day=1; day<=daysInMonth; day++){
     const iso = `${year}-${pad(month+1)}-${pad(day)}`;
@@ -38,18 +41,21 @@ function makeCalendar(date, selectedISO, minISO){
     if(iso < minBound) cls += ' disabled';
     if(iso===fmtISO(new Date())) cls += ' today';
     if(selectedISO && iso===selectedISO) cls += ' selected';
-    html += `<div class="${cls}" data-date="${iso}">${day}</div>`;
+    html += `<div class=\"${cls}\" data-date=\"${iso}\">${day}</div>`;
   }
   // Trailing blanks to complete grid
   const totalCells = RO_DOW.length + startOffset + daysInMonth; // incl. header row
   const rem = (7 - (totalCells % 7)) % 7;
-  for(let i=0;i<rem;i++){ html += '<div class="cal-day muted"></div>'; }
+  for(let i=0;i<rem;i++){ html += '<div class=\"cal-day muted\"></div>'; }
   html += '</div>';
   return html;
 }
 
+function activateField(picker){ const f = picker.closest('.field'); if(f){ f.classList.add('active'); } }
+function deactivateField(picker){ const f = picker.closest('.field'); if(f){ f.classList.remove('active'); } }
+
 function initAirportPicker(picker){
-  const hidden = picker.querySelector('input[type="hidden"]');
+  const hidden = picker.querySelector('input[type=\"hidden\"]');
   const display = picker.querySelector('.ap-input');
   const pop = picker.querySelector('.menu-pop');
   const menu = pop.querySelector('.menu');
@@ -58,16 +64,16 @@ function initAirportPicker(picker){
     let html = '';
     for(const ap of AIRPORTS){
       const active = hidden.value===ap.value ? ' active' : '';
-      html += `<div class="menu-item${active}" data-val="${ap.value}" data-label="${ap.label}">
-        <span class="code">${ap.value}</span>
-        <span class="name">${ap.label}</span>
-        <span class="hint">${ap.hint||''}</span>
+      html += `<div class=\"menu-item${active}\" data-val=\"${ap.value}\" data-label=\"${ap.label}\">
+        <span class=\"code\">${ap.value}</span>
+        <span class=\"name\">${ap.label}</span>
+        <span class=\"hint\">${ap.hint||''}</span>
       </div>`;
     }
     menu.innerHTML = html;
   }
-  function open(){ closeAllPopovers(); pop.classList.add('open'); build(); document.addEventListener('click', onDoc, true); }
-  function close(){ pop.classList.remove('open'); document.removeEventListener('click', onDoc, true); }
+  function open(){ closeAllPopovers(); pop.classList.add('open'); build(); activateField(picker); document.addEventListener('click', onDoc, true); }
+  function close(){ pop.classList.remove('open'); deactivateField(picker); document.removeEventListener('click', onDoc, true); }
   function onDoc(e){ if(!picker.contains(e.target)) close(); }
 
   display.addEventListener('click', (e)=>{ e.stopPropagation(); pop.classList.contains('open')? close(): open(); });
@@ -82,7 +88,7 @@ function initAirportPicker(picker){
 }
 
 function initDatePicker(picker){
-  const hidden = picker.querySelector('input[type="hidden"]');
+  const hidden = picker.querySelector('input[type=\"hidden\"]');
   const display = picker.querySelector('.dp-input');
   const pop = picker.querySelector('.calendar-pop');
   const cal = pop.querySelector('.calendar');
@@ -91,14 +97,14 @@ function initDatePicker(picker){
   function getMinISO(){
     const today = fmtISO(new Date());
     if(hidden.name === 'end_date'){
-      const sd = document.querySelector('input[name="start_date"]')?.value || '';
+      const sd = document.querySelector('input[name=\"start_date\"]')?.value || '';
       if(sd && sd > today) return sd; // end_date min is start_date (or today)
     }
     return today;
   }
 
-  function open(){ closeAllPopovers(); pop.classList.add('open'); render(); document.addEventListener('click', onDoc, true); }
-  function close(){ pop.classList.remove('open'); document.removeEventListener('click', onDoc, true); }
+  function open(){ closeAllPopovers(); pop.classList.add('open'); render(); activateField(picker); document.addEventListener('click', onDoc, true); }
+  function close(){ pop.classList.remove('open'); deactivateField(picker); document.removeEventListener('click', onDoc, true); }
   function onDoc(e){ if(!picker.contains(e.target)) close(); }
   function render(){
     const minISO = getMinISO();
@@ -138,7 +144,7 @@ function initDatePicker(picker){
 }
 
 function initTimePicker(picker){
-  const hidden = picker.querySelector('input[type="hidden"]');
+  const hidden = picker.querySelector('input[type=\"hidden\"]');
   const display = picker.querySelector('.tp-input');
   const pop = picker.querySelector('.time-pop');
   const list = pop.querySelector('.time-list');
@@ -161,12 +167,12 @@ function initTimePicker(picker){
       const isDisabled = (minTime && cmpTime(t, minTime) < 0);
       const active = hidden.value===t ? ' active' : '';
       const disabledCls = isDisabled ? ' disabled' : '';
-      html += `<div class="time-opt${active}${disabledCls}" data-time="${t}" aria-disabled="${isDisabled}">${t}</div>`;
+      html += `<div class=\"time-opt${active}${disabledCls}\" data-time=\"${t}\" aria-disabled=\"${isDisabled}\">${t}</div>`;
     }
     list.innerHTML = html;
   }
-  function open(){ closeAllPopovers(); pop.classList.add('open'); build(); document.addEventListener('click', onDoc, true); }
-  function close(){ pop.classList.remove('open'); document.removeEventListener('click', onDoc, true); }
+  function open(){ closeAllPopovers(); pop.classList.add('open'); build(); activateField(picker); document.addEventListener('click', onDoc, true); }
+  function close(){ pop.classList.remove('open'); deactivateField(picker); document.removeEventListener('click', onDoc, true); }
   function onDoc(e){ if(!picker.contains(e.target)) close(); }
 
   display.addEventListener('click', (e)=>{ e.stopPropagation(); pop.classList.contains('open')? close(): open(); });
@@ -187,7 +193,7 @@ function initFAQ(){
       const item = btn.closest('.faq-item');
       const expanded = item.getAttribute('aria-expanded')==='true';
       // accordion: close others
-      document.querySelectorAll('.faq-item[aria-expanded="true"]').forEach(i=> i.setAttribute('aria-expanded','false'));
+      document.querySelectorAll('.faq-item[aria-expanded=\"true\"]').forEach(i=> i.setAttribute('aria-expanded','false'));
       item.setAttribute('aria-expanded', expanded?'false':'true');
     });
   });
@@ -210,9 +216,9 @@ document.addEventListener('DOMContentLoaded', () => {
   if(langBtn2) langBtn2.addEventListener('click', toggleLang);
 
   // Initialize custom pickers
-  document.querySelectorAll('.picker[data-type="airport"]').forEach(initAirportPicker);
-  document.querySelectorAll('.picker[data-type="date"]').forEach(initDatePicker);
-  document.querySelectorAll('.picker[data-type="time"]').forEach(initTimePicker);
+  document.querySelectorAll('.picker[data-type=\"airport\"]').forEach(initAirportPicker);
+  document.querySelectorAll('.picker[data-type=\"date\"]').forEach(initDatePicker);
+  document.querySelectorAll('.picker[data-type=\"time\"]').forEach(initTimePicker);
   initFAQ();
 
   const form = document.getElementById('searchForm');
@@ -222,17 +228,17 @@ document.addEventListener('DOMContentLoaded', () => {
     if(!live || !form) return;
     const arr = form.arr_airport?.value || '';
     const dep = form.dep_airport?.value || '';
-    const arrLabel = document.querySelector('.picker[data-target="arr_airport"] .ap-input')?.value || arr || '—';
-    const depLabel = document.querySelector('.picker[data-target="dep_airport"] .ap-input')?.value || dep || '—';
+    const arrLabel = document.querySelector('.picker[data-target=\"arr_airport\"] .ap-input')?.value || arr || '—';
+    const depLabel = document.querySelector('.picker[data-target=\"dep_airport\"] .ap-input')?.value || dep || '—';
     const sd = form.start_date?.value || '';
     const st = form.start_time?.value || '';
     const ed = form.end_date?.value || '';
     const et = form.end_time?.value || '';
     const hasAny = arr || dep || (sd&&st) || (ed&&et);
     live.innerHTML = hasAny ? `
-      <span class="chip"><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#0f172a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><strong>Aeroporturi</strong> ${arrLabel} → ${depLabel}</span>
-      <span class="chip"><svg viewBox="0 0 24 24" fill="none"><path d="M16 2v4M8 2v4M3 10h18" stroke="#0f172a" stroke-width="2"/></svg><strong>Preluare</strong> ${sd?fmtDisplayDate(sd):'—'} ${st||''}</span>
-      <span class="chip"><svg viewBox="0 0 24 24" fill="none"><path d="M16 2v4M8 2v4M3 10h18" stroke="#0f172a" stroke-width="2"/></svg><strong>Returnare</strong> ${ed?fmtDisplayDate(ed):'—'} ${et||''}</span>
+      <span class=\"chip\"><strong>Aeroporturi</strong> ${arrLabel} → ${depLabel}</span>
+      <span class=\"chip\"><strong>Preluare</strong> ${sd?fmtDisplayDate(sd):'—'} ${st||''}</span>
+      <span class=\"chip\"><strong>Returnare</strong> ${ed?fmtDisplayDate(ed):'—'} ${et||''}</span>
     ` : '';
     live.classList.toggle('hidden', !hasAny);
   }
@@ -243,13 +249,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // Enforce end_date >= start_date
     if(e.detail?.name==='start_date'){
       const sd = e.detail.value;
-      const endHidden = document.querySelector('input[name="end_date"]');
-      const endDisplay = document.querySelector('.picker[data-target="end_date"] .dp-input');
-      const endField = document.querySelector('.picker[data-target="end_date"]').closest('.field');
+      const endHidden = document.querySelector('input[name=\"end_date\"]');
+      const endDisplay = document.querySelector('.picker[data-target=\"end_date\"] .dp-input');
+      const endField = document.querySelector('.picker[data-target=\"end_date\"]').closest('.field');
       if(endHidden && endHidden.value && endHidden.value < sd){
         endHidden.value=''; if(endDisplay) endDisplay.value=''; if(endField) endField.classList.remove('filled');
       }
-      const endPicker = document.querySelector('.picker[data-target="end_date"]');
+      const endPicker = document.querySelector('.picker[data-target=\"end_date\"]');
       if(endPicker && endPicker._renderCal) endPicker._renderCal();
     }
     // Enforce end_time >= start_time when same day
@@ -261,7 +267,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if(sd && ed && sd===ed && st){
         // if currently chosen end_time is earlier than start_time, reset it
         if(et && cmpTime(et, st) < 0){
-          const eHidden = form.end_time; const eDisplay = document.querySelector('.picker[data-target="end_time"] .tp-input'); const eField = document.querySelector('.picker[data-target="end_time"]').closest('.field');
+          const eHidden = form.end_time; const eDisplay = document.querySelector('.picker[data-target=\"end_time\"] .tp-input'); const eField = document.querySelector('.picker[data-target=\"end_time\"]').closest('.field');
           eHidden.value=''; if(eDisplay) eDisplay.value=''; if(eField) eField.classList.remove('filled');
         }
       }
@@ -270,7 +276,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Initialize filled state on load for all pickers
   document.querySelectorAll('.picker').forEach(p=>{
-    const h = p.querySelector('input[type="hidden"]');
+    const h = p.querySelector('input[type=\"hidden\"]');
     if(h && h.value){ p.closest('.field')?.classList.add('filled'); }
   });
 

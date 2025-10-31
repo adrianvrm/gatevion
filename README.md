@@ -1,10 +1,8 @@
-# Gatevion – Landing (static) v3
-Acest pachet conține varianta actualizată cu cerințele recente:
+# Gatevion – Landing (static) v4
+Cerințe implementate:
+- **Picker aeroport** peste celelalte controale la reselectare (fix stacking context): fără `transform` pe `.field.filled`, `overflow: visible` pe panou, `.field.active{ z-index:100000; isolation:isolate }` + toggle din JS la open/close.
+- **Badge-uri** mai mici, încât să încapă pe **o singură linie** (nowrap pe ≥768px).
+- **Dată & oră** puțin mai mici (13px) și padding redus pentru a încăpea complet în casete.
+- Header stilizat + link **Întrebări frecvente**.
 
-- Input placeholders: **„Data”** / **„Ora”**
-- Copy erou: **„Trimiți solicitarea. Primești confirmarea. Plătești la livrare.”**
-- **4 badge-uri** imediat sub copy (nu într-o secțiune separată)
-- Header cu link la **Întrebări frecvente** + stilizare nav
-- Popover aeroport: **z-index** maxim + `overflow:visible` pe panou => rămâne peste data/ora când reselectezi
-- Data și ora: text **complet vizibil** în controale (fără ellipsis), font 14px
-- Divizoare decorative `.divider` între secțiuni
+Testează local deschizând `index.html`.
