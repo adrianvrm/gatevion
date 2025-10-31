@@ -221,6 +221,59 @@ document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('.picker[data-type=\"time\"]').forEach(initTimePicker);
   initFAQ();
 
+  // ===== Portal for popovers (date/time/airport) to render OVER section borders =====
+  (function(){
+    let portal = document.getElementById('ui-portal');
+    if(!portal){
+      portal = document.createElement('div');
+      portal.id = 'ui-portal';
+      document.body.appendChild(portal);
+    }
+    function placePopover(picker){
+      const pop = picker.querySelector('.popover');
+      if(!pop) return;
+      // move popover into portal
+      if(pop.parentElement !== portal) portal.appendChild(pop);
+      const r = picker.getBoundingClientRect();
+      // position below the picker, keep within viewport
+      const vw = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+      const ph = pop.offsetHeight || 240;
+      const pw = pop.offsetWidth || 240;
+      let top = r.bottom + 6;
+      if(top + ph > window.innerHeight - 12){ top = Math.max(12, r.top - ph - 6); } // flip if needed
+      let left = Math.min(Math.max(12, r.left), vw - pw - 12);
+      pop.style.top = top + 'px';
+      pop.style.left = left + 'px';
+    }
+    function bindPicker(picker){
+      const pop = picker.querySelector('.popover');
+      if(!pop) return;
+      const openEvents = ['click','focusin'];
+      openEvents.forEach(evt=> picker.addEventListener(evt, ()=>{
+        picker.classList.add('open');
+        // wait for content paint
+        requestAnimationFrame(()=>{ placePopover(picker); });
+      }));
+      window.addEventListener('scroll', ()=>{
+        if(picker.classList.contains('open')) placePopover(picker);
+      }, true);
+      window.addEventListener('resize', ()=>{
+        if(picker.classList.contains('open')) placePopover(picker);
+      });
+      // Close if clicked outside
+      document.addEventListener('click', (e)=>{
+        if(!picker.classList.contains('open')) return;
+        const popNow = picker.querySelector('.popover');
+        if(popNow && (popNow.contains(e.target) || picker.contains(e.target))) return;
+        picker.classList.remove('open');
+        // hide popover
+        if(popNow){ popNow.style.top='-9999px'; popNow.style.left='-9999px'; }
+      });
+    }
+    document.querySelectorAll('.picker').forEach(bindPicker);
+  })();
+
+
 
   // Mobile nav
   const mToggle = document.getElementById('mobileToggle');
