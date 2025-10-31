@@ -255,7 +255,7 @@ document.addEventListener('DOMContentLoaded', () => {
       <span class=\"chip\"><strong>Preluare</strong> ${sd?fmtDisplayDate(sd):'—'} ${st||''}</span>
       <span class=\"chip\"><strong>Returnare</strong> ${ed?fmtDisplayDate(ed):'—'} ${et||''}</span>
     ` : '';
-    live.classList.toggle('hidden', !hasAny);
+    live.classList.toggle('empty', !hasAny);
   }
 
   // React to picker changes
