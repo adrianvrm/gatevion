@@ -1,13 +1,21 @@
-# Gatevion — Static starter (pentru Vercel)
+# Gatevion – Landing (static)
+Acest pachet conține varianta statică pentru pagina principală Gatevion:
 
-Acest folder conține un **site static minim** (un singur `index.html`) ca să poți face primul deploy pe Vercel.
+- `index.html` (landing)
+- `styles.css` (CSS personalizat)
+- `app.js` (JS pentru pickere: aeroport, dată, oră, + FAQ, + reguli validare)
+- `rezultate.html` (stub, ca să nu 404 la butonul „Caută mașini disponibile”)
 
-## Pași
-1) Creează un repo pe GitHub (nume: `gatevion`).
-2) În GitHub → `Add file` → `Upload files` → urcă **tot folderul** (sau arhiva ZIP dezarhivată).
-3) În Vercel → **Add New → Project → Import Git Repository** → alege repo-ul → **Deploy**.
-4) În proiectul din Vercel → **Settings → Domains → Add** → `gatevion.ro`.  
-   - În DNS la .ro: **A** `@` → `76.76.21.21` ; **CNAME** `www` → `cname.vercel-dns.com`
-5) După propagare: site-ul va fi live pe `https://gatevion.ro`.
+## Cum testez local
+Deschide `index.html` în browser (dublu click). Nu sunt necesare servere locale – totul e static.
 
-Ulterior vom înlocui conținutul cu proiectul Next.js complet.
+## Deploy pe Vercel
+1. Autentifică-te pe vercel.com.
+2. Creează un proiect nou -> **Import Project** -> **Drag&drop** acest folder/zip.
+3. Build settings: nu e nevoie de build; output static.
+4. După preview, apasă **Promote to Production**.
+
+## Note tehnice
+- Folosește Tailwind CDN doar pentru prototip. Când migrezi la Next.js, mutăm CSS în module + folosim Tailwind CLI/JIT.
+- Calendarul blochează datele din trecut, iar returnarea nu poate fi înaintea preluării (în aceeași zi).
+- Pickerul de aeroport e custom, cu popover „over” (z-index mare) și închide alte popovere când se deschide.

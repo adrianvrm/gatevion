@@ -1,121 +1,265 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ro">
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Gatevion — Broker premium închirieri auto (Otopeni & Băneasa)</title>
-<link rel="canonical" href="https://gatevion.ro/"/>
-<meta name="description" content="Gatevion — broker premium pentru închirieri auto la aeroport. Solicitarea rămâne în PENDING până la accept/decline. Pachete Standard/Flex. Încărcare CI & permis. RO/EN."/>
-<meta property="og:title" content="Gatevion — Premium Car Rental Broker"/>
-<meta property="og:type" content="website"/>
-<meta property="og:url" content="https://gatevion.ro/"/>
-<meta property="og:description" content="Închirieri auto la aeroport — clar, securizat, premium. Cererea rămâne PENDING până la accept/decline."/>
-<link rel="icon" href="/assets/favicon.svg"/>
-<link rel="stylesheet" href="/assets/styles.css"/>
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "Organization",
-  "name": "Gatevion",
-  "url": "https://gatevion.ro",
-  "logo": "https://gatevion.ro/assets/favicon.svg",
-  "sameAs": []
-}
-</script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Gatevion – Broker premium de închirieri auto</title>
+  <meta name="description" content="Gatevion este brokerul premium de închirieri auto. Rezervă simplu – status PENDING până la Accept/Decline. Aeroporturi OTP & BBU." />
+  <link rel="canonical" href="https://gatevion.ro/" />
+  <link rel="alternate" href="https://gatevion.ro/" hreflang="ro" />
+  <link rel="alternate" href="https://gatevion.ro/en" hreflang="en" />
+  <meta name="theme-color" content="#0f172a" />
+
+  <!-- TailwindCSS CDN for prototyping -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: { extend: { colors: { primary: '#0f172a' }, fontFamily: { sans: ['Manrope','Inter','system-ui','Segoe UI','Roboto','Helvetica','Arial','sans-serif'] }, boxShadow:{ soft:'0 10px 30px rgba(0,0,0,.08)' } } }
+    }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="./styles.css" />
 </head>
-<body>
-<header class="nav">
-  <div class="container inner">
-    <div class="brand"><span class="logo"></span><span>Gatevion</span></div>
-    <nav class="navlinks">
-      <a href="#why">De ce</a>
-      <a href="#packages">Pachete</a>
-      <a href="#airports">Aeroporturi</a>
-      <a href="#faq">Întrebări</a>
-      <a class="btn" href="/rezervare.html">Rezervă</a>
-    </nav>
-  </div>
-</header>
+<body class="font-sans text-slate-900 bg-white">
+  <!-- Header -->
+  <header class="sticky top-0 z-50 bg-white/90 border-b border-slate-100 topbar" id="topbar">
+    <div class="wrap h-16 flex items-center justify-between">
+      <a href="/" class="flex items-center gap-2" aria-label="Gatevion home">
+        <!-- Inline SVG logo -->
+        <svg class="h-8 w-auto" viewBox="0 0 180 32" aria-label="Gatevion logo" role="img">
+          <g>
+            <circle cx="16" cy="16" r="12" fill="#0f172a" fill-opacity="0.08"></circle>
+            <path d="M16 8c-4.4 0-8 3.6-8 8s3.6 8 8 8c3 0 5.7-1.6 7.1-4.1l-3.2-1.8c-.8 1.4-2.2 2.3-3.9 2.3-2.5 0-4.5-2-4.5-4.5S13.5 11.5 16 11.5c1.7 0 3.1.9 3.9 2.3H16v3h7.5c.1-.4.1-.8.1-1.3 0-4.4-3.6-8-7.6-8z" fill="#0f172a"></path>
+            <text x="36" y="22" font-family="Manrope, Inter, Segoe UI, Roboto, Arial, sans-serif" font-weight="700" font-size="16" fill="#0f172a" letter-spacing=".5">Gatevion</text>
+          </g>
+        </svg>
+      </a>
+      <nav class="hidden md:flex items-center gap-6">
+        <a href="#cum-functioneaza" class="text-slate-600 hover:text-slate-900">Cum funcționează</a>
+        <a href="#aeroporturi" class="text-slate-600 hover:text-slate-900">Aeroporturi</a>
+      </nav>
+      <div class="flex items-center gap-3">
+        <button id="langBtn" class="text-sm px-3 py-1 rounded-full border border-slate-200 hover:border-slate-300">RO / EN</button>
+        <a href="/rezultate.html" class="btn btn-primary" aria-label="Caută mașini disponibile">Caută mașini disponibile</a>
+      </div>
+    </div>
+  </header>
 
-<section class="hero">
-  <div class="container fade">
-    <span class="badge">Broker premium · Încredere totală</span>
-    <h1>Închirieri auto la aeroport — clar, securizat, premium</h1>
-    <p class="sub">Trimite solicitarea în <strong>2 pași</strong>, încarci documentele securizat, iar cererea rămâne <strong>PENDING</strong> până la accept/decline. Plata se face doar după confirmare.</p>
-    <div class="chips">
-      <div class="chip">3D Secure-ready</div>
-      <div class="chip">Parteneri verificați</div>
-      <div class="chip">RO + EN</div>
-    </div>
-    <div class="cta">
-      <a class="btn" href="/rezervare.html">Rezervă acum</a>
-      <a class="btn ghost" href="#why">Cum funcționează</a>
-    </div>
-  </div>
-</section>
+  <!-- Hero -->
+  <section class="relative overflow-hidden hero">
+    <div class="wrap py-20">
+      <div class="grid-12 items-center">
+        <div class="hero-copy hero-left">
+          <h1>Închiriază în siguranță, printr-un broker</h1>
+          <p class="mt-4 text-lg text-slate-600">Trimiți solicitarea, primești confirmarea. Plătești la livrare.</p>
+        </div>
+        <div class="relative hero-right">
+          <div class="glass rounded-3xl p-6 shadow-soft">
+            <form id="searchForm" action="/rezultate.html" class="grid grid-cols-1 gap-4" aria-label="Căutare rapidă">
+              <div class="grid grid-cols-2 gap-3">
+                <div class="field">
+                  <label class="label">Aeroport sosire</label>
+                  <div class="picker picker--airport" data-type="airport" data-target="arr_airport">
+                    <input type="hidden" name="arr_airport" />
+                    <input type="text" class="input select--airport mt-1 w-full ap-input" placeholder="Alege aeroport" readonly />
+                    <div class="popover menu-pop">
+                      <div class="menu"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="field">
+                  <label class="label">Aeroport plecare</label>
+                  <div class="picker picker--airport" data-type="airport" data-target="dep_airport">
+                    <input type="hidden" name="dep_airport" />
+                    <input type="text" class="input select--airport mt-1 w-full ap-input" placeholder="Alege aeroport" readonly />
+                    <div class="popover menu-pop">
+                      <div class="menu"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
 
-<section id="why" class="section">
-  <div class="container">
-    <h2>De ce Gatevion</h2>
-    <p class="muted">Siguranță, transparență, control — fără presiune de timp.</p>
-    <div class="grid" style="margin-top:12px">
-      <div class="col-4"><div class="card fade"><strong>Siguranță totală</strong><p class="muted">Upload criptat în UE, scan AV, acces doar staff autorizat. Plata se finalizează doar după confirmare.</p></div></div>
-      <div class="col-4"><div class="card fade" style="animation-delay:.05s"><strong>Fără presiune</strong><p class="muted">Solicitarea rămâne PENDING până la decizia partenerului. Primești update pe email/SMS.</p></div></div>
-      <div class="col-4"><div class="card fade" style="animation-delay:.1s"><strong>Parteneri verificați</strong><p class="muted">Răspunsurile partenerilor sunt auditate. Alegem opțiunea de încredere, la preț corect.</p></div></div>
-    </div>
-  </div>
-</section>
+              <div class="grid grid-cols-2 gap-3">
+                <div class="field">
+                  <label class="label">Data/ora preluare</label>
+                  <div class="grid grid-cols-2 gap-2 items-center">
+                    <div class="picker" data-type="date" data-target="start_date">
+                      <input type="hidden" name="start_date" />
+                      <input type="text" class="input input--date mt-1 w-full dp-input" placeholder="Alege data" readonly />
+                      <div class="popover calendar-pop">
+                        <div class="calendar"></div>
+                      </div>
+                    </div>
+                    <div class="picker" data-type="time" data-target="start_time">
+                      <input type="hidden" name="start_time" />
+                      <input type="text" class="input select--time mt-1 w-full tp-input" placeholder="Alege ora" readonly />
+                      <div class="popover time-pop">
+                        <div class="time-list"></div>
+                      </div>
+                    </div>
+                  </div>
+                  <input type="hidden" name="start" id="startValue" />
+                </div>
+                <div class="field">
+                  <label class="label">Data/ora returnare</label>
+                  <div class="grid grid-cols-2 gap-2 items-center">
+                    <div class="picker" data-type="date" data-target="end_date">
+                      <input type="hidden" name="end_date" />
+                      <input type="text" class="input input--date mt-1 w-full dp-input" placeholder="Alege data" readonly />
+                      <div class="popover calendar-pop">
+                        <div class="calendar"></div>
+                      </div>
+                    </div>
+                    <div class="picker" data-type="time" data-target="end_time">
+                      <input type="hidden" name="end_time" />
+                      <input type="text" class="input select--time mt-1 w-full tp-input" placeholder="Alege ora" readonly />
+                      <div class="popover time-pop">
+                        <div class="time-list"></div>
+                      </div>
+                    </div>
+                  </div>
+                  <input type="hidden" name="end" id="endValue" />
+                </div>
+              </div>
 
-<section id="packages" class="section" style="background:var(--fog)">
-  <div class="container">
-    <h2>Alege pachetul potrivit</h2>
-    <p class="muted">Standard pentru cel mai mic preț • Flex pentru schimbarea perioadei</p>
-    <div class="grid" style="margin-top:12px">
-      <div class="col-6"><div class="card fade">
-        <div style="display:flex;justify-content:space-between;align-items:center"><strong>Standard</strong><span class="muted">date fixe</span></div>
-        <ul style="margin:10px 0 0 18px;color:var(--muted)"><li>Cel mai bun preț disponibil</li><li>Fără modificarea perioadei după trimitere</li><li>Plata se finalizează doar după confirmare</li></ul>
-        <div style="margin-top:12px"><a class="btn" href="/rezervare.html">Rezervă Standard</a></div>
-      </div></div>
-      <div class="col-6"><div class="card fade" style="animation-delay:.05s">
-        <div style="display:flex;justify-content:space-between;align-items:center"><strong>Flex</strong><span class="muted">modifici perioada</span></div>
-        <ul style="margin:10px 0 0 18px;color:var(--muted)"><li>Schimbi perioada fără stres</li><li>Termeni clari, fără surprize</li><li>Status PENDING până la accept/decline</li></ul>
-        <div style="margin-top:12px"><a class="btn" href="/rezervare.html">Rezervă Flex</a></div>
-      </div></div>
+              <button class="btn btn-primary" type="submit">Caută mașini disponibile</button>
+              <p class="text-xs text-slate-500 mt-1">Nu percepem plata online. Solicitarea intră în status <strong>PENDING</strong> până la confirmarea partenerilor.</p>
+            </form>
+            <div id="liveSummary" class="summary mt-4 hidden" aria-live="polite"></div>
+          </div>
+        </div>
+      </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<section id="airports" class="section">
-  <div class="container">
-    <h2>Otopeni & Băneasa</h2>
-    <p class="muted">Acoperire rapidă pentru sosiri comerciale și zboruri business/private.</p>
-    <div class="grid" style="margin-top:12px">
-      <div class="col-6"><div class="card fade"><strong>Otopeni (OTP)</strong><p class="muted">Preluare/retur la aeroport sau în proximitate, în funcție de partener.</p></div></div>
-      <div class="col-6"><div class="card fade" style="animation-delay:.05s"><strong>Băneasa (BBU)</strong><p class="muted">Zboruri private & corporate, timpi de așteptare minimizați.</p></div></div>
+  <!-- Highlights / Assurance strip -->
+  <section class="py-8 border-t border-slate-100">
+    <div class="wrap grid md:grid-cols-3 gap-4 assurance">
+      <div class="chip"><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#0f172a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><strong>Plata</strong> la livrare</div>
+      <div class="chip"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2l7 4v6c0 5-3.5 9-7 10-3.5-1-7-5-7-10V6l7-4z" stroke="#0f172a" stroke-width="2"/></svg><strong>Parteneri</strong> verificați</div>
+      <div class="chip"><svg viewBox="0 0 24 24" fill="none"><path d="M4 4h16v16H4z" stroke="#0f172a" stroke-width="2"/><path d="M8 8h8M8 12h8M8 16h5" stroke="#0f172a" stroke-width="2" stroke-linecap="round"/></svg><strong>Confirmare</strong> pe email</div>
     </div>
-  </div>
-</section>
+  </section>
 
-<section id="faq" class="section" style="background:var(--fog)">
-  <div class="container">
-    <h2>Întrebări frecvente</h2>
-    <div class="grid" style="margin-top:12px">
-      <div class="col-6"><div class="card fade"><strong>Se blochează bani la trimitere?</strong><p class="muted">Nu. Plata se finalizează doar după ce un partener acceptă rezervarea.</p></div></div>
-      <div class="col-6"><div class="card fade" style="animation-delay:.05s"><strong>Cât durează confirmarea?</strong><p class="muted">Nu afișăm un timp-limită. Primești notificări; rămâne PENDING până la accept/decline.</p></div></div>
-      <div class="col-6"><div class="card fade" style="animation-delay:.1s"><strong>Ce documente sunt necesare?</strong><p class="muted">CI & permis (față/verso). Încărcare criptată, retenție limitată, acces doar personal autorizat.</p></div></div>
-      <div class="col-6"><div class="card fade" style="animation-delay:.15s"><strong>Ce înseamnă Flex?</strong><p class="muted">Posibilitatea de a modifica perioada fără stres, pe o politică clară.</p></div></div>
+  <!-- Steps -->
+  <section id="cum-functioneaza" class="py-16 border-t border-slate-100 section">
+    <div class="wrap">
+      <h2 class="text-2xl md:text-3xl font-semibold text-primary">Cum funcționează</h2>
+      <div class="mt-8 grid md:grid-cols-3 gap-6">
+        <div class="card">
+          <div class="text-primary text-sm font-semibold">01</div>
+          <h3 class="mt-2 font-semibold">Trimiți solicitarea</h3>
+          <p class="mt-1 text-slate-600">Completezi datele și încarci documentele.</p>
+        </div>
+        <div class="card">
+          <div class="text-primary text-sm font-semibold">02</div>
+          <h3 class="mt-2 font-semibold">Solicitare în PENDING</h3>
+          <p class="mt-1 text-slate-600">Verificăm disponibilitatea la parteneri.</p>
+        </div>
+        <div class="card">
+          <div class="text-primary text-sm font-semibold">03</div>
+          <h3 class="mt-2 font-semibold">Verifică mail-ul</h3>
+          <p class="mt-1 text-slate-600">Primești detaliile de preluare.</p>
+        </div>
+      </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<footer class="section">
-  <div class="container">
-    <hr class="sep"/>
-    <div class="foot">
-      <div><strong>Gatevion</strong> — Premium Car Rental Broker</div>
-      <div>Termeni • Politică • Cookies</div>
+  <!-- Airports -->
+  <section id="aeroporturi" class="py-16">
+    <div class="wrap">
+      <h2 class="text-2xl md:text-3xl font-semibold text-primary">Aeroporturi</h2>
+      <div class="mt-8 grid md:grid-cols-2 gap-6">
+        <div class="card">
+          <h3 class="text-xl font-semibold">OTP – Henri Coandă</h3>
+          <p class="mt-2 text-slate-600">Preluare/returnare 24/7 prin partenerii Gatevion.</p>
+        </div>
+        <div class="card">
+          <h3 class="text-xl font-semibold">BBU – Aurel Vlaicu</h3>
+          <p class="mt-2 text-slate-600">Preluare/returnare 24/7 prin partenerii Gatevion.</p>
+        </div>
+      </div>
     </div>
-  </div>
-</footer>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq" class="py-16 faq">
+    <div class="wrap">
+      <h2 class="text-2xl md:text-3xl font-semibold text-primary">Întrebări frecvente</h2>
+      <div class="mt-8 grid gap-4 md:grid-cols-2">
+        <div class="faq-item" aria-expanded="false">
+          <button class="faq-btn" type="button" aria-controls="f1">
+            <span>Ce fac după ce trimit solicitarea?</span>
+            <span class="faq-icon">＋</span>
+          </button>
+          <div id="f1" class="faq-panel">Când unul dintre partenerii noștri acceptă solicitarea vei primi mail.</div>
+        </div>
+        <div class="faq-item" aria-expanded="false">
+          <button class="faq-btn" type="button" aria-controls="f2">
+            <span>Cât durează confirmarea?</span>
+            <span class="faq-icon">＋</span>
+          </button>
+          <div id="f2" class="faq-panel">Nu afișăm un timp limită. Cât mai repede posibil.</div>
+        </div>
+        <div class="faq-item" aria-expanded="false">
+          <button class="faq-btn" type="button" aria-controls="f3">
+            <span>Ce documente sunt necesare?</span>
+            <span class="faq-icon">＋</span>
+          </button>
+          <div id="f3" class="faq-panel">Cartea de identitate și permisul de conducere.</div>
+        </div>
+        <div class="faq-item" aria-expanded="false">
+          <button class="faq-btn" type="button" aria-controls="f4">
+            <span>Ce fac după ce am aterizat?</span>
+            <span class="faq-icon">＋</span>
+          </button>
+          <div id="f4" class="faq-panel">Nu îți face griji – vei fi contactat la aterizare de către partenerii noștri.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="border-t border-slate-200">
+    <div class="wrap py-10 grid md:grid-cols-4 gap-8">
+      <div>
+        <svg class="h-8 w-auto" viewBox="0 0 180 32" aria-label="Gatevion logo" role="img">
+          <g>
+            <circle cx="16" cy="16" r="12" fill="#0f172a" fill-opacity="0.08"></circle>
+            <path d="M16 8c-4.4 0-8 3.6-8 8s3.6 8 8 8c3 0 5.7-1.6 7.1-4.1l-3.2-1.8c-.8 1.4-2.2 2.3-3.9 2.3-2.5 0-4.5-2-4.5-4.5S13.5 11.5 16 11.5c1.7 0 3.1.9 3.9 2.3H16 v3h7.5c.1-.4.1-.8.1-1.3 0-4.4-3.6-8-7.6-8z" fill="#0f172a"></path>
+            <text x="36" y="22" font-family="Manrope, Inter, Segoe UI, Roboto, Arial, sans-serif" font-weight="700" font-size="16" fill="#0f172a" letter-spacing=".5">Gatevion</text>
+          </g>
+        </svg>
+        <p class="mt-3 text-slate-600">Broker premium de închirieri auto.</p>
+      </div>
+      <div>
+        <h4 class="font-semibold">Legal</h4>
+        <ul class="mt-3 space-y-2 text-slate-600">
+          <li><a href="/termeni.html" class="hover:text-slate-900">Termeni & Condiții</a></li>
+          <li><a href="/confidentialitate.html" class="hover:text-slate-900">Politica de Confidențialitate</a></li>
+          <li><a href="/cookies.html" class="hover:text-slate-900">Cookie-uri</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="font-semibold">Asistență</h4>
+        <ul class="mt-3 space-y-2 text-slate-600">
+          <li><a href="mailto:hello@gatevion.ro" class="hover:text-slate-900">hello@gatevion.ro</a></li>
+          <li><a href="tel:+40" class="hover:text-slate-900">+40 ...</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="font-semibold">Preferințe</h4>
+        <button class="mt-3 text-sm rounded-xl border border-slate-200 px-3 py-2" id="langBtn2">Schimbă limba (RO/EN)</button>
+      </div>
+    </div>
+    <div class="border-t border-slate-200 py-4 text-center text-sm text-slate-500">
+      © <span id="y" class="year"></span> Gatevion. Toate drepturile rezervate.
+    </div>
+  </footer>
+
+  <script src="./app.js" defer></script>
 </body>
 </html>
