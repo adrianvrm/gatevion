@@ -549,3 +549,102 @@ section h2.section-title::before,
   .hero .wrap{ align-items: flex-start !important; }
   .hero-left, .hero-right{ align-self: flex-start !important; }
 }
+
+
+/* =========================================================
+   Header & Form premium polish (CSS-only, no layout changes)
+   ========================================================= */
+
+/* Header: solid premium bar with luxe bottom hairline and nav micro-underline */
+.topbar{
+  background:#ffffff !important;
+  box-shadow: 0 8px 24px rgba(2,6,23,.06), 0 1px 0 rgba(2,6,23,.08);
+  position: sticky; top: 0; z-index: 1000;
+  transition: box-shadow .25s ease, background .25s ease;
+}
+.topbar::after{
+  content:""; position:absolute; left:0; right:0; bottom:0; height:2px;
+  background: linear-gradient(90deg, rgba(15,23,42,.08), rgba(37,99,235,.25), rgba(15,23,42,.08));
+  pointer-events:none;
+}
+.topbar .nav a{
+  position: relative; color:#0f172a;
+}
+.topbar .nav a::after{
+  content:""; position:absolute; left:0; right:100%; bottom:-6px; height:2px;
+  background: linear-gradient(90deg, #2563eb, rgba(37,99,235,0));
+  transition: right .25s ease;
+}
+.topbar .nav a:hover::after{ right:0; }
+
+/* Form card: layered border, subtle glow on focus-within */
+.hero-right .glass{
+  position: relative;
+  background: linear-gradient(180deg,#ffffff,#fbfbfd);
+  border:1px solid #e6ecf6;
+  box-shadow: 0 10px 24px rgba(2,6,23,.08);
+  transition: box-shadow .25s ease, border-color .25s ease;
+}
+.hero-right .glass::before{
+  content:""; position:absolute; inset:0;
+  padding:1px; border-radius:16px;
+  background: linear-gradient(135deg, rgba(37,99,235,.35), rgba(37,99,235,0) 30%, rgba(2,6,23,.18) 70%, rgba(2,6,23,0) );
+  -webkit-mask: 
+     linear-gradient(#000 0 0) content-box, 
+     linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor; mask-composite: exclude;
+  border-radius: inherit;
+  pointer-events: none;
+}
+.hero-right .glass::after{
+  content:""; position:absolute; left:0; right:0; top:0; height:10px; border-radius:16px 16px 0 0;
+  background: linear-gradient(180deg, rgba(255,255,255,.9), rgba(255,255,255,0));
+  pointer-events: none;
+}
+.hero-right .glass:focus-within{
+  border-color: #c7d2fe;
+  box-shadow: 0 16px 36px rgba(37,99,235,.18);
+}
+
+/* Inputs inside form: consistent focus */
+.hero-right .glass .input:focus,
+.hero-right .glass input:focus,
+.hero-right .glass .select:focus,
+.hero-right .glass select:focus,
+.hero-right .glass .dp-input:focus,
+.hero-right .glass .tp-input:focus{
+  border-color:#2563eb;
+  box-shadow: 0 0 0 3px rgba(37,99,235,.14), inset 0 1px 0 #fff;
+  outline:none;
+}
+
+/* Center CTA text and icon perfectly */
+
+
+.hero-right .btn-primary{ 
+  display:inline-flex; align-items:center; justify-content:center; text-align:center; 
+}
+
+.hero-right .btn, .hero-right .button, .hero-right .btn-primary, 
+.hero-right button[type="submit"], .hero-right a.button {
+  display:inline-flex; align-items:center; justify-content:center; text-align:center;
+}
+.hero-right .btn .icon, .hero-right .button .icon{ margin-left:.5rem; }
+
+.hero-right .btn-primary, .hero-right .button.primary{
+  background: linear-gradient(180deg, #2563eb, #1d4ed8);
+  color:#fff;
+  border-color: rgba(0,0,0,.08);
+  box-shadow: 0 12px 24px rgba(37,99,235,.2), inset 0 1px 0 rgba(255,255,255,.6);
+  transition: transform .12s ease, box-shadow .2s ease, filter .2s ease;
+}
+.hero-right .btn-primary:hover, .hero-right .button.primary:hover{ 
+  transform: translateY(-1px);
+  box-shadow: 0 16px 32px rgba(37,99,235,.26), inset 0 1px 0 rgba(255,255,255,.6);
+  filter: brightness(1.02);
+}
+.hero-right .btn-primary:active, .hero-right .button.primary:active{ 
+  transform: translateY(0);
+  box-shadow: 0 10px 20px rgba(37,99,235,.20), inset 0 1px 0 rgba(255,255,255,.5);
+  filter: brightness(.98);
+}
