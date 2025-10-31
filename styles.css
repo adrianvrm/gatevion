@@ -130,82 +130,33 @@
 .year{ font-variant-numeric: tabular-nums; }
 
 
-/* === Premium badge styling (applies to all .chip variants) === */
-.chip{
-  position:relative;
-  border-radius:999px;
-  border:1px solid #e6e9f2;
-  background:
-    linear-gradient(180deg,#ffffff 0%,#f8fafc 100%);
-  box-shadow:
-    inset 0 1px 0 #fff,
-    0 1px 2px rgba(2,6,23,.04),
-    0 10px 24px rgba(2,6,23,.06);
-  letter-spacing:.01em;
-}
-.chip::after{
-  content:"";
-  position:absolute;
-  inset:0;
-  border-radius:inherit;
-  background:linear-gradient(180deg,rgba(255,255,255,.8),rgba(255,255,255,0) 60%);
-  pointer-events:none;
-  mix-blend-mode:screen;
-  opacity:.7;
-}
-.chip:hover{
-  transform:translateY(-1px);
-  box-shadow:
-    inset 0 1px 0 #fff,
-    0 6px 16px rgba(2,6,23,.08);
-}
-.chip-strong{
-  border-color:#e2e6f2;
-  background:
-    radial-gradient(120% 100% at 50% 0%,#ffffff 0%,#f3f6fb 70%),
-    linear-gradient(180deg,#ffffff,#f5f7fb);
-  box-shadow:
-    inset 0 1px 0 #fff,
-    0 10px 24px rgba(2,6,23,.08);
-}
+/* Chip icons sizing + refined look */
+.chip svg{ width:14px; height:14px; opacity:.9; }
+.hero-badges .chip-strong{ padding:.42rem .66rem; font-size:12px; }
 
-/* Keep hero badges tighter to fit 1 row more often */
-.hero-badges .chip-strong{
-  padding:.38rem .65rem;
-  font-size:12px;
-}
-
-/* === Compact inputs for date/time === */
-.dp-input, .tp-input{
-  font-size:12px;
-  line-height:1.15;
-  padding:6px 9px;
-}
-.input--date{
-  background-position:.5rem center;
-  background-size:16px;
-  padding-left:2rem;
-}
-.select--time{
-  background-position:.5rem center, right .6rem center;
-  background-size:16px,14px;
-  padding-left:2rem;
-  padding-right:2.1rem;
-}
-
-/* === Compact calendar popover === */
-.popover{ border-radius:12px; margin-top:.35rem; }
-.calendar{ width:260px; }
-.calendar header{ padding:.5rem .75rem; }
-.icon-btn{ width:28px; height:28px; border-radius:8px; }
+/* Smaller calendar/time popovers */
+.calendar{ width:220px; }
+.calendar header{ padding:.45rem .6rem; }
+.icon-btn{ width:24px; height:24px; border-radius:7px; }
 .cal-grid{ gap:1px; padding:6px; }
-.cal-dow{ font-size:11px; padding:.2rem 0; }
-.cal-day{ padding:.4rem 0; border-radius:8px; font-size:13px; }
-.cal-day.today{ outline-width:1.5px; }
+.cal-dow{ font-size:11px; padding:.15rem 0; }
+.cal-day{ padding:.35rem 0; border-radius:8px; font-size:12px; }
+.time-list{ width:160px; max-height:170px; padding:.3rem; }
+.time-opt{ padding:.35rem .55rem; border-radius:8px; font-size:12px; }
 
-/* === Compact time list === */
-.time-list{ width:180px; max-height:200px; padding:.35rem; }
-.time-opt{ padding:.4rem .6rem; border-radius:8px; font-size:13px; }
+/* Inputs compact (already small, keep consistent) */
+.dp-input, .tp-input{ font-size:12px; padding:6px 9px; line-height:1.15; }
 
-/* Slightly tone down shadows inside the glass panel to reduce visual clutter */
-.hero-right .glass{ box-shadow: 0 14px 40px rgba(2,6,23,.08); }
+/* Mobile responsiveness improvements */
+@media (max-width: 640px){
+  .wrap{ padding:0 .875rem; }
+  .hero-copy h1{ font-size:28px; }
+  .hero-right .glass{ margin-top:1.25rem; }
+  .hero-badges{ gap:.35rem; }
+  .hero-badges .chip-strong{ font-size:11px; padding:.35rem .55rem; }
+  .calendar{ width:200px; }
+  .time-list{ width:140px; max-height:150px; }
+}
+
+/* Ensure popovers never clip inside form panel on small screens */
+.hero-right .glass{ overflow:visible; }
