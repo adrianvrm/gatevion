@@ -648,3 +648,107 @@ section h2.section-title::before,
   box-shadow: 0 10px 20px rgba(37,99,235,.20), inset 0 1px 0 rgba(255,255,255,.5);
   filter: brightness(.98);
 }
+
+
+/* =========================================================
+   FORM & HEADER PREMIUM CONTRAST (CSS-only, no layout changes)
+   - Emphasize the form vs left text with a subtle stage glow
+   - Keep everything anchored (no shifts)
+   ========================================================= */
+
+/* Ensure hero columns remain top-anchored (keeps left text fixed) */
+@media (min-width:1024px){
+  .hero .wrap{ align-items:flex-start !important; }
+  .hero-left, .hero-right{ align-self:flex-start !important; }
+}
+
+/* --- Header polish kept (already solid). Add subtle active underline on nav --- */
+.topbar .nav a{ position:relative; }
+.topbar .nav a[aria-current="page"]::after{
+  content:""; position:absolute; left:0; right:0; bottom:-6px; height:2px;
+  background: linear-gradient(90deg,#2563eb, rgba(37,99,235,0));
+}
+
+/* --- FORM: create a premium 'stage' behind the card without layout change --- */
+.hero-right{ position:relative; z-index: 2; }
+.hero-right::before{
+  content:""; position:absolute; inset:-14px -18px -14px -18px;
+  background:
+    radial-gradient(520px 260px at 85% 5%, rgba(37,99,235,.08), rgba(37,99,235,0) 65%),
+    radial-gradient(420px 240px at 30% 100%, rgba(2,6,23,.06), rgba(2,6,23,0) 55%);
+  border-radius: 22px;
+  pointer-events:none;
+  z-index: 0;
+  filter: saturate(105%);
+}
+@media (max-width: 1023.98px){
+  .hero-right::before{ inset:-10px -12px -10px -12px; border-radius:20px; }
+}
+
+/* The form card itself (glass) gains layered border + subtle depth */
+.hero-right .glass{
+  position: relative; z-index: 1;
+  background: linear-gradient(180deg,#ffffff,#fbfbfd);
+  border:1px solid #e6ecf6;
+  box-shadow: 0 14px 36px rgba(2,6,23,.12), 0 2px 0 rgba(255,255,255,.8) inset;
+  transition: box-shadow .25s ease, border-color .25s ease, transform .18s ease;
+  transform: translateZ(0); /* prevent blit artifacts */
+}
+.hero-right .glass::before{
+  content:""; position:absolute; inset: -1px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, rgba(37,99,235,.35), rgba(37,99,235,0) 40%, rgba(2,6,23,.15) 70%, rgba(2,6,23,0));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor; mask-composite: exclude;
+  padding: 1px; pointer-events:none;
+}
+.hero-right .glass::after{
+  content:""; position:absolute; left:0; right:0; top:0; height:12px; border-radius:16px 16px 0 0;
+  background: linear-gradient(180deg, rgba(255,255,255,.95), rgba(255,255,255,0));
+  pointer-events:none;
+}
+
+/* Focus-within: gentle glow to guide the eye */
+.hero-right .glass:focus-within{
+  border-color:#c7d2fe;
+  box-shadow: 0 20px 48px rgba(37,99,235,.18), 0 2px 0 rgba(255,255,255,.85) inset;
+}
+.hero-right .glass:focus-within::before{
+  background: linear-gradient(135deg, rgba(37,99,235,.45), rgba(37,99,235,0) 40%, rgba(2,6,23,.18) 70%, rgba(2,6,23,0));
+}
+
+/* Inputs: premium focus ring (kept from previous), add subtle background shift */
+.hero-right .glass .input:focus,
+.hero-right .glass input:focus,
+.hero-right .glass .select:focus,
+.hero-right .glass select:focus,
+.hero-right .glass .dp-input:focus,
+.hero-right .glass .tp-input:focus{
+  border-color:#2563eb;
+  background-color:#ffffff;
+  box-shadow: 0 0 0 3px rgba(37,99,235,.14), inset 0 1px 0 #fff;
+  outline:none;
+}
+
+/* CTA centering (safe) */
+.hero-right .btn, .hero-right .button, .hero-right .btn-primary, 
+.hero-right button[type="submit"], .hero-right a.button {
+  display:inline-flex; align-items:center; justify-content:center; text-align:center;
+}
+.hero-right .btn .icon, .hero-right .button .icon{ margin-left:.5rem; }
+
+/* Optional: very subtle hover lift on the whole card (no layout shift) */
+@media (hover:hover){
+  .hero-right .glass:hover{ transform: translateY(-1px); }
+}
+
+/* Maintain left column dominance without changing layout */
+.hero-left{ position:relative; z-index: 1; }
+.hero-left::after{
+  content:""; position:absolute; left:-12px; right:-12px; bottom:-8px; height:1px;
+  background: linear-gradient(90deg, rgba(2,6,23,.05), rgba(2,6,23,.18), rgba(2,6,23,.05));
+  pointer-events:none;
+}
+
+/* Keep popover pickers above the stage glow */
+#ui-portal, .popover{ z-index: 200000 !important; }
