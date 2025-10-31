@@ -221,67 +221,6 @@ document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('.picker[data-type=\"time\"]').forEach(initTimePicker);
   initFAQ();
 
-  // Robust portal for popovers
-  (function(){
-    let portal = document.getElementById('ui-portal');
-    if(!portal){
-      portal = document.createElement('div');
-      portal.id = 'ui-portal';
-      document.body.appendChild(portal);
-    }
-    function placePopover(picker){
-      const pop = picker._pop || picker.querySelector('.popover');
-      if(!pop) return;
-      if(pop.parentElement !== portal) portal.appendChild(pop);
-      const r = picker.getBoundingClientRect();
-      const vw = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
-      const ph = pop.offsetHeight || 260;
-      const pw = pop.offsetWidth || 240;
-      let top = r.bottom + 6;
-      if(top + ph > window.innerHeight - 12){ top = Math.max(12, r.top - ph - 6); }
-      let left = Math.min(Math.max(12, r.left), vw - pw - 12);
-      pop.style.top = top+'px'; pop.style.left = left+'px';
-      picker._pop = pop;
-    }
-    function bind(picker){
-      const pop = picker.querySelector('.popover');
-      if(!pop) return;
-      picker.addEventListener('click', ()=>{ picker.classList.add('open'); requestAnimationFrame(()=>placePopover(picker)); });
-      picker.addEventListener('focusin', ()=>{ picker.classList.add('open'); requestAnimationFrame(()=>placePopover(picker)); });
-    }
-    document.querySelectorAll('.picker').forEach(bind);
-    document.addEventListener('click', (e)=>{
-      // if click inside portal popover -> do nothing (keep open)
-      let n = e.target;
-      while(n){
-        if(n.id === 'ui-portal' || (n.parentElement && n.parentElement.id === 'ui-portal')) return;
-        n = n.parentElement;
-      }
-      // otherwise close
-      document.querySelectorAll('.picker.open').forEach(p=> p.classList.remove('open'));
-    }, true);
-    ['scroll','resize'].forEach(ev=> window.addEventListener(ev, ()=>{
-      document.querySelectorAll('.picker.open').forEach(placePopover);
-    }, true));
-  })();
-
-
-  // ===== Portal popovers with correct outside-click handling =====
-  // ===== Portal for popovers (date/time/airport) to render OVER section borders =====
-  // Mobile nav
-  const mToggle = document.getElementById('mobileToggle');
-  const mNav = document.getElementById('mobileNav');
-  if(mToggle && mNav){
-    mToggle.addEventListener('click', ()=>{
-      const isHidden = mNav.hasAttribute('hidden');
-      if(isHidden){ mNav.removeAttribute('hidden'); mNav.classList.add('open'); mToggle.classList.add('open'); }
-      else { mNav.classList.remove('open'); mNav.setAttribute('hidden',''); mToggle.classList.remove('open'); }
-    });
-    // Close on link click
-    mNav.querySelectorAll('a').forEach(a=> a.addEventListener('click', ()=> { mNav.classList.remove('open'); mNav.setAttribute('hidden',''); mToggle.classList.remove('open'); }));
-  }
-
-
   const form = document.getElementById('searchForm');
   const live = document.getElementById('liveSummary');
 
@@ -301,7 +240,7 @@ document.addEventListener('DOMContentLoaded', () => {
       <span class=\"chip\"><strong>Preluare</strong> ${sd?fmtDisplayDate(sd):'—'} ${st||''}</span>
       <span class=\"chip\"><strong>Returnare</strong> ${ed?fmtDisplayDate(ed):'—'} ${et||''}</span>
     ` : '';
-    live.classList.toggle('empty', !hasAny);
+    live.classList.toggle('hidden', !hasAny);
   }
 
   // React to picker changes
