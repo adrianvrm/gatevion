@@ -390,3 +390,26 @@
 @media (prefers-reduced-motion: reduce){
   .hero-left .ticker-track{ animation: none; }
 }
+
+
+/* === Prevent layout shift when preview (#liveSummary) appears === */
+.summary{
+  min-height: 56px; /* reserve space so the divider doesn't jump */
+  transition: opacity .2s ease, transform .2s ease;
+}
+@media (max-width: 640px){
+  .summary{ min-height: 48px; }
+}
+/* Override generic .hidden so summary still takes space */
+.summary.hidden{
+  display: block !important;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-2px);
+  pointer-events: none;
+}
+.summary:not(.hidden){
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
