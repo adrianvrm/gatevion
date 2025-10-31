@@ -824,3 +824,38 @@ section h2.section-title::before,
   opacity: 1; visibility: visible; transform: translateY(0);
 }
 
+
+
+/* === Header V2: utility strip + headline font polish === */
+body{ font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif; }
+
+.hero-left .hero-title,
+h1.hero-title{
+  font-family: "Manrope", system-ui, -apple-system, "Segoe UI", Roboto, "Inter", Arial, sans-serif;
+  font-weight: 800;
+  letter-spacing: -0.012em;
+  line-height: 1.08;
+  text-wrap: balance;
+}
+
+/* Utility strip */
+.topbar{ position: sticky; top: 0; z-index: 1000; }
+.topbar-utility{
+  display:flex; align-items:center; gap:16px; padding:6px 16px;
+  background:#0E1320; color:#fff; border-bottom:1px solid rgba(255,255,255,.06);
+}
+.topbar-utility .util-item{
+  display:inline-flex; align-items:center; gap:8px; font-weight:600; font-size:13px;
+  color:#fff; opacity:.95; text-decoration:none;
+}
+.topbar-utility .util-item:hover{ opacity:1; }
+.topbar-utility svg{ width:14px; height:14px; opacity:.9; }
+.topbar-utility .util-spacer{ flex:1; }
+.topbar-utility .lang-switch{
+  background:transparent; border:0; cursor:pointer; color:#fff; font-weight:700;
+}
+
+@media (max-width: 768px){
+  .topbar-utility{ padding:6px 12px; gap:12px; }
+  .topbar-utility .label{ display:none; } /* afișează doar icon/text scurt pe mobil */
+}
