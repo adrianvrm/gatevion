@@ -37,7 +37,10 @@
           </g>
         </svg>
       </a>
-      <nav class="main-nav hidden md:flex items-center gap-6">
+      <button id="mobileToggle" class="md:hidden inline-flex items-center justify-center w-10 h-10 rounded-lg border border-slate-200 mr-2" aria-label="Deschide meniul">
+  <svg viewBox="0 0 24 24" width="20" height="20"><path d="M4 7h16M4 12h16M4 17h16" stroke="#0f172a" stroke-width="2" stroke-linecap="round"/></svg>
+</button>
+<nav class="main-nav hidden md:flex items-center gap-6">
         <a href="#cum-functioneaza" class="nav-link">Cum funcționează</a>
         <a href="#aeroporturi" class="nav-link">Aeroporturi</a>
         <a href="#faq" class="nav-link">Întrebări frecvente</a>
@@ -47,7 +50,12 @@
         <a href="/rezultate.html" class="btn btn-primary" aria-label="Caută mașini disponibile">Caută mașini disponibile</a>
       </div>
     </div>
-  </header>
+  <div id="mobileNav" class="mobile-nav" hidden>
+  <a href="#cum-functioneaza" class="mnav-link">Cum funcționează</a>
+  <a href="#aeroporturi" class="mnav-link">Aeroporturi</a>
+  <a href="#faq" class="mnav-link">Întrebări frecvente</a>
+</div>
+</header>
 
   <!-- Hero -->
   <section class="relative overflow-hidden hero">
@@ -180,10 +188,10 @@
   <!-- Highlights / Assurance strip (existing 3) -->
   <section class="py-8 border-t border-slate-100">
     <div class="wrap grid md:grid-cols-3 gap-4 assurance">
-      <div class="chip"><strong>Plata</strong> la livrare</div>
-      <div class="chip"><strong>Parteneri</strong> verificați</div>
-      <div class="chip"><strong>Confirmare</strong> pe email</div>
-    </div>
+  <div class="chip chip-ghost"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke="#0f172a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><strong>Plata</strong> la livrare</div>
+  <div class="chip chip-ghost"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 2l7 4v6c0 5-3.5 9-7 10-3.5-1-7-5-7-10V6l7-4z" stroke="#0f172a" stroke-width="2"/></svg><strong>Parteneri</strong> verificați</div>
+  <div class="chip chip-ghost"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 4h16v16H4z" stroke="#0f172a" stroke-width="2"/><path d="M8 8h8M8 12h8M8 16h5" stroke="#0f172a" stroke-width="2" stroke-linecap="round"/></svg><strong>Confirmare</strong> pe email</div>
+</div>
   </section>
 
   <div class="divider" role="presentation"></div>

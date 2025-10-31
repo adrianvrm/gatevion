@@ -221,6 +221,20 @@ document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('.picker[data-type=\"time\"]').forEach(initTimePicker);
   initFAQ();
 
+
+  // Mobile nav
+  const mToggle = document.getElementById('mobileToggle');
+  const mNav = document.getElementById('mobileNav');
+  if(mToggle && mNav){
+    mToggle.addEventListener('click', ()=>{
+      const isHidden = mNav.hasAttribute('hidden');
+      if(isHidden) mNav.removeAttribute('hidden'); else mNav.setAttribute('hidden','');
+    });
+    // Close on link click
+    mNav.querySelectorAll('a').forEach(a=> a.addEventListener('click', ()=> mNav.setAttribute('hidden','')));
+  }
+
+
   const form = document.getElementById('searchForm');
   const live = document.getElementById('liveSummary');
 
