@@ -228,10 +228,11 @@ document.addEventListener('DOMContentLoaded', () => {
   if(mToggle && mNav){
     mToggle.addEventListener('click', ()=>{
       const isHidden = mNav.hasAttribute('hidden');
-      if(isHidden) mNav.removeAttribute('hidden'); else mNav.setAttribute('hidden','');
+      if(isHidden){ mNav.removeAttribute('hidden'); mNav.classList.add('open'); mToggle.classList.add('open'); }
+      else { mNav.classList.remove('open'); mNav.setAttribute('hidden',''); mToggle.classList.remove('open'); }
     });
     // Close on link click
-    mNav.querySelectorAll('a').forEach(a=> a.addEventListener('click', ()=> mNav.setAttribute('hidden','')));
+    mNav.querySelectorAll('a').forEach(a=> a.addEventListener('click', ()=> { mNav.classList.remove('open'); mNav.setAttribute('hidden',''); mToggle.classList.remove('open'); }));
   }
 
 
