@@ -394,3 +394,11 @@
   .hero-right .glass{ width:100%; max-width:560px; margin-left:auto; }
   .grid-12{ align-items:center; }
 }
+
+/* === Stronger desktop alignment for the form === */
+@media (min-width: 1024px){
+  .hero .wrap{ display:grid; grid-template-columns: 1.1fr 1fr; align-items:center; gap:48px; }
+  .hero-left{ align-self:center; }
+  .hero-right{ display:flex; justify-content:flex-end; align-self:center; }
+  .hero-right .glass{ max-width:560px; width:100%; margin-left:auto; }
+}
