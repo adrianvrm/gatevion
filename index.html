@@ -37,9 +37,10 @@
           </g>
         </svg>
       </a>
-      <nav class="hidden md:flex items-center gap-6">
-        <a href="#cum-functioneaza" class="text-slate-600 hover:text-slate-900">Cum funcționează</a>
-        <a href="#aeroporturi" class="text-slate-600 hover:text-slate-900">Aeroporturi</a>
+      <nav class="main-nav hidden md:flex items-center gap-6">
+        <a href="#cum-functioneaza" class="nav-link">Cum funcționează</a>
+        <a href="#aeroporturi" class="nav-link">Aeroporturi</a>
+        <a href="#faq" class="nav-link">Întrebări frecvente</a>
       </nav>
       <div class="flex items-center gap-3">
         <button id="langBtn" class="text-sm px-3 py-1 rounded-full border border-slate-200 hover:border-slate-300">RO / EN</button>
@@ -55,6 +56,13 @@
         <div class="hero-copy hero-left">
           <h1>Închiriază în siguranță, printr-un broker</h1>
           <p class="mt-4 text-lg text-slate-600">Trimiți solicitarea. Primești confirmarea. Plătești la livrare.</p>
+          <!-- New: 4 badges immediately under copy -->
+          <div class="mt-5 hero-badges">
+            <div class="chip chip-strong"><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#0f172a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Fără card de credit</div>
+            <div class="chip chip-strong"><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#0f172a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Fără depozit</div>
+            <div class="chip chip-strong"><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#0f172a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Fără limită de km</div>
+            <div class="chip chip-strong"><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#0f172a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Plata cash sau cu cardul</div>
+          </div>
         </div>
         <div class="relative hero-right">
           <div class="glass rounded-3xl p-6 shadow-soft">
@@ -86,14 +94,14 @@
                 <div class="field">
                   <label class="label">Data/ora preluare</label>
                   <div class="grid grid-cols-2 gap-2 items-center">
-                    <div class="picker" data-type="date" data-target="start_date">
+                    <div class="picker picker--date" data-type="date" data-target="start_date">
                       <input type="hidden" name="start_date" />
                       <input type="text" class="input input--date mt-1 w-full dp-input" placeholder="Data" readonly />
                       <div class="popover calendar-pop">
                         <div class="calendar"></div>
                       </div>
                     </div>
-                    <div class="picker" data-type="time" data-target="start_time">
+                    <div class="picker picker--time" data-type="time" data-target="start_time">
                       <input type="hidden" name="start_time" />
                       <input type="text" class="input select--time mt-1 w-full tp-input" placeholder="Ora" readonly />
                       <div class="popover time-pop">
@@ -106,14 +114,14 @@
                 <div class="field">
                   <label class="label">Data/ora returnare</label>
                   <div class="grid grid-cols-2 gap-2 items-center">
-                    <div class="picker" data-type="date" data-target="end_date">
+                    <div class="picker picker--date" data-type="date" data-target="end_date">
                       <input type="hidden" name="end_date" />
                       <input type="text" class="input input--date mt-1 w-full dp-input" placeholder="Data" readonly />
                       <div class="popover calendar-pop">
                         <div class="calendar"></div>
                       </div>
                     </div>
-                    <div class="picker" data-type="time" data-target="end_time">
+                    <div class="picker picker--time" data-type="time" data-target="end_time">
                       <input type="hidden" name="end_time" />
                       <input type="text" class="input select--time mt-1 w-full tp-input" placeholder="Ora" readonly />
                       <div class="popover time-pop">
@@ -131,28 +139,6 @@
             <div id="liveSummary" class="summary mt-4 hidden" aria-live="polite"></div>
           </div>
         </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- NEW: Benefits strip (4 badges) -->
-  <section class="benefits-strip">
-    <div class="wrap benefits">
-      <div class="chip chip-strong">
-        <svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#0f172a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        Fără card de credit
-      </div>
-      <div class="chip chip-strong">
-        <svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#0f172a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        Fără depozit
-      </div>
-      <div class="chip chip-strong">
-        <svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#0f172a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        Fără limită de km
-      </div>
-      <div class="chip chip-strong">
-        <svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#0f172a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        Plata cash sau cu cardul
       </div>
     </div>
   </section>
