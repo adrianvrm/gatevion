@@ -32,7 +32,7 @@
         <svg class="h-8 w-auto" viewBox="0 0 180 32" aria-label="Gatevion logo" role="img">
           <g>
             <circle cx="16" cy="16" r="12" fill="#0f172a" fill-opacity="0.08"></circle>
-            <path d="M16 8c-4.4 0-8 3.6-8 8s3.6 8 8 8c3 0 5.7-1.6 7.1-4.1l-3.2-1.8c-.8 1.4-2.2 2.3-3.9 2.3-2.5 0-4.5-2-4.5-4.5S13.5 11.5 16 11.5c1.7 0 3.1.9 3.9 2.3H16v3h7.5c.1-.4.1-.8.1-1.3 0-4.4-3.6-8-7.6-8z" fill="#0f172a"></path>
+            <path d="M16 8c-4.4 0-8 3.6-8 8s3.6 8 8 8c3 0 5.7-1.6 7.1-4.1l-3.2-1.8c-.8 1.4-2.2 2.3-3.9 2.3-2.5 0-4.5-2-4.5-4.5S13.5 11.5 16 11.5c1.7 0 3.1.9 3.9 2.3H16 v3h7.5c.1-.4.1-.8.1-1.3 0-4.4-3.6-8-7.6-8z" fill="#0f172a"></path>
             <text x="36" y="22" font-family="Manrope, Inter, Segoe UI, Roboto, Arial, sans-serif" font-weight="700" font-size="16" fill="#0f172a" letter-spacing=".5">Gatevion</text>
           </g>
         </svg>
@@ -54,7 +54,7 @@
       <div class="grid-12 items-center">
         <div class="hero-copy hero-left">
           <h1>Închiriază în siguranță, printr-un broker</h1>
-          <p class="mt-4 text-lg text-slate-600">Trimiți solicitarea, primești confirmarea. Plătești la livrare.</p>
+          <p class="mt-4 text-lg text-slate-600">Trimiți solicitarea. Primești confirmarea. Plătești la livrare.</p>
         </div>
         <div class="relative hero-right">
           <div class="glass rounded-3xl p-6 shadow-soft">
@@ -88,14 +88,14 @@
                   <div class="grid grid-cols-2 gap-2 items-center">
                     <div class="picker" data-type="date" data-target="start_date">
                       <input type="hidden" name="start_date" />
-                      <input type="text" class="input input--date mt-1 w-full dp-input" placeholder="Alege data" readonly />
+                      <input type="text" class="input input--date mt-1 w-full dp-input" placeholder="Data" readonly />
                       <div class="popover calendar-pop">
                         <div class="calendar"></div>
                       </div>
                     </div>
                     <div class="picker" data-type="time" data-target="start_time">
                       <input type="hidden" name="start_time" />
-                      <input type="text" class="input select--time mt-1 w-full tp-input" placeholder="Alege ora" readonly />
+                      <input type="text" class="input select--time mt-1 w-full tp-input" placeholder="Ora" readonly />
                       <div class="popover time-pop">
                         <div class="time-list"></div>
                       </div>
@@ -108,14 +108,14 @@
                   <div class="grid grid-cols-2 gap-2 items-center">
                     <div class="picker" data-type="date" data-target="end_date">
                       <input type="hidden" name="end_date" />
-                      <input type="text" class="input input--date mt-1 w-full dp-input" placeholder="Alege data" readonly />
+                      <input type="text" class="input input--date mt-1 w-full dp-input" placeholder="Data" readonly />
                       <div class="popover calendar-pop">
                         <div class="calendar"></div>
                       </div>
                     </div>
                     <div class="picker" data-type="time" data-target="end_time">
                       <input type="hidden" name="end_time" />
-                      <input type="text" class="input select--time mt-1 w-full tp-input" placeholder="Alege ora" readonly />
+                      <input type="text" class="input select--time mt-1 w-full tp-input" placeholder="Ora" readonly />
                       <div class="popover time-pop">
                         <div class="time-list"></div>
                       </div>
@@ -135,7 +135,31 @@
     </div>
   </section>
 
-  <!-- Highlights / Assurance strip -->
+  <!-- NEW: Benefits strip (4 badges) -->
+  <section class="benefits-strip">
+    <div class="wrap benefits">
+      <div class="chip chip-strong">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#0f172a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Fără card de credit
+      </div>
+      <div class="chip chip-strong">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#0f172a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Fără depozit
+      </div>
+      <div class="chip chip-strong">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#0f172a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Fără limită de km
+      </div>
+      <div class="chip chip-strong">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#0f172a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Plata cash sau cu cardul
+      </div>
+    </div>
+  </section>
+
+  <div class="divider" role="presentation"></div>
+
+  <!-- Highlights / Assurance strip (existing 3) -->
   <section class="py-8 border-t border-slate-100">
     <div class="wrap grid md:grid-cols-3 gap-4 assurance">
       <div class="chip"><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#0f172a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><strong>Plata</strong> la livrare</div>
@@ -143,6 +167,8 @@
       <div class="chip"><svg viewBox="0 0 24 24" fill="none"><path d="M4 4h16v16H4z" stroke="#0f172a" stroke-width="2"/><path d="M8 8h8M8 12h8M8 16h5" stroke="#0f172a" stroke-width="2" stroke-linecap="round"/></svg><strong>Confirmare</strong> pe email</div>
     </div>
   </section>
+
+  <div class="divider" role="presentation"></div>
 
   <!-- Steps -->
   <section id="cum-functioneaza" class="py-16 border-t border-slate-100 section">
@@ -168,6 +194,8 @@
     </div>
   </section>
 
+  <div class="divider" role="presentation"></div>
+
   <!-- Airports -->
   <section id="aeroporturi" class="py-16">
     <div class="wrap">
@@ -184,6 +212,8 @@
       </div>
     </div>
   </section>
+
+  <div class="divider" role="presentation"></div>
 
   <!-- FAQ -->
   <section id="faq" class="py-16 faq">
