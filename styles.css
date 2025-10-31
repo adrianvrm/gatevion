@@ -413,3 +413,15 @@
   visibility: visible;
   transform: translateY(0);
 }
+
+
+/* === Lock hero columns to top on desktop to prevent left text/ticker shifting === */
+@media (min-width: 1024px){
+  .hero .wrap{ align-items: flex-start !important; }
+  .hero-left{ align-self: flex-start !important; }
+  .hero-right{ align-self: flex-start !important; }
+  /* If a generic grid container centers children, override for safety */
+  .grid-12{ align-items: flex-start !important; }
+  /* Give the preview a bit more reserved height on desktop for zero movement */
+  .summary{ min-height: 64px; }
+}
