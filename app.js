@@ -302,6 +302,17 @@ document.addEventListener('DOMContentLoaded', () => {
     if(eHidden) eHidden.value = end;
   });
 
+  
+  // Reveal-on-scroll
+  const io = ('IntersectionObserver' in window) ? new IntersectionObserver((entries)=>{
+    for(const e of entries){
+      if(e.isIntersecting){ e.target.classList.add('inview'); io.unobserve(e.target); }
+    }
+  }, {rootMargin: '0px 0px -10% 0px'}) : null;
+  document.querySelectorAll('.reveal').forEach(el=>{
+    if(io) io.observe(el); else el.classList.add('inview');
+  });
+
   const y = document.getElementById('y');
   if(y) y.textContent = new Date().getFullYear();
 });
