@@ -386,3 +386,11 @@
   .hero-left .ticker-slim .ticker-track{ height:26px; }
   .hero-left .ticker-chip{ height:20px; font-size:11px; padding:.14rem .42rem; }
 }
+
+
+/* === Align form to the right on desktop === */
+@media (min-width: 1024px){
+  .hero-right{ display:flex; justify-content:flex-end; }
+  .hero-right .glass{ width:100%; max-width:560px; margin-left:auto; }
+  .grid-12{ align-items:center; }
+}
