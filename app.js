@@ -207,7 +207,12 @@ document.addEventListener('DOMContentLoaded', () => {
   if ('scrollRestoration' in history) {
     history.scrollRestoration = 'manual';
   }
-  window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+  // Ensure page starts at top on fresh load (esp. mobile reload) when no hash
+  if (!location.hash) {
+    const resetToTop = () => window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+    resetToTop();
+    setTimeout(resetToTop, 140);
+  }
 
   const topbar = document.getElementById('topbar');
   if(topbar){
