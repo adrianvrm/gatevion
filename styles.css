@@ -892,3 +892,23 @@ h1.hero-title{
   }
 }
 
+
+
+/* Mobile form: ensure selected airport/date/time text fits fully in fields */
+@media (max-width: 640px){
+  .hero-right form .grid.grid-cols-2{
+    grid-template-columns: 1fr !important;
+  }
+  .hero-right form .grid.grid-cols-2 > *{
+    min-width: 0;
+  }
+  .select--airport,
+  .dp-input,
+  .tp-input{
+    font-size: 13px;
+    padding-left: 0.9rem;
+    padding-right: 0.9rem;
+    white-space: nowrap;
+  }
+}
+
