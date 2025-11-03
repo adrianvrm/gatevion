@@ -1052,3 +1052,42 @@ input:focus, .dp-input:focus, .tp-input:focus, select:focus{
   padding-right:0.9rem;
 }
 
+
+/* Brand primary utilities */
+.text-primary{ color:#2563EB; }
+.bg-primary-soft{ background:rgba(37,99,235,.06); }
+.border-primary{ border-color:#2563EB; }
+
+
+/* === Assurance strip (3 badges) – centered & brand-accented === */
+.assurance{
+  text-align:center;
+  align-items:stretch;
+}
+.assurance .chip-ghost{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  width:100%;
+  min-height:52px;
+  padding:.5rem 1.15rem;
+  background: radial-gradient(120% 220% at 0% 0%, rgba(37,99,235,.08), #ffffff);
+  border-color: rgba(15,23,42,.08);
+  box-shadow: 0 10px 26px rgba(15,23,42,.06), inset 0 1px 0 rgba(255,255,255,.9);
+  color:#0f172a;
+}
+.assurance .chip-ghost svg{
+  flex:0 0 16px;
+}
+.assurance .chip-ghost strong{
+  font-weight:700;
+  color:#2563EB;
+}
+@media (max-width:768px){
+  .assurance .chip-ghost{
+    min-height:48px;
+    padding:.45rem .9rem;
+  }
+}
+
