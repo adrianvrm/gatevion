@@ -204,6 +204,11 @@ function setLang(l){ localStorage.setItem('lang', l); if(l==='en'){ location.hre
 function toggleLang(){ const l = localStorage.getItem('lang')==='en'?'ro':'en'; setLang(l); }
 
 document.addEventListener('DOMContentLoaded', () => {
+  if ('scrollRestoration' in history) {
+    history.scrollRestoration = 'manual';
+  }
+  window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+
   const topbar = document.getElementById('topbar');
   if(topbar){
     const onScroll = ()=>{ if(window.scrollY>4) topbar.classList.add('shadow'); else topbar.classList.remove('shadow'); };
