@@ -2784,3 +2784,28 @@ body{
   box-shadow:0 10px 28px rgba(15,23,42,0.22);
 }
 
+
+
+@media (min-width: 1024px){
+  .results-sidebar .filter-card{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    column-gap:1.25rem;
+    row-gap:.35rem;
+  }
+  .results-sidebar .filter-title{
+    grid-column:1 / -1;
+    margin-bottom:.3rem;
+  }
+  .results-sidebar .filter-group{
+    margin-top:.35rem;
+  }
+  .results-sidebar .filter-group + .filter-group{
+    border-top:none;
+    padding-top:0;
+    margin-top:.35rem;
+  }
+  .results-sidebar .filter-group:last-child{
+    grid-column:1 / -1;
+  }
+}
