@@ -3129,3 +3129,20 @@ body{
     0 20px 55px rgba(15,23,42,0.2),
     0 0 0 1px rgba(148,163,184,0.55);
 }
+
+
+@media (min-width: 1024px){
+  .results-page .results-layout .wrap{
+    align-items:flex-start;
+  }
+  .results-page .results-sidebar{
+    position:sticky;
+    top:9.5rem;
+    left:auto;
+    width:auto;
+    max-width:280px;
+  }
+  .results-page .results-list{
+    margin-left:0;
+  }
+}
