@@ -3154,25 +3154,32 @@ body{
     gap:2.25rem;
   }
   .results-page .results-sidebar{
-    position:sticky;
+    position:fixed;
     top:9.5rem;
+    left:max(1rem, calc(50% - 560px + 1rem));
+    width:280px;
+    max-width:280px;
   }
   .results-page .results-sidebar::after{
     content:"";
     position:absolute;
-    top:-16px;
-    bottom:-16px;
-    right:-1.2rem;
-    width:1px;
+    top:-20px;
+    bottom:-20px;
+    right:-1.4rem;
+    width:2px;
     background:linear-gradient(to bottom,
       rgba(148,163,184,0),
-      rgba(148,163,184,0.7),
+      rgba(148,163,184,0.85),
+      rgba(56,189,248,0.9),
       rgba(148,163,184,0));
-    opacity:.9;
+    box-shadow:
+      0 0 0 1px rgba(15,23,42,0.18),
+      0 0 32px rgba(56,189,248,0.55);
+    opacity:.95;
     pointer-events:none;
+    animation:resultsDividerGlow 9s ease-in-out infinite;
   }
 }
-
 /* Harmonize topbar actions layout on results page */
 .results-page .results-topbar-actions{
   display:flex;
@@ -3186,4 +3193,10 @@ body{
 .results-page .btn-outline-premium{
   padding:.42rem 1.3rem;
   font-size:.8rem;
+}
+
+@keyframes resultsDividerGlow{
+  0%{ transform:translateY(0); opacity:.6; }
+  50%{ transform:translateY(-6px); opacity:1; }
+  100%{ transform:translateY(0); opacity:.6; }
 }
