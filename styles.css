@@ -1302,6 +1302,9 @@ h1.hero-title{
   max-width: 24ch;
 }
 
+
+
+
 /* === Hero v2 – premium look for Gatevion === */
 
 .hero.hero-premium{
@@ -1324,7 +1327,6 @@ h1.hero-title{
   z-index:10;
 }
 
-/* Col stânga */
 .hero-premium .hero-left{
   position:relative;
   z-index:20;
@@ -1352,7 +1354,6 @@ h1.hero-title{
   box-shadow:0 0 0 4px rgba(2,172,142,0.18);
 }
 
-/* Titlul pe două rânduri */
 .hero-title.hero-title-split{
   margin-top:1.3rem;
   display:flex;
@@ -1376,7 +1377,6 @@ h1.hero-title{
   color:transparent;
 }
 
-/* Pe mobil – centrăm tot blocul */
 @media (max-width:767.98px){
   .hero-title.hero-title-split{
     align-items:center;
@@ -1384,7 +1384,6 @@ h1.hero-title{
   }
 }
 
-/* Subline + listă premium */
 .hero-subline-premium{
   margin-top:1.5rem;
   font-size:1.05rem;
@@ -1422,7 +1421,6 @@ h1.hero-title{
   color:#02ac8e;
 }
 
-/* CTA row */
 .hero-cta-row{
   margin-top:2rem;
   display:flex;
@@ -1435,7 +1433,6 @@ h1.hero-title{
   color:#64748b;
 }
 
-/* În Hero facem .btn-primary să fie pe accentul Gatevion */
 .hero-premium .btn-primary{
   background:linear-gradient(120deg,#02ac8e,#0f172a);
   box-shadow:0 18px 40px rgba(15,23,42,0.25);
@@ -1448,12 +1445,9 @@ h1.hero-title{
   border-color:rgba(148,163,184,0.7);
 }
 
-/* Ticker-ul, dacă îl păstrezi, un pic mai aerisit */
 .hero-premium .ticker{
   margin-top:2rem;
 }
-
-/* Col dreapta – glow + card plutitor + badge-uri */
 
 .hero-premium .hero-right{
   position:relative;
@@ -1485,7 +1479,6 @@ h1.hero-title{
   animation:heroOrbFloat 11s ease-in-out infinite alternate;
 }
 
-/* Card-ul formularului */
 .hero-form-card{
   position:relative;
   z-index:20;
@@ -1496,7 +1489,6 @@ h1.hero-title{
   animation:heroFloat 9s ease-in-out infinite;
 }
 
-/* Badge-uri flotante */
 .hero-floating-badge{
   position:absolute;
   padding:.65rem .9rem;
@@ -1526,7 +1518,6 @@ h1.hero-title{
   animation:heroBadgeDrift 10s ease-in-out infinite reverse;
 }
 
-/* Fade-up pentru copy-ul din stânga */
 .hero-animate{
   opacity:0;
   transform:translateY(18px);
@@ -1536,7 +1527,6 @@ h1.hero-title{
 .hero-animate.delay-2{ animation-delay:.18s; }
 .hero-animate.delay-3{ animation-delay:.28s; }
 
-/* Keyframes */
 @keyframes heroFadeUp{
   from{ opacity:0; transform:translateY(24px);}
   to{ opacity:1; transform:translateY(0);}
@@ -1559,7 +1549,6 @@ h1.hero-title{
   100%{ transform:translateY(0);}
 }
 
-/* Respectăm preferințele de “reduced motion” */
 @media (prefers-reduced-motion: reduce){
   .hero-animate,
   .hero-form-card,
@@ -1569,4 +1558,89 @@ h1.hero-title{
     transform:none !important;
     opacity:1 !important;
   }
+}
+
+
+
+/* === Gatevion premium theming – rest of site === */
+
+/* Global: slightly softer background between sections */
+body{
+  background: radial-gradient(circle at top left, #f9fafb 0, #ffffff 40%, #f8fafc 100%);
+}
+
+/* Divider more subtle */
+.divider{
+  border-color: rgba(148,163,184,0.45);
+}
+
+/* Assurance strip */
+.assurance{
+  align-items:stretch;
+}
+.assurance .chip-ghost{
+  border-radius: 1rem;
+  border:1px solid rgba(148,163,184,0.6);
+  background: linear-gradient(135deg, rgba(248,250,252,0.9), rgba(241,245,249,0.96));
+  box-shadow: 0 12px 30px rgba(15,23,42,0.08);
+  font-weight:500;
+}
+
+/* Airport cards */
+#aeroporturi{
+  position:relative;
+  background: radial-gradient(160% 220% at 0% 0%, rgba(148,163,184,0.14), transparent 60%);
+}
+#aeroporturi .card{
+  border-radius:1.5rem;
+  border:1px solid rgba(148,163,184,0.5);
+  background:linear-gradient(145deg, rgba(255,255,255,0.98), rgba(241,245,249,0.96));
+  box-shadow:0 24px 60px rgba(15,23,42,0.12);
+}
+
+/* FAQ styling */
+.faq{
+  position:relative;
+  background: radial-gradient(160% 220% at 100% 0%, rgba(2,172,142,0.06), transparent 65%);
+}
+.faq h2{
+  letter-spacing:-0.03em;
+}
+.faq-item{
+  border-radius:1rem;
+  border:1px solid rgba(148,163,184,0.55);
+  background:rgba(255,255,255,0.96);
+  box-shadow:0 14px 40px rgba(15,23,42,0.08);
+}
+.faq-btn{
+  padding:0.9rem 1rem;
+}
+.faq-btn span:first-child{
+  font-weight:600;
+  color:#0f172a;
+}
+.faq-icon{
+  font-size:1.1rem;
+  color:#64748b;
+}
+
+/* Footer */
+.site-footer{
+  background: radial-gradient(circle at top, #0f172a, #020617 70%);
+  color:#e5e7eb;
+}
+.site-footer a{
+  color:#e5e7eb;
+}
+.site-footer a:hover{
+  color:#a5f3fc;
+}
+.site-footer .muted{
+  color:#9ca3af;
+}
+
+/* Buttons in footer/preferences */
+.site-footer button{
+  border-radius:999px;
+  border:1px solid rgba(148,163,184,0.6);
 }
