@@ -1046,3 +1046,22 @@ h1.hero-title{
   }
 }
 
+
+
+/* Mobile: make summary chips wrap fully so long airport names are fully visible */
+@media (max-width: 640px){
+  .summary{
+    display:flex !important;
+    flex-direction:column !important;
+    align-items:flex-start !important;
+  }
+  .summary .chip{
+    display:block !important;
+    width:100% !important;
+    max-width:100% !important;
+    white-space:normal !important;
+    overflow:visible !important;
+    text-overflow:clip !important;
+  }
+}
+
