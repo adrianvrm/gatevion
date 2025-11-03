@@ -2346,7 +2346,7 @@ body{
 @media (min-width: 1024px){
   .results-sidebar{
     position:sticky;
-    top:6.5rem;
+    top:5.5rem;
   }
 }
 .filter-card{
