@@ -1207,3 +1207,62 @@ h1.hero-title{
   border-color:rgba(37,99,235,.22);
 }
 
+
+
+/* === Hero title refinements: stylized comma & brand word === */
+.hero-comma{
+  display:inline-block;
+  transform: translateY(-0.15em);
+  font-weight: 500;
+  color: rgba(15,23,42,0.65);
+  padding-left: 0.02em;
+  padding-right: 0.03em;
+  animation: heroCommaPop .65s ease-out .18s both;
+}
+
+.hero-brand{
+  position: relative;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  background: linear-gradient(120deg,#0F172A 0%,#111827 40%,#2563EB 80%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  padding-inline: 0.08em;
+  animation: heroBrandReveal .8s cubic-bezier(0.19,1,0.22,1) .12s both;
+}
+.hero-brand::after{
+  content:"";
+  position:absolute;
+  inset: 65% 0 -0.05em 0;
+  border-radius: 999px;
+  background: radial-gradient(circle at 50% 0%, rgba(37,99,235,0.5), transparent 60%);
+  opacity: 0;
+  pointer-events:none;
+  animation: heroBrandUnderline 1.4s ease-out .38s forwards;
+}
+
+/* Animations just for micro-motion, not distracting */
+@keyframes heroCommaPop{
+  0%{ opacity:0; transform:translateY(-0.4em) scale(.8); }
+  60%{ opacity:1; transform:translateY(-0.15em) scale(1.02); }
+  100%{ opacity:1; transform:translateY(-0.15em) scale(1); }
+}
+@keyframes heroBrandReveal{
+  0%{ opacity:0; transform:translateY(8px) scale(.98); filter:blur(1px); }
+  60%{ opacity:1; transform:translateY(0) scale(1.01); filter:blur(0); }
+  100%{ opacity:1; transform:translateY(0) scale(1); }
+}
+@keyframes heroBrandUnderline{
+  0%{ opacity:0; transform:scaleX(0.3); }
+  50%{ opacity:1; transform:scaleX(1.05); }
+  100%{ opacity:0.9; transform:scaleX(1); }
+}
+
+/* Slightly tighten hero title spacing on very small screens */
+@media (max-width: 480px){
+  .hero-title{
+    font-size: clamp(1.75rem, 6vw, 2.1rem);
+  }
+}
+
