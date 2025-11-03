@@ -878,20 +878,6 @@ h1.hero-title{
 
 
 
-/* === Assurance badges: center text & content === */
-.assurance-row{
-  display:flex;
-  flex-wrap:wrap;
-  gap:0.5rem;
-}
-.assurance-row .chip-ghost{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  text-align:center;
-}
-
-
 /* =========================================================
    Gatevion – Full Visual Polish (CSS-only, no layout/JS changes)
    ========================================================= */
@@ -900,8 +886,8 @@ h1.hero-title{
 body{
   background-color:#ffffff;
   background-image:
-    radial-gradient(1400px 800px at 100% -10%, rgba(37,99,235,.05), transparent 55%),
-    radial-gradient(1200px 600px at -10% 110%, rgba(15,23,42,.04), transparent 55%);
+    radial-gradient(1400px 800px at 100% -10%, rgba(37,99,235,.09), transparent 58%),
+    radial-gradient(1200px 600px at -10% 110%, rgba(15,23,42,.07), transparent 58%);
   background-attachment: fixed;
   background-repeat: no-repeat;
   background-size: cover;
@@ -1039,5 +1025,30 @@ input:focus, .dp-input:focus, .tp-input:focus, select:focus{
   .card, .glass, .info-card, .step-card{
     box-shadow: 0 6px 16px rgba(15,23,42,.09);
   }
+}
+
+
+
+/* === Assurance badges: center text & content === */
+.assurance-row{
+  display:flex;
+  flex-wrap:wrap;
+  gap:0.5rem;
+  justify-content:center;
+}
+.assurance-row > *{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+}
+.assurance-row .chip-ghost,
+.assurance-row .chip{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding-left:0.9rem;
+  padding-right:0.9rem;
 }
 
