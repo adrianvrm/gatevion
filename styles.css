@@ -2941,3 +2941,46 @@ body{
 .pill:hover::before{
   opacity:.9;
 }
+
+
+/* Topbar sort selector */
+.results-topbar-actions{
+  display:flex;
+  align-items:center;
+  gap:.9rem;
+}
+.results-topbar-sort{
+  display:flex;
+  flex-direction:column;
+  gap:.18rem;
+}
+.results-topbar-sort-label{
+  font-size:.72rem;
+  text-transform:uppercase;
+  letter-spacing:.16em;
+  color:#64748b;
+}
+.results-topbar-sort-trigger{
+  display:inline-flex;
+  align-items:center;
+  gap:.4rem;
+  border-radius:999px;
+  padding:.32rem .9rem;
+  font-size:.8rem;
+  font-weight:500;
+  border:1px solid rgba(148,163,184,0.9);
+  background:radial-gradient(circle at 0 0, rgba(255,255,255,0.98), rgba(241,245,249,0.96));
+  color:#0f172a;
+  box-shadow:
+    0 10px 26px rgba(15,23,42,0.15),
+    0 0 0 1px rgba(255,255,255,0.8);
+  cursor:pointer;
+}
+.results-topbar-sort-trigger:hover{
+  border-color:rgba(2,172,142,0.9);
+  box-shadow:0 16px 40px rgba(15,23,42,0.2);
+}
+.results-topbar-sort-icon{
+  width:.9rem;
+  height:.9rem;
+}
