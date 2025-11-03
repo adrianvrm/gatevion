@@ -1645,7 +1645,7 @@ body{
   width:24px;
   height:1px;
   border-radius:999px;
-  background:linear-gradient(90deg,#22c55e,#0ea5e9);
+  background:linear-gradient(90deg,#02ac8e,#0f172a);
 }
 .section-head{
   max-width:42rem;
@@ -2059,7 +2059,7 @@ body{
   font-weight:600;
 }
 .main-nav .nav-link::after{
-  background:linear-gradient(90deg,#22c55e,#0ea5e9);
+  background:linear-gradient(90deg,#02ac8e,#0f172a);
 }
 
 /* Mobile nav icons (hamburger) */
@@ -2129,4 +2129,38 @@ body{
     text-align:left;
     width:100%;
   }
+}
+
+
+
+/* === Final hero alignment: title & subtitle centered, bullets left, CTAs centered === */
+.hero.hero-premium .hero-left{
+  text-align:center;
+}
+.hero.hero-premium .hero-title.hero-title-split{
+  align-items:center;
+  text-align:center;
+}
+.hero.hero-premium .hero-subline-premium{
+  text-align:center;
+  margin-left:auto;
+  margin-right:auto;
+}
+.hero.hero-premium .hero-premium-list{
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  text-align:left;
+  margin-left:0;
+  margin-right:auto;
+}
+.hero.hero-premium .hero-premium-list li{
+  text-align:left;
+}
+.hero.hero-premium .hero-cta-row{
+  justify-content:center;
+  text-align:center;
+}
+.hero.hero-premium .hero-cta-note{
+  text-align:center;
 }
