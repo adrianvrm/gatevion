@@ -1926,3 +1926,106 @@ body{
     display: none;
   }
 }
+
+
+
+/* === Premium header aligned with hero theme === */
+#topbar{
+  background:radial-gradient(140% 220% at 0% 0%, rgba(15,23,42,0.98), #020617);
+  color:#e5e7eb;
+  border-bottom:1px solid rgba(15,23,42,0.85);
+}
+#topbar.shadow{
+  box-shadow:0 16px 40px rgba(15,23,42,0.7);
+  background:radial-gradient(140% 220% at 0% 0%, rgba(15,23,42,1), #020617);
+}
+#topbar .wrap{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+.topbar-utility{
+  background:linear-gradient(90deg,rgba(15,23,42,0.96),rgba(2,172,142,0.55));
+  border-bottom:1px solid rgba(148,163,184,0.45);
+}
+.util-item{
+  color:#e5e7eb;
+}
+.lang-switch{
+  color:#e5e7eb;
+}
+.lang-switch .muted,
+.util-item .label{
+  opacity:.8;
+}
+.main-nav .nav-link{
+  color:#cbd5f5;
+}
+.main-nav .nav-link::after{
+  background:linear-gradient(90deg,#02ac8e,#a5f3fc);
+}
+.main-nav .nav-link:hover{
+  color:#e5e7eb;
+}
+#topbar .btn-primary{
+  box-shadow:0 16px 38px rgba(15,23,42,0.65);
+}
+.mobile-nav{
+  background:rgba(15,23,42,0.98);
+  border-top:1px solid rgba(30,64,175,0.7);
+  border-bottom:1px solid rgba(15,23,42,0.9);
+  box-shadow:0 18px 45px rgba(15,23,42,0.9);
+}
+.mnav-link{
+  color:#e5e7eb;
+}
+.mnav-link:hover{
+  background:rgba(15,23,42,0.8);
+}
+
+@media (max-width: 767.98px){
+  .topbar-utility{
+    display:none;
+  }
+}
+
+
+
+/* === Hero mobile tuning with badges visible === */
+@media (max-width: 767.98px){
+  .hero.hero-premium > .wrap{
+    padding-top: 3rem;
+    padding-bottom: 2.4rem;
+  }
+  .hero-premium .hero-right{
+    margin-top: 2rem;
+    justify-self: center;
+  }
+  /* Re-enable decorative elements on mobile and adapt positions */
+  .hero-orb{
+    display:block;
+  }
+  .hero-floating-badge{
+    display:flex;
+  }
+  .hero-orb--primary{
+    width: 220px;
+    height: 220px;
+    top: -24px;
+    right: -28px;
+  }
+  .hero-orb--soft{
+    width: 180px;
+    height: 180px;
+    bottom: -32px;
+    left: -20px;
+  }
+  .hero-floating-badge--top{
+    top: -8px;
+    right: 14%;
+  }
+  .hero-floating-badge--bottom{
+    bottom: -8px;
+    left: 10%;
+  }
+}
