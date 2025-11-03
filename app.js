@@ -325,6 +325,29 @@ document.addEventListener('DOMContentLoaded', () => {
     const eHidden = formEl.querySelector('#endValue');
     if(sHidden) sHidden.value = start;
     if(eHidden) eHidden.value = end;
+
+    // Build URL for results page including selected values
+    const params = new URLSearchParams();
+    const arrHidden = formEl.querySelector('input[name="arr_airport"]');
+    const depHidden = formEl.querySelector('input[name="dep_airport"]');
+    const arrDisplay = document.querySelector('.picker[data-target="arr_airport"] .ap-input');
+    const depDisplay = document.querySelector('.picker[data-target="dep_airport"] .ap-input');
+
+    if(arrHidden && arrHidden.value) params.set('arr', arrHidden.value);
+    if(depHidden && depHidden.value) params.set('dep', depHidden.value);
+    if(arrDisplay && arrDisplay.value) params.set('arrLabel', arrDisplay.value);
+    if(depDisplay && depDisplay.value) params.set('depLabel', depDisplay.value);
+    if(sd) params.set('sd', sd);
+    if(st) params.set('st', st);
+    if(ed) params.set('ed', ed);
+    if(et) params.set('et', et);
+    if(start) params.set('start', start);
+    if(end) params.set('end', end);
+
+    const qs = params.toString();
+    const url = './rezultate.html' + (qs ? `?${qs}` : '');
+    e.preventDefault();
+    window.location.href = url;
   });
 
   
@@ -345,6 +368,59 @@ document.addEventListener('DOMContentLoaded', () => {
         formCard.classList.remove('hero-form-highlight');
       }, 900);
     });
+  }
+
+
+  // Results page: hydrate summary/topbar from query params
+  if(window.location.pathname && window.location.pathname.endsWith('rezultate.html')){
+    const params = new URLSearchParams(window.location.search || '');
+    const arrLabel = params.get('arrLabel') || params.get('arr') || '';
+    const depLabel = params.get('depLabel') || params.get('dep') || '';
+    const sd = params.get('sd') || '';
+    const st = params.get('st') || '';
+    const ed = params.get('ed') || '';
+    const et = params.get('et') || '';
+
+    const fmtDate = (iso)=>{
+      if(!iso) return '';
+      const parts = iso.split('-');
+      if(parts.length!==3) return iso;
+      const [y,m,d] = parts;
+      return `${d}.${m}.${y}`;
+    };
+
+    const routeText = (arrLabel || '—') + (depLabel ? ` → ${depLabel}` : '');
+    const pickupText = (sd ? fmtDate(sd) : '—') + (st ? ` • ${st}` : '');
+    const returnText = (ed ? fmtDate(ed) : '—') + (et ? ` • ${et}` : '');
+
+    const barRoute = document.getElementById('barRoute');
+    const barPickup = document.getElementById('barPickup');
+    const barReturn = document.getElementById('barReturn');
+
+    if(barRoute && routeText.trim()) barRoute.textContent = routeText;
+    if(barPickup && pickupText.trim()) barPickup.textContent = pickupText;
+    if(barReturn && returnText.trim()) barReturn.textContent = returnText;
+
+    const resRoute = document.getElementById('resRoute');
+    const resPickup = document.getElementById('resPickup');
+    const resReturn = document.getElementById('resReturn');
+    const resArr = document.getElementById('resArr');
+    const resDep = document.getElementById('resDep');
+    const resPickupDetail = document.getElementById('resPickupDetail');
+    const resReturnDetail = document.getElementById('resReturnDetail');
+
+    if(resRoute && routeText.trim()) resRoute.textContent = routeText;
+    if(resPickup && pickupText.trim()) resPickup.textContent = pickupText;
+    if(resReturn && returnText.trim()) resReturn.textContent = returnText;
+
+    if(resArr && (arrLabel || params.get('arr'))){
+      resArr.textContent = arrLabel || params.get('arr');
+    }
+    if(resDep && (depLabel || params.get('dep'))){
+      resDep.textContent = depLabel || params.get('dep');
+    }
+    if(resPickupDetail && pickupText.trim()) resPickupDetail.textContent = pickupText;
+    if(resReturnDetail && returnText.trim()) resReturnDetail.textContent = returnText;
   }
 
 const y = document.getElementById('y');
