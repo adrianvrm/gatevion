@@ -1296,3 +1296,77 @@ input:focus, .dp-input:focus, .tp-input:focus, select:focus{
   }
 }
 
+
+
+/* === Header mobile fix: remove glass effect & ensure solid bar === */
+.topbar{
+  backdrop-filter: none !important;
+  background: linear-gradient(180deg, #ffffff, #f8fafc) !important;
+  background-color:#ffffff !important;
+}
+
+
+/* === Mobile nav overlay: fully opaque & above content === */
+@media (max-width: 768px){
+  .mobile-nav{
+    position: fixed !important;
+    inset: 0 !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    background:#020617 !important;
+    background-image: radial-gradient(140% 180% at 0% 0%, rgba(37,99,235,0.26), #020617) !important;
+    padding:72px 16px 20px;
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+    box-shadow:0 24px 48px rgba(15,23,42,0.85);
+    z-index:9999;
+  }
+  .mobile-nav .mnav-link{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    color:#E5E7EB;
+    padding:10px 12px;
+    border-radius:999px;
+    font-weight:600;
+    font-size:14px;
+    text-decoration:none;
+    background:rgba(15,23,42,0.65);
+  }
+  .mobile-nav .mnav-link:hover{
+    background:rgba(15,23,42,0.9);
+  }
+}
+
+
+/* === Airport selectors: keep icons away from text === */
+.select--airport{
+  background-position: 0.7rem center, calc(100% - 0.75rem) center;
+  background-repeat: no-repeat;
+  padding-left: 2.6rem;
+  padding-right: 2.6rem;
+}
+@media (max-width: 640px){
+  .select--airport{
+    font-size:13px;
+    padding-left: 2.4rem;
+    padding-right: 2.4rem;
+  }
+  .ap-input{
+    font-size:13px;
+    padding-inline: 10px;
+  }
+}
+
+
+/* === Date/time popover: ensure fully visible via internal scroll on small screens === */
+@media (max-width: 768px){
+  .popover{
+    max-height: 60vh;
+    overflow-y: auto;
+  }
+}
+
