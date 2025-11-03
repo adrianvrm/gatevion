@@ -912,3 +912,15 @@ h1.hero-title{
   }
 }
 
+
+
+/* Mobile: keep space for airport icons so text never overlaps */
+@media (max-width: 640px){
+  .select--airport{
+    font-size:13px;
+    padding-left:2.2rem !important;
+    padding-right:2.4rem !important;
+    white-space:normal;
+  }
+}
+
