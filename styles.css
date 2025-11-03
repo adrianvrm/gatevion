@@ -2507,10 +2507,10 @@ body{
 .car-specs{
   display:grid;
   grid-template-columns:repeat(4,minmax(0,1fr));
-  gap:.8rem;
-  padding:.8rem .95rem;
-  border-radius:1.1rem;
-  background:linear-gradient(135deg,rgba(15,23,42,0.015),rgba(148,163,184,0.08));
+  gap:1rem;
+  padding:.95rem 1.05rem;
+  border-radius:1.15rem;
+  background:linear-gradient(135deg,rgba(15,23,42,0.02),rgba(148,163,184,0.09));
 }
 @media (max-width: 1024px){
   .car-specs{
@@ -2524,23 +2524,24 @@ body{
 }
 .car-spec{
   display:flex;
-  align-items:center;
-  gap:.7rem;
+  align-items:flex-start;
+  gap:.8rem;
+  min-height:2.4rem;
 }
 .car-spec-icon{
   flex-shrink:0;
-  width:2.1rem;
-  height:2.1rem;
+  width:2rem;
+  height:2rem;
   border-radius:999px;
   display:flex;
   align-items:center;
   justify-content:center;
   background:
-    radial-gradient(circle at 0 0,rgba(2,172,142,0.09),transparent 60%),
-    radial-gradient(circle at 100% 100%,rgba(56,189,248,0.09),transparent 60%);
+    radial-gradient(circle at 0 0,rgba(2,172,142,0.1),transparent 58%),
+    radial-gradient(circle at 100% 100%,rgba(56,189,248,0.1),transparent 58%);
   box-shadow:
-    0 0 0 1px rgba(148,163,184,0.32),
-    0 8px 18px rgba(15,23,42,0.14);
+    0 0 0 1px rgba(148,163,184,0.28),
+    0 7px 16px rgba(15,23,42,0.14);
   color:#0f172a;
 }
 .car-spec-icon-svg{
@@ -2551,6 +2552,9 @@ body{
   display:flex;
   flex-direction:column;
   gap:.05rem;
+  flex:1;
+  min-width:0;
+  line-height:1.25;
 }
 .car-spec-label{
   font-size:.64rem;
@@ -2562,6 +2566,16 @@ body{
   font-size:.84rem;
   font-weight:550;
   color:#0f172a;
+}
+
+
+@media (max-width: 640px){
+  .car-spec{
+    align-items:flex-start;
+  }
+  .car-spec-text{
+    margin-top:.05rem;
+  }
 }
 
 /* Price + CTA row */
