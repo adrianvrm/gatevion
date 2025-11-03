@@ -1841,3 +1841,46 @@ body{
 .hero-animate.delay-1{ animation-delay:.12s; }
 .hero-animate.delay-2{ animation-delay:.22s; }
 .hero-animate.delay-3{ animation-delay:.32s; }
+
+
+
+/* === Hero form focus highlight & mobile adjustments === */
+
+/* Smooth anchor scrolling offset for the form */
+#searchForm{
+  scroll-margin-top: 110px;
+}
+
+@media (max-width: 767.98px){
+  .hero.hero-premium .hero-right{
+    margin-top:2.5rem;
+  }
+  .hero-form-card{
+    max-width:480px;
+    margin-left:auto;
+    margin-right:auto;
+  }
+  #searchForm{
+    scroll-margin-top: 90px;
+  }
+}
+
+/* Glow highlight when user clicks "Începe rezervarea" */
+.hero-form-card::before{
+  content:"";
+  position:absolute;
+  inset:-12px;
+  border-radius:inherit;
+  background:
+    radial-gradient(140% 180% at 50% 0%, rgba(2,172,142,0.30), transparent 65%),
+    radial-gradient(120% 160% at 0% 100%, rgba(15,23,42,0.26), transparent 70%);
+  opacity:0;
+  pointer-events:none;
+  transform:scale(.96);
+  transition:opacity .45s ease-out, transform .45s ease-out;
+}
+
+.hero-form-card.hero-form-highlight::before{
+  opacity:1;
+  transform:scale(1);
+}

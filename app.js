@@ -317,6 +317,26 @@ document.addEventListener('DOMContentLoaded', () => {
     if(eHidden) eHidden.value = end;
   });
 
-  const y = document.getElementById('y');
+  
+  // Hero CTA -> focus form card with glow & adjusted scroll
+  const startBtn = document.getElementById('startBookingBtn');
+  const formCard = document.querySelector('.hero-form-card');
+  if(startBtn && formCard){
+    startBtn.addEventListener('click', (e)=>{
+      e.preventDefault();
+      const rect = formCard.getBoundingClientRect();
+      const offset = 110;
+      const targetY = rect.top + window.scrollY - offset;
+      window.scrollTo({ top: targetY < 0 ? 0 : targetY, behavior: 'smooth' });
+
+      // trigger highlight glow
+      formCard.classList.add('hero-form-highlight');
+      setTimeout(()=>{
+        formCard.classList.remove('hero-form-highlight');
+      }, 900);
+    });
+  }
+
+const y = document.getElementById('y');
   if(y) y.textContent = new Date().getFullYear();
 });
