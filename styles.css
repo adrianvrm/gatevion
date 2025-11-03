@@ -1372,13 +1372,6 @@ input:focus, .dp-input:focus, .tp-input:focus, select:focus{
 
 
 
-/* === FIX 1: Airport select icons not overlapping text === */
-.select--airport{
-  background-image: none !important; /* remove inline icon bg to keep text clean */
-  padding-left: 0.9rem !important;
-  padding-right: 0.9rem !important;
-}
-
 /* === FIX 2: Date/time popovers as bottom sheets on mobile === */
 @media (max-width: 640px){
   .picker--date .popover,
@@ -1423,6 +1416,51 @@ input:focus, .dp-input:focus, .tp-input:focus, select:focus{
     font-size:14px;
     text-decoration:none;
     background:rgba(15,23,42,0.85);
+  }
+}
+
+
+
+/* === Airport select: icons via wrapper, text never overlapped === */
+.picker--airport{
+  position: relative;
+}
+.picker--airport::before{
+  content:"";
+  position:absolute;
+  left:0.8rem;
+  top:50%;
+  width:14px;
+  height:14px;
+  transform:translateY(-50%);
+  background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="none"><path d="M2 10.5l16-4-1-2.5-7 2-3-5-1.5.5 1.5 6-3.5 1z" stroke="%2394A3B8" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 14l10 2" stroke="%2394A3B8" stroke-width="1.4" stroke-linecap="round"/></svg>');
+  background-repeat:no-repeat;
+  background-size:contain;
+  pointer-events:none;
+}
+.picker--airport::after{
+  content:"";
+  position:absolute;
+  right:0.85rem;
+  top:50%;
+  width:11px;
+  height:11px;
+  transform:translateY(-50%);
+  background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="none"><path d="M5 7.5l5 5 5-5" stroke="%2394A3B8" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>');
+  background-repeat:no-repeat;
+  background-size:contain;
+  pointer-events:none;
+}
+.select--airport{
+  background-image:none !important;
+  padding-left:2.6rem !important;
+  padding-right:2.4rem !important;
+}
+@media (max-width: 640px){
+  .select--airport{
+    font-size:13px;
+    padding-left:2.4rem !important;
+    padding-right:2.2rem !important;
   }
 }
 
