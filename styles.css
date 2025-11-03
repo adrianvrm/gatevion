@@ -2345,10 +2345,11 @@ body{
 }
 @media (min-width: 1024px){
   .results-sidebar{
-    position:sticky;
-    top:9.5rem;
+    position:relative;
+    align-self:flex-start;
   }
 }
+
 .filter-card{
   position:relative;
   border-radius:1.1rem;
@@ -2616,11 +2617,11 @@ body{
   100%{ transform:translate3d(0,0,0) scale(1); opacity:.35; }
 }
 .results-topbar{
-  position:sticky;
-  z-index:20;
-  top:5rem;
-  margin-top:.25rem;
+  position:relative;
+  z-index:5;
+  margin-top:.35rem;
 }
+
 
 
 .results-topbar::before,
@@ -2654,7 +2655,8 @@ body{
 }
 
 .results-topbar-inner{
-  position:relative;
+  position:sticky;
+  top:5.2rem;
   display:flex;
   align-items:center;
   justify-content:space-between;
@@ -2807,5 +2809,14 @@ body{
   }
   .results-sidebar .filter-pills{
     gap:.25rem;
+  }
+}
+
+
+@media (min-width: 1024px){
+  .results-sidebar .filter-card{
+    position:sticky;
+    top:9.2rem;
+    backdrop-filter:blur(14px);
   }
 }
