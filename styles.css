@@ -1370,3 +1370,59 @@ input:focus, .dp-input:focus, .tp-input:focus, select:focus{
   }
 }
 
+
+
+/* === FIX 1: Airport select icons not overlapping text === */
+.select--airport{
+  background-image: none !important; /* remove inline icon bg to keep text clean */
+  padding-left: 0.9rem !important;
+  padding-right: 0.9rem !important;
+}
+
+/* === FIX 2: Date/time popovers as bottom sheets on mobile === */
+@media (max-width: 640px){
+  .picker--date .popover,
+  .picker--time .popover{
+    position: fixed !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    top: auto !important;
+    margin: 0 auto !important;
+    width: 100vw !important;
+    max-width: 100vw !important;
+    border-radius: 16px 16px 0 0 !important;
+  }
+}
+
+/* === FIX 3: Mobile nav back to dropdown style, but solid background === */
+@media (max-width: 768px){
+  .mobile-nav{
+    position: absolute !important;
+    top: 100% !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: auto !important;
+    background:#020617 !important;
+    background-image: none !important;
+    padding:10px 16px 14px !important;
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+    box-shadow:0 16px 40px rgba(15,23,42,0.6) !important;
+    z-index:80 !important;
+  }
+  .mobile-nav .mnav-link{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    color:#E5E7EB;
+    padding:8px 10px;
+    border-radius:999px;
+    font-weight:500;
+    font-size:14px;
+    text-decoration:none;
+    background:rgba(15,23,42,0.85);
+  }
+}
+
