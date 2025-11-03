@@ -1,22 +1,49 @@
 <!DOCTYPE html>
 <html lang="ro">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Gatevion – Rezultate</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Gatevion – Broker premium de închirieri auto</title>
+  <meta name="description" content="Gatevion este brokerul premium de închirieri auto. Rezervă simplu – status PENDING până la Accept/Decline. Aeroporturi OTP & BBU." />
+  <link rel="canonical" href="https://gatevion.ro/" />
+  <link rel="alternate" href="https://gatevion.ro/" hreflang="ro" />
+  <link rel="alternate" href="https://gatevion.ro/en" hreflang="en" />
+  <meta name="theme-color" content="#0f172a" />
+
+  <!-- TailwindCSS CDN for prototyping -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: { extend: { colors: { primary: '#0f172a' }, fontFamily: { sans: ['Manrope','Inter','system-ui','Segoe UI','Roboto','Helvetica','Arial','sans-serif'] }, boxShadow:{ soft:'0 10px 30px rgba(0,0,0,.08)' } } }
+    }
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = { theme: { extend: { colors: { primary: '#0f172a' }, fontFamily: { sans: ['Manrope','Inter','system-ui','Segoe UI','Roboto','Helvetica','Arial','sans-serif'] } } } };
-  </script>
+
   <link rel="stylesheet" href="./styles.css" />
 </head>
-<body class="font-sans text-slate-900 bg-white">
+
+  <body class="font-sans text-slate-900 bg-white">
+  <!-- Header -->
   <header class="sticky top-0 z-50 bg-white/90 border-b border-slate-100 topbar" id="topbar">
+<div class="topbar-utility">
+  <a class="util-item" href="tel:+40700000000" aria-label="Sună-ne">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3.5l4 2v3l-2 1.5a12 12 0 006 6l1.5-2h3l2 4-2.5 2.5c-.7.7-2 .9-3 .6-8.1-2.1-13-7.9-15.1-16-.3-1 .0-2.2.7-2.9L6 3.5z" fill="currentColor"/></svg>
+    <span class="label">+40 700 000 000</span>
+  </a>
+  <a class="util-item" href="https://wa.me/40700000000" target="_blank" rel="noopener" aria-label="WhatsApp">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5a9.5 9.5 0 00-8.2 14.4L3 22l5.3-1a9.5 9.5 0 004.7 1.2 9.5 9.5 0 000-19z" fill="currentColor"/><path d="M8.5 9.8c.1-.2.3-.3.5-.3h.4c.1 0 .2 0 .3.2l.8 1.4c.1.2.1.4 0 .5l-.4.5c.9 1.6 2.2 2.6 3.7 3.3l.4-.4c.1-.1.3-.2.5-.1l1.6.6c.2.1.3.2.3.4l-.1.6c0 .2-.2.4-.4.5-.6.3-1.2.4-1.8.3-3.3-.6-6-3.1-7.2-6.2-.2-.6-.2-1.2 0-1.8z" fill="#fff"/></svg>
+    <span class="label">WhatsApp</span>
+  </a>
+  <div class="util-spacer"></div>
+  <a class="util-item" href="./index.html#faq">Întrebări frecvente</a>
+  <button class="util-item lang-switch" type="button" aria-label="Schimbă limba">RO <span class="muted">/ EN</span></button>
+</div>
+
     <div class="wrap h-16 flex items-center justify-between">
       <a href="/" class="flex items-center gap-2" aria-label="Gatevion home">
+        <!-- Inline SVG logo -->
         <svg class="h-8 w-auto" viewBox="0 0 180 32" aria-label="Gatevion logo" role="img">
           <g>
             <circle cx="16" cy="16" r="12" fill="#0f172a" fill-opacity="0.08"></circle>
@@ -25,17 +52,356 @@
           </g>
         </svg>
       </a>
+      <button id="mobileToggle" class="md:hidden inline-flex items-center justify-center w-10 h-10 rounded-lg border border-slate-200 mr-2" aria-label="Deschide meniul">
+  <svg viewBox="0 0 24 24" width="20" height="20"><path d="M4 7h16M4 12h16M4 17h16" stroke="#0f172a" stroke-width="2" stroke-linecap="round"/></svg>
+</button>
+<nav class="main-nav hidden md:flex items-center gap-6">
+        <a href="./index.html#cum-functioneaza" class="nav-link">Cum funcționează</a>
+        <a href="./index.html#aeroporturi" class="nav-link">Aeroporturi</a>
+        <a href="./index.html#faq" class="nav-link">Întrebări frecvente</a>
+      </nav>
+      <div class="flex items-center gap-3">
+        <button id="langBtn" class="text-sm px-3 py-1 rounded-full border border-slate-200 hover:border-slate-300">RO / EN</button>
+        <a href="/rezultate.html" class="btn btn-primary" aria-label="Caută mașini disponibile">Caută mașini disponibile</a>
+      </div>
     </div>
-  </header>
+  <div id="mobileNav" class="mobile-nav" hidden>
+  <a href="./index.html#cum-functioneaza" class="mnav-link mnav-cf">Cum funcționează</a>
+  <a href="./index.html#aeroporturi" class="mnav-link mnav-ap">Aeroporturi</a>
+  <a href="./index.html#faq" class="mnav-link mnav-faq">Întrebări frecvente</a>
+</div>
+</header>
 
-  <main class="wrap py-16">
-    <h1 class="text-2xl md:text-3xl font-semibold text-primary">Rezultatele căutării</h1>
-    <p class="mt-2 text-slate-600">Pagina de rezultate urmează să fie implementată. Între timp, formularul din prima pagină trimite datele selectate (aeroporturi + interval) în query string/hidden fields.</p>
-    <p class="mt-6"><a href="./index.html" class="btn btn-primary">Înapoi la pagina principală</a></p>
+  <main class="results-main bg-slate-50">
+    <!-- Results hero / summary -->
+    <section class="results-hero border-b border-slate-200/70 bg-gradient-to-b from-slate-50 to-slate-100/70">
+      <div class="wrap py-8 md:py-10 lg:py-12">
+        <div class="grid gap-6 lg:grid-cols-[minmax(0,1.6fr)_minmax(0,1.1fr)] items-start">
+          <div class="results-hero-left">
+            <p class="section-kicker">Rezultatele căutării</p>
+            <h1 class="results-title text-2xl md:text-3xl lg:text-4xl font-semibold tracking-tight text-slate-900">
+              Mașini disponibile pentru aeroporturile tale
+            </h1>
+            <p class="mt-3 text-sm md:text-base text-slate-600 max-w-xl">
+              Acesta este șablonul de rezultate Gatevion. Aici vor apărea mașinile confirmate de partenerii verificați,
+              filtrate după aeroporturi, interval și preferințele tale.
+            </p>
+            <div class="results-meta mt-5 flex flex-wrap gap-2">
+              <span class="chip chip-soft">
+                <span class="chip-label">Aeroporturi</span>
+                <span class="chip-value" id="resRoute">OTP → BBU (exemplu)</span>
+              </span>
+              <span class="chip chip-soft">
+                <span class="chip-label">Preluare</span>
+                <span class="chip-value" id="resPickup">Data &amp; ora</span>
+              </span>
+              <span class="chip chip-soft">
+                <span class="chip-label">Returnare</span>
+                <span class="chip-value" id="resReturn">Data &amp; ora</span>
+              </span>
+              <span class="chip chip-soft chip-soft--status">
+                <span class="chip-label">Status</span>
+                <span class="chip-value">Solicitare PENDING la parteneri</span>
+              </span>
+            </div>
+          </div>
+          <div class="results-hero-right">
+            <div class="results-search-card">
+              <h2 class="text-sm font-semibold text-slate-900 tracking-wide uppercase">
+                Rezumat căutare
+              </h2>
+              <p class="mt-2 text-xs text-slate-500">
+                În versiunea finală, aceste câmpuri vor fi completate automat din formularul de pe pagina principală
+                sau din query string-ul URL-ului.
+              </p>
+              <dl class="mt-4 space-y-3 text-sm">
+                <div class="flex items-start justify-between gap-3">
+                  <dt class="text-slate-500">Aeroport sosire</dt>
+                  <dd class="font-medium text-slate-900 text-right" id="resArr">OTP – Henri Coandă (exemplu)</dd>
+                </div>
+                <div class="flex items-start justify-between gap-3">
+                  <dt class="text-slate-500">Aeroport plecare</dt>
+                  <dd class="font-medium text-slate-900 text-right" id="resDep">BBU – Aurel Vlaicu (exemplu)</dd>
+                </div>
+                <div class="flex items-start justify-between gap-3">
+                  <dt class="text-slate-500">Preluare</dt>
+                  <dd class="font-medium text-slate-900 text-right" id="resPickupDetail">—</dd>
+                </div>
+                <div class="flex items-start justify-between gap-3">
+                  <dt class="text-slate-500">Returnare</dt>
+                  <dd class="font-medium text-slate-900 text-right" id="resReturnDetail">—</dd>
+                </div>
+              </dl>
+              <div class="mt-5 flex flex-wrap gap-2 justify-between">
+                <a href="./index.html" class="btn btn-ghost text-sm">Modifică căutarea</a>
+                <button type="button" class="btn btn-primary text-sm px-4 py-2">
+                  Salvează această căutare
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Results layout: filters + list -->
+    <section class="results-layout py-10 lg:py-12">
+      <div class="wrap grid gap-8 lg:grid-cols-[minmax(0,280px)_minmax(0,1fr)]">
+        <!-- Sidebar filters (static template, to be wired later) -->
+        <aside class="results-sidebar">
+          <div class="filter-card">
+            <h2 class="filter-title">Filtre rapide</h2>
+            <div class="filter-group">
+              <p class="filter-label">Tip mașină</p>
+              <div class="filter-pills">
+                <button type="button" class="pill pill-active">Compact</button>
+                <button type="button" class="pill">Sedan</button>
+                <button type="button" class="pill">SUV</button>
+                <button type="button" class="pill">Premium</button>
+              </div>
+            </div>
+            <div class="filter-group">
+              <p class="filter-label">Transmisie</p>
+              <div class="filter-pills">
+                <button type="button" class="pill pill-active">Automată</button>
+                <button type="button" class="pill">Manuală</button>
+              </div>
+            </div>
+            <div class="filter-group">
+              <p class="filter-label">Politică combustibil</p>
+              <div class="filter-pills">
+                <button type="button" class="pill">Full → Full</button>
+                <button type="button" class="pill">Altele</button>
+              </div>
+            </div>
+            <div class="filter-group">
+              <p class="filter-label">Garanție / depozit</p>
+              <div class="filter-pills">
+                <button type="button" class="pill pill-active">Fără depozit</button>
+                <button type="button" class="pill">Depozit mic</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="filter-card">
+            <h2 class="filter-title">Sortare</h2>
+            <div class="filter-group">
+              <div class="sort-options">
+                <button type="button" class="sort-pill sort-pill-active">Recomandat</button>
+                <button type="button" class="sort-pill">Preț (crescător)</button>
+                <button type="button" class="sort-pill">Preț (descrescător)</button>
+                <button type="button" class="sort-pill">Cele mai noi flote</button>
+              </div>
+            </div>
+          </div>
+        </aside>
+
+        <!-- Results list: sample car cards as template -->
+        <div class="results-list space-y-6 lg:space-y-7">
+          <!-- Card 1 -->
+          <article class="car-card">
+            <div class="car-media">
+              <div class="car-image-skeleton" aria-hidden="true">
+                <span class="skeleton-label">Imagine mașină (placeholder)</span>
+              </div>
+              <div class="car-tags">
+                <span class="tag tag-brand">Fără card de credit</span>
+                <span class="tag tag-soft">Asigurare CASCO inclusă</span>
+              </div>
+            </div>
+            <div class="car-main">
+              <header class="car-header">
+                <div>
+                  <h2 class="car-name">Volkswagen Golf VIII sau similar</h2>
+                  <p class="car-subtitle">Compact • Automată • 5 locuri • Aer condiționat</p>
+                </div>
+                <div class="car-price">
+                  <p class="car-price-main">€49<span>/zi</span></p>
+                  <p class="car-price-note">Preț total estimativ: €245</p>
+                  <p class="car-price-includes">Include taxe, CASCO și TVA</p>
+                </div>
+              </header>
+              <div class="car-meta">
+                <div class="meta-col">
+                  <p class="meta-label">Preluare</p>
+                  <p class="meta-value">OTP – Henri Coandă • Terminal Sosiri</p>
+                  <p class="meta-note">Întâlnire cu reprezentantul în zona de sosiri</p>
+                </div>
+                <div class="meta-col">
+                  <p class="meta-label">Returnare</p>
+                  <p class="meta-value">BBU – Aurel Vlaicu • Zona plecări</p>
+                  <p class="meta-note">Instrucțiuni exacte în mailul de confirmare</p>
+                </div>
+                <div class="meta-col meta-col--partner">
+                  <p class="meta-label">Partener</p>
+                  <p class="meta-value">Partner Rent Premium</p>
+                  <p class="meta-note">Rating intern Gatevion: 4.8 / 5</p>
+                </div>
+              </div>
+              <div class="car-footer">
+                <div class="car-badges">
+                  <span class="tag tag-soft">Plată la livrare</span>
+                  <span class="tag tag-soft">Kilometraj inclus 250 km/zi</span>
+                  <span class="tag tag-soft">Asistență rutieră 24/7</span>
+                </div>
+                <div class="car-actions">
+                  <button type="button" class="btn btn-ghost-sm">Detalii ofertă</button>
+                  <button type="button" class="btn btn-primary-sm">Trimite solicitare</button>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <!-- Card 2 -->
+          <article class="car-card">
+            <div class="car-media">
+              <div class="car-image-skeleton" aria-hidden="true">
+                <span class="skeleton-label">Imagine mașină (placeholder)</span>
+              </div>
+              <div class="car-tags">
+                <span class="tag tag-brand">Fără depozit</span>
+                <span class="tag tag-soft">Șofer adițional inclus</span>
+              </div>
+            </div>
+            <div class="car-main">
+              <header class="car-header">
+                <div>
+                  <h2 class="car-name">BMW Seria 3 sau similar</h2>
+                  <p class="car-subtitle">Sedan premium • Automată • 5 locuri</p>
+                </div>
+                <div class="car-price">
+                  <p class="car-price-main">€79<span>/zi</span></p>
+                  <p class="car-price-note">Preț total estimativ: €395</p>
+                  <p class="car-price-includes">Include taxe, CASCO, TVA și livrare la terminal</p>
+                </div>
+              </header>
+              <div class="car-meta">
+                <div class="meta-col">
+                  <p class="meta-label">Preluare</p>
+                  <p class="meta-value">OTP – Henri Coandă • Parcarea „Rent a car”</p>
+                  <p class="meta-note">Shuttle sau escortă în funcție de partener</p>
+                </div>
+                <div class="meta-col">
+                  <p class="meta-label">Returnare</p>
+                  <p class="meta-value">OTP – Henri Coandă • Parcarea „Rent a car”</p>
+                  <p class="meta-note">Instrucțiuni clare în confirmare</p>
+                </div>
+                <div class="meta-col meta-col--partner">
+                  <p class="meta-label">Partener</p>
+                  <p class="meta-value">Airport Elite Cars</p>
+                  <p class="meta-note">Partener verificat manual</p>
+                </div>
+              </div>
+              <div class="car-footer">
+                <div class="car-badges">
+                  <span class="tag tag-soft">Livrare 24/7</span>
+                  <span class="tag tag-soft">Politică combustibil Full → Full</span>
+                  <span class="tag tag-soft">Fără costuri ascunse</span>
+                </div>
+                <div class="car-actions">
+                  <button type="button" class="btn btn-ghost-sm">Detalii ofertă</button>
+                  <button type="button" class="btn btn-primary-sm">Trimite solicitare</button>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <!-- Card 3 -->
+          <article class="car-card">
+            <div class="car-media">
+              <div class="car-image-skeleton" aria-hidden="true">
+                <span class="skeleton-label">Imagine mașină (placeholder)</span>
+              </div>
+              <div class="car-tags">
+                <span class="tag tag-soft">Buget optim</span>
+                <span class="tag tag-soft">Ideal pentru city-break</span>
+              </div>
+            </div>
+            <div class="car-main">
+              <header class="car-header">
+                <div>
+                  <h2 class="car-name">Dacia Sandero Stepway sau similar</h2>
+                  <p class="car-subtitle">Crossover urban • Manuală • 5 locuri</p>
+                </div>
+                <div class="car-price">
+                  <p class="car-price-main">€35<span>/zi</span></p>
+                  <p class="car-price-note">Preț total estimativ: €175</p>
+                  <p class="car-price-includes">Include CASCO, TVA și asistență 24/7</p>
+                </div>
+              </header>
+              <div class="car-meta">
+                <div class="meta-col">
+                  <p class="meta-label">Preluare</p>
+                  <p class="meta-value">BBU – Aurel Vlaicu • Terminal principal</p>
+                  <p class="meta-note">Preluare direct la bordură</p>
+                </div>
+                <div class="meta-col">
+                  <p class="meta-label">Returnare</p>
+                  <p class="meta-value">BBU – Aurel Vlaicu • Terminal principal</p>
+                  <p class="meta-note">Returnare flexibilă (în funcție de zbor)</p>
+                </div>
+                <div class="meta-col meta-col--partner">
+                  <p class="meta-label">Partener</p>
+                  <p class="meta-value">City Line Rentals</p>
+                  <p class="meta-note">Profil orientat pe city-break</p>
+                </div>
+              </div>
+              <div class="car-footer">
+                <div class="car-badges">
+                  <span class="tag tag-soft">Kilometraj inclus 200 km/zi</span>
+                  <span class="tag tag-soft">Opțiune pick-up flexibil</span>
+                </div>
+                <div class="car-actions">
+                  <button type="button" class="btn btn-ghost-sm">Detalii ofertă</button>
+                  <button type="button" class="btn btn-primary-sm">Trimite solicitare</button>
+                </div>
+              </div>
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </section>
   </main>
 
-  <script>
-    // If needed, we can parse URL params here later
-  </script>
-</body>
+  <footer class="border-t border-slate-200 site-footer">
+    <div class="wrap py-10 grid md:grid-cols-4 gap-8">
+      <div>
+        <svg class="h-8 w-auto" viewBox="0 0 180 32" aria-label="Gatevion logo" role="img">
+          <g>
+            <circle cx="16" cy="16" r="12" fill="#0f172a" fill-opacity="0.18"></circle>
+            <path d="M16 8c-4.4 0-8 3.6-8 8s3.6 8 8 8c3 0 5.7-1.7 7.1-4.3l-2.9-1.2c-.8 1.5-2.3 2.5-4.2 2.5-2.5 0-4.5-2-4.5-4.5s2-4.5 4.5-4.5c1.2 0 2.3.5 3.1 1.2H16v3h7.5c.1-.4.1-.8.1-1.3 0-4.4-3.6-8-7.6-8z" fill="#0f172a"></path>
+            <text x="36" y="22" font-family="Manrope, Inter, Segoe UI, Roboto, Arial, sans-serif" font-weight="700" font-size="16" fill="#e5e7eb" letter-spacing=".5">Gatevion</text>
+          </g>
+        </svg>
+        <p class="mt-3 text-sm text-slate-300">Broker premium de închirieri auto, cu solicitări PENDING și confirmare directă de la parteneri.</p>
+      </div>
+      <div>
+        <h4 class="font-semibold text-slate-100">Legal</h4>
+        <ul class="mt-3 space-y-2 text-slate-400">
+          <li><a href="/termeni.html" class="hover:text-slate-100">Termeni &amp; Condiții</a></li>
+          <li><a href="/confidentialitate.html" class="hover:text-slate-100">Politica de Confidențialitate</a></li>
+          <li><a href="/cookies.html" class="hover:text-slate-100">Cookie-uri</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="font-semibold text-slate-100">Asistență</h4>
+        <ul class="mt-3 space-y-2 text-slate-400">
+          <li><a href="mailto:hello@gatevion.ro" class="hover:text-slate-100">hello@gatevion.ro</a></li>
+          <li><a href="tel:+40" class="hover:text-slate-100">+40 ...</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="font-semibold text-slate-100">Preferințe</h4>
+        <button class="mt-3 text-sm rounded-full border border-slate-500/70 px-3 py-2 bg-slate-900/40 hover:bg-slate-900/70" id="langBtn2">Schimbă limba (RO/EN)</button>
+      </div>
+    </div>
+    <div class="border-t border-slate-700/60 py-4 text-center text-xs text-slate-500">
+      © <span id="y" class="year"></span> Gatevion. Toate drepturile rezervate.
+    </div>
+  </footer>
+
+  <script src="./app.js" defer></script>
+  </body>
+
 </html>

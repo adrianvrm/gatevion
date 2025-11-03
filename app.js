@@ -308,7 +308,7 @@ document.addEventListener('DOMContentLoaded', () => {
   renderSummary();
 
   const formEl = document.getElementById('searchForm');
-  formEl.addEventListener('submit', (e)=>{
+  if(formEl) formEl.addEventListener('submit', (e)=>{
     const sd = formEl.start_date?.value || '';
     const st = formEl.start_time?.value || '';
     const ed = formEl.end_date?.value || '';
