@@ -2345,7 +2345,8 @@ body{
 }
 @media (min-width: 1024px){
   .results-sidebar{
-    position:relative;
+    position:sticky;
+    top:9.75rem;
     align-self:flex-start;
   }
 }
@@ -2617,10 +2618,12 @@ body{
   100%{ transform:translate3d(0,0,0) scale(1); opacity:.35; }
 }
 .results-topbar{
-  position:relative;
-  z-index:5;
+  position:sticky;
+  z-index:15;
+  top:6.5rem;
   margin-top:.35rem;
 }
+
 
 
 
@@ -2815,8 +2818,6 @@ body{
 
 @media (min-width: 1024px){
   .results-sidebar .filter-card{
-    position:sticky;
-    top:9.2rem;
     backdrop-filter:blur(14px);
   }
 }
