@@ -207,7 +207,12 @@ document.addEventListener('DOMContentLoaded', () => {
   if ('scrollRestoration' in history) {
     history.scrollRestoration = 'manual';
   }
-  window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+  // Ensure page starts at top on fresh load (esp. mobile reload) when no hash
+  if (!location.hash) {
+    const resetToTop = () => window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+    resetToTop();
+    setTimeout(resetToTop, 140);
+  }
 
   const topbar = document.getElementById('topbar');
   if(topbar){
@@ -265,7 +270,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // React to picker changes
   document.addEventListener('picker:changed', (e)=>{
-    if(!form) return;
     renderSummary();
     // Enforce end_date >= start_date
     if(e.detail?.name==='start_date'){
@@ -304,48 +308,47 @@ document.addEventListener('DOMContentLoaded', () => {
   renderSummary();
 
   const formEl = document.getElementById('searchForm');
-  if(formEl){
-    formEl.addEventListener('submit', (e)=>{
-      const sd = formEl.start_date?.value || '';
-      const st = formEl.start_time?.value || '';
-      const ed = formEl.end_date?.value || '';
-      const et = formEl.end_time?.value || '';
-      // Final guard: if same day and end time earlier than start time, prevent submit
-      if(sd && ed && sd===ed && st && et && cmpTime(et, st) < 0){
-        e.preventDefault();
-        alert('Ora de returnare trebuie să fie după ora de preluare pentru aceeași zi.');
-        return;
-      }
-      const start = (sd && st) ? `${sd}T${st}` : '';
-      const end   = (ed && et) ? `${ed}T${et}` : '';
-      const sHidden = formEl.querySelector('#startValue');
-      const eHidden = formEl.querySelector('#endValue');
-      if(sHidden) sHidden.value = start;
-      if(eHidden) eHidden.value = end;
-
-      // Build query string and navigate to results template
-      const arr = formEl.arr_airport?.value || '';
-      const dep = formEl.dep_airport?.value || '';
-      const arrLabel = document.querySelector('.picker[data-target="arr_airport"] .ap-input')?.value || arr;
-      const depLabel = document.querySelector('.picker[data-target="dep_airport"] .ap-input')?.value || dep;
-
-      const params = new URLSearchParams();
-      if(arr) params.set('arr', arr);
-      if(dep) params.set('dep', dep);
-      if(arrLabel) params.set('arrLabel', arrLabel);
-      if(depLabel) params.set('depLabel', depLabel);
-      if(sd) params.set('sd', sd);
-      if(st) params.set('st', st);
-      if(ed) params.set('ed', ed);
-      if(et) params.set('et', et);
-      if(start) params.set('start', start);
-      if(end) params.set('end', end);
-
-      const url = './rezultate.html' + (params.toString() ? `?${params.toString()}` : '');
+  if(formEl) formEl.addEventListener('submit', (e)=>{
+    const sd = formEl.start_date?.value || '';
+    const st = formEl.start_time?.value || '';
+    const ed = formEl.end_date?.value || '';
+    const et = formEl.end_time?.value || '';
+    // Final guard: if same day and end time earlier than start time, prevent submit
+    if(sd && ed && sd===ed && st && et && cmpTime(et, st) < 0){
       e.preventDefault();
-      window.location.href = url;
-    });
-  }
+      alert('Ora de returnare trebuie să fie după ora de preluare pentru aceeași zi.');
+      return;
+    }
+    const start = (sd && st) ? `${sd}T${st}` : '';
+    const end   = (ed && et) ? `${ed}T${et}` : '';
+    const sHidden = formEl.querySelector('#startValue');
+    const eHidden = formEl.querySelector('#endValue');
+    if(sHidden) sHidden.value = start;
+    if(eHidden) eHidden.value = end;
+
+    // Build URL for results page including selected values
+    const params = new URLSearchParams();
+    const arrHidden = formEl.querySelector('input[name="arr_airport"]');
+    const depHidden = formEl.querySelector('input[name="dep_airport"]');
+    const arrDisplay = document.querySelector('.picker[data-target="arr_airport"] .ap-input');
+    const depDisplay = document.querySelector('.picker[data-target="dep_airport"] .ap-input');
+
+    if(arrHidden && arrHidden.value) params.set('arr', arrHidden.value);
+    if(depHidden && depHidden.value) params.set('dep', depHidden.value);
+    if(arrDisplay && arrDisplay.value) params.set('arrLabel', arrDisplay.value);
+    if(depDisplay && depDisplay.value) params.set('depLabel', depDisplay.value);
+    if(sd) params.set('sd', sd);
+    if(st) params.set('st', st);
+    if(ed) params.set('ed', ed);
+    if(et) params.set('et', et);
+    if(start) params.set('start', start);
+    if(end) params.set('end', end);
+
+    const qs = params.toString();
+    const url = './rezultate.html' + (qs ? `?${qs}` : '');
+    e.preventDefault();
+    window.location.href = url;
+  });
 
   
   // Hero CTA -> focus form card with glow & adjusted scroll
@@ -368,30 +371,57 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
 
-  // Results page: hydrate summary bar and sort selector
-  if(document.body && document.body.classList.contains('results-page')){
+  // Results page: hydrate summary/topbar from query params
+  if(window.location.pathname && window.location.pathname.endsWith('rezultate.html')){
     const params = new URLSearchParams(window.location.search || '');
     const arrLabel = params.get('arrLabel') || params.get('arr') || '';
     const depLabel = params.get('depLabel') || params.get('dep') || '';
-
     const sd = params.get('sd') || '';
     const st = params.get('st') || '';
     const ed = params.get('ed') || '';
     const et = params.get('et') || '';
 
+    const fmtDate = (iso)=>{
+      if(!iso) return '';
+      const parts = iso.split('-');
+      if(parts.length!==3) return iso;
+      const [y,m,d] = parts;
+      return `${d}.${m}.${y}`;
+    };
+
+    const routeText = (arrLabel || '—') + (depLabel ? ` → ${depLabel}` : '');
+    const pickupText = (sd ? fmtDate(sd) : '—') + (st ? ` • ${st}` : '');
+    const returnText = (ed ? fmtDate(ed) : '—') + (et ? ` • ${et}` : '');
+
     const barRoute = document.getElementById('barRoute');
     const barPickup = document.getElementById('barPickup');
     const barReturn = document.getElementById('barReturn');
 
-    const routeText = (arrLabel && depLabel) ? `${arrLabel} → ${depLabel}` : 'Aeroporturi necompletate';
-    const pickupText = (sd ? fmtDisplayDate(sd) : '—') + (st ? ` · ${st}` : '');
-    const returnText = (ed ? fmtDisplayDate(ed) : '—') + (et ? ` · ${et}` : '');
+    if(barRoute && routeText.trim()) barRoute.textContent = routeText;
+    if(barPickup && pickupText.trim()) barPickup.textContent = pickupText;
+    if(barReturn && returnText.trim()) barReturn.textContent = returnText;
 
-    if(barRoute) barRoute.textContent = routeText;
-    if(barPickup) barPickup.textContent = pickupText;
-    if(barReturn) barReturn.textContent = returnText;
+    const resRoute = document.getElementById('resRoute');
+    const resPickup = document.getElementById('resPickup');
+    const resReturn = document.getElementById('resReturn');
+    const resArr = document.getElementById('resArr');
+    const resDep = document.getElementById('resDep');
+    const resPickupDetail = document.getElementById('resPickupDetail');
+    const resReturnDetail = document.getElementById('resReturnDetail');
 
-    // Sort UI in topbar
+    if(resRoute && routeText.trim()) resRoute.textContent = routeText;
+    if(resPickup && pickupText.trim()) resPickup.textContent = pickupText;
+    if(resReturn && returnText.trim()) resReturn.textContent = returnText;
+
+    if(resArr && (arrLabel || params.get('arr'))){
+      resArr.textContent = arrLabel || params.get('arr');
+    }
+    if(resDep && (depLabel || params.get('dep'))){
+      resDep.textContent = depLabel || params.get('dep');
+    }
+    if(resPickupDetail && pickupText.trim()) resPickupDetail.textContent = pickupText;
+    if(resReturnDetail && returnText.trim()) resReturnDetail.textContent = returnText;
+    // Topbar sort selector interactions (UI only, sorting logic to be wired server-side)
     const sortRoot = document.querySelector('.results-topbar-sort');
     const sortTrigger = sortRoot ? sortRoot.querySelector('.results-topbar-sort-trigger') : null;
     const sortValueEl = sortRoot ? sortRoot.querySelector('.results-topbar-sort-value') : null;
@@ -426,6 +456,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       });
     }
+
   }
 
 const y = document.getElementById('y');
