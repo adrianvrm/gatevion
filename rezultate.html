@@ -24,7 +24,7 @@
   <link rel="stylesheet" href="./styles.css" />
 </head>
 
-  <body class="font-sans text-slate-900 bg-white">
+  <body class="font-sans text-slate-900 bg-white results-page">
   <!-- Header -->
   <header class="sticky top-0 z-50 bg-white/90 border-b border-slate-100 topbar" id="topbar">
 <div class="topbar-utility">
@@ -90,14 +90,22 @@
         </div>
       </div>
       <div class="results-topbar-actions">
-        <div class="results-topbar-sort">
-          <span class="results-topbar-sort-label">Sortare</span>
-          <button type="button" class="results-topbar-sort-trigger">
-            <span class="results-topbar-sort-value">Recomandat</span>
-            <svg viewBox="0 0 16 16" aria-hidden="true" class="results-topbar-sort-icon">
-              <path d="M4 6l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </button>
+        
+          <div class="results-topbar-sort">
+            <span class="results-topbar-sort-label">Sortare</span>
+            <button type="button" class="results-topbar-sort-trigger" aria-haspopup="listbox" aria-expanded="false">
+              <span class="results-topbar-sort-value">Recomandat</span>
+              <svg viewBox="0 0 16 16" aria-hidden="true" class="results-topbar-sort-icon">
+                <path d="M4 6l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+            <div class="results-topbar-sort-menu" aria-hidden="true">
+              <button type="button" class="results-topbar-sort-option is-active" data-sort="recommended">Recomandat</button>
+              <button type="button" class="results-topbar-sort-option" data-sort="price-asc">Preț (crescător)</button>
+              <button type="button" class="results-topbar-sort-option" data-sort="price-desc">Preț (descrescător)</button>
+              <button type="button" class="results-topbar-sort-option" data-sort="fleet-newest">Cele mai noi flote</button>
+            </div>
+          </div>
         </div>
         <a href="./index.html" class="btn btn-outline-premium"><span>Modifică căutarea</span></a>
       </div>

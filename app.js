@@ -421,6 +421,42 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     if(resPickupDetail && pickupText.trim()) resPickupDetail.textContent = pickupText;
     if(resReturnDetail && returnText.trim()) resReturnDetail.textContent = returnText;
+    // Topbar sort selector interactions (UI only, sorting logic to be wired server-side)
+    const sortRoot = document.querySelector('.results-topbar-sort');
+    const sortTrigger = sortRoot ? sortRoot.querySelector('.results-topbar-sort-trigger') : null;
+    const sortValueEl = sortRoot ? sortRoot.querySelector('.results-topbar-sort-value') : null;
+    const sortMenu = sortRoot ? sortRoot.querySelector('.results-topbar-sort-menu') : null;
+    const sortOptions = sortRoot ? sortRoot.querySelectorAll('.results-topbar-sort-option') : null;
+
+    if(sortRoot && sortTrigger && sortMenu && sortOptions && sortOptions.length){
+      sortTrigger.addEventListener('click', (ev)=>{
+        ev.stopPropagation();
+        const isOpen = sortRoot.classList.toggle('is-open');
+        sortTrigger.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+        sortMenu.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
+      });
+
+      sortOptions.forEach((opt)=>{
+        opt.addEventListener('click', (ev)=>{
+          ev.stopPropagation();
+          sortOptions.forEach(o=>o.classList.remove('is-active'));
+          opt.classList.add('is-active');
+          if(sortValueEl) sortValueEl.textContent = opt.textContent.trim();
+          sortRoot.classList.remove('is-open');
+          sortTrigger.setAttribute('aria-expanded', 'false');
+          sortMenu.setAttribute('aria-hidden', 'true');
+        });
+      });
+
+      document.addEventListener('click', ()=>{
+        if(sortRoot.classList.contains('is-open')){
+          sortRoot.classList.remove('is-open');
+          sortTrigger.setAttribute('aria-expanded', 'false');
+          sortMenu.setAttribute('aria-hidden', 'true');
+        }
+      });
+    }
+
   }
 
 const y = document.getElementById('y');
