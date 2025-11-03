@@ -2883,3 +2883,61 @@ body{
   border-color:rgba(2,172,142,0.85);
   box-shadow:0 0 0 1px rgba(255,255,255,0.7), 0 10px 25px rgba(15,23,42,0.16);
 }
+
+
+@media (min-width: 1024px){
+  .results-sidebar{
+    max-width:300px;
+  }
+  .results-sidebar .filter-card{
+    padding:.5rem .75rem;
+    border-radius:.9rem;
+  }
+  .results-sidebar .filter-title{
+    font-size:.78rem;
+  }
+  .results-sidebar .filter-label{
+    font-size:.76rem;
+  }
+  .results-sidebar .pill{
+    padding:.14rem .5rem;
+    font-size:.72rem;
+  }
+  .results-sidebar .sort-pill{
+    padding:.2rem .5rem;
+    font-size:.74rem;
+  }
+  .results-sidebar .filter-pills{
+    gap:.22rem;
+  }
+}
+
+/* extra micro details on filters */
+.filter-card{
+  box-shadow:
+    0 18px 48px rgba(15,23,42,0.18),
+    0 0 0 1px rgba(148,163,184,0.55);
+}
+.filter-card::after{
+  content:"";
+  position:absolute;
+  inset:1px;
+  border-radius:inherit;
+  border:1px solid rgba(255,255,255,0.7);
+  pointer-events:none;
+}
+.pill{
+  position:relative;
+  overflow:hidden;
+}
+.pill::before{
+  content:"";
+  position:absolute;
+  inset:-20%;
+  background:radial-gradient(circle at 0 0, rgba(148,163,184,0.16), transparent 60%);
+  opacity:0;
+  transition:opacity .18s ease;
+}
+.pill:hover::before{
+  opacity:.9;
+}
