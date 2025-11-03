@@ -1884,3 +1884,45 @@ body{
   opacity:1;
   transform:scale(1);
 }
+
+
+
+/* === Mobile hero & form layout fixes (v4) === */
+@media (max-width: 767.98px){
+  .hero.hero-premium > .wrap{
+    padding-top: 3.2rem;
+    padding-bottom: 2.6rem;
+  }
+  .hero.hero-premium .grid-12{
+    gap: 1.75rem;
+  }
+  .hero.hero-premium .hero-left{
+    text-align: center;
+  }
+  .hero-title.hero-title-split{
+    align-items: center;
+  }
+  .hero-subline-premium{
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .hero-premium-list{
+    justify-content: center;
+  }
+  .hero-premium .hero-right{
+    margin-top: 2rem;
+    justify-self: center;
+  }
+  .hero-form-card{
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  /* Reduce visual noise on very small screens */
+  .hero-orb,
+  .hero-floating-badge{
+    display: none;
+  }
+}
