@@ -924,3 +924,19 @@ h1.hero-title{
   }
 }
 
+
+
+/* Mobile: ensure date/time icons don't overlap text and values remain readable */
+@media (max-width: 640px){
+  .picker--date .dp-input{
+    padding-left: 2rem !important;
+    padding-right: 0.9rem !important;
+    white-space: normal !important;
+  }
+  .picker--time .tp-input{
+    padding-left: 2rem !important;
+    padding-right: 2.1rem !important;
+    white-space: normal !important;
+  }
+}
+
