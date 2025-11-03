@@ -204,11 +204,6 @@ function setLang(l){ localStorage.setItem('lang', l); if(l==='en'){ location.hre
 function toggleLang(){ const l = localStorage.getItem('lang')==='en'?'ro':'en'; setLang(l); }
 
 document.addEventListener('DOMContentLoaded', () => {
-  if ('scrollRestoration' in history) {
-    history.scrollRestoration = 'manual';
-  }
-  window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
-
   const topbar = document.getElementById('topbar');
   if(topbar){
     const onScroll = ()=>{ if(window.scrollY>4) topbar.classList.add('shadow'); else topbar.classList.remove('shadow'); };
@@ -322,26 +317,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if(eHidden) eHidden.value = end;
   });
 
-  
-  // Hero CTA -> focus form card with glow & adjusted scroll
-  const startBtn = document.getElementById('startBookingBtn');
-  const formCard = document.querySelector('.hero-form-card');
-  if(startBtn && formCard){
-    startBtn.addEventListener('click', (e)=>{
-      e.preventDefault();
-      const rect = formCard.getBoundingClientRect();
-      const offset = 110;
-      const targetY = rect.top + window.scrollY - offset;
-      window.scrollTo({ top: targetY < 0 ? 0 : targetY, behavior: 'smooth' });
-
-      // trigger highlight glow
-      formCard.classList.add('hero-form-highlight');
-      setTimeout(()=>{
-        formCard.classList.remove('hero-form-highlight');
-      }, 900);
-    });
-  }
-
-const y = document.getElementById('y');
+  const y = document.getElementById('y');
   if(y) y.textContent = new Date().getFullYear();
 });
