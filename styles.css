@@ -632,7 +632,7 @@ section h2.section-title::before,
 .hero-right .btn .icon, .hero-right .button .icon{ margin-left:.5rem; }
 
 .hero-right .btn-primary, .hero-right .button.primary{
-  background: linear-gradient(180deg, #2563eb, #1d4ed8);
+  background: linear-gradient(180deg, #02ac8e, #0f172a);
   color:#fff;
   border-color: rgba(0,0,0,.08);
   box-shadow: 0 12px 24px rgba(37,99,235,.2), inset 0 1px 0 rgba(255,255,255,.6);
@@ -1645,7 +1645,7 @@ body{
   width:24px;
   height:1px;
   border-radius:999px;
-  background:linear-gradient(90deg,#02ac8e,#0f172a);
+  background:linear-gradient(90deg,#22c55e,#0ea5e9);
 }
 .section-head{
   max-width:42rem;
@@ -2103,5 +2103,30 @@ body{
   .hero-premium-list li{
     text-align: left;
     width: 100%;
+  }
+}
+
+
+
+/* Force hero text & bullets left-aligned on mobile */
+@media (max-width: 767.98px){
+  .hero.hero-premium .hero-left{
+    text-align:left;
+  }
+  .hero.hero-premium .hero-title.hero-title-split{
+    align-items:flex-start;
+    text-align:left;
+  }
+  .hero.hero-premium .hero-premium-list{
+    justify-content:flex-start;
+    align-items:flex-start;
+    text-align:left;
+    width:100%;
+    margin-left:0;
+    margin-right:auto;
+  }
+  .hero.hero-premium .hero-premium-list li{
+    text-align:left;
+    width:100%;
   }
 }
