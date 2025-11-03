@@ -1302,3 +1302,271 @@ h1.hero-title{
   max-width: 24ch;
 }
 
+/* === Hero v2 – premium look for Gatevion === */
+
+.hero.hero-premium{
+  position: relative;
+}
+.hero.hero-premium::before{
+  content:"";
+  position:absolute;
+  inset:-25%;
+  pointer-events:none;
+  background:
+    radial-gradient(120% 160% at 0% 0%, rgba(2,172,142,0.15), transparent 60%),
+    radial-gradient(140% 180% at 100% 10%, rgba(56,189,248,0.18), transparent 60%),
+    radial-gradient(160% 220% at 50% 120%, rgba(15,23,42,0.12), transparent 65%);
+  opacity:1;
+  z-index:0;
+}
+.hero.hero-premium > .wrap{
+  position:relative;
+  z-index:10;
+}
+
+/* Col stânga */
+.hero-premium .hero-left{
+  position:relative;
+  z-index:20;
+}
+
+.hero-eyebrow{
+  display:inline-flex;
+  align-items:center;
+  gap:.5rem;
+  padding:.2rem .75rem;
+  border-radius:999px;
+  background:rgba(15,23,42,0.04);
+  border:1px solid rgba(148,163,184,0.5);
+  font-size:11px;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  font-weight:600;
+  color:#0f172a;
+}
+.hero-eyebrow-dot{
+  width:8px;
+  height:8px;
+  border-radius:999px;
+  background:linear-gradient(135deg,#02ac8e,#0f172a);
+  box-shadow:0 0 0 4px rgba(2,172,142,0.18);
+}
+
+/* Titlul pe două rânduri */
+.hero-title.hero-title-split{
+  margin-top:1.3rem;
+  display:flex;
+  flex-direction:column;
+  gap:.05em;
+}
+.hero-title-line{
+  display:block;
+}
+.hero-title-line:first-child{
+  font-weight:800;
+}
+.hero-title-line-brand{
+  font-weight:800;
+  font-size:clamp(40px,4.8vw,56px);
+  letter-spacing:-0.06em;
+  text-align:center;
+  background:linear-gradient(120deg,#02ac8e,#0f172a);
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+}
+
+/* Pe mobil – centrăm tot blocul */
+@media (max-width:767.98px){
+  .hero-title.hero-title-split{
+    align-items:center;
+    text-align:center;
+  }
+}
+
+/* Subline + listă premium */
+.hero-subline-premium{
+  margin-top:1.5rem;
+  font-size:1.05rem;
+  line-height:1.6;
+  color:#334155;
+  max-width:44ch;
+}
+.hero-premium-list{
+  margin-top:1.6rem;
+  display:flex;
+  flex-wrap:wrap;
+  gap:.9rem 1.4rem;
+}
+.hero-premium-list li{
+  display:flex;
+  align-items:flex-start;
+  gap:.55rem;
+  font-size:.92rem;
+  color:#1e293b;
+}
+.hero-premium-icon{
+  margin-top:.05rem;
+  flex-shrink:0;
+  width:18px;
+  height:18px;
+  border-radius:999px;
+  background:rgba(2,172,142,0.08);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.hero-premium-icon svg{
+  width:12px;
+  height:12px;
+  color:#02ac8e;
+}
+
+/* CTA row */
+.hero-cta-row{
+  margin-top:2rem;
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:1rem 1.25rem;
+}
+.hero-cta-note{
+  font-size:.8rem;
+  color:#64748b;
+}
+
+/* În Hero facem .btn-primary să fie pe accentul Gatevion */
+.hero-premium .btn-primary{
+  background:linear-gradient(120deg,#02ac8e,#0f172a);
+  box-shadow:0 18px 40px rgba(15,23,42,0.25);
+}
+.hero-premium .btn-primary:hover{
+  transform:translateY(-2px);
+  box-shadow:0 22px 55px rgba(15,23,42,0.35);
+}
+.hero-premium .btn-outline{
+  border-color:rgba(148,163,184,0.7);
+}
+
+/* Ticker-ul, dacă îl păstrezi, un pic mai aerisit */
+.hero-premium .ticker{
+  margin-top:2rem;
+}
+
+/* Col dreapta – glow + card plutitor + badge-uri */
+
+.hero-premium .hero-right{
+  position:relative;
+  z-index:10;
+}
+
+.hero-orb{
+  position:absolute;
+  border-radius:999px;
+  filter:blur(32px);
+  opacity:.85;
+  pointer-events:none;
+}
+.hero-orb--primary{
+  width:260px;
+  height:260px;
+  top:-40px;
+  right:-40px;
+  background:radial-gradient(circle at 30% 20%,rgba(2,172,142,0.5),transparent 60%);
+  animation:heroOrbPulse 7s ease-in-out infinite alternate;
+}
+.hero-orb--soft{
+  width:220px;
+  height:220px;
+  bottom:-60px;
+  left:40px;
+  background:radial-gradient(circle at 50% 50%,rgba(148,163,184,0.5),transparent 60%);
+  opacity:.45;
+  animation:heroOrbFloat 11s ease-in-out infinite alternate;
+}
+
+/* Card-ul formularului */
+.hero-form-card{
+  position:relative;
+  z-index:20;
+  border-radius:1.5rem;
+  border:1px solid rgba(148,163,184,0.45);
+  background:linear-gradient(145deg,rgba(255,255,255,0.96),rgba(241,245,249,0.98));
+  box-shadow:0 26px 80px rgba(15,23,42,0.16);
+  animation:heroFloat 9s ease-in-out infinite;
+}
+
+/* Badge-uri flotante */
+.hero-floating-badge{
+  position:absolute;
+  padding:.65rem .9rem;
+  border-radius:999px;
+  background:rgba(15,23,42,0.92);
+  color:#e5e7eb;
+  font-size:.78rem;
+  display:flex;
+  align-items:center;
+  gap:.5rem;
+  box-shadow:0 16px 40px rgba(15,23,42,0.55);
+  z-index:30;
+}
+.hero-floating-badge svg{
+  width:14px;
+  height:14px;
+  color:#22c55e;
+}
+.hero-floating-badge--top{
+  top:-18px;
+  right:22%;
+  animation:heroBadgeDrift 12s ease-in-out infinite;
+}
+.hero-floating-badge--bottom{
+  bottom:-16px;
+  left:10%;
+  animation:heroBadgeDrift 10s ease-in-out infinite reverse;
+}
+
+/* Fade-up pentru copy-ul din stânga */
+.hero-animate{
+  opacity:0;
+  transform:translateY(18px);
+  animation:heroFadeUp .8s ease-out forwards;
+}
+.hero-animate.delay-1{ animation-delay:.08s; }
+.hero-animate.delay-2{ animation-delay:.18s; }
+.hero-animate.delay-3{ animation-delay:.28s; }
+
+/* Keyframes */
+@keyframes heroFadeUp{
+  from{ opacity:0; transform:translateY(24px);}
+  to{ opacity:1; transform:translateY(0);}
+}
+@keyframes heroFloat{
+  0%,100%{ transform:translateY(0);}
+  50%{ transform:translateY(-10px);}
+}
+@keyframes heroOrbPulse{
+  0%{ transform:scale(0.95); opacity:.7;}
+  100%{ transform:scale(1.05); opacity:.95;}
+}
+@keyframes heroOrbFloat{
+  0%{ transform:translateY(10px);}
+  100%{ transform:translateY(-8px);}
+}
+@keyframes heroBadgeDrift{
+  0%{ transform:translateY(0);}
+  50%{ transform:translateY(-8px);}
+  100%{ transform:translateY(0);}
+}
+
+/* Respectăm preferințele de “reduced motion” */
+@media (prefers-reduced-motion: reduce){
+  .hero-animate,
+  .hero-form-card,
+  .hero-orb,
+  .hero-floating-badge{
+    animation:none !important;
+    transform:none !important;
+    opacity:1 !important;
+  }
+}
