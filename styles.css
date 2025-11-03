@@ -1031,3 +1031,18 @@ h1.hero-title{
   }
 }
 
+
+
+/* Mobile: make live summary block full-width and allow text to wrap fully */
+@media (max-width: 640px){
+  .summary{
+    display:block;
+    padding:.75rem .75rem;
+    font-size:13px;
+  }
+  #liveSummary{
+    word-break:break-word;
+    white-space:normal;
+  }
+}
+
