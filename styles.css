@@ -1079,18 +1079,21 @@ h1.hero-title{
   text-wrap: balance;
   animation: heroTitleReveal .75s cubic-bezier(0.19, 1, 0.22, 1) both;
 }
+
 .hero-title::after{
   content:"";
   position:absolute;
-  left:0.15rem;
+  left:50%;
   bottom:-0.5rem;
-  width:46%;
+  transform:translateX(-50%);
+  width:60%;
   height:3px;
   border-radius:999px;
-  background:linear-gradient(90deg,#2563EB,rgba(37,99,235,0));
-  opacity:0.92;
+  background:linear-gradient(90deg,#02ac8e,rgba(2,172,142,0));
+  opacity:0.9;
   pointer-events:none;
 }
+
 .hero-accent{
   background:linear-gradient(120deg,#2563EB 0%,#4F46E5 35%,#0EA5E9 70%);
   -webkit-background-clip:text;
@@ -2172,4 +2175,88 @@ body{
   .hero-title-line:first-child{
     white-space: nowrap;
   }
+}
+
+
+
+/* Stronger RO/EN pill in header */
+#topbar .lang-switch{
+  display:inline-flex;
+  align-items:center;
+  gap:.35rem;
+  padding:.28rem .8rem;
+  border-radius:999px;
+  font-weight:700;
+  letter-spacing:.02em;
+  text-transform:uppercase;
+  color:#0f172a;
+  background:linear-gradient(180deg, rgba(240,253,250,0.95), rgba(224,242,254,0.9));
+  border:1px solid rgba(2,172,142,0.65);
+  box-shadow:0 6px 16px rgba(2,172,142,0.18), inset 0 1px 0 #fff;
+}
+#topbar .lang-switch .muted{
+  opacity:.8;
+}
+#topbar .lang-switch:hover{
+  box-shadow:0 10px 26px rgba(2,172,142,0.28), inset 0 1px 0 #fff;
+  transform:translateY(-1px);
+}
+#topbar .lang-switch:active{
+  transform:translateY(0);
+}
+
+
+
+/* Premium polish for steps, airports, FAQ cards */
+.step-card, .airport-card, .faq-item{
+  position:relative;
+  border-radius:1.5rem;
+  background:linear-gradient(180deg,#ffffff,#fbfbfd);
+  border:1px solid rgba(148,163,184,0.55);
+  box-shadow:0 22px 70px rgba(2,6,23,0.12);
+  overflow:hidden;
+}
+.step-card::before, .airport-card::before, .faq-item::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  border-radius:inherit;
+  background:
+    radial-gradient(120% 140% at 0% 0%, rgba(2,172,142,0.08), transparent 70%),
+    radial-gradient(120% 140% at 100% 100%, rgba(15,23,42,0.06), transparent 75%);
+  opacity:.9;
+}
+.step-card::after, .airport-card::after, .faq-item::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  border-radius:inherit;
+  pointer-events:none;
+  padding:1px; /* hairline gradient border */
+  background:linear-gradient(120deg, rgba(2,172,142,0.5), rgba(15,23,42,0.25));
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+}
+.step-card:hover, .airport-card:hover, .faq-item:hover{
+  transform:translateY(-2px);
+  box-shadow:0 30px 90px rgba(2,6,23,0.16);
+}
+.step-card .step-index{
+  background:rgba(15,23,42,0.92);
+  color:#e5e7eb;
+}
+.step-card:hover .step-index{
+  background:linear-gradient(120deg,#02ac8e,#0f172a);
+}
+.airport-card .airport-tag{
+  background:rgba(15,23,42,0.95);
+  color:#e5e7eb;
+}
+.faq-item[aria-expanded="true"]{
+  box-shadow:0 28px 80px rgba(2,6,23,0.16);
+  border-color:rgba(2,172,142,0.55);
 }
