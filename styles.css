@@ -1247,3 +1247,52 @@ input:focus, .dp-input:focus, .tp-input:focus, select:focus{
   padding:6px 9px;
 }
 
+
+
+/* Mobile nav: full overlay on small screens to avoid text bleeding underneath */
+@media (max-width: 768px){
+  .mobile-nav{
+    position: fixed;
+    inset: 0;
+    top: 0;
+    background:#020617;
+    background-image: radial-gradient(140% 180% at 0% 0%, rgba(37,99,235,0.22), #020617);
+    padding:72px 16px 20px; /* leave room visually for header area */
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+    box-shadow:0 24px 48px rgba(15,23,42,0.65);
+    z-index:70;
+  }
+  .mobile-nav .mnav-link{
+    color:#E5E7EB;
+    padding:10px 12px;
+    border-radius:999px;
+    font-weight:600;
+    font-size:14px;
+    text-decoration:none;
+    background:rgba(15,23,42,0.6);
+  }
+  .mobile-nav .mnav-link:hover{
+    background:rgba(15,23,42,0.85);
+  }
+}
+
+
+/* Form: on mobile, stack the 2-column grids for full-width controls */
+@media (max-width: 640px){
+  .hero-right form .grid.grid-cols-2{
+    grid-template-columns: 1fr !important;
+  }
+  .hero-right form .grid.grid-cols-2 > *{
+    min-width: 0;
+  }
+  .ap-input{
+    font-size:13px;
+    padding-inline:10px;
+  }
+  .dp-input, .tp-input{
+    font-size:13px;
+  }
+}
+
