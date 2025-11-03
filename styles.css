@@ -2514,13 +2514,14 @@ body{
 }
 .car-spec{
   display:flex;
-  align-items:center;
-  gap:.6rem;
+  align-items:flex-start;
+  gap:.7rem;
 }
+
 .car-spec-icon{
   flex-shrink:0;
-  width:1.8rem;
-  height:1.8rem;
+  width:2rem;
+  height:2rem;
   border-radius:999px;
   display:flex;
   align-items:center;
@@ -2533,10 +2534,12 @@ body{
     0 5px 12px rgba(15,23,42,0.13);
   color:#0f172a;
 }
+
 .car-spec-icon-svg{
-  width:1.05rem;
-  height:1.05rem;
+  width:1.15rem;
+  height:1.15rem;
 }
+
 .car-spec-text{
   display:flex;
   flex-direction:column;
@@ -2546,16 +2549,18 @@ body{
   line-height:1.25;
 }
 .car-spec-label{
-  font-size:.62rem;
+  font-size:.6rem;
   text-transform:uppercase;
   letter-spacing:.1em;
   color:#94a3b8;
 }
+
 .car-spec-value{
-  font-size:.8rem;
+  font-size:.82rem;
   font-weight:540;
   color:#0f172a;
 }
+
 
 /* Price + CTA row – compact */
 .car-bottom{
