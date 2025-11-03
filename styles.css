@@ -2514,33 +2514,26 @@ body{
 }
 .car-spec{
   display:flex;
-  align-items:flex-start;
-  gap:.7rem;
+  align-items:center;
+  gap:.6rem;
 }
+
 
 
 .car-spec-icon{
   flex-shrink:0;
-  width:2rem;
-  height:2rem;
-  border-radius:999px;
   display:flex;
   align-items:center;
   justify-content:center;
-  background:
-    radial-gradient(circle at 0 0,rgba(2,172,142,0.12),transparent 60%),
-    radial-gradient(circle at 100% 100%,rgba(15,23,42,0.12),transparent 60%);
-  box-shadow:
-    0 0 0 1px rgba(148,163,184,0.26),
-    0 6px 14px rgba(15,23,42,0.16);
-  color:#0f172a;
 }
+
 
 
 .car-spec-icon-svg{
-  width:1.2rem;
-  height:1.2rem;
+  width:1.1rem;
+  height:1.1rem;
 }
+
 
 
 .car-spec-text{
@@ -2552,18 +2545,20 @@ body{
   line-height:1.25;
 }
 .car-spec-label{
-  font-size:.6rem;
+  font-size:.65rem;
   text-transform:uppercase;
-  letter-spacing:.12em;
+  letter-spacing:.09em;
   color:#94a3b8;
 }
 
 
+
 .car-spec-value{
-  font-size:.84rem;
-  font-weight:540;
+  font-size:.9rem;
+  font-weight:600;
   color:#0f172a;
 }
+
 
 
 
