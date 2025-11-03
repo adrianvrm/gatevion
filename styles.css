@@ -3058,3 +3058,74 @@ body{
 .results-topbar-sort-option:hover{
   background:rgba(226,232,240,0.9);
 }
+
+
+/* Results page: fixed summary bar below main header */
+.results-page .results-topbar{
+  position:fixed;
+  top:4.5rem;
+  left:0;
+  right:0;
+  z-index:30;
+  margin-top:0;
+}
+.results-page .results-layout{
+  padding-top:7.5rem;
+}
+
+/* Allow dropdown to overflow the glass strip */
+.results-topbar-inner{
+  overflow:visible;
+}
+
+/* Ensure sort menu is above everything */
+.results-topbar-sort-menu{
+  z-index:90;
+}
+
+
+@media (min-width: 1024px){
+  .results-page .results-layout .wrap{
+    align-items:flex-start;
+  }
+  .results-page .results-sidebar{
+    position:fixed;
+    top:9.5rem;
+    left:max(1.5rem, calc(50% - 560px + 1rem));
+    width:280px;
+    max-width:280px;
+  }
+  .results-page .results-list{
+    margin-left:300px;
+  }
+}
+
+
+@media (min-width: 1024px){
+  .results-page .results-sidebar .filter-card{
+    padding:.5rem .75rem;
+    border-radius:.85rem;
+  }
+  .results-page .results-sidebar .filter-title{
+    font-size:.76rem;
+  }
+  .results-page .results-sidebar .filter-label{
+    font-size:.74rem;
+  }
+  .results-page .results-sidebar .pill{
+    padding:.12rem .48rem;
+    font-size:.7rem;
+  }
+  .results-page .results-sidebar .sort-pill{
+    padding:.18rem .48rem;
+    font-size:.72rem;
+  }
+}
+
+/* Extra floating/glass feel for filter card */
+.results-page .results-sidebar .filter-card{
+  backdrop-filter:blur(16px);
+  box-shadow:
+    0 20px 55px rgba(15,23,42,0.2),
+    0 0 0 1px rgba(148,163,184,0.55);
+}
