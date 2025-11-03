@@ -1165,10 +1165,7 @@ h1.hero-title{
 
 /* On wider screens keep "Închiriază în siguranță" on a single line */
 @media (min-width: 900px){
-  .hero-lead{
-    white-space: nowrap;
   }
-}
 
 /* Section titles polish */
 .section-title{
@@ -1288,5 +1285,20 @@ h1.hero-title{
   0%{ opacity:0; transform:translateY(6px); }
   60%{ opacity:1; transform:translateY(0); }
   100%{ opacity:0.9; transform:translateY(0); }
+}
+
+
+
+/* Keep lead phrase on a single line only on wide screens */
+@media (min-width: 1024px){
+  .hero-lead{
+    white-space: nowrap;
+  }
+}
+
+/* Slight adjustment of hero-title size to keep it compact */
+.hero-title{
+  font-size: clamp(1.9rem, 2.7vw, 2.4rem);
+  max-width: 24ch;
 }
 
