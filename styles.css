@@ -876,3 +876,168 @@ h1.hero-title{
   .hero-left::before{ display:none; }
 }
 
+
+
+/* === Assurance badges: center text & content === */
+.assurance-row{
+  display:flex;
+  flex-wrap:wrap;
+  gap:0.5rem;
+}
+.assurance-row .chip-ghost{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+}
+
+
+/* =========================================================
+   Gatevion – Full Visual Polish (CSS-only, no layout/JS changes)
+   ========================================================= */
+
+/* Base background: very soft texture */
+body{
+  background-color:#ffffff;
+  background-image:
+    radial-gradient(1400px 800px at 100% -10%, rgba(37,99,235,.05), transparent 55%),
+    radial-gradient(1200px 600px at -10% 110%, rgba(15,23,42,.04), transparent 55%);
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+/* Section depth */
+main section{
+  position: relative;
+}
+main section:nth-of-type(even){
+  background-image: radial-gradient(900px 420px at 80% -10%, rgba(37,99,235,.03), transparent 60%);
+}
+
+/* Generic cards / glass */
+.card, .glass{
+  background: linear-gradient(180deg,#ffffff,#fbfbfd);
+  border-radius: 16px;
+  border:1px solid #E7EDF6;
+  box-shadow: 0 10px 24px rgba(15,23,42,.08), inset 0 1px 0 rgba(255,255,255,.8);
+  transition: box-shadow .25s ease, transform .18s ease, border-color .22s ease;
+}
+.card:hover, .glass:hover{
+  box-shadow: 0 16px 32px rgba(15,23,42,.10);
+  transform: translateY(-1px);
+  border-color: #D3DDF1;
+}
+
+/* Info / step cards (if present) */
+.info-card, .step-card{
+  background: linear-gradient(180deg,#ffffff,#f8fafc);
+  border-radius: 16px;
+  border:1px solid #E5EAF4;
+  box-shadow: 0 8px 18px rgba(15,23,42,.06), inset 0 1px 0 rgba(255,255,255,.8);
+  transition: box-shadow .25s ease, transform .18s ease, border-color .22s ease;
+}
+.info-card:hover, .step-card:hover{
+  transform: translateY(-2px);
+  box-shadow: 0 14px 30px rgba(15,23,42,.10);
+  border-color:#D0D9EE;
+}
+
+/* Subtitle style */
+.subtitle, .section-subtitle{
+  color:#64748B;
+  font-size:.95rem;
+}
+
+/* Buttons micro-interactions */
+button, .button, .btn{
+  position: relative;
+  border-radius: 999px;
+  transition: transform .12s ease, box-shadow .2s ease, filter .18s ease;
+}
+button:hover, .button:hover, .btn:hover{
+  transform: translateY(-1px);
+}
+button:active, .button:active, .btn:active{
+  transform: translateY(0);
+}
+.button.outline, .btn-outline{
+  background: transparent;
+  border:1px solid #CBD5F1;
+  color:#0E1320;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.8);
+}
+.button.outline:hover, .btn-outline:hover{
+  border-color:#2563EB;
+  box-shadow: 0 8px 18px rgba(37,99,235,.15);
+}
+
+/* Chips / badges generic */
+.chip, .chip-ghost{
+  border-radius:999px;
+  font-size:12px;
+  padding:0.18rem 0.7rem;
+}
+.chip{
+  background: rgba(37,99,235,.08);
+  color:#1D4ED8;
+  border:1px solid rgba(37,99,235,.2);
+}
+.chip-ghost{
+  background: linear-gradient(180deg,#fff,#F9FAFB);
+  border:1px solid #E5EAF4;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.9);
+}
+
+/* FAQ blocks */
+.faq-item{
+  border-radius: 14px;
+  border:1px solid #E5EAF4;
+  background: linear-gradient(180deg,#ffffff,#f9fbff);
+  box-shadow: 0 8px 20px rgba(15,23,42,.06), inset 0 1px 0 rgba(255,255,255,.9);
+  transition: border-color .22s ease, box-shadow .25s ease, transform .18s ease;
+}
+.faq-item:hover{
+  transform: translateY(-1px);
+  box-shadow: 0 14px 30px rgba(15,23,42,.10);
+  border-color:#D0D9EE;
+}
+.faq-item summary{
+  list-style:none;
+}
+.faq-item summary::-webkit-details-marker{ display:none; }
+
+/* Live summary preview card */
+.summary{
+  background: rgba(248,250,252,.7);
+  border-radius: 12px;
+  border:1px dashed #E2E8F0;
+  padding:0.5rem 0.75rem;
+}
+
+/* Extra hairline sub hero-left (nu afectează layout) */
+.hero-left::after{
+  content:""; position:absolute; left:-12px; right:-12px; bottom:-6px; height:1px;
+  pointer-events:none;
+  background: linear-gradient(90deg, rgba(15,23,42,.05), rgba(15,23,42,.18), rgba(15,23,42,.05));
+  z-index:0;
+}
+
+/* Inputs background refinement */
+input[type="text"], input[type="email"], input[type="tel"], .dp-input, .tp-input, select{
+  background-color:#F9FAFB;
+}
+input:focus, .dp-input:focus, .tp-input:focus, select:focus{
+  background-color:#FFFFFF;
+}
+
+/* Mobile – reduce background effects ușor */
+@media (max-width: 768px){
+  main section:nth-of-type(even){
+    background-image:none;
+  }
+  .card, .glass, .info-card, .step-card{
+    box-shadow: 0 6px 16px rgba(15,23,42,.09);
+  }
+}
+
