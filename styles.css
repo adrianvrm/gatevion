@@ -1065,3 +1065,95 @@ h1.hero-title{
   }
 }
 
+
+
+/* === Premium hero title & subline === */
+.hero-title{
+  font-family: "Manrope", system-ui, -apple-system, "Segoe UI", Roboto, "Inter", Arial, sans-serif;
+  font-weight: 800;
+  font-size: clamp(2.1rem, 3.4vw, 3rem);
+  letter-spacing: -0.035em;
+  line-height: 1.05;
+  color:#020617;
+  position: relative;
+  text-wrap: balance;
+  animation: heroTitleReveal .75s cubic-bezier(0.19, 1, 0.22, 1) both;
+}
+.hero-title::after{
+  content:"";
+  position:absolute;
+  left:0.15rem;
+  bottom:-0.5rem;
+  width:46%;
+  height:3px;
+  border-radius:999px;
+  background:linear-gradient(90deg,#2563EB,rgba(37,99,235,0));
+  opacity:0.92;
+  pointer-events:none;
+}
+.hero-accent{
+  background:linear-gradient(120deg,#2563EB 0%,#4F46E5 35%,#0EA5E9 70%);
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+  position:relative;
+}
+.hero-accent::after{
+  content:"";
+  position:absolute;
+  inset:-0.15em -0.05em;
+  border-radius:999px;
+  background:radial-gradient(circle at 50% 0%, rgba(59,130,246,0.18), transparent 60%);
+  mix-blend-mode:soft-light;
+  pointer-events:none;
+  opacity:0;
+  animation: heroAccentGlow 2.1s ease-out 0.35s forwards;
+}
+
+.hero-subline{
+  display:inline-flex;
+  align-items:center;
+  gap:0.5rem;
+  color:#4B5563;
+  font-weight:500;
+  text-wrap:balance;
+  animation: heroSublineFade .7s ease-out .15s both;
+}
+.hero-subline::before{
+  content:"";
+  width:7px;
+  height:7px;
+  border-radius:999px;
+  background:radial-gradient(circle at 30% 30%, #22C55E, #16A34A);
+  box-shadow:0 0 0 6px rgba(34,197,94,0.18);
+}
+
+/* Keep mobile single-line constraint already configured, but animations still apply */
+
+/* Hero title animations */
+@keyframes heroTitleReveal{
+  0%{
+    opacity:0;
+    transform:translateY(14px) scale(.98);
+    filter:blur(1px);
+  }
+  60%{
+    opacity:1;
+    transform:translateY(0) scale(1.005);
+    filter:blur(0);
+  }
+  100%{
+    opacity:1;
+    transform:translateY(0) scale(1);
+  }
+}
+@keyframes heroAccentGlow{
+  0%{ opacity:0; filter:drop-shadow(0 0 0 rgba(59,130,246,0)); }
+  50%{ opacity:1; filter:drop-shadow(0 0 16px rgba(59,130,246,0.35)); }
+  100%{ opacity:0.75; filter:drop-shadow(0 0 10px rgba(59,130,246,0.25)); }
+}
+@keyframes heroSublineFade{
+  0%{ opacity:0; transform:translateY(6px); }
+  100%{ opacity:1; transform:translateY(0); }
+}
+
