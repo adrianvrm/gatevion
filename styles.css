@@ -2616,10 +2616,12 @@ body{
   100%{ transform:translate3d(0,0,0) scale(1); opacity:.35; }
 }
 .results-topbar{
-  position:relative;
+  position:sticky;
   z-index:5;
-  margin-top:.75rem;
+  top:4.25rem;
+  margin-top:.35rem;
 }
+
 .results-topbar::before,
 .results-topbar::after{
   content:"";
