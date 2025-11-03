@@ -1266,3 +1266,27 @@ h1.hero-title{
   }
 }
 
+
+
+/* Hero title halo behind text for subtle depth */
+.hero-title{
+  position:relative;
+}
+.hero-title::before{
+  content:"";
+  position:absolute;
+  inset:-1.2rem -1.6rem auto -1rem;
+  height:60%;
+  background:
+    radial-gradient(circle at 10% 0%, rgba(37,99,235,0.16), transparent 60%),
+    radial-gradient(circle at 80% 20%, rgba(15,23,42,0.12), transparent 65%);
+  opacity:0;
+  pointer-events:none;
+  animation: heroHalo 1.4s ease-out .12s forwards;
+}
+@keyframes heroHalo{
+  0%{ opacity:0; transform:translateY(6px); }
+  60%{ opacity:1; transform:translateY(0); }
+  100%{ opacity:0.9; transform:translateY(0); }
+}
+
