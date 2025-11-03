@@ -294,7 +294,7 @@
 /* ===== Hero subline: ensure one line on mobile ===== */
 .hero-subline{ text-wrap: balance; }
 @media (max-width: 640px){
-  .hero-subline{ white-space:nowrap; font-size:clamp(12px, 3.6vw, 16px); letter-spacing:-0.01em; }
+  .hero-subline{ white-space:nowrap; font-size:clamp(11px, 3.2vw, 14px); letter-spacing:-0.01em; }
 }
 
 /* ===== Hero badges: single-row even on mobile (nowrap + horizontal scroll), smaller & closer ===== */
@@ -985,5 +985,34 @@ h1.hero-title{
   left: 0 !important;
   right: auto !important;
   margin-top: 0 !important;
+}
+
+
+
+/* Assurance badges: center content & apply brand accents */
+.assurance{
+  align-items:stretch;
+  text-align:center;
+}
+.assurance .chip-ghost{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:0.5rem;
+  text-align:center;
+  padding:.6rem 1.1rem;
+  border-radius:999px;
+  background:radial-gradient(120% 220% at 0% 0%, rgba(37,99,235,.10), #ffffff);
+  border-color:rgba(37,99,235,.28);
+  box-shadow:0 10px 26px rgba(15,23,42,.06), inset 0 1px 0 rgba(255,255,255,.9);
+}
+.assurance .chip-ghost strong{
+  color:#2563EB;
+}
+@media (max-width: 640px){
+  .assurance .chip-ghost{
+    font-size:12px;
+    padding:.55rem 0.9rem;
+  }
 }
 
