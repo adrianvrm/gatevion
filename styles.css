@@ -2507,10 +2507,10 @@ body{
 .car-specs{
   display:grid;
   grid-template-columns:repeat(4,minmax(0,1fr));
-  gap:.9rem;
-  padding:.85rem 1rem;
+  gap:.8rem;
+  padding:.8rem .95rem;
   border-radius:1.1rem;
-  background:linear-gradient(135deg,rgba(15,23,42,0.02),rgba(148,163,184,0.1));
+  background:linear-gradient(135deg,rgba(15,23,42,0.015),rgba(148,163,184,0.08));
 }
 @media (max-width: 1024px){
   .car-specs{
@@ -2529,23 +2529,23 @@ body{
 }
 .car-spec-icon{
   flex-shrink:0;
-  width:2.3rem;
-  height:2.3rem;
+  width:2.1rem;
+  height:2.1rem;
   border-radius:999px;
   display:flex;
   align-items:center;
   justify-content:center;
   background:
-    radial-gradient(circle at 0 0,rgba(2,172,142,0.12),transparent 60%),
-    radial-gradient(circle at 100% 100%,rgba(56,189,248,0.12),transparent 60%);
+    radial-gradient(circle at 0 0,rgba(2,172,142,0.09),transparent 60%),
+    radial-gradient(circle at 100% 100%,rgba(56,189,248,0.09),transparent 60%);
   box-shadow:
-    0 0 0 1px rgba(148,163,184,0.45),
-    0 10px 22px rgba(15,23,42,0.18);
+    0 0 0 1px rgba(148,163,184,0.32),
+    0 8px 18px rgba(15,23,42,0.14);
   color:#0f172a;
 }
 .car-spec-icon-svg{
-  width:1.25rem;
-  height:1.25rem;
+  width:1.15rem;
+  height:1.15rem;
 }
 .car-spec-text{
   display:flex;
@@ -2553,13 +2553,13 @@ body{
   gap:.05rem;
 }
 .car-spec-label{
-  font-size:.66rem;
+  font-size:.64rem;
   text-transform:uppercase;
-  letter-spacing:.12em;
+  letter-spacing:.11em;
   color:#94a3b8;
 }
 .car-spec-value{
-  font-size:.86rem;
+  font-size:.84rem;
   font-weight:550;
   color:#0f172a;
 }
