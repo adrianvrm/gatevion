@@ -968,7 +968,8 @@ h1.hero-title{
 
 
 
-/* === Date & time popover: open above trigger, overlaying other fields === */
+
+/* === Date & time popover: open above trigger only on mobile, overlaying other fields === */
 .hero-right .glass{
   overflow: visible;
 }
@@ -978,17 +979,16 @@ h1.hero-title{
   position: relative;
 }
 
-.picker--date .popover,
-.picker--time .popover{
-  top: auto !important;
-  bottom: calc(100% + 0.35rem) !important;
-  left: 0 !important;
-  right: auto !important;
-  margin-top: 0 !important;
+@media (max-width: 640px){
+  .picker--date .popover,
+  .picker--time .popover{
+    top: auto !important;
+    bottom: calc(100% + 0.35rem) !important;
+    left: 0 !important;
+    right: auto !important;
+    margin-top: 0 !important;
+  }
 }
-
-
-
 /* Assurance badges: center content & apply brand accents */
 .assurance{
   align-items:stretch;
