@@ -2164,3 +2164,12 @@ body{
 .hero.hero-premium .hero-cta-note{
   text-align:center;
 }
+
+
+
+/* Keep 'Închiriază în siguranță' on a single line on larger screens */
+@media (min-width: 768px){
+  .hero-title-line:first-child{
+    white-space: nowrap;
+  }
+}
