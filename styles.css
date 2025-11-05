@@ -235,7 +235,6 @@
 @media (min-width:1024px){
   .hero-badges{ flex-wrap:nowrap; }
   .hero-badges .chip-strong{ font-size:11.5px; padding:.36rem .56rem; }
-}
 /* Prevent overlap with form: keep enough right padding in hero-left */
 @media (min-width:1024px){
   .hero-left{ padding-right:1rem; }
@@ -3404,9 +3403,20 @@ body{
 }
 
 
+
 @media (max-width: 768px){
   .results-topbar{
     position:static;
     top:auto;
+  }
+  .results-page .results-topbar{
+    position:static;
+    top:auto;
+    left:auto;
+    right:auto;
+    margin-top:.35rem;
+  }
+  .results-page .results-layout{
+    padding-top:0;
   }
 }
