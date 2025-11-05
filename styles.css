@@ -2680,6 +2680,22 @@ body{
   word-wrap:break-word;
 }
 
+@media (max-width: 640px){
+  .car-spec{
+    flex-direction:row;
+    align-items:center;
+    column-gap:.55rem;
+    row-gap:0;
+  }
+  .car-spec-icon{
+    margin-bottom:0;
+  }
+  .car-spec-text{
+    align-items:flex-start;
+  }
+}
+
+
 .car-spec-label{
   display:inline-block;
   font-size:.62rem;
@@ -3385,4 +3401,12 @@ body{
   0%{ transform:translateY(0); opacity:.6; }
   50%{ transform:translateY(-6px); opacity:1; }
   100%{ transform:translateY(0); opacity:.6; }
+}
+
+
+@media (max-width: 768px){
+  .results-topbar{
+    position:static;
+    top:auto;
+  }
 }

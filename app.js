@@ -481,8 +481,8 @@ document.addEventListener('DOMContentLoaded', () => {
       working = working.filter(card=>{
         const seg = card.dataset.segment || '';
         const tr = card.dataset.transmission || '';
-        const segMatch = !segmentFilter || seg === segmentFilter;
-        const trMatch = !transmissionFilter || tr === transmissionFilter;
+        const segMatch = !segmentFilter || segmentFilter === 'all' || seg === segmentFilter;
+        const trMatch = !transmissionFilter || transmissionFilter === 'all' || tr === transmissionFilter;
         return segMatch && trMatch;
       });
 
