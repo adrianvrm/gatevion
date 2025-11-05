@@ -455,6 +455,81 @@ document.addEventListener('DOMContentLoaded', () => {
           sortMenu.setAttribute('aria-hidden', 'true');
         }
       });
+
+    // Client-side filters & sorting for results list
+    const resultsList = document.querySelector('.results-list');
+    const allCards = resultsList ? Array.from(resultsList.querySelectorAll('.car-card')) : [];
+    const originalOrder = allCards.slice();
+
+    function getActiveFilterValue(group){
+      const active = document.querySelector('.pill[data-filter-group="'+group+'"].pill-active');
+      return active ? active.getAttribute('data-filter-value') : null;
+    }
+
+    function applyFiltersAndSort(){
+      if(!resultsList || !allCards.length) return;
+
+      const segmentFilter = getActiveFilterValue('segment');
+      const transmissionFilter = getActiveFilterValue('transmission');
+
+      const activeSort = document.querySelector('.results-topbar-sort-option.is-active');
+      const sortKey = activeSort ? activeSort.getAttribute('data-sort') : 'recommended';
+
+      let working = originalOrder.slice();
+
+      // Apply filters
+      working = working.filter(card=>{
+        const seg = card.dataset.segment || '';
+        const tr = card.dataset.transmission || '';
+        const segMatch = !segmentFilter || seg === segmentFilter;
+        const trMatch = !transmissionFilter || tr === transmissionFilter;
+        return segMatch && trMatch;
+      });
+
+      // Apply sorting
+      if(sortKey === 'price-asc' || sortKey === 'price-desc'){
+        working.sort((a,b)=>{
+          const pa = parseFloat(a.dataset.price || '0');
+          const pb = parseFloat(b.dataset.price || '0');
+          if(isNaN(pa) || isNaN(pb)) return 0;
+          return sortKey === 'price-asc' ? pa - pb : pb - pa;
+        });
+      }else if(sortKey === 'fleet-newest'){
+        working.sort((a,b)=>{
+          const na = parseInt(a.dataset.fleetAge || '0', 10);
+          const nb = parseInt(b.dataset.fleetAge || '0', 10);
+          return nb - na; // newest first
+        });
+      }else{
+        // 'recommended' or unknown => original order
+        working = working;
+      }
+
+      // Re-render
+      resultsList.innerHTML = '';
+      working.forEach(card=> resultsList.appendChild(card));
+    }
+
+    // Wire filter pills (radio-like per group, but allow deselect)
+    document.querySelectorAll('.filter-pills .pill[data-filter-group]').forEach(pill=>{
+      pill.addEventListener('click', ()=>{
+        const group = pill.getAttribute('data-filter-group');
+        const isActive = pill.classList.contains('pill-active');
+        const groupPills = document.querySelectorAll('.pill[data-filter-group="'+group+'"]');
+        groupPills.forEach(p=> p.classList.remove('pill-active'));
+        if(!isActive){
+          pill.classList.add('pill-active');
+        }
+        applyFiltersAndSort();
+      });
+    });
+
+    // Re-run list when sort changes
+    document.querySelectorAll('.results-topbar-sort-option').forEach(opt=>{
+      opt.addEventListener('click', ()=>{
+        applyFiltersAndSort();
+      });
+    });
     }
 
   }

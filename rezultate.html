@@ -122,40 +122,29 @@
             <div class="filter-group">
               <p class="filter-label">Tip mașină</p>
               <div class="filter-pills">
-                <button type="button" class="pill pill-active">Compact</button>
-                <button type="button" class="pill">Sedan</button>
-                <button type="button" class="pill">SUV</button>
-                <button type="button" class="pill">Premium</button>
+                <button type="button" class="pill" data-filter-group="segment" data-filter-value="compact">Compact</button>
+                <button type="button" class="pill" data-filter-group="segment" data-filter-value="sedan">Sedan</button>
+                <button type="button" class="pill" data-filter-group="segment" data-filter-value="suv">SUV</button>
+                <button type="button" class="pill" data-filter-group="segment" data-filter-value="premium">Premium</button>
+                <button type="button" class="pill" data-filter-group="segment" data-filter-value="7locuri">7 locuri</button>
+                <button type="button" class="pill" data-filter-group="segment" data-filter-value="van">Van</button>
               </div>
             </div>
             <div class="filter-group">
               <p class="filter-label">Transmisie</p>
               <div class="filter-pills">
-                <button type="button" class="pill pill-active">Automată</button>
-                <button type="button" class="pill">Manuală</button>
-              </div>
-            </div>
-            <div class="filter-group">
-              <p class="filter-label">Politică combustibil</p>
-              <div class="filter-pills">
-                <button type="button" class="pill">Full → Full</button>
-                <button type="button" class="pill">Altele</button>
-              </div>
-            </div>
-            <div class="filter-group">
-              <p class="filter-label">Garanție / depozit</p>
-              <div class="filter-pills">
-                <button type="button" class="pill pill-active">Fără depozit</button>
-                <button type="button" class="pill">Depozit mic</button>
+                <button type="button" class="pill" data-filter-group="transmission" data-filter-value="automata">Automată</button>
+                <button type="button" class="pill" data-filter-group="transmission" data-filter-value="manuala">Manuală</button>
               </div>
             </div>
           </div>
         </aside>
 
+
         <!-- Results list: sample car cards as template -->
         <div class="results-list space-y-6 lg:space-y-7">
           <!-- Card 1 -->
-          <article class="car-card">
+          <article class="car-card" data-segment="compact" data-transmission="automata" data-price="45" data-fleet-age="3">
   <div class="car-media">
     <div class="car-image-skeleton" aria-hidden="true">
       <span class="skeleton-label">Imagine mașină (placeholder)</span>
@@ -323,7 +312,7 @@
 </article>
 
           <!-- Card 2 -->
-          <article class="car-card">
+          <article class="car-card" data-segment="suv" data-transmission="manuala" data-price="60" data-fleet-age="1">
   <div class="car-media">
     <div class="car-image-skeleton" aria-hidden="true">
       <span class="skeleton-label">Imagine mașină (placeholder)</span>
@@ -491,7 +480,7 @@
 </article>
 
           <!-- Card 3 -->
-          <article class="car-card">
+          <article class="car-card" data-segment="7locuri" data-transmission="automata" data-price="80" data-fleet-age="2">
   <div class="car-media">
     <div class="car-image-skeleton" aria-hidden="true">
       <span class="skeleton-label">Imagine mașină (placeholder)</span>
