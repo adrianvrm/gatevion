@@ -3425,3 +3425,38 @@ body{
     padding-top:0;
   }
 }
+
+
+
+@media (max-width: 768px){
+  .results-page .results-topbar{
+    border-radius:1.2rem 1.2rem .9rem .9rem;
+    margin-top:.5rem;
+    margin-bottom:.15rem;
+  }
+  .results-page .results-topbar .wrap{
+    padding-inline:1.1rem;
+  }
+  .results-page .results-layout{
+    padding-top:0;
+  }
+  .results-page .results-sidebar{
+    margin-top:0;
+  }
+  .results-page .results-sidebar .filter-card{
+    margin-top:-.55rem;
+    border-radius:0 0 1.2rem 1.2rem;
+    border-top:1px solid rgba(148,163,184,0.28);
+    background:linear-gradient(180deg,#f9fafb,#eef2ff);
+  }
+}
+
+/* Extra small screens: tighten spacing */
+@media (max-width: 640px){
+  .results-page .results-topbar{
+    margin-top:.35rem;
+  }
+  .results-page .results-sidebar .filter-card{
+    padding:.8rem .9rem;
+  }
+}
