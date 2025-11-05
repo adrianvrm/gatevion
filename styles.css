@@ -3410,3 +3410,18 @@ body{
     top:auto;
   }
 }
+
+
+
+@media (max-width: 768px){
+  .results-page .results-topbar{
+    position:static;
+    top:auto;
+    left:auto;
+    right:auto;
+    margin-top:.35rem;
+  }
+  .results-page .results-layout{
+    padding-top:0;
+  }
+}
