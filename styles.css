@@ -235,6 +235,7 @@
 @media (min-width:1024px){
   .hero-badges{ flex-wrap:nowrap; }
   .hero-badges .chip-strong{ font-size:11.5px; padding:.36rem .56rem; }
+}
 /* Prevent overlap with form: keep enough right padding in hero-left */
 @media (min-width:1024px){
   .hero-left{ padding-right:1rem; }
@@ -848,8 +849,7 @@ h1.hero-title{
   color:#fff; opacity:.95; text-decoration:none;
 }
 .topbar-utility .util-item:hover{ opacity:1; }
-.topbar-utility svg{ width:14px; height:14px; max-width:20px; max-height:20px; opacity:.9; }
-.util-icon{ width:14px; height:14px; max-width:20px; max-height:20px; display:inline-block; flex-shrink:0; }
+.topbar-utility svg{ width:14px; height:14px; opacity:.9; }
 .topbar-utility .util-spacer{ flex:1; }
 .topbar-utility .lang-switch{
   background:transparent; border:0; cursor:pointer; color:#fff; font-weight:700;
@@ -3404,65 +3404,9 @@ body{
 }
 
 
-
 @media (max-width: 768px){
   .results-topbar{
     position:static;
     top:auto;
-  }
-  .results-page .results-topbar{
-    position:static;
-    top:auto;
-    left:auto;
-    right:auto;
-    margin-top:.35rem;
-  }
-  .results-page .results-layout{
-    padding-top:0;
-  }
-}
-
-
-
-@media (max-width: 640px){
-  .results-topbar-label{
-    font-size:.7rem;
-  }
-  .results-topbar-value{
-    font-size:.82rem;
-  }
-  .results-topbar-sort-label{
-    font-size:.7rem;
-  }
-  .results-topbar-sort-trigger{
-    font-size:.8rem;
-    padding:.25rem .6rem;
-  }
-  .car-card{
-    padding:.8rem .9rem .9rem;
-    gap:.7rem;
-  }
-  .car-name{
-    font-size:1rem;
-  }
-  .car-name-alt{
-    font-size:.8rem;
-  }
-  .car-price-main{
-    font-size:1.05rem;
-  }
-  .car-price-note,
-  .car-price-includes{
-    font-size:.75rem;
-  }
-  .car-spec-label{
-    font-size:.58rem;
-  }
-  .car-spec-value{
-    font-size:.78rem;
-  }
-  .car-benefit-badge{
-    font-size:.7rem;
-    padding:.15rem .4rem;
   }
 }
