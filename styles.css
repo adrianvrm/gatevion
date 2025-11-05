@@ -3507,3 +3507,25 @@ body{
     box-shadow:0 12px 35px rgba(15,23,42,0.18);
   }
 }
+
+
+
+@media (max-width: 640px){
+  .results-page .results-topbar{
+    margin-top:.45rem;
+    margin-bottom:0;
+    border-radius:1rem 1rem 0 0;
+  }
+  .results-page .results-sidebar{
+    margin-top:0;
+  }
+  .results-page .results-sidebar .filter-card{
+    margin-top:0;
+    border-radius:0 0 1rem 1rem;
+    border-top:none;
+    padding:.6rem .85rem .75rem;
+  }
+  .results-page .results-layout .wrap{
+    gap:.55rem;
+  }
+}
