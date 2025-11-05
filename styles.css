@@ -848,7 +848,8 @@ h1.hero-title{
   color:#fff; opacity:.95; text-decoration:none;
 }
 .topbar-utility .util-item:hover{ opacity:1; }
-.topbar-utility svg{ width:14px; height:14px; opacity:.9; }
+.topbar-utility svg{ width:14px; height:14px; max-width:20px; max-height:20px; opacity:.9; }
+.util-icon{ width:14px; height:14px; max-width:20px; max-height:20px; display:inline-block; flex-shrink:0; }
 .topbar-utility .util-spacer{ flex:1; }
 .topbar-utility .lang-switch{
   background:transparent; border:0; cursor:pointer; color:#fff; font-weight:700;
