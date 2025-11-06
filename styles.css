@@ -3472,35 +3472,49 @@ body{
 
 
 @media (max-width: 640px){
-  html, body{
-    width:100%;
-    max-width:100%;
-    overflow-x:hidden;
+  .results-topbar{
+    position:static;
+    top:auto;
+    left:auto;
+    right:auto;
+    margin-top:.5rem;
+    margin-bottom:.35rem;
   }
-
-  .page-shell,
-  .page-shell-main,
-  .main-shell,
-  .results-main,
-  .results-page .results-layout{
-    max-width:100%;
-    overflow-x:hidden;
-  }
-
-  .wrap{
-    max-width:100%;
-    padding-left:.9rem;
-    padding-right:.9rem;
-    box-sizing:border-box;
-  }
-
-  /* Sort button centered on mobile */
   .results-topbar-inner{
-    flex-direction:column;
-    align-items:stretch;
-    gap:.45rem;
+    position:static;
+    top:auto;
+    align-items:flex-start;
+    border-radius:1rem;
+    padding:.75rem .85rem .7rem;
+    gap:.5rem;
+  }
+  .results-topbar-main{
+    display:grid;
+    grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+    grid-template-areas:
+      "route route"
+      "pickup return";
+    column-gap:.7rem;
+    row-gap:.3rem;
+    width:100%;
+  }
+  .results-topbar-main .results-topbar-group:nth-child(1){
+    grid-area:route;
+  }
+  .results-topbar-main .results-topbar-group:nth-child(2){
+    grid-area:pickup;
+  }
+  .results-topbar-main .results-topbar-group:nth-child(3){
+    grid-area:return;
+  }
+  .results-topbar-group{
+    width:100%;
+  }
+  .results-topbar-value{
+    white-space:normal;
   }
 
+  /* Sort area centred */
   .results-topbar-actions{
     width:100%;
     display:flex;
@@ -3509,16 +3523,44 @@ body{
     justify-content:center;
     margin-top:.2rem;
   }
-
   .results-topbar-sort-label{
     text-align:center;
     font-size:.7rem;
     margin-bottom:.1rem;
   }
-
   .results-topbar-sort-trigger{
     align-self:center;
     min-width:9rem;
     justify-content:center;
+  }
+}
+
+
+
+@media (max-width: 640px){
+  html, body{
+    margin:0;
+    padding:0;
+    width:100%;
+    max-width:100%;
+    overflow-x:hidden;
+  }
+  body{
+    position:relative;
+  }
+  .page-shell,
+  .page-shell-main,
+  .main-shell,
+  .results-main,
+  .results-page,
+  .results-page .results-layout,
+  .results-page .results-layout .wrap,
+  .wrap{
+    width:100%;
+    max-width:100%;
+    margin-left:0;
+    margin-right:0;
+    overflow-x:hidden;
+    box-sizing:border-box;
   }
 }
