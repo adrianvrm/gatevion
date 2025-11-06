@@ -3468,3 +3468,57 @@ body{
     padding:0 .8rem;
   }
 }
+
+
+
+@media (max-width: 640px){
+  html, body{
+    width:100%;
+    max-width:100%;
+    overflow-x:hidden;
+  }
+
+  .page-shell,
+  .page-shell-main,
+  .main-shell,
+  .results-main,
+  .results-page .results-layout{
+    max-width:100%;
+    overflow-x:hidden;
+  }
+
+  .wrap{
+    max-width:100%;
+    padding-left:.9rem;
+    padding-right:.9rem;
+    box-sizing:border-box;
+  }
+
+  /* Sort button centered on mobile */
+  .results-topbar-inner{
+    flex-direction:column;
+    align-items:stretch;
+    gap:.45rem;
+  }
+
+  .results-topbar-actions{
+    width:100%;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    margin-top:.2rem;
+  }
+
+  .results-topbar-sort-label{
+    text-align:center;
+    font-size:.7rem;
+    margin-bottom:.1rem;
+  }
+
+  .results-topbar-sort-trigger{
+    align-self:center;
+    min-width:9rem;
+    justify-content:center;
+  }
+}
