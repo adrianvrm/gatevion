@@ -2826,10 +2826,12 @@ body{
   100%{ transform:translate3d(0,0,0) scale(1); opacity:.35; }
 }
 .results-topbar{
-  position:sticky;
+  position:static;
+  top:auto;
+  left:auto;
+  right:auto;
   z-index:15;
-  top:6.5rem;
-  margin-top:.35rem;
+  margin-
 }
 
 
@@ -2866,7 +2868,7 @@ body{
 }
 
 .results-topbar-inner{
-  position:sticky;
+  
   top:5.2rem;
   display:flex;
   align-items:center;
@@ -3270,12 +3272,12 @@ body{
 
 /* Results page: fixed summary bar below main header */
 .results-page .results-topbar{
-  position:fixed;
-  top:4.5rem;
-  left:0;
-  right:0;
+  position:static;
+  top:auto;
+  left:auto;
+  right:auto;
   z-index:30;
-  margin-top:0;
+  margin-
 }
 .results-page .results-layout{
   padding-top:7.5rem;
