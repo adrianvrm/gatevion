@@ -3584,3 +3584,18 @@ body{
     display:none;
   }
 }
+
+.results-page{ overflow-x:hidden; }
+
+@media (max-width: 640px){
+  .results-topbar,
+  .results-topbar-main,
+  .results-topbar-actions,
+  .results-topbar-inner{
+    overflow:visible;
+  }
+  .results-topbar-inner::before,
+  .results-topbar-inner::after{
+    content:none;
+  }
+}
