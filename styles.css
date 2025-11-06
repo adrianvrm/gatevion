@@ -3589,15 +3589,3 @@ body{
     margin-top:.1rem;
   }
 }
-
-
-
-@media (max-width: 640px){
-  .results-page .results-topbar{
-    margin-bottom:0;
-  }
-  .results-page .results-sidebar .filter-card{
-    margin-top:0;
-    padding-top:.55rem;
-  }
-}
