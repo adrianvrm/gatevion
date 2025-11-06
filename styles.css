@@ -3546,3 +3546,41 @@ body{
     display:none;
   }
 }
+
+@media (max-width: 640px){
+  /* Hard clamp results summary bar to viewport width on mobile */
+  .results-topbar{
+    padding-left:0;
+    padding-right:0;
+  }
+  .results-topbar-inner{
+    position:static;
+    top:auto;
+    margin:0;
+    width:100%;
+    max-width:100%;
+    box-sizing:border-box;
+    border-radius:.85rem;
+    padding:.75rem .8rem;
+    box-shadow:none;
+    background:#ffffff;
+  }
+  .results-topbar-main{
+    display:flex;
+    flex-direction:column;
+    gap:.4rem;
+    width:100%;
+  }
+  .results-topbar-actions{
+    width:100%;
+  }
+  .results-topbar-sort-trigger{
+    width:100%;
+    min-width:0;
+    justify-content:center;
+  }
+  .results-topbar::before,
+  .results-topbar::after{
+    display:none;
+  }
+}
