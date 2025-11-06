@@ -1,4 +1,5 @@
 :root{ --ring:#0f172a; --muted:#64748b; --line:#e5e7eb; --bgsoft:#f8fafc; --shadow:0 20px 60px rgba(2,6,23,.08); }
+html{ scroll-behavior:smooth; }
 /* Layout */
 .wrap{ max-width:1120px; margin:0 auto; padding:0 1rem; }
 @media (min-width:640px){ .wrap{ padding:0 1.5rem; } }
@@ -3639,6 +3640,13 @@ body{
     overflow-y:auto !important;
     overflow-x:hidden;
     -webkit-overflow-scrolling:touch;
+  }
+  /* On mobile, simplify background to keep scrolling smooth */
+  body{
+    background-image:none;
+    background-color:#f8fafc;
+    background-attachment:scroll;
+    background-size:auto;
   }
   .results-main{
     min-height:auto !important;
