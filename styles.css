@@ -3613,3 +3613,21 @@ body{
     padding-top:.45rem;
   }
 }
+
+
+
+@media (max-width: 640px){
+  html, body{
+    overflow-y:auto;
+  }
+  .results-main{
+    min-height:auto;
+  }
+  .results-page .results-topbar{
+    margin-bottom:-.2rem;
+  }
+  .results-page .results-sidebar .filter-card{
+    margin-top:0;
+    padding-top:.35rem;
+  }
+}
