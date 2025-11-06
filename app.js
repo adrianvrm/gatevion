@@ -204,15 +204,6 @@ function setLang(l){ localStorage.setItem('lang', l); if(l==='en'){ location.hre
 function toggleLang(){ const l = localStorage.getItem('lang')==='en'?'ro':'en'; setLang(l); }
 
 document.addEventListener('DOMContentLoaded', () => {
-  if ('scrollRestoration' in history) {
-    history.scrollRestoration = 'manual';
-  }
-  // Ensure page starts at top on fresh load (esp. mobile reload) when no hash
-  if (!location.hash) {
-    const resetToTop = () => window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
-    resetToTop();
-    setTimeout(resetToTop, 140);
-  }
 
   const topbar = document.getElementById('topbar');
   if(topbar){
