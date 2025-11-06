@@ -3564,28 +3564,3 @@ body{
     box-sizing:border-box;
   }
 }
-
-
-
-@media (max-width: 640px){
-  .results-topbar-inner{
-    overflow:visible;
-  }
-  .results-topbar-sort{
-    position:relative;
-    z-index:60;
-  }
-  .results-topbar-sort-menu{
-    left:50%;
-    right:auto;
-    transform:translateX(-50%);
-    margin-top:.3rem;
-    z-index:70;
-  }
-  .results-page .results-topbar{
-    margin-bottom:.15rem;
-  }
-  .results-page .results-sidebar .filter-card{
-    margin-top:.1rem;
-  }
-}
