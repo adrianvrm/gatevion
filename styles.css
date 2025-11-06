@@ -2940,7 +2940,8 @@ body{
   font-size:.95rem;
   font-weight:600;
   color:#020617;
-  white-space:nowrap;
+  white-space:normal;
+  word-break:break-word;
 }
 .results-topbar-actions{
   position:relative;
@@ -3528,5 +3529,20 @@ body{
     align-self:center;
     min-width:9rem;
     justify-content:center;
+  }
+}
+
+@media (max-width: 640px){
+  .results-topbar,
+  .results-topbar-inner,
+  .results-topbar-main,
+  .results-topbar-actions{
+    width:100%;
+    max-width:100%;
+    overflow:hidden;
+  }
+  .results-topbar::before,
+  .results-topbar::after{
+    display:none;
   }
 }
