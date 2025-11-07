@@ -138,11 +138,17 @@ function initDatePicker(picker){
   function getMinISO(){
     const today = fmtISO(new Date());
     if(hidden.name === 'end_date'){
-      const sd = document.querySelector('input[name=\"start_date\"]')?.value || '';
-      if(sd && sd > today) return sd; // end_date min is start_date (or today)
+      const sd = document.querySelector('input[name="start_date"]')?.value || '';
+      if(sd){
+        const base = new Date(sd + 'T00:00:00');
+        base.setDate(base.getDate() + 1);
+        const minFromStart = fmtISO(base);
+        return (minFromStart > today ? minFromStart : today);
+      }
     }
     return today;
   }
+
 
   function open(){ closeAllPopovers(); pop.classList.add('open'); render(); activateField(picker); document.addEventListener('click', onDoc, true); }
   function close(){ pop.classList.remove('open'); deactivateField(picker); document.removeEventListener('click', onDoc, true); }
@@ -307,12 +313,25 @@ function initTimePicker(picker){
     const form = document.getElementById('searchForm');
     const isEnd = hidden.name==='end_time';
     let minTime = null;
-    if(isEnd){
+
+    if(isEnd && form){
       const sd = form.start_date?.value || '';
       const ed = form.end_date?.value || '';
       const st = form.start_time?.value || '';
-      if(sd && ed && sd===ed && st){ minTime = st; }
+
+      if(sd && ed && st){
+        const startDateTime = new Date(`${sd}T${st}:00`);
+        const minReturn = new Date(startDateTime.getTime() + 24*60*60*1000);
+        const minReturnDateISO = fmtISO(minReturn);
+
+        if(ed === minReturnDateISO){
+          const mh = pad(minReturn.getHours());
+          const mm = minReturn.getMinutes() >= 30 ? '30' : '00';
+          minTime = `${mh}:${mm}`;
+        }
+      }
     }
+
     let html = '';
     for(let i=0;i<48;i++){
       const h = pad(Math.floor(i/2));
@@ -430,19 +449,49 @@ document.addEventListener('DOMContentLoaded', () => {
       const endPicker = document.querySelector('.picker[data-target=\"end_date\"]');
       if(endPicker && endPicker._renderCal) endPicker._renderCal();
     }
-    // Enforce end_time >= start_time when same day
-    if(e.detail?.name==='start_time' || e.detail?.name==='end_date'){
+    // Enforce minim 24h între preluare și returnare (fără mesaje, ajustăm automat selecția)
+    if(e.detail?.name==='start_date' || e.detail?.name==='start_time' || e.detail?.name==='end_date' || e.detail?.name==='end_time'){
+      const form = document.getElementById('searchForm');
+      if(!form) return;
       const sd = form.start_date?.value || '';
       const ed = form.end_date?.value || '';
       const st = form.start_time?.value || '';
       const et = form.end_time?.value || '';
-      if(sd && ed && sd===ed && st){
-        // if currently chosen end_time is earlier than start_time, reset it
-        if(et && cmpTime(et, st) < 0){
-          const eHidden = form.end_time; const eDisplay = document.querySelector('.picker[data-target=\"end_time\"] .tp-input'); const eField = document.querySelector('.picker[data-target=\"end_time\"]').closest('.field');
-          eHidden.value=''; if(eDisplay) eDisplay.value=''; if(eField) eField.classList.remove('filled');
+
+      if(sd && ed && st && et){
+        const startDateTime = new Date(`${sd}T${st}:00`);
+        const endDateTime   = new Date(`${ed}T${et}:00`);
+        const minReturn = new Date(startDateTime.getTime() + 24*60*60*1000);
+
+        if(endDateTime < minReturn){
+          const minDateISO = fmtISO(minReturn);
+          const mh = pad(minReturn.getHours());
+          const mm = minReturn.getMinutes() >= 30 ? '30' : '00';
+          const minTime = `${mh}:${mm}`;
+
+          const endPickerEl = document.querySelector('.picker[data-target="end_date"]');
+          const endHidden = form.end_date;
+          const endDisplay = endPickerEl ? endPickerEl.querySelector('.dp-input') : null;
+          const endField = endPickerEl ? endPickerEl.closest('.field') : null;
+          if(endHidden){
+            endHidden.value = minDateISO;
+            if(endDisplay) endDisplay.value = fmtDisplayDateSlash(minDateISO);
+            if(endField) endField.classList.add('filled');
+          }
+
+          const endTimePickerEl = document.querySelector('.picker[data-target="end_time"]');
+          const eHiddenTime = form.end_time;
+          const eDisplayTime = endTimePickerEl ? endTimePickerEl.querySelector('.tp-input') : null;
+          const eFieldTime = endTimePickerEl ? endTimePickerEl.closest('.field') : null;
+          if(eHiddenTime){
+            eHiddenTime.value = minTime;
+            if(eDisplayTime) eDisplayTime.value = minTime;
+            if(eFieldTime) eFieldTime.classList.add('filled');
+          }
         }
       }
+    }
+
     }
   });
 
@@ -468,22 +517,10 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    // Final guard: dacă este aceeași zi și ora de returnare este mai devreme decât ora de preluare
+    // Final guard: pentru aceeași zi, ora de returnare trebuie să fie după ora de preluare
     if(sd === ed && cmpTime(et, st) < 0){
       e.preventDefault();
       alert('Ora de returnare trebuie să fie după ora de preluare pentru aceeași zi.');
-      return;
-    }
-
-    // Calculează durata în ore și aplică regula de minim 24h
-    const startDateTime = new Date(`${sd}T${st}:00`);
-    const endDateTime   = new Date(`${ed}T${et}:00`);
-    const diffMs = endDateTime - startDateTime;
-    const hours = diffMs / 36e5;
-
-    if(isNaN(hours) || hours < 24){
-      e.preventDefault();
-      alert('Perioada minimă de închiriere este de 24 de ore. Te rugăm să alegi o returnare la cel puțin 24 de ore după preluare.');
       return;
     }
 
@@ -624,19 +661,25 @@ document.addEventListener('DOMContentLoaded', () => {
       const mainPriceEl = card.querySelector('.car-price-main');
       const noteEl = card.querySelector('.car-price-note');
 
-      if(mainPriceEl && dayPrice){
-        // Afișează prețul pe zi în formatul €XX/zi
-        mainPriceEl.textContent = `€${dayPrice.toFixed(0)}`;
-        const perSpan = document.createElement('span');
-        perSpan.textContent = '/zi';
-        mainPriceEl.appendChild(perSpan);
+      let total = null;
+      if(dayPrice && rentalDays){
+        total = Math.round(dayPrice * rentalDays);
       }
 
-      if(noteEl && dayPrice && rentalDays){
-        const total = Math.round(dayPrice * rentalDays);
-        const labelDays = rentalDays === 1 ? 'zi' : 'zile';
-        noteEl.textContent = `Preț total estimat: €${total} (${rentalDays} ${labelDays})`;
-        noteEl.setAttribute('data-total', String(total));
+      // Preț final (pentru perioada selectată) – afișat mare pe card
+      if(mainPriceEl && total !== null){
+        mainPriceEl.textContent = `€${total}`;
+        const tag = document.createElement('span');
+        tag.textContent = 'Preț final';
+        mainPriceEl.appendChild(tag);
+      }
+
+      // Preț pe zi afișat discret sub formă de notă
+      if(noteEl && dayPrice){
+        noteEl.textContent = `€${dayPrice.toFixed(0)}/zi`;
+        if(total !== null){
+          noteEl.setAttribute('data-total', String(total));
+        }
       }
 
       if(!btn) return;
