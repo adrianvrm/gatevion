@@ -203,6 +203,7 @@ function initDobPicker(picker){
     cal.innerHTML = makeCalendar(viewDate, hidden.value, maxISO, 'maxPast');
     const yearSelect = cal.querySelector('.cal-year-select');
     if(yearSelect){
+      yearSelect.addEventListener('mousedown', (ev)=>{ ev.stopPropagation(); });
       yearSelect.addEventListener('change', ()=>{
         const y = parseInt(yearSelect.value,10);
         if(!isNaN(y)){
