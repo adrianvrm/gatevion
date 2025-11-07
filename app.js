@@ -627,11 +627,102 @@ const y = document.getElementById('y');
         '+48': { min:9, max:9 },   // Polonia
         '+386': { min:8, max:8 },  // Slovenia
         '+385': { min:8, max:9 },  // Croația
+
+        /* Extinse pentru mai multe țări din dropdown: valori aproximative
+           (suficient de strict încât să prindă o cifră în plus sau în minus) */
+        '+355': { min:8, max:9 },   // Albania
+        '+213': { min:8, max:9 },   // Algeria
+        '+54':  { min:8, max:10 },  // Argentina
+        '+61':  { min:8, max:9 },   // Australia
+        '+994': { min:8, max:9 },   // Azerbaidjan
+        '+973': { min:7, max:8 },   // Bahrain
+        '+880': { min:8, max:10 },  // Bangladesh
+        '+591': { min:8, max:9 },   // Bolivia
+        '+387': { min:8, max:9 },   // Bosnia și Herțegovina
+        '+55':  { min:8, max:11 },  // Brazilia
+        '+359': { min:8, max:9 },   // Bulgaria
+        '+855': { min:8, max:9 },   // Cambodgia
+        '+237': { min:8, max:9 },   // Camerun
+        '+1':   { min:10, max:10 }, // SUA / Canada
+        '+56':  { min:8, max:9 },   // Chile
+        '+86':  { min:8, max:11 },  // China
+        '+57':  { min:8, max:10 },  // Columbia
+        '+506': { min:8, max:8 },   // Costa Rica
+        '+357': { min:8, max:8 },   // Cipru
+        '+45':  { min:8, max:8 },   // Danemarca
+        '+20':  { min:8, max:9 },   // Egipt
+        '+372': { min:7, max:8 },   // Estonia
+        '+251': { min:8, max:9 },   // Etiopia
+        '+358': { min:8, max:10 },  // Finlanda
+        '+995': { min:8, max:9 },   // Georgia
+        '+502': { min:8, max:8 },   // Guatemala
+        '+504': { min:8, max:8 },   // Honduras
+        '+852': { min:8, max:8 },   // Hong Kong
+        '+354': { min:7, max:7 },   // Islanda
+        '+91':  { min:10, max:10 }, // India
+        '+62':  { min:9, max:11 },  // Indonezia
+        '+353': { min:8, max:9 },   // Irlanda
+        '+972': { min:8, max:9 },   // Israel
+        '+81':  { min:9, max:10 },  // Japonia
+        '+962': { min:8, max:9 },   // Iordania
+        '+7':   { min:10, max:10 }, // Rusia / Kazahstan (simplificat)
+        '+254': { min:9, max:9 },   // Kenya
+        '+82':  { min:9, max:9 },   // Coreea de Sud
+        '+965': { min:8, max:8 },   // Kuweit
+        '+996': { min:8, max:9 },   // Kârgâzstan
+        '+371': { min:8, max:8 },   // Letonia
+        '+961': { min:8, max:8 },   // Liban
+        '+370': { min:8, max:8 },   // Lituania
+        '+352': { min:8, max:9 },   // Luxemburg
+        '+353': { min:8, max:9 },   // Irlanda (deja definită mai sus)
+        '+389': { min:8, max:9 },   // Macedonia de Nord
+        '+60':  { min:8, max:10 },  // Malaysia
+        '+356': { min:8, max:8 },   // Malta
+        '+52':  { min:10, max:10 }, // Mexic
+        '+373': { min:8, max:8 },   // Moldova
+        '+377': { min:8, max:9 },   // Monaco
+        '+212': { min:8, max:9 },   // Maroc
+        '+64':  { min:8, max:9 },   // Noua Zeelandă
+        '+234': { min:8, max:10 },  // Nigeria
+        '+47':  { min:8, max:8 },   // Norvegia
+        '+92':  { min:9, max:10 },  // Pakistan
+        '+507': { min:7, max:8 },   // Panama
+        '+595': { min:8, max:9 },   // Paraguay
+        '+51':  { min:8, max:9 },   // Peru
+        '+63':  { min:9, max:10 },  // Filipine
+        '+351': { min:9, max:9 },   // Portugalia
+        '+974': { min:7, max:8 },   // Qatar
+        '+381': { min:8, max:9 },   // Serbia
+        '+65':  { min:8, max:8 },   // Singapore
+        '+27':  { min:9, max:9 },   // Africa de Sud
+        '+94':  { min:9, max:9 },   // Sri Lanka
+        '+46':  { min:7, max:9 },   // Suedia
+        '+886': { min:8, max:9 },   // Taiwan
+        '+66':  { min:8, max:9 },   // Thailanda
+        '+90':  { min:10, max:10 }, // Turcia
+        '+380': { min:9, max:9 },   // Ucraina
+        '+971': { min:8, max:9 },   // Emiratele Arabe Unite
+        '+598': { min:7, max:8 },   // Uruguay
+        '+58':  { min:7, max:9 },   // Venezuela
+        '+84':  { min:8, max:10 },  // Vietnam
+
         // Fallback: valori rezonabile pentru restul țărilor
         'default': { min:6, max:14 }
       };
 
       const phoneRow = phoneInput.closest('.phone-row');
+      const phoneFlagEl = document.getElementById('phoneCountryFlag');
+
+      const updateFlag = ()=>{
+        if(!phoneFlagEl || !phoneCountry) return;
+        const selected = phoneCountry.options[phoneCountry.selectedIndex];
+        if(!selected) return;
+        const text = (selected.textContent || '').trim();
+        const flagChar = text.split(' ')[0] || '';
+        phoneFlagEl.textContent = flagChar;
+      };
+
+
       let phoneErrorEl = document.getElementById('phoneNumberError');
       if(!phoneErrorEl){
         phoneErrorEl = document.createElement('p');
@@ -703,8 +794,15 @@ const y = document.getElementById('y');
         phoneInput.value = cc + ' ' + digits;
       };
 
-      phoneCountry.addEventListener('change', normalizePhone);
+      // Actualizăm și steagul, și normalizăm numărul la schimbarea țării
+      phoneCountry.addEventListener('change', ()=>{
+        updateFlag();
+        normalizePhone();
+      });
       phoneInput.addEventListener('blur', normalizePhone);
+
+      // Setăm steagul inițial la încărcarea paginii
+      updateFlag();
     }
   }
 });

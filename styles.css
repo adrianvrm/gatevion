@@ -4221,11 +4221,12 @@ body{
 }
 .phone-country{
   flex:0 0 auto;
+  position:relative;
 }
 .phone-country-select{
   width:4.6rem;
   min-width:4.6rem;
-  padding-left:0.45rem;
+  padding-left:2.1rem;
   padding-right:0.45rem;
 }
 .phone-number-input{
@@ -4366,4 +4367,14 @@ body{
 
 .mobile-nav .mnav-step::before{
   left:0;
+}
+
+
+.phone-flag{
+  position:absolute;
+  left:0.55rem;
+  top:50%;
+  transform:translateY(-50%);
+  pointer-events:none;
+  font-size:1.1rem;
 }
