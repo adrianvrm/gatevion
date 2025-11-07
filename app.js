@@ -934,7 +934,7 @@ const y = document.getElementById('y');
             digits = digits.slice(2);
           }
 
-          // Dacă utilizatorul a introdus deja prefixul țării, îl eliminăm
+          // Dacă utilizatorul a introdus deja prefixul țării, îl eliminăm din zona de număr
           if(ccDigits && digits.startsWith(ccDigits)){
             digits = digits.slice(ccDigits.length);
           }
@@ -1186,8 +1186,6 @@ const phoneCountry = document.getElementById('phoneCountry');
     };
 
     birthDisplay.addEventListener('blur', validateBirthDate);
-  }
-
   // Thank you page: hydrate recap from query params
   if(window.location.pathname && window.location.pathname.indexOf('multumire') !== -1){
     const params = new URLSearchParams(window.location.search || '');
@@ -1225,12 +1223,78 @@ const phoneCountry = document.getElementById('phoneCountry');
     const returnText = (ed ? fmtDate(ed) : '—') + (et ? ` • ${et}` : '');
     const periodText = (pickupText && returnText) ? `${pickupText}  →  ${returnText}` : (pickupText || returnText || '—');
 
-    // Reconstruim numărul pentru afișare astfel încât să nu dublăm prefixul
+    const phoneDisplay = (phoneCountry || '') + (phoneNumber ? ((phoneCountry ? ' ' : '') + phoneNumber) : '');
+
+    const setText = (id, value)=>{
+      const el = document.getElementById(id);
+      if(el && value) el.textContent = value;
+    };
+
+    if(carName) setText('tyCarName', carName);
+    if(carAlt) setText('tyCarAlt', carAlt);
+    if(segment) setText('tyCarSegment', segment);
+    if(gear){
+      const gearLabel = (gear === 'automata' ? 'Automată' : 'Manuală');
+      setText('tyCarGear', gearLabel);
+    }
+    if(carPrice) setText('tyCarPrice', `€${carPrice}`);
+
+    setText('tyRoute', routeText);
+    setText('tyPeriod', periodText);
+    if(travelCountry) setText('tyTravelCountry', travelCountry);
+    if(flightNumber) setText('tyFlightNumber', flightNumber);
+    if(fullName) setText('tyName', fullName);
+    if(email) setText('tyEmail', email);
+    if(phoneDisplay) setText('tyPhone', phoneDisplay);
+  }
+
+
+  }
+  }
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+  if(window.location.pathname && window.location.pathname.indexOf('multumire') !== -1){
+    const params = new URLSearchParams(window.location.search || '');
+
+    const arrLabel = params.get('arrLabel') || params.get('arr') || '';
+    const depLabel = params.get('depLabel') || params.get('dep') || '';
+    const sd = params.get('sd') || '';
+    const st = params.get('st') || '';
+    const ed = params.get('ed') || '';
+    const et = params.get('et') || '';
+
+    const carName = params.get('carName') || '';
+    const carAlt = params.get('carAlt') || '';
+    const carPrice = params.get('carPrice') || '';
+    const segment = params.get('segment') || '';
+    const gear = params.get('gear') || '';
+
+    const travelCountry = params.get('travelCountry') || '';
+    const flightNumber = params.get('flightNumber') || '';
+    const fullName = params.get('fullName') || '';
+    const email = params.get('email') || '';
+    const phoneCountry = params.get('phoneCountry') || '';
+    const phoneNumber = params.get('phoneNumber') || '';
+
+    const fmtDate = (iso)=>{
+      if(!iso) return '';
+      const parts = iso.split('-');
+      if(parts.length!==3) return iso;
+      const [y,m,d] = parts;
+      return `${d}.${m}.${y}`;
+    };
+
+    const routeText = (arrLabel || '—') + (depLabel ? ` → ${depLabel}` : '');
+    const pickupText = (sd ? fmtDate(sd) : '—') + (st ? ` • ${st}` : '');
+    const returnText = (ed ? fmtDate(ed) : '—') + (et ? ` • ${et}` : '');
+    const periodText = (pickupText && returnText) ? `${pickupText}  →  ${returnText}` : (pickupText || returnText || '—');
+
+    // Reconstruim numărul pentru afișare din prefix și numărul național
     let phoneDisplay = '';
     if(phoneCountry || phoneNumber){
       let normalizedNumber = (phoneNumber || '').toString().trim();
       if(normalizedNumber){
-        // Dacă parametrul conține deja un '+' îl afișăm ca atare
         if(normalizedNumber.startsWith('+')){
           phoneDisplay = normalizedNumber;
         }else{
@@ -1263,5 +1327,4 @@ const phoneCountry = document.getElementById('phoneCountry');
     if(email) setText('tyEmail', email);
     if(phoneDisplay) setText('tyPhone', phoneDisplay);
   }
-
 });

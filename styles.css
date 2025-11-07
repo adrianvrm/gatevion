@@ -4821,6 +4821,12 @@ body{
   color:#0f172a;
 }
 
+#tyEmail{
+  overflow-wrap:anywhere;
+  word-break:break-all;
+}
+
+
 .thankyou-tagline{
   margin-top:.7rem;
   font-size:.82rem;
