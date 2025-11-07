@@ -4523,3 +4523,22 @@ body{
     margin-right:auto;
   }
 }
+
+
+.submit-helper{
+  margin-top:0.85rem;
+  font-size:0.85rem;
+  color:#4b5563;
+  white-space:nowrap;
+}
+
+@media (max-width: 640px){
+  .submit-helper{
+    font-size:0.85rem;
+    text-align:center;
+    max-width:22rem;
+    margin-left:auto;
+    margin-right:auto;
+    white-space:normal;
+  }
+}
