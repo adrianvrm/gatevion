@@ -4803,6 +4803,11 @@ body{
   gap:.65rem 1.25rem;
 }
 
+.thankyou-summary-item-full{
+  grid-column:1 / -1;
+}
+
+
 @media (max-width: 640px){
   .thankyou-summary-grid{
     grid-template-columns:minmax(0,1fr);
@@ -4822,8 +4827,9 @@ body{
 }
 
 #tyEmail{
-  overflow-wrap:anywhere;
-  word-break:break-all;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
 }
 
 
