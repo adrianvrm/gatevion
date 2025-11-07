@@ -56,19 +56,19 @@
   <svg viewBox="0 0 24 24" width="20" height="20"><path d="M4 7h16M4 12h16M4 17h16" stroke="#0f172a" stroke-width="2" stroke-linecap="round"/></svg>
 </button>
 <nav class="main-nav hidden md:flex items-center gap-6">
-        <a href="#cum-functioneaza" class="nav-link">Cum funcționează</a>
-        <a href="#aeroporturi" class="nav-link">Aeroporturi</a>
-        <a href="#faq" class="nav-link">Întrebări frecvente</a>
+        <a href="#cum-functioneaza" class="nav-link nav-step" data-step="1">Alegi mașina</a>
+        <a href="#aeroporturi" class="nav-link nav-step nav-step-current" data-step="2">Completezi datele</a>
+        <a href="#faq" class="nav-link nav-step" data-step="3">Trimiți cererea</a>
       </nav>
       <div class="flex items-center gap-3">
         <a href="/contul-meu.html" class="btn-account" aria-label="Contul meu">Contul meu</a>
-        <a href="/rezultate.html" class="btn btn-primary" aria-label="Caută mașini disponibile">Caută mașini disponibile</a>
+        <a href="/rezultate.html" class="btn btn-primary" aria-label="Alege altă mașină">Alege altă mașină</a>
       </div>
     </div>
   <div id="mobileNav" class="mobile-nav" hidden>
-  <a href="#cum-functioneaza" class="mnav-link mnav-cf">Cum funcționează</a>
-  <a href="#aeroporturi" class="mnav-link mnav-ap">Aeroporturi</a>
-  <a href="#faq" class="mnav-link mnav-faq">Întrebări frecvente</a>
+  <a href="#cum-functioneaza" class="mnav-link mnav-cf mnav-step" data-step="1">Alegi mașina</a>
+  <a href="#aeroporturi" class="mnav-link mnav-ap mnav-step mnav-step-current" data-step="2">Completezi datele</a>
+  <a href="#faq" class="mnav-link mnav-faq mnav-step" data-step="3">Trimiți cererea</a>
 </div>
 </header>
 
@@ -168,7 +168,7 @@
               <div class="form-grid">
                 <div class="field">
                   <label for="fullName" class="field-label">Nume complet<span class="field-required">*</span></label>
-                  <input id="fullName" name="fullName" type="text" class="field-input" autocomplete="name" required placeholder="Nume și prenume exact ca în act" />
+                  <input id="fullName" name="fullName" type="text" class="field-input" autocomplete="name" required placeholder="Nume și prenume" />
                 </div>
                 <div class="field">
                   <label for="email" class="field-label">Email<span class="field-required">*</span></label>
@@ -178,7 +178,10 @@
                   <label for="phoneNumber" class="field-label">Telefon mobil (WhatsApp)<span class="field-required">*</span></label>
                   <div class="phone-row">
                     <div class="phone-country">
-                      <select id="phoneCountry" name="phoneCountry" class="field-input phone-country-select" required>
+                      <button type="button" class="phone-country-toggle" aria-label="Alege prefix de țară">
+                      <span class="phone-country-flag" id="phoneCountryFlag" aria-hidden="true">🇷🇴</span>
+                    </button>
+                      <select id="phoneCountry" name="phoneCountry" class="phone-country-select" required>
                         <option value="+93">🇦🇫 Afganistan +93</option>
                         <option value="+355">🇦🇱 Albania +355</option>
                         <option value="+213">🇩🇿 Algeria +213</option>
@@ -289,8 +292,14 @@
                   </div>
                 </div>
                 <div class="field">
-                  <label for="birthDate" class="field-label">Data nașterii<span class="field-required">*</span></label>
-                  <input id="birthDate" name="birthDate" type="date" class="field-input" required />
+                  <label for="birthDateDisplay" class="field-label">Data nașterii<span class="field-required">*</span></label>
+                  <div class="picker picker--dob" data-type="dob" data-target="birthDate">
+                    <input type="hidden" id="birthDate" name="birthDate" />
+                    <input id="birthDateDisplay" type="text" class="field-input dp-input" placeholder="ZZ/LL/AAAA" readonly required />
+                    <div class="popover calendar-pop">
+                      <div class="calendar"></div>
+                    </div>
+                  </div>
                 </div>
                 <div class="field">
                   <label for="nationalId" class="field-label">Serie & număr CI / Pașaport<span class="field-required">*</span></label>
@@ -316,120 +325,14 @@
               <h3 class="form-section-title">Detalii de zbor</h3>
               <div class="form-grid">
                 <div class="field">
-                  <label for="flightNumber" class="field-label">Număr zbor (dacă există)</label>
+                  <label for="flightNumber" class="field-label">Număr zbor</label>
                   <input id="flightNumber" name="flightNumber" type="text" class="field-input" placeholder="Ex: RO1234" />
                 </div>
-                                <div class="field">
-                  <label for="travelCountry" class="field-label">Țara din care călătoresc:<span class="field-required">*</span></label>
-                  <select id="travelCountry" name="travelCountry" class="field-input" required>
-                        <option value="" selected hidden>Alege țara</option>
-                        <option value="Afganistan">🇦🇫 Afganistan</option>
-                        <option value="Albania">🇦🇱 Albania</option>
-                        <option value="Algeria">🇩🇿 Algeria</option>
-                        <option value="Andorra">🇦🇩 Andorra</option>
-                        <option value="Angola">🇦🇴 Angola</option>
-                        <option value="Argentina">🇦🇷 Argentina</option>
-                        <option value="Armenia">🇦🇲 Armenia</option>
-                        <option value="Australia">🇦🇺 Australia</option>
-                        <option value="Austria">🇦🇹 Austria</option>
-                        <option value="Azerbaidjan">🇦🇿 Azerbaidjan</option>
-                        <option value="Bahrain">🇧🇭 Bahrain</option>
-                        <option value="Bangladesh">🇧🇩 Bangladesh</option>
-                        <option value="Belgia">🇧🇪 Belgia</option>
-                        <option value="Bolivia">🇧🇴 Bolivia</option>
-                        <option value="Bosnia și Herțegovina">🇧🇦 Bosnia și Herțegovina</option>
-                        <option value="Brazilia">🇧🇷 Brazilia</option>
-                        <option value="Bulgaria">🇧🇬 Bulgaria</option>
-                        <option value="Cambodgia">🇰🇭 Cambodgia</option>
-                        <option value="Camerun">🇨🇲 Camerun</option>
-                        <option value="Canada">🇨🇦 Canada</option>
-                        <option value="Chile">🇨🇱 Chile</option>
-                        <option value="China">🇨🇳 China</option>
-                        <option value="Columbia">🇨🇴 Columbia</option>
-                        <option value="Costa Rica">🇨🇷 Costa Rica</option>
-                        <option value="Croația">🇭🇷 Croația</option>
-                        <option value="Cipru">🇨🇾 Cipru</option>
-                        <option value="Cehia">🇨🇿 Cehia</option>
-                        <option value="Danemarca">🇩🇰 Danemarca</option>
-                        <option value="Egipt">🇪🇬 Egipt</option>
-                        <option value="El Salvador">🇸🇻 El Salvador</option>
-                        <option value="Estonia">🇪🇪 Estonia</option>
-                        <option value="Etiopia">🇪🇹 Etiopia</option>
-                        <option value="Finlanda">🇫🇮 Finlanda</option>
-                        <option value="Franța">🇫🇷 Franța</option>
-                        <option value="Georgia">🇬🇪 Georgia</option>
-                        <option value="Germania">🇩🇪 Germania</option>
-                        <option value="Grecia">🇬🇷 Grecia</option>
-                        <option value="Guatemala">🇬🇹 Guatemala</option>
-                        <option value="Haiti">🇭🇹 Haiti</option>
-                        <option value="Honduras">🇭🇳 Honduras</option>
-                        <option value="Hong Kong">🇭🇰 Hong Kong</option>
-                        <option value="Ungaria">🇭🇺 Ungaria</option>
-                        <option value="Islanda">🇮🇸 Islanda</option>
-                        <option value="India">🇮🇳 India</option>
-                        <option value="Indonezia">🇮🇩 Indonezia</option>
-                        <option value="Irlanda">🇮🇪 Irlanda</option>
-                        <option value="Israel">🇮🇱 Israel</option>
-                        <option value="Italia">🇮🇹 Italia</option>
-                        <option value="Japonia">🇯🇵 Japonia</option>
-                        <option value="Iordania">🇯🇴 Iordania</option>
-                        <option value="Kazahstan">🇰🇿 Kazahstan</option>
-                        <option value="Kenya">🇰🇪 Kenya</option>
-                        <option value="Coreea de Sud">🇰🇷 Coreea de Sud</option>
-                        <option value="Kuweit">🇰🇼 Kuweit</option>
-                        <option value="Kârgâzstan">🇰🇬 Kârgâzstan</option>
-                        <option value="Letonia">🇱🇻 Letonia</option>
-                        <option value="Liban">🇱🇧 Liban</option>
-                        <option value="Libia">🇱🇾 Libia</option>
-                        <option value="Liechtenstein">🇱🇮 Liechtenstein</option>
-                        <option value="Lituania">🇱🇹 Lituania</option>
-                        <option value="Luxemburg">🇱🇺 Luxemburg</option>
-                        <option value="Macao">🇲🇴 Macao</option>
-                        <option value="Macedonia de Nord">🇲🇰 Macedonia de Nord</option>
-                        <option value="Madagascar">🇲🇬 Madagascar</option>
-                        <option value="Malaysia">🇲🇾 Malaysia</option>
-                        <option value="Malta">🇲🇹 Malta</option>
-                        <option value="Mexic">🇲🇽 Mexic</option>
-                        <option value="Moldova">🇲🇩 Moldova</option>
-                        <option value="Monaco">🇲🇨 Monaco</option>
-                        <option value="Maroc">🇲🇦 Maroc</option>
-                        <option value="Olanda">🇳🇱 Olanda</option>
-                        <option value="Noua Zeelandă">🇳🇿 Noua Zeelandă</option>
-                        <option value="Nigeria">🇳🇬 Nigeria</option>
-                        <option value="Norvegia">🇳🇴 Norvegia</option>
-                        <option value="Pakistan">🇵🇰 Pakistan</option>
-                        <option value="Panama">🇵🇦 Panama</option>
-                        <option value="Paraguay">🇵🇾 Paraguay</option>
-                        <option value="Peru">🇵🇪 Peru</option>
-                        <option value="Filipine">🇵🇭 Filipine</option>
-                        <option value="Polonia">🇵🇱 Polonia</option>
-                        <option value="Portugalia">🇵🇹 Portugalia</option>
-                        <option value="Qatar">🇶🇦 Qatar</option>
-                        <option value="România">🇷🇴 România</option>
-                        <option value="Rusia">🇷🇺 Rusia</option>
-                        <option value="Arabia Saudită">🇸🇦 Arabia Saudită</option>
-                        <option value="Serbia">🇷🇸 Serbia</option>
-                        <option value="Singapore">🇸🇬 Singapore</option>
-                        <option value="Slovacia">🇸🇰 Slovacia</option>
-                        <option value="Slovenia">🇸🇮 Slovenia</option>
-                        <option value="Africa de Sud">🇿🇦 Africa de Sud</option>
-                        <option value="Spania">🇪🇸 Spania</option>
-                        <option value="Sri Lanka">🇱🇰 Sri Lanka</option>
-                        <option value="Suedia">🇸🇪 Suedia</option>
-                        <option value="Elveția">🇨🇭 Elveția</option>
-                        <option value="Taiwan">🇹🇼 Taiwan</option>
-                        <option value="Thailanda">🇹🇭 Thailanda</option>
-                        <option value="Turcia">🇹🇷 Turcia</option>
-                        <option value="Ucraina">🇺🇦 Ucraina</option>
-                        <option value="Emiratele Arabe Unite">🇦🇪 Emiratele Arabe Unite</option>
-                        <option value="Regatul Unit">🇬🇧 Regatul Unit</option>
-                        <option value="Statele Unite">🇺🇸 Statele Unite</option>
-                        <option value="Uruguay">🇺🇾 Uruguay</option>
-                        <option value="Venezuela">🇻🇪 Venezuela</option>
-                        <option value="Vietnam">🇻🇳 Vietnam</option>
-                  </select>
+                <div class="field">
+                  <label for="arrivalTime" class="field-label">Ora estimată de aterizare</label>
+                  <input id="arrivalTime" name="arrivalTime" type="time" class="field-input" />
                 </div>
-  <div class="field field-full">
+                <div class="field field-full">
                   <label for="extraNotes" class="field-label">Observații pentru livrare</label>
                   <textarea id="extraNotes" name="extraNotes" rows="3" class="field-input field-textarea" placeholder="Ex: Călătoresc cu copii mici, am bagaj voluminos, vreau scaun de copil etc."></textarea>
                 </div>
@@ -484,7 +387,7 @@
                 </div>
 
                 <div class="upload-field">
-                  <label for="flightTicket" class="field-label">Bilet de avion / boarding pass<span class="field-required">*</span></label>
+                  <label for="flightTicket" class="field-label">Bilet de avion<span class="field-required">*</span></label>
                   <label class="upload-drop">
                     <span class="upload-icon" aria-hidden="true">⬆</span>
                     <span class="upload-main">Alege fișier sau trage aici</span>
