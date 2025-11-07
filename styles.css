@@ -4219,15 +4219,45 @@ body{
   flex-wrap:nowrap;
   gap:.4rem;
 }
+
 .phone-country{
   flex:0 0 auto;
   position:relative;
+  width:3rem;
 }
+
+.phone-country-toggle{
+  width:100%;
+  height:2.6rem;
+  border-radius:.7rem;
+  border:1px solid #d1d5db;
+  background:#f9fafb;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:0;
+  cursor:pointer;
+}
+
+.phone-country-flag{
+  font-size:1.1rem;
+  line-height:1;
+}
+
 .phone-country-select{
-  width:4.6rem;
-  min-width:4.6rem;
-  padding-left:2.1rem;
-  padding-right:0.45rem;
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  opacity:0;
+  cursor:pointer;
+}
+
+/* focus vizual pentru container când selectul este focusat */
+.phone-country:focus-within .phone-country-toggle{
+  border-color:#06b6d4;
+  box-shadow:0 0 0 1px rgba(6,182,212,.2);
+  background:#ffffff;
 }
 .phone-number-input{
   flex:1 1 auto;
@@ -4369,12 +4399,3 @@ body{
   left:0;
 }
 
-
-.phone-flag{
-  position:absolute;
-  left:0.55rem;
-  top:50%;
-  transform:translateY(-50%);
-  pointer-events:none;
-  font-size:1.1rem;
-}
