@@ -26,23 +26,29 @@ function makeCalendar(date, selectedISO, boundISO, mode){
   const first = new Date(year, month, 1);
   const startOffset = (first.getDay()+6)%7; // Monday-first; 0=Mon ... 6=Sun
   const daysInMonth = new Date(year, month+1, 0).getDate();
-  const todayISO = fmtISO(new Date());
+  const today = new Date();
+  const todayISO = fmtISO(today);
   let minBound = null;
   let maxBound = null;
   if(mode === 'maxPast'){
-    maxBound = boundISO || todayISO; // block future days by default
+    // Pentru data nașterii: interval permis între 22 și 65 de ani
+    const maxAgeYears = 65;
+    const minDate = new Date(today.getFullYear() - maxAgeYears, today.getMonth(), today.getDate());
+    minBound = fmtISO(minDate);           // prea vechi => prea bătrân (>65)
+    maxBound = boundISO || todayISO;      // prea nou => prea tânăr (<22)
   }else{
     minBound = boundISO || todayISO; // block past days by default
   }
-  let html = '<header><div class="month">'+RO_MONTHS[month]+' '+year+'</div><div class="nav">';
+  const monthLabel = (mode === 'maxPast') ? RO_MONTHS[month] : RO_MONTHS[month]+' '+year;
+  let html = '<header><div class="month">'+monthLabel+'</div><div class="nav">';
   html += '<button class="icon-btn" data-cal="prev" aria-label="Luna anterioară">‹</button>';
   if(mode !== 'maxPast'){
     html += '<button class="icon-btn" data-cal="today" aria-label="Astăzi">•</button>';
   }
   html += '<button class="icon-btn" data-cal="next" aria-label="Luna următoare">›</button>';
   if(mode === 'maxPast'){
-    const currentYear = (new Date()).getFullYear();
-    const minYear = currentYear - 100;
+    const currentYear = today.getFullYear();
+    const minYear = currentYear - 65;
     const maxYear = currentYear - 22;
     html += '<select class="cal-year-select" data-cal="year">';
     for(let y = maxYear; y >= minYear; y--){
@@ -52,6 +58,7 @@ function makeCalendar(date, selectedISO, boundISO, mode){
     html += '</select>';
   }
   html += '</div></header>';
+
 
   html += '<div class=\"cal-grid\">';
   // DOW
@@ -895,8 +902,11 @@ const y = document.getElementById('y');
   if(birthHidden && birthDisplay){
     const today = new Date();
     const minAgeYears = 22;
-    const maxDate = new Date(today.getFullYear() - minAgeYears, today.getMonth(), today.getDate());
+    const maxAgeYears = 65;
+    const maxDate = new Date(today.getFullYear() - minAgeYears, today.getMonth(), today.getDate()); // cel mai tânăr (22)
+    const minDate = new Date(today.getFullYear() - maxAgeYears, today.getMonth(), today.getDate()); // cel mai în vârstă (65)
     const maxISO = fmtISO(maxDate);
+    const minISO = fmtISO(minDate);
 
     const validateBirthDate = ()=>{
       const isoVal = birthHidden.value;
@@ -904,8 +914,8 @@ const y = document.getElementById('y');
         birthDisplay.setCustomValidity('Completează data nașterii.');
         return;
       }
-      if(isoVal > maxISO){
-        birthDisplay.setCustomValidity('Trebuie să ai cel puțin 22 de ani pentru a închiria o mașină.');
+      if(isoVal > maxISO || isoVal < minISO){
+        birthDisplay.setCustomValidity('Trebuie să ai între 22 și 65 de ani pentru a închiria o mașină.');
       }else{
         birthDisplay.setCustomValidity('');
       }
