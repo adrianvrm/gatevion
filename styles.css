@@ -3682,3 +3682,10 @@ body{
     content:none;
   }
 }
+
+@media (max-width: 640px){
+  .topbar{
+    position:relative;
+    top:auto;
+  }
+}
