@@ -16,9 +16,10 @@ const RO_DOW = ['Lu','Ma','Mi','Jo','Vi','Sa','Du']; // Monday-first
 const pad = (n)=> String(n).padStart(2,'0');
 const fmtISO = (d)=> `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
 const fmtDisplayDate = (iso)=> { if(!iso) return ''; const [y,m,d]=iso.split('-'); return `${d}.${m}.${y}`; };
+const fmtDisplayDateSlash = (iso)=> { if(!iso) return ''; const [y,m,d]=iso.split('-'); return `${d}/${m}/${y}`; };
 const cmpTime = (a,b)=> (a===b?0:(a<b?-1:1)); // HH:MM strings (zero-padded)
 
-function makeCalendar(date, selectedISO, minISO){
+function makeCalendar(date, selectedISO, boundISO, mode){
   // returns HTML string for a calendar month grid
   const year = date.getFullYear();
   const month = date.getMonth();
@@ -26,7 +27,13 @@ function makeCalendar(date, selectedISO, minISO){
   const startOffset = (first.getDay()+6)%7; // Monday-first; 0=Mon ... 6=Sun
   const daysInMonth = new Date(year, month+1, 0).getDate();
   const todayISO = fmtISO(new Date());
-  const minBound = minISO || todayISO; // block past days by default
+  let minBound = null;
+  let maxBound = null;
+  if(mode === 'maxPast'){
+    maxBound = boundISO || todayISO; // block future days by default
+  }else{
+    minBound = boundISO || todayISO; // block past days by default
+  }
 
   let html = '<header><button class=\"icon-btn\" data-cal=\"prev\" aria-label=\"Luna anterioară\">‹</button><div class=\"month\">'+RO_MONTHS[month]+' '+year+'</div><div class=\"nav\"><button class=\"icon-btn\" data-cal=\"today\" aria-label=\"Astăzi\">•</button><button class=\"icon-btn\" data-cal=\"next\" aria-label=\"Luna următoare\">›</button></div></header>';
   html += '<div class=\"cal-grid\">';
@@ -38,7 +45,8 @@ function makeCalendar(date, selectedISO, minISO){
   for(let day=1; day<=daysInMonth; day++){
     const iso = `${year}-${pad(month+1)}-${pad(day)}`;
     let cls = 'cal-day';
-    if(iso < minBound) cls += ' disabled';
+    if(minBound && iso < minBound) cls += ' disabled';
+    if(maxBound && iso > maxBound) cls += ' disabled';
     if(iso===fmtISO(new Date())) cls += ' today';
     if(selectedISO && iso===selectedISO) cls += ' selected';
     html += `<div class=\"${cls}\" data-date=\"${iso}\">${day}</div>`;
@@ -143,6 +151,54 @@ function initDatePicker(picker){
   picker._renderCal = render;
 }
 
+
+
+function initDobPicker(picker){
+  const hidden = picker.querySelector('input[type="hidden"]');
+  const display = picker.querySelector('.dp-input');
+  const pop = picker.querySelector('.calendar-pop');
+  const cal = pop.querySelector('.calendar');
+
+  const today = new Date();
+  const minAgeYears = 22;
+  const maxDate = new Date(today.getFullYear() - minAgeYears, today.getMonth(), today.getDate());
+  const maxISO = fmtISO(maxDate);
+  let viewDate = hidden.value ? new Date(hidden.value) : maxDate;
+
+  function open(){ closeAllPopovers(); pop.classList.add('open'); activateField(picker); document.addEventListener('click', onDoc, true); }
+  function close(){ pop.classList.remove('open'); deactivateField(picker); document.removeEventListener('click', onDoc, true); }
+  function onDoc(e){ if(!picker.contains(e.target)) close(); }
+
+  function render(){
+    cal.innerHTML = makeCalendar(viewDate, hidden.value, maxISO, 'maxPast');
+  }
+
+  display.addEventListener('click', (e)=>{ e.stopPropagation(); pop.classList.contains('open')? close(): open(); });
+  cal.addEventListener('click', (e)=>{
+    const btn = e.target.closest('[data-cal]');
+    if(btn){
+      const t = btn.getAttribute('data-cal');
+      if(t==='prev') viewDate = new Date(viewDate.getFullYear(), viewDate.getMonth()-1, 1);
+      if(t==='next') viewDate = new Date(viewDate.getFullYear(), viewDate.getMonth()+1, 1);
+      if(t==='today') viewDate = maxDate;
+      render(); return;
+    }
+    const day = e.target.closest('.cal-day');
+    if(day && day.dataset.date){
+      if(day.classList.contains('disabled')) return;
+      hidden.value = day.dataset.date;
+      display.value = fmtDisplayDateSlash(hidden.value);
+      picker.closest('.field')?.classList.add('filled');
+      close();
+      // declanșăm validarea, dacă este definită
+      display.dispatchEvent(new Event('blur'));
+    }
+  });
+
+  // prima randare
+  render();
+}
+
 function initTimePicker(picker){
   const hidden = picker.querySelector('input[type=\"hidden\"]');
   const display = picker.querySelector('.tp-input');
@@ -218,9 +274,10 @@ document.addEventListener('DOMContentLoaded', () => {
   if(langBtn2) langBtn2.addEventListener('click', toggleLang);
 
   // Initialize custom pickers
-  document.querySelectorAll('.picker[data-type=\"airport\"]').forEach(initAirportPicker);
-  document.querySelectorAll('.picker[data-type=\"date\"]').forEach(initDatePicker);
-  document.querySelectorAll('.picker[data-type=\"time\"]').forEach(initTimePicker);
+  document.querySelectorAll('.picker[data-type="airport"]').forEach(initAirportPicker);
+  document.querySelectorAll('.picker[data-type="date"]').forEach(initDatePicker);
+  document.querySelectorAll('.picker[data-type="dob"]').forEach(initDobPicker);
+  document.querySelectorAll('.picker[data-type="time"]').forEach(initTimePicker);
   initFAQ();
 
 
@@ -806,29 +863,30 @@ const y = document.getElementById('y');
     }
 
   // Restricție dinamică pentru data nașterii (minim 22 de ani)
-  const birthInput = document.getElementById('birthDate');
-  if(birthInput){
+  const birthHidden = document.getElementById('birthDate');
+  const birthDisplay = document.getElementById('birthDateDisplay');
+  if(birthHidden && birthDisplay){
     const today = new Date();
     const minAgeYears = 22;
     const maxDate = new Date(today.getFullYear() - minAgeYears, today.getMonth(), today.getDate());
     const maxISO = fmtISO(maxDate);
-    birthInput.setAttribute('max', maxISO);
 
     const validateBirthDate = ()=>{
-      const val = birthInput.value;
-      if(!val){
-        birthInput.setCustomValidity('');
+      const isoVal = birthHidden.value;
+      if(!isoVal){
+        birthDisplay.setCustomValidity('Completează data nașterii.');
         return;
       }
-      if(val > maxISO){
-        birthInput.setCustomValidity('Trebuie să ai cel puțin 22 de ani pentru a închiria o mașină.');
+      if(isoVal > maxISO){
+        birthDisplay.setCustomValidity('Trebuie să ai cel puțin 22 de ani pentru a închiria o mașină.');
       }else{
-        birthInput.setCustomValidity('');
+        birthDisplay.setCustomValidity('');
       }
     };
 
-    birthInput.addEventListener('change', validateBirthDate);
-    birthInput.addEventListener('blur', validateBirthDate);
+    birthDisplay.addEventListener('blur', validateBirthDate);
+  }
+
   }
   }
 });

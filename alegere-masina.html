@@ -292,8 +292,14 @@
                   </div>
                 </div>
                 <div class="field">
-                  <label for="birthDate" class="field-label">Data nașterii<span class="field-required">*</span></label>
-                  <input id="birthDate" name="birthDate" type="date" class="field-input" required />
+                  <label for="birthDateDisplay" class="field-label">Data nașterii<span class="field-required">*</span></label>
+                  <div class="picker picker--dob" data-type="dob" data-target="birthDate">
+                    <input type="hidden" id="birthDate" name="birthDate" />
+                    <input id="birthDateDisplay" type="text" class="field-input dp-input" placeholder="ZZ/LL/AAAA" readonly required />
+                    <div class="popover calendar-pop">
+                      <div class="calendar"></div>
+                    </div>
+                  </div>
                 </div>
                 <div class="field">
                   <label for="nationalId" class="field-label">Serie & număr CI / Pașaport<span class="field-required">*</span></label>
