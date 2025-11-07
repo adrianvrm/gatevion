@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Mulțumim pentru rezervare | Gatevion</title>
-  <meta name="description" content="Mulțumim că ai ales Gatevion. Cererea ta de rezervare a fost trimisă spre verificare de către echipa noastră și partenerii de închirieri auto." />
+  <meta name="description" content="Mulțumim că ai ales Gatevion. Cererea ta de rezervare este în curs de procesare și va fi verificată împreună cu partenerii noștri de închirieri auto." />
   <link rel="canonical" href="https://gatevion.ro/" />
   <link rel="alternate" href="https://gatevion.ro/" hreflang="ro" />
   <link rel="alternate" href="https://gatevion.ro/en" hreflang="en" />
@@ -21,12 +21,16 @@
             accent: '#02ac8e'
           },
           fontFamily: {
-            sans: ['Manrope', 'system-ui', 'sans-serif']
+            sans: ['Manrope','system-ui','-apple-system','BlinkMacSystemFont','Segoe UI','sans-serif']
           }
         }
       }
     };
   </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
 
   <link rel="stylesheet" href="./styles.css" />
 </head>
@@ -48,20 +52,20 @@
 </div>
 
     <div class="wrap h-16 flex items-center justify-between">
-      <a href="/" class="flex items-center gap-2" aria-label="Gatevion home">
-        <!-- Inline SVG logo -->
+      <a href="./index.html" class="flex items-center gap-2" aria-label="Gatevion home">
+        <!-- Logo simplificat -->
         <svg class="h-8 w-auto" viewBox="0 0 180 32" aria-label="Gatevion logo" role="img">
           <g>
             <circle cx="16" cy="16" r="12" fill="#0f172a" fill-opacity="0.08"></circle>
             <path d="M16 8c-4.4 0-8 3.6-8 8s3.6 8 8 8c3 0 5.7-1.3 7.3-3.7.3-.4.2-1-.2-1.3-.4-.3-1-.2-1.3.2-1.1 1.7-3.1 2.8-5.2 2.8-3.4 0-6.1-2.7-6.1-6.1S12.6 9.9 16 9.9c1.4 0 2.8.5 3.8 1.4.3.3.8.3 1.2.1.4-.3.5-.9.2-1.3C19.8 8.7 17.9 8 16 8zm0 3.4c-2.2 0-4 1.8-4 4s1.8 4 4 4c1.8 0 3.3-1.2 3.8-2.8.1-.4 0-.8-.3-1.1-.3-.3-.7-.4-1.1-.3-.5.2-1.1.3-1.7.3-1.3 0-2.4-.5-3.2-1.4-.4-.4-1-.4-1.4 0-.4.4-.4 1 0 1.4.9 1 2.2 1.6 3.6 1.6.4 0 .8 0 1.2-.1-.5.7-1.3 1.1-2.2 1.1-1.5 0-2.8-1.2-2.8-2.8 0-1.5 1.2-2.8 2.8-2.8.5 0 1 .1 1.4.4.4.3 1.1.2 1.4-.3.3-.4.2-1-.3-1.3-.7-.5-1.6-.7-2.5-.7z" fill="#0f172a"></path>
-            <text x="36" y="22" font-family="Manrope, Inter, Segoe UI, system-ui, -apple-system, BlinkMacSystemFont, sans-serif" font-size="16" fill="#0f172a" letter-spacing=".5">Gatevion</text>
+            <text x="36" y="22" font-family="Manrope, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif" font-size="16" fill="#0f172a" letter-spacing=".5">Gatevion</text>
           </g>
         </svg>
       </a>
       <button id="mobileToggle" class="md:hidden inline-flex items-center justify-center rounded-lg border border-slate-200 mr-2" aria-label="Deschide meniul">
-  <svg viewBox="0 0 24 24" width="20" height="20"><path d="M4 7h16M4 12h16M4 17h16" fill="none" stroke="#0f172a" stroke-width="2" stroke-linecap="round"/></svg>
-</button>
-<nav class="main-nav hidden md:flex items-center gap-6">
+        <svg viewBox="0 0 24 24" width="20" height="20"><path d="M4 7h16M4 12h16M4 17h16" fill="none" stroke="#0f172a" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+      <nav class="main-nav hidden md:flex items-center gap-6">
         <span class="nav-link nav-step nav-step-disabled" data-step="1" aria-disabled="true">Alegi mașina</span>
         <span class="nav-link nav-step nav-step-disabled" data-step="2" aria-disabled="true">Completezi datele</span>
         <span class="nav-link nav-step nav-step-current" data-step="3">Trimiți cererea</span>
@@ -94,8 +98,8 @@
               Mulțumim, cererea ta a ajuns la <span class="thankyou-highlight">Gatevion</span>!
             </h1>
             <p class="thankyou-subtitle">
-              Cererea ta este <span class="thankyou-highlight">în curs de procesare</span>. 
-              Un operator Gatevion analizează detaliile rezervării împreună cu partenerii pentru a confirma disponibilitatea mașinii.
+              Cererea ta este <strong>în curs de procesare</strong>. Un operator Gatevion analizează detaliile rezervării împreună cu partenerii
+              pentru a confirma disponibilitatea mașinii.
             </p>
 
             <div class="thankyou-content">
@@ -104,12 +108,19 @@
                   <p class="thankyou-summary-title">Rezumatul rezervării</p>
 
                   <div class="thankyou-summary-car">
-                    <p id="tyCarName" class="thankyou-summary-car-name">Mașina selectată</p>
-                    <p id="tyCarAlt" class="thankyou-summary-car-alt">Detalii variantă și motorizare</p>
+                    <p id="tyCarName" class="thankyou-summary-car-name">[Nume mașină]</p>
+                    <p id="tyCarAlt" class="thankyou-summary-car-alt">[Variantă / motorizare]</p>
                     <div class="thankyou-summary-car-meta">
-                      <span id="tyCarSegment" class="thankyou-pill">Clasă flotă</span>
-                      <span id="tyCarGear" class="thankyou-pill">Transmisie</span>
-                      <span id="tyCarPrice" class="thankyou-pill">Preț afișat</span>
+                      <span class="thankyou-pill">
+                        <span class="thankyou-pill-badge"></span>
+                        <span id="tyCarSegment">Clasă flotă</span>
+                      </span>
+                      <span class="thankyou-pill">
+                        <span id="tyCarGear">Transmisie</span>
+                      </span>
+                      <span class="thankyou-pill">
+                        <span id="tyCarPrice">—</span>
+                      </span>
                     </div>
                   </div>
 
@@ -127,7 +138,7 @@
                       <p id="tyTravelCountry" class="thankyou-summary-item-value">—</p>
                     </div>
                     <div>
-                      <p class="thankyou-summary-item-label">Număr zbor (dacă este cazul)</p>
+                      <p class="thankyou-summary-item-label">Număr zbor</p>
                       <p id="tyFlightNumber" class="thankyou-summary-item-value">—</p>
                     </div>
                     <div>

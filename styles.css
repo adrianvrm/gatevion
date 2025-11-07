@@ -4581,13 +4581,13 @@ body{
 
 .thankyou-card{
   position:relative;
-  max-width:780px;
+  max-width:820px;
   width:100%;
   margin:0 auto;
   background:#ffffff;
   border-radius:1.75rem;
   padding:2.4rem 2.6rem 2.6rem;
-  box-shadow:0 28px 90px rgba(15,23,42,0.16);
+  box-shadow:0 28px 80px rgba(15,23,42,0.22);
   overflow:hidden;
 }
 
@@ -4604,8 +4604,8 @@ body{
   inset:-40%;
   opacity:0.12;
   background:
-    radial-gradient(circle at 0% 0%, rgba(2,172,142,0.65), transparent 55%),
-    radial-gradient(circle at 100% 100%, rgba(15,23,42,0.9), transparent 55%);
+    radial-gradient(circle at 0% 0%, rgba(2,172,142,0.75), transparent 55%),
+    radial-gradient(circle at 100% 100%, rgba(15,23,42,0.95), transparent 55%);
   pointer-events:none;
 }
 
@@ -4620,19 +4620,21 @@ body{
   letter-spacing:.16em;
   text-transform:uppercase;
   color:#64748b;
-  margin-bottom:.5rem;
+  margin-bottom:.45rem;
 }
 
 .thankyou-icon{
-  width:3.5rem;
-  height:3.5rem;
+  width:3.25rem;
+  height:3.25rem;
   border-radius:999px;
   background:rgba(2,172,142,0.08);
   color:#02ac8e;
   display:flex;
   align-items:center;
   justify-content:center;
-  margin-bottom:1.2rem;
+  margin-bottom:1.1rem;
+  box-shadow:0 10px 30px rgba(15,23,42,0.12);
+  animation:thankyou-icon-pop .7s ease-out forwards;
 }
 
 .thankyou-title{
@@ -4641,23 +4643,44 @@ body{
   font-weight:700;
   color:#020617;
   margin-bottom:.75rem;
+  position:relative;
+  text-shadow:0 14px 30px rgba(15,23,42,0.35);
+  animation:thankyou-title-reveal .75s ease-out forwards;
 }
 
 @media (min-width: 1024px){
   .thankyou-title{
-    font-size:2.1rem;
+    font-size:2.15rem;
   }
+}
+
+.thankyou-title span.thankyou-highlight{
+  background-image:linear-gradient(110deg,#02ac8e,#0ea5e9);
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+}
+
+.thankyou-title::after{
+  content:"";
+  position:absolute;
+  left:0;
+  bottom:-0.25rem;
+  width:3.5rem;
+  height:2px;
+  border-radius:999px;
+  background:linear-gradient(90deg,rgba(148,163,184,0.2),rgba(2,172,142,0.9));
+  box-shadow:0 6px 18px rgba(15,23,42,0.24);
 }
 
 .thankyou-subtitle{
   font-size:.98rem;
   line-height:1.6;
   color:#64748b;
-  max-width:34rem;
+  max-width:36rem;
 }
 
-.thankyou-highlight{
-  font-weight:600;
+.thankyou-subtitle strong{
   color:#0f172a;
 }
 
@@ -4669,17 +4692,17 @@ body{
 
 @media (min-width: 900px){
   .thankyou-content{
-    grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);
+    grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);
     gap:2.25rem;
     align-items:flex-start;
   }
 }
 
 .thankyou-summary{
-  padding:1rem 1.1rem;
-  border-radius:1.25rem;
+  padding:1.15rem 1.25rem 1.2rem;
+  border-radius:1.3rem;
   background:linear-gradient(120deg,rgba(15,23,42,0.03),rgba(148,163,184,0.06));
-  border:1px solid rgba(148,163,184,0.25);
+  border:1px solid rgba(148,163,184,0.3);
 }
 
 .thankyou-summary-title{
@@ -4688,7 +4711,51 @@ body{
   letter-spacing:.14em;
   font-weight:600;
   color:#64748b;
-  margin-bottom:.6rem;
+  margin-bottom:.7rem;
+}
+
+.thankyou-summary-car{
+  padding:.7rem .85rem;
+  border-radius:1rem;
+  background:rgba(248,250,252,0.9);
+  border:1px solid rgba(226,232,240,0.9);
+  margin-bottom:.9rem;
+}
+
+.thankyou-summary-car-name{
+  font-size:.98rem;
+  font-weight:600;
+  color:#0f172a;
+}
+
+.thankyou-summary-car-alt{
+  font-size:.85rem;
+  color:#64748b;
+}
+
+.thankyou-summary-car-meta{
+  margin-top:.55rem;
+  display:flex;
+  flex-wrap:wrap;
+  gap:.4rem;
+}
+
+.thankyou-pill{
+  display:inline-flex;
+  align-items:center;
+  gap:.3rem;
+  padding:.22rem .7rem;
+  border-radius:999px;
+  font-size:.78rem;
+  background:rgba(15,23,42,0.04);
+  color:#0f172a;
+}
+
+.thankyou-pill-badge{
+  width:.4rem;
+  height:.4rem;
+  border-radius:999px;
+  background:#02ac8e;
 }
 
 .thankyou-summary-grid{
@@ -4727,7 +4794,7 @@ body{
   list-style:none;
   display:flex;
   flex-direction:column;
-  gap:.75rem;
+  gap:.8rem;
 }
 
 .thankyou-list li{
@@ -4748,7 +4815,7 @@ body{
 }
 
 .thankyou-actions{
-  margin-top:2rem;
+  margin-top:1.9rem;
   display:flex;
   flex-wrap:wrap;
   gap:.75rem;
@@ -4778,54 +4845,15 @@ body{
   background:#02ac8e;
 }
 
-
-.thankyou-summary-car{
-  padding:.75rem .9rem 1rem;
-  border-radius:1.1rem;
-  background:rgba(15,23,42,0.03);
-  border:1px solid rgba(148,163,184,0.35);
-  margin-bottom:1rem;
+/* Animations for thankyou icon & title */
+@keyframes thankyou-icon-pop{
+  0% { transform:scale(0.6) translateY(6px); opacity:0; }
+  60%{ transform:scale(1.08) translateY(0); opacity:1; }
+  100%{ transform:scale(1) translateY(0); opacity:1; }
 }
 
-.thankyou-summary-car-name{
-  font-size:1rem;
-  font-weight:650;
-  color:#0f172a;
-  margin-bottom:.15rem;
-}
-
-.thankyou-summary-car-alt{
-  font-size:.85rem;
-  color:#64748b;
-  margin-bottom:.7rem;
-}
-
-.thankyou-summary-car-meta{
-  display:flex;
-  flex-wrap:wrap;
-  gap:.45rem;
-}
-
-.thankyou-pill{
-  display:inline-flex;
-  align-items:center;
-  border-radius:999px;
-  padding:.16rem .7rem;
-  font-size:.78rem;
-  font-weight:500;
-  background:rgba(15,23,42,0.04);
-  color:#0f172a;
-  border:1px solid rgba(148,163,184,0.4);
-}
-
-.thankyou-pill:nth-child(1){
-  background:rgba(15,23,42,0.04);
-}
-.thankyou-pill:nth-child(2){
-  background:rgba(2,172,142,0.05);
-  border-color:rgba(34,197,154,0.6);
-}
-.thankyou-pill:nth-child(3){
-  background:rgba(30,64,175,0.04);
-  border-color:rgba(59,130,246,0.55);
+@keyframes thankyou-title-reveal{
+  0% { opacity:0; transform:translateY(12px); }
+  55%{ opacity:1; transform:translateY(-2px); }
+  100%{ opacity:1; transform:translateY(0); }
 }

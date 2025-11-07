@@ -758,12 +758,14 @@ const y = document.getElementById('y');
     setText('bkPickup', pickupText);
     setText('bkReturn', returnText);
 
-    // Build back URL towards results page using original search params (without car-specific keys)
+    // Build URLs based on query params
     const baseParams = new URLSearchParams(window.location.search || '');
-    ['carName','carAlt','carPrice','segment','gear'].forEach((k)=> baseParams.delete(k));
-    const backQs = baseParams.toString();
+    const backParams = new URLSearchParams(baseParams.toString());
+    ['carName','carAlt','carPrice','segment','gear'].forEach((k)=> backParams.delete(k));
+    const backQs = backParams.toString();
     const backUrl = './rezultate.html' + (backQs ? `?${backQs}` : '');
 
+    // Hook back-to-results button & step 1 nav
     const backBtn = document.getElementById('backToResultsBtn');
     if(backBtn){ backBtn.href = backUrl; }
 
@@ -773,127 +775,40 @@ const y = document.getElementById('y');
     const step1Mobile = document.querySelector('#mobileNav .mnav-step[data-step="1"]');
     if(step1Mobile && step1Mobile.tagName === 'A'){ step1Mobile.href = backUrl; }
 
-    // Handle final submit: later we will send data to backend, for acum doar redirecționăm spre pagina de mulțumire
+    // Final submit: trimite datele spre pagina de mulțumire (backend-ul se va lega ulterior aici)
     const bookingForm = document.getElementById('bookingForm');
     if(bookingForm){
       bookingForm.addEventListener('submit', (e)=>{
         e.preventDefault();
-        const submitParams = new URLSearchParams(params.toString());
-        const fullNameInput = bookingForm.querySelector('input[name="fullName"]');
-        const emailInput = bookingForm.querySelector('input[name="email"]');
-        if(fullNameInput && fullNameInput.value){
-          submitParams.set('fullName', fullNameInput.value.trim());
-        }
-        if(emailInput && emailInput.value){
-          submitParams.set('email', emailInput.value.trim());
-        }
+        const submitParams = new URLSearchParams(baseParams.toString());
 
-        const travelCountrySelect = bookingForm.querySelector('select[name="travelCountry"]');
-        if(travelCountrySelect && travelCountrySelect.value){
-          submitParams.set('travelCountry', travelCountrySelect.value);
-        }
+        const getVal = (selector)=>{
+          const el = bookingForm.querySelector(selector);
+          return el && el.value ? el.value.trim() : '';
+        };
 
-        const flightNumberInput = bookingForm.querySelector('input[name="flightNumber"]');
-        if(flightNumberInput && flightNumberInput.value){
-          submitParams.set('flightNumber', flightNumberInput.value.trim());
-        }
+        const fullName = getVal('input[name="fullName"]');
+        const email = getVal('input[name="email"]');
+        const travelCountry = getVal('#travelCountry');
+        const flightNumber = getVal('input[name="flightNumber"]');
 
-        const phoneCountrySelect = bookingForm.querySelector('select[name="phoneCountry"]');
-        const phoneNumberInput = bookingForm.querySelector('input[name="phoneNumber"]');
-        if(phoneCountrySelect && phoneCountrySelect.value){
-          submitParams.set('phoneCountry', phoneCountrySelect.value);
-        }
-        if(phoneNumberInput && phoneNumberInput.value){
-          submitParams.set('phoneNumber', phoneNumberInput.value.trim());
-        }
+        const phoneCountryEl = document.getElementById('phoneCountry');
+        const phoneNumberEl = document.getElementById('phoneNumber');
+        const phoneCountryVal = phoneCountryEl && phoneCountryEl.value ? phoneCountryEl.value : '';
+        const phoneNumberVal = phoneNumberEl && phoneNumberEl.value ? phoneNumberEl.value.trim() : '';
+
+        if(fullName) submitParams.set('fullName', fullName);
+        if(email) submitParams.set('email', email);
+        if(travelCountry) submitParams.set('travelCountry', travelCountry);
+        if(flightNumber) submitParams.set('flightNumber', flightNumber);
+        if(phoneCountryVal) submitParams.set('phoneCountry', phoneCountryVal);
+        if(phoneNumberVal) submitParams.set('phoneNumber', phoneNumberVal);
 
         const qs = submitParams.toString();
         // TODO: aici vom trimite datele către backend / API când baza de date este implementată
         window.location.href = './multumire.html' + (qs ? `?${qs}` : '');
       });
     }
-
-
-  // Thank you page: hydrate recap from query params
-  if(window.location.pathname && window.location.pathname.endsWith('multumire.html')){
-    const params = new URLSearchParams(window.location.search || '');
-    const arrLabel = params.get('arrLabel') || params.get('arr') || '';
-    const depLabel = params.get('depLabel') || params.get('dep') || '';
-    const sd = params.get('sd') || '';
-    const st = params.get('st') || '';
-    const ed = params.get('ed') || '';
-    const et = params.get('et') || '';
-    const fullName = params.get('fullName') || '';
-    const email = params.get('email') || '';
-    const carName = params.get('carName') || '';
-    const carAlt = params.get('carAlt') || '';
-    const carPrice = params.get('carPrice') || '';
-    const segment = params.get('segment') || '';
-    const gear = params.get('gear') || '';
-    const travelCountry = params.get('travelCountry') || '';
-    const flightNumber = params.get('flightNumber') || '';
-    const phoneCountry = params.get('phoneCountry') || '';
-    const phoneNumber = params.get('phoneNumber') || '';
-
-    const fmtDate = (iso)=>{
-      if(!iso) return '';
-      const parts = iso.split('-');
-      if(parts.length!==3) return iso;
-      const [y,m,d] = parts;
-      return `${d}.${m}.${y}`;
-    };
-
-    const routeText = (arrLabel || '—') + (depLabel ? ` → ${depLabel}` : '');
-    const pickupText = (sd ? fmtDate(sd) : '—') + (st ? ` • ${st}` : '');
-    const returnText = (ed ? fmtDate(ed) : '—') + (et ? ` • ${et}` : '');
-    const periodText = (pickupText && returnText) ? `${pickupText}  →  ${returnText}` : (pickupText || returnText || '—');
-
-    const gearText = gear ? (gear === 'automata' ? 'Automată' : 'Manuală') : '';
-    const segmentText = segment || '';
-    const carPriceText = carPrice ? `€${carPrice}` : '';
-    const phoneDisplay = (phoneCountry || '') + (phoneNumber ? ((phoneCountry ? ' ' : '') + phoneNumber) : '');
-
-    const setText = (id, value)=>{
-      const el = document.getElementById(id);
-      if(el && value) el.textContent = value;
-    };
-
-    setText('tyRoute', routeText);
-    setText('tyPeriod', periodText);
-
-    if(carName){
-      setText('tyCarName', carName);
-    }
-    if(carAlt){
-      setText('tyCarAlt', carAlt);
-    }
-    if(segmentText){
-      setText('tyCarSegment', segmentText);
-    }
-    if(gearText){
-      setText('tyCarGear', gearText);
-    }
-    if(carPriceText){
-      setText('tyCarPrice', carPriceText);
-    }
-
-    if(travelCountry){
-      setText('tyTravelCountry', travelCountry);
-    }
-    if(flightNumber){
-      setText('tyFlightNumber', flightNumber);
-    }
-
-    if(fullName){
-      setText('tyName', fullName);
-    }
-    if(email){
-      setText('tyEmail', email);
-    }
-    if(phoneDisplay){
-      setText('tyPhone', phoneDisplay);
-    }
-  }
 
 // Normalize & validate phone number according to selected country prefix
     const phoneCountry = document.getElementById('phoneCountry');
@@ -1123,6 +1038,69 @@ const y = document.getElementById('y');
     };
 
     birthDisplay.addEventListener('blur', validateBirthDate);
+  // Thank you page: hydrate recap from query params
+  if(window.location.pathname && window.location.pathname.endsWith('multumire.html')){
+    const params = new URLSearchParams(window.location.search || '');
+
+    const arrLabel = params.get('arrLabel') || params.get('arr') || '';
+    const depLabel = params.get('depLabel') || params.get('dep') || '';
+    const sd = params.get('sd') || '';
+    const st = params.get('st') || '';
+    const ed = params.get('ed') || '';
+    const et = params.get('et') || '';
+
+    const carName = params.get('carName') || '';
+    const carAlt = params.get('carAlt') || '';
+    const carPrice = params.get('carPrice') || '';
+    const segment = params.get('segment') || '';
+    const gear = params.get('gear') || '';
+
+    const travelCountry = params.get('travelCountry') || '';
+    const flightNumber = params.get('flightNumber') || '';
+    const fullName = params.get('fullName') || '';
+    const email = params.get('email') || '';
+    const phoneCountry = params.get('phoneCountry') || '';
+    const phoneNumber = params.get('phoneNumber') || '';
+
+    const fmtDate = (iso)=>{
+      if(!iso) return '';
+      const parts = iso.split('-');
+      if(parts.length!==3) return iso;
+      const [y,m,d] = parts;
+      return `${d}.${m}.${y}`;
+    };
+
+    const routeText = (arrLabel || '—') + (depLabel ? ` → ${depLabel}` : '');
+    const pickupText = (sd ? fmtDate(sd) : '—') + (st ? ` • ${st}` : '');
+    const returnText = (ed ? fmtDate(ed) : '—') + (et ? ` • ${et}` : '');
+    const periodText = (pickupText && returnText) ? `${pickupText}  →  ${returnText}` : (pickupText || returnText || '—');
+
+    const phoneDisplay = (phoneCountry || '') + (phoneNumber ? ((phoneCountry ? ' ' : '') + phoneNumber) : '');
+
+    const setText = (id, value)=>{
+      const el = document.getElementById(id);
+      if(el && value) el.textContent = value;
+    };
+
+    if(carName) setText('tyCarName', carName);
+    if(carAlt) setText('tyCarAlt', carAlt);
+    if(segment) setText('tyCarSegment', segment);
+    if(gear){
+      const gearLabel = (gear === 'automata' ? 'Automată' : 'Manuală');
+      setText('tyCarGear', gearLabel);
+    }
+    if(carPrice) setText('tyCarPrice', `€${carPrice}`);
+
+    setText('tyRoute', routeText);
+    setText('tyPeriod', periodText);
+    if(travelCountry) setText('tyTravelCountry', travelCountry);
+    if(flightNumber) setText('tyFlightNumber', flightNumber);
+    if(fullName) setText('tyName', fullName);
+    if(email) setText('tyEmail', email);
+    if(phoneDisplay) setText('tyPhone', phoneDisplay);
+  }
+
+
   }
   }
 });
