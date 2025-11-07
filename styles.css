@@ -4442,3 +4442,11 @@ body{
   border:1px solid var(--line);
   background:#ffffff;
 }
+
+.cal-month-select{
+  padding:0.15rem 0.5rem;
+  font-size:0.8rem;
+  border-radius:999px;
+  border:1px solid var(--line);
+  background:#ffffff;
+}

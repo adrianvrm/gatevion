@@ -40,24 +40,33 @@ function makeCalendar(date, selectedISO, boundISO, mode){
     minBound = boundISO || todayISO; // block past days by default
   }
   const monthLabel = (mode === 'maxPast') ? RO_MONTHS[month] : RO_MONTHS[month]+' '+year;
-  let html = '<header><div class="month">'+monthLabel+'</div><div class="nav">';
-  html += '<button class="icon-btn" data-cal="prev" aria-label="Luna anterioară">‹</button>';
-  if(mode !== 'maxPast'){
-    html += '<button class="icon-btn" data-cal="today" aria-label="Astăzi">•</button>';
-  }
-  html += '<button class="icon-btn" data-cal="next" aria-label="Luna următoare">›</button>';
+  
+  let html = '';
   if(mode === 'maxPast'){
     const currentYear = today.getFullYear();
     const minYear = currentYear - 65;
     const maxYear = currentYear - 22;
+    html += '<header><div class="month"><select class="cal-month-select" data-cal="month">';
+    for(let m=0; m<12; m++){
+      const selM = m === month ? ' selected' : '';
+      html += '<option value="'+m+'"'+selM+'">'+RO_MONTHS[m]+'</option>';
+    }
+    html += '</select></div><div class="nav">';
     html += '<select class="cal-year-select" data-cal="year">';
     for(let y = maxYear; y >= minYear; y--){
       const sel = y === year ? ' selected' : '';
-      html += '<option value="'+y+'"'+sel+'>'+y+'</option>';
+      html += '<option value="'+y+'"'+sel+'">'+y+'</option>';
     }
-    html += '</select>';
+    html += '</select></div></header>';
+  }else{
+    const monthLabel = RO_MONTHS[month]+' '+year;
+    html += '<header><div class="month">'+monthLabel+'</div><div class="nav">';
+    html += '<button class="icon-btn" data-cal="prev" aria-label="Luna anterioară">‹</button>';
+    html += '<button class="icon-btn" data-cal="today" aria-label="Astăzi">•</button>';
+    html += '<button class="icon-btn" data-cal="next" aria-label="Luna următoare">›</button>';
+    html += '</div></header>';
   }
-  html += '</div></header>';
+
 
 
   html += '<div class=\"cal-grid\">';
@@ -199,11 +208,12 @@ function initDobPicker(picker){
     deactivateField(picker);
   }
 
-  function render(){
+    function render(){
     cal.innerHTML = makeCalendar(viewDate, hidden.value, maxISO, 'maxPast');
     const yearSelect = cal.querySelector('.cal-year-select');
+    const monthSelect = cal.querySelector('.cal-month-select');
+
     if(yearSelect){
-      yearSelect.addEventListener('mousedown', (ev)=>{ ev.stopPropagation(); });
       yearSelect.addEventListener('change', ()=>{
         const y = parseInt(yearSelect.value,10);
         if(!isNaN(y)){
@@ -212,7 +222,18 @@ function initDobPicker(picker){
         }
       });
     }
+
+    if(monthSelect){
+      monthSelect.addEventListener('change', ()=>{
+        const m = parseInt(monthSelect.value,10);
+        if(!isNaN(m)){
+          viewDate = new Date(viewDate.getFullYear(), m, 1);
+          render();
+        }
+      });
+    }
   }
+
 
   display.addEventListener('click', (e)=>{ e.stopPropagation(); pop.classList.contains('open')? close(): open(); });
   cal.addEventListener('click', (e)=>{
