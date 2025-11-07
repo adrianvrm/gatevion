@@ -460,14 +460,35 @@ document.addEventListener('DOMContentLoaded', () => {
     const st = formEl.start_time?.value || '';
     const ed = formEl.end_date?.value || '';
     const et = formEl.end_time?.value || '';
-    // Final guard: if same day and end time earlier than start time, prevent submit
-    if(sd && ed && sd===ed && st && et && cmpTime(et, st) < 0){
+
+    // Asigură-te că a fost aleasă o perioadă completă (data și ora pentru preluare și returnare)
+    if(!sd || !st || !ed || !et){
+      e.preventDefault();
+      alert('Te rugăm să selectezi data și ora de preluare și de returnare.');
+      return;
+    }
+
+    // Final guard: dacă este aceeași zi și ora de returnare este mai devreme decât ora de preluare
+    if(sd === ed && cmpTime(et, st) < 0){
       e.preventDefault();
       alert('Ora de returnare trebuie să fie după ora de preluare pentru aceeași zi.');
       return;
     }
-    const start = (sd && st) ? `${sd}T${st}` : '';
-    const end   = (ed && et) ? `${ed}T${et}` : '';
+
+    // Calculează durata în ore și aplică regula de minim 24h
+    const startDateTime = new Date(`${sd}T${st}:00`);
+    const endDateTime   = new Date(`${ed}T${et}:00`);
+    const diffMs = endDateTime - startDateTime;
+    const hours = diffMs / 36e5;
+
+    if(isNaN(hours) || hours < 24){
+      e.preventDefault();
+      alert('Perioada minimă de închiriere este de 24 de ore. Te rugăm să alegi o returnare la cel puțin 24 de ore după preluare.');
+      return;
+    }
+
+    const start = `${sd}T${st}`;
+    const end   = `${ed}T${et}`;
     const sHidden = formEl.querySelector('#startValue');
     const eHidden = formEl.querySelector('#endValue');
     if(sHidden) sHidden.value = start;
@@ -528,6 +549,31 @@ document.addEventListener('DOMContentLoaded', () => {
     const ed = params.get('ed') || '';
     const et = params.get('et') || '';
 
+    let rentalDays = 1;
+    let rentalHours = 24;
+
+    if(sd && st && ed && et){
+      const startDateTime = new Date(`${sd}T${st}:00`);
+      const endDateTime   = new Date(`${ed}T${et}:00`);
+      const diffMs = endDateTime - startDateTime;
+      const rawHours = diffMs / 36e5;
+
+      if(!isNaN(rawHours) && rawHours > 0){
+        const minHours = 24;
+        const effectiveHours = rawHours < minHours ? minHours : rawHours;
+        rentalHours = effectiveHours;
+
+        const fullDays = Math.floor(effectiveHours / 24);
+        if(fullDays <= 0){
+          rentalDays = 1;
+        }else{
+          const remainder = effectiveHours - fullDays * 24;
+          rentalDays = fullDays + (remainder > 2 ? 1 : 0);
+        }
+      }
+    }
+
+
     const fmtDate = (iso)=>{
       if(!iso) return '';
       const parts = iso.split('-');
@@ -572,22 +618,42 @@ document.addEventListener('DOMContentLoaded', () => {
     // Wire "Alege mașina" buttons to booking page with car & search details
     document.querySelectorAll('.car-card').forEach((card)=>{
       const btn = card.querySelector('.car-cta-main');
+      const dayPriceRaw = card.getAttribute('data-price') || '';
+      const dayPrice = parseFloat(String(dayPriceRaw).replace(',', '.')) || 0;
+
+      const mainPriceEl = card.querySelector('.car-price-main');
+      const noteEl = card.querySelector('.car-price-note');
+
+      if(mainPriceEl && dayPrice){
+        // Afișează prețul pe zi în formatul €XX/zi
+        mainPriceEl.textContent = `€${dayPrice.toFixed(0)}`;
+        const perSpan = document.createElement('span');
+        perSpan.textContent = '/zi';
+        mainPriceEl.appendChild(perSpan);
+      }
+
+      if(noteEl && dayPrice && rentalDays){
+        const total = Math.round(dayPrice * rentalDays);
+        const labelDays = rentalDays === 1 ? 'zi' : 'zile';
+        noteEl.textContent = `Preț total estimat: €${total} (${rentalDays} ${labelDays})`;
+        noteEl.setAttribute('data-total', String(total));
+      }
+
       if(!btn) return;
       btn.addEventListener('click', ()=>{
         const nameEl = card.querySelector('.car-name');
         const altEl = card.querySelector('.car-name-alt');
-        const dayPrice = card.getAttribute('data-price') || '';
         const segment = card.getAttribute('data-segment') || '';
         const gear = card.getAttribute('data-transmission') || '';
         const carName = nameEl ? nameEl.textContent.trim() : '';
         const carAlt = altEl ? altEl.textContent.trim() : '';
 
         const totalEl = card.querySelector('.car-price-note');
-        let totalText = '';
+        let priceToSend = dayPriceRaw;
         if(totalEl){
-          totalText = totalEl.textContent.replace(/[^0-9.,]/g,'').trim();
+          const fromData = totalEl.getAttribute('data-total');
+          if(fromData){ priceToSend = fromData; }
         }
-        const priceToSend = totalText || dayPrice;
 
         const nextParams = new URLSearchParams(params.toString());
         if(carName) nextParams.set('carName', carName);
@@ -780,6 +846,19 @@ const y = document.getElementById('y');
     if(bookingForm){
       bookingForm.addEventListener('submit', (e)=>{
         e.preventDefault();
+
+        // Validează toate câmpurile obligatorii, inclusiv fișierele și checkbox-ul de consimțământ
+        if(!bookingForm.checkValidity()){
+          bookingForm.reportValidity();
+          return;
+        }
+
+        const termsCheckbox = bookingForm.querySelector('input[name="agreeTerms"]');
+        if(!termsCheckbox || !termsCheckbox.checked){
+          alert('Te rugăm să confirmi că ești de acord cu Termenii & Condițiile pentru a continua.');
+          return;
+        }
+
         const submitParams = new URLSearchParams(baseParams.toString());
 
         const getVal = (selector)=>{
@@ -809,10 +888,7 @@ const y = document.getElementById('y');
         window.location.href = './multumire.html' + (qs ? `?${qs}` : '');
       });
     }
-
-// Normalize & validate phone number according to selected country prefix
-    const phoneCountry = document.getElementById('phoneCountry');
-    const phoneInput = document.getElementById('phoneNumber');
+t.getElementById('phoneNumber');
 
     if(phoneCountry && phoneInput){
       // Basic per-country rules: number of digits expected for the national number (without prefix)
