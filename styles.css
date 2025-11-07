@@ -104,10 +104,10 @@
 .picker--airport .popover{ z-index:100000; } /* ensure airport is top-most */
 .popover.open{ display:block; }
 
-.calendar{ width:320px; }
-.calendar header{ display:flex; align-items:center; justify-content:space-between; padding:.75rem 1rem; border-bottom:1px solid var(--line); }
-.calendar header .month{ font-weight:600; color:#0f172a; }
-.calendar header .nav{ display:flex; gap:.25rem; }
+.calendar{ width:360px; max-width:100%; }
+.calendar header{ display:flex; align-items:center; justify-content:space-between; padding:.75rem 1rem; border-bottom:1px solid var(--line); gap:.25rem; }
+.calendar header .month{ font-weight:600; color:#0f172a; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.calendar header .nav{ display:flex; align-items:center; gap:.2rem; flex-shrink:0; }
 .icon-btn{ display:inline-flex; align-items:center; justify-content:center; width:32px; height:32px; border-radius:10px; border:1px solid var(--line); background:#fff; }
 .icon-btn:hover{ background:#f8fafc; }
 .cal-grid{ display:grid; grid-template-columns:repeat(7,1fr); gap:2px; padding:8px; }

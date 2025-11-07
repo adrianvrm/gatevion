@@ -189,9 +189,15 @@ function initDobPicker(picker){
   const maxISO = fmtISO(maxDate);
   let viewDate = hidden.value ? new Date(hidden.value) : maxDate;
 
-  function open(){ closeAllPopovers(); pop.classList.add('open'); activateField(picker); document.addEventListener('click', onDoc, true); }
-  function close(){ pop.classList.remove('open'); deactivateField(picker); document.removeEventListener('click', onDoc, true); }
-  function onDoc(e){ if(!picker.contains(e.target)) close(); }
+  function open(){
+    closeAllPopovers();
+    pop.classList.add('open');
+    activateField(picker);
+  }
+  function close(){
+    pop.classList.remove('open');
+    deactivateField(picker);
+  }
 
   function render(){
     cal.innerHTML = makeCalendar(viewDate, hidden.value, maxISO, 'maxPast');
