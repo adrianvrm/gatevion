@@ -208,7 +208,7 @@ function initDobPicker(picker){
     deactivateField(picker);
   }
 
-      function render(){
+  function render(){
     cal.innerHTML = makeCalendar(viewDate, hidden.value, maxISO, 'maxPast');
 
     const monthBtn = cal.querySelector('.cal-dd-month');
@@ -267,6 +267,34 @@ function initDobPicker(picker){
       });
     }
   }
+
+  display.addEventListener('click', (e)=>{
+    e.stopPropagation();
+    if(pop.classList.contains('open')){
+      close();
+    }else{
+      open();
+      render();
+    }
+  });
+
+  cal.addEventListener('click', (e)=>{
+    const day = e.target.closest('.cal-day');
+    if(day && day.dataset.date){
+      if(day.classList.contains('disabled')) return;
+      hidden.value = day.dataset.date;
+      if(typeof fmtDisplayDateSlash === 'function'){
+        display.value = fmtDisplayDateSlash(hidden.value);
+      }else{
+        display.value = hidden.value;
+      }
+      picker.closest('.field')?.classList.add('filled');
+      close();
+    }
+  });
+
+  // First render so controls are ready when popover is opened
+  render();
 }
 
 function initTimePicker(picker){
