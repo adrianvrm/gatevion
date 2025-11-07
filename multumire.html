@@ -91,17 +91,28 @@
             </div>
             <p class="thankyou-eyebrow">Pasul 3 din 3</p>
             <h1 id="thankyouTitle" class="thankyou-title">
-              Mulțumim, cererea ta a ajuns la <span class="thankyou-highlight">Gatevion</span>
+              Mulțumim, cererea ta a ajuns la <span class="thankyou-highlight">Gatevion</span>!
             </h1>
             <p class="thankyou-subtitle">
-              Cererea ta de rezervare a intrat în <span class="thankyou-highlight">verificare manuală</span>. 
-              Un operator Gatevion analizează detaliile și contactează partenerii noștri pentru a confirma disponibilitatea mașinii.
+              Cererea ta este <span class="thankyou-highlight">în curs de procesare</span>. 
+              Un operator Gatevion analizează detaliile rezervării împreună cu partenerii pentru a confirma disponibilitatea mașinii.
             </p>
 
             <div class="thankyou-content">
               <div>
                 <div class="thankyou-summary">
-                  <p class="thankyou-summary-title">Rezumatul cererii</p>
+                  <p class="thankyou-summary-title">Rezumatul rezervării</p>
+
+                  <div class="thankyou-summary-car">
+                    <p id="tyCarName" class="thankyou-summary-car-name">Mașina selectată</p>
+                    <p id="tyCarAlt" class="thankyou-summary-car-alt">Detalii variantă și motorizare</p>
+                    <div class="thankyou-summary-car-meta">
+                      <span id="tyCarSegment" class="thankyou-pill">Clasă flotă</span>
+                      <span id="tyCarGear" class="thankyou-pill">Transmisie</span>
+                      <span id="tyCarPrice" class="thankyou-pill">Preț afișat</span>
+                    </div>
+                  </div>
+
                   <div class="thankyou-summary-grid">
                     <div>
                       <p class="thankyou-summary-item-label">Rută</p>
@@ -112,6 +123,14 @@
                       <p id="tyPeriod" class="thankyou-summary-item-value">—</p>
                     </div>
                     <div>
+                      <p class="thankyou-summary-item-label">Țara din care călătorești</p>
+                      <p id="tyTravelCountry" class="thankyou-summary-item-value">—</p>
+                    </div>
+                    <div>
+                      <p class="thankyou-summary-item-label">Număr zbor (dacă este cazul)</p>
+                      <p id="tyFlightNumber" class="thankyou-summary-item-value">—</p>
+                    </div>
+                    <div>
                       <p class="thankyou-summary-item-label">Nume client</p>
                       <p id="tyName" class="thankyou-summary-item-value">Client Gatevion</p>
                     </div>
@@ -119,7 +138,12 @@
                       <p class="thankyou-summary-item-label">Email de contact</p>
                       <p id="tyEmail" class="thankyou-summary-item-value">—</p>
                     </div>
+                    <div>
+                      <p class="thankyou-summary-item-label">Telefon</p>
+                      <p id="tyPhone" class="thankyou-summary-item-value">—</p>
+                    </div>
                   </div>
+
                   <p class="thankyou-tagline">
                     Te vom contacta doar pentru confirmare sau clarificări legate de această rezervare.
                   </p>
@@ -131,20 +155,13 @@
                   <li>
                     <span class="thankyou-bullet-dot"></span>
                     <span>
-                      <strong>Nu ți-am debitat niciun ban.</strong> Cererea ta rămâne în status <em>PENDING</em> până când un partener acceptă rezervarea.
+                      <strong>Plata o vei face la preluarea mașinii.</strong> Cererea ta este în curs de procesare.
                     </span>
                   </li>
                   <li>
                     <span class="thankyou-bullet-dot"></span>
                     <span>
-                      <strong>Primești un email de confirmare</strong> cu toate detaliile și contactul direct al companiei de închirieri auto.
-                    </span>
-                  </li>
-                  <li>
-                    <span class="thankyou-bullet-dot"></span>
-                    <span>
-                      Dacă nu există mașini disponibile exact pe perioada aleasă, îți vom propune 
-                      <strong>alternative premium similare</strong> ca preț și clasă.
+                      <strong>Primești un email de confirmare</strong> cu toate detaliile necesare pentru preluarea mașinii.
                     </span>
                   </li>
                   <li>
@@ -163,17 +180,6 @@
                   <a href="./index.html#faq" class="btn btn-ghost">
                     Vezi întrebări frecvente
                   </a>
-                </div>
-
-                <p class="thankyou-meta">
-                  În următoarele ore vei primi un răspuns pe email. Pentru întrebări urgente, ne poți suna sau scrie pe WhatsApp.
-                </p>
-
-                <div class="mt-4">
-                  <span class="badge-soft">
-                    <span class="badge-soft-dot"></span>
-                    Verificare făcută de oameni, nu de roboți
-                  </span>
                 </div>
               </div>
             </div>

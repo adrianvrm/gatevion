@@ -4777,3 +4777,55 @@ body{
   border-radius:999px;
   background:#02ac8e;
 }
+
+
+.thankyou-summary-car{
+  padding:.75rem .9rem 1rem;
+  border-radius:1.1rem;
+  background:rgba(15,23,42,0.03);
+  border:1px solid rgba(148,163,184,0.35);
+  margin-bottom:1rem;
+}
+
+.thankyou-summary-car-name{
+  font-size:1rem;
+  font-weight:650;
+  color:#0f172a;
+  margin-bottom:.15rem;
+}
+
+.thankyou-summary-car-alt{
+  font-size:.85rem;
+  color:#64748b;
+  margin-bottom:.7rem;
+}
+
+.thankyou-summary-car-meta{
+  display:flex;
+  flex-wrap:wrap;
+  gap:.45rem;
+}
+
+.thankyou-pill{
+  display:inline-flex;
+  align-items:center;
+  border-radius:999px;
+  padding:.16rem .7rem;
+  font-size:.78rem;
+  font-weight:500;
+  background:rgba(15,23,42,0.04);
+  color:#0f172a;
+  border:1px solid rgba(148,163,184,0.4);
+}
+
+.thankyou-pill:nth-child(1){
+  background:rgba(15,23,42,0.04);
+}
+.thankyou-pill:nth-child(2){
+  background:rgba(2,172,142,0.05);
+  border-color:rgba(34,197,154,0.6);
+}
+.thankyou-pill:nth-child(3){
+  background:rgba(30,64,175,0.04);
+  border-color:rgba(59,130,246,0.55);
+}

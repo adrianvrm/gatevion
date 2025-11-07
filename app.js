@@ -778,7 +778,7 @@ const y = document.getElementById('y');
     if(bookingForm){
       bookingForm.addEventListener('submit', (e)=>{
         e.preventDefault();
-        const submitParams = new URLSearchParams(baseParams.toString());
+        const submitParams = new URLSearchParams(params.toString());
         const fullNameInput = bookingForm.querySelector('input[name="fullName"]');
         const emailInput = bookingForm.querySelector('input[name="email"]');
         if(fullNameInput && fullNameInput.value){
@@ -787,6 +787,26 @@ const y = document.getElementById('y');
         if(emailInput && emailInput.value){
           submitParams.set('email', emailInput.value.trim());
         }
+
+        const travelCountrySelect = bookingForm.querySelector('select[name="travelCountry"]');
+        if(travelCountrySelect && travelCountrySelect.value){
+          submitParams.set('travelCountry', travelCountrySelect.value);
+        }
+
+        const flightNumberInput = bookingForm.querySelector('input[name="flightNumber"]');
+        if(flightNumberInput && flightNumberInput.value){
+          submitParams.set('flightNumber', flightNumberInput.value.trim());
+        }
+
+        const phoneCountrySelect = bookingForm.querySelector('select[name="phoneCountry"]');
+        const phoneNumberInput = bookingForm.querySelector('input[name="phoneNumber"]');
+        if(phoneCountrySelect && phoneCountrySelect.value){
+          submitParams.set('phoneCountry', phoneCountrySelect.value);
+        }
+        if(phoneNumberInput && phoneNumberInput.value){
+          submitParams.set('phoneNumber', phoneNumberInput.value.trim());
+        }
+
         const qs = submitParams.toString();
         // TODO: aici vom trimite datele către backend / API când baza de date este implementată
         window.location.href = './multumire.html' + (qs ? `?${qs}` : '');
@@ -805,6 +825,15 @@ const y = document.getElementById('y');
     const et = params.get('et') || '';
     const fullName = params.get('fullName') || '';
     const email = params.get('email') || '';
+    const carName = params.get('carName') || '';
+    const carAlt = params.get('carAlt') || '';
+    const carPrice = params.get('carPrice') || '';
+    const segment = params.get('segment') || '';
+    const gear = params.get('gear') || '';
+    const travelCountry = params.get('travelCountry') || '';
+    const flightNumber = params.get('flightNumber') || '';
+    const phoneCountry = params.get('phoneCountry') || '';
+    const phoneNumber = params.get('phoneNumber') || '';
 
     const fmtDate = (iso)=>{
       if(!iso) return '';
@@ -819,6 +848,11 @@ const y = document.getElementById('y');
     const returnText = (ed ? fmtDate(ed) : '—') + (et ? ` • ${et}` : '');
     const periodText = (pickupText && returnText) ? `${pickupText}  →  ${returnText}` : (pickupText || returnText || '—');
 
+    const gearText = gear ? (gear === 'automata' ? 'Automată' : 'Manuală') : '';
+    const segmentText = segment || '';
+    const carPriceText = carPrice ? `€${carPrice}` : '';
+    const phoneDisplay = (phoneCountry || '') + (phoneNumber ? ((phoneCountry ? ' ' : '') + phoneNumber) : '');
+
     const setText = (id, value)=>{
       const el = document.getElementById(id);
       if(el && value) el.textContent = value;
@@ -826,11 +860,38 @@ const y = document.getElementById('y');
 
     setText('tyRoute', routeText);
     setText('tyPeriod', periodText);
+
+    if(carName){
+      setText('tyCarName', carName);
+    }
+    if(carAlt){
+      setText('tyCarAlt', carAlt);
+    }
+    if(segmentText){
+      setText('tyCarSegment', segmentText);
+    }
+    if(gearText){
+      setText('tyCarGear', gearText);
+    }
+    if(carPriceText){
+      setText('tyCarPrice', carPriceText);
+    }
+
+    if(travelCountry){
+      setText('tyTravelCountry', travelCountry);
+    }
+    if(flightNumber){
+      setText('tyFlightNumber', flightNumber);
+    }
+
     if(fullName){
       setText('tyName', fullName);
     }
     if(email){
       setText('tyEmail', email);
+    }
+    if(phoneDisplay){
+      setText('tyPhone', phoneDisplay);
     }
   }
 
