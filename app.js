@@ -603,24 +603,106 @@ const y = document.getElementById('y');
     setText('bkPickup', pickupText);
     setText('bkReturn', returnText);
 
-    // Normalize phone number according to selected country prefix
+    // Normalize & validate phone number according to selected country prefix
     const phoneCountry = document.getElementById('phoneCountry');
     const phoneInput = document.getElementById('phoneNumber');
 
     if(phoneCountry && phoneInput){
+      // Basic per-country rules: number of digits expected for the national number (without prefix)
+      const PHONE_RULES = {
+        '+40': { min:9, max:9 },   // România: 9 cifre fără prefix (ex: 7XX XXX XXX)
+        '+33': { min:9, max:9 },   // Franța
+        '+34': { min:9, max:9 },   // Spania
+        '+39': { min:8, max:11 },  // Italia (variază)
+        '+49': { min:7, max:13 },  // Germania
+        '+44': { min:9, max:10 },  // Marea Britanie
+        '+43': { min:10, max:13 }, // Austria
+        '+31': { min:9, max:9 },   // Olanda
+        '+32': { min:8, max:9 },   // Belgia
+        '+41': { min:9, max:9 },   // Elveția
+        '+30': { min:10, max:10 }, // Grecia
+        '+420': { min:9, max:9 },  // Cehia
+        '+421': { min:9, max:9 },  // Slovacia
+        '+36': { min:8, max:9 },   // Ungaria
+        '+48': { min:9, max:9 },   // Polonia
+        '+386': { min:8, max:8 },  // Slovenia
+        '+385': { min:8, max:9 },  // Croația
+        // Fallback: valori rezonabile pentru restul țărilor
+        'default': { min:6, max:14 }
+      };
+
+      const phoneRow = phoneInput.closest('.phone-row');
+      let phoneErrorEl = document.getElementById('phoneNumberError');
+      if(!phoneErrorEl){
+        phoneErrorEl = document.createElement('p');
+        phoneErrorEl.id = 'phoneNumberError';
+        phoneErrorEl.className = 'field-error';
+        phoneErrorEl.style.display = 'none';
+        if(phoneRow && phoneRow.parentNode){
+          phoneRow.insertAdjacentElement('afterend', phoneErrorEl);
+        }
+      }
+
+      const setPhoneError = (msg)=>{
+        if(!phoneErrorEl) return;
+        if(msg){
+          phoneErrorEl.textContent = msg;
+          phoneErrorEl.style.display = 'block';
+          phoneInput.classList.add('field-input-error');
+          phoneInput.setAttribute('aria-invalid','true');
+          phoneInput.setCustomValidity(msg);
+        }else{
+          phoneErrorEl.textContent = '';
+          phoneErrorEl.style.display = 'none';
+          phoneInput.classList.remove('field-input-error');
+          phoneInput.removeAttribute('aria-invalid');
+          phoneInput.setCustomValidity('');
+        }
+      };
+
       const normalizePhone = ()=>{
         const cc = phoneCountry.value || '';
         const ccDigits = cc.replace('+','');
         let raw = phoneInput.value || '';
         let digits = raw.replace(/\D/g,'');
+
+        if(!digits){
+          setPhoneError('');
+          return;
+        }
+
+        // Accept forme de tip 00 + prefix + număr
+        while(digits.startsWith('00')){
+          digits = digits.slice(2);
+        }
+
+        // Dacă utilizatorul a introdus deja prefixul țării, îl eliminăm din zona de număr
         if(ccDigits && digits.startsWith(ccDigits)){
           digits = digits.slice(ccDigits.length);
         }
+
+        // Eliminăm un 0 inițial de tip prefix național (ex: 07xx -> 7xx)
         if(digits.startsWith('0')){
           digits = digits.slice(1);
         }
-        phoneInput.value = digits;
+
+        // Validare pe baza regulilor
+        const rule = PHONE_RULES[cc] || PHONE_RULES['default'];
+        const len = digits.length;
+
+        if(len < rule.min || len > rule.max){
+          const msg = (rule.min === rule.max)
+            ? `Numărul de telefon trebuie să conțină exact ${rule.min} cifre pentru această țară.`
+            : `Numărul de telefon trebuie să conțină între ${rule.min} și ${rule.max} cifre pentru această țară.`;
+          setPhoneError(msg);
+        }else{
+          setPhoneError('');
+        }
+
+        // Rescriem vizibil numărul în format normalizat: prefix + număr fără spații
+        phoneInput.value = cc + ' ' + digits;
       };
+
       phoneCountry.addEventListener('change', normalizePhone);
       phoneInput.addEventListener('blur', normalizePhone);
     }

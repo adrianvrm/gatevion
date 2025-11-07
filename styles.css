@@ -4052,6 +4052,17 @@ body{
   resize:vertical;
   min-height:3.2rem;
 }
+.field-input.field-input-error{
+  border-color:#b91c1c;
+  box-shadow:0 0 0 1px rgba(185,28,28,.18);
+}
+
+.field-error{
+  margin-top:0.25rem;
+  font-size:0.78rem;
+  color:#b91c1c;
+}
+
 
 /* Uploads */
 .upload-grid{
@@ -4204,24 +4215,25 @@ body{
 /* Phone input with country selector */
 .phone-row{
   display:flex;
-  flex-wrap:wrap;
+  align-items:center;
+  flex-wrap:nowrap;
   gap:.4rem;
 }
 .phone-country{
-  flex:0 0 7.2rem;
+  flex:0 0 auto;
 }
 .phone-country-select{
-  padding-right:1.8rem;
+  width:4.6rem;
+  min-width:4.6rem;
+  padding-left:0.45rem;
+  padding-right:0.45rem;
 }
 .phone-number-input{
-  flex:1 1 8rem;
+  flex:1 1 auto;
 }
 @media (max-width: 640px){
   .phone-row{
-    flex-direction:column;
-  }
-  .phone-country{
-    flex:0 0 100%;
+    flex-wrap:nowrap;
   }
 }
 
