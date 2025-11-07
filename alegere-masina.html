@@ -86,12 +86,8 @@
                   <dd id="bkRoute">–</dd>
                 </div>
                 <div class="booking-meta-row">
-                  <dt>Politică combustibil</dt>
-                  <dd>Full to full</dd>
-                </div>
-                <div class="booking-meta-row">
                   <dt>Inclus</dt>
-                  <dd>Asigurare CASCO, km nelimitați, asistență rutieră</dd>
+                  <dd>Asigurare CASCO, kilometri nelimitați</dd>
                 </div>
               </dl>
             </div>
@@ -100,10 +96,6 @@
               <div class="booking-price">
                 <p class="booking-price-main">
                   <span id="bkCarPrice">€[preț]</span>
-                  <span class="booking-price-unit">/ zi</span>
-                </p>
-                <p class="booking-price-note">
-                  Estimare pentru perioada selectată, poate varia ușor în funcție de disponibilitate.
                 </p>
               </div>
               <ul class="booking-guarantees">
@@ -147,8 +139,22 @@
                   <input id="email" name="email" type="email" class="field-input" autocomplete="email" required placeholder="nume@exemplu.com" />
                 </div>
                 <div class="field">
-                  <label for="phone" class="field-label">Telefon mobil (WhatsApp)<span class="field-required">*</span></label>
-                  <input id="phone" name="phone" type="tel" class="field-input" autocomplete="tel" required placeholder="+40 7XX XXX XXX" />
+                  <label for="phoneNumber" class="field-label">Telefon mobil (WhatsApp)<span class="field-required">*</span></label>
+                  <div class="phone-row">
+                    <div class="phone-country">
+                      <select id="phoneCountry" name="phoneCountry" class="field-input phone-country-select" required>
+                        <option value="+40" selected>🇷🇴 +40</option>
+                        <option value="+44">🇬🇧 +44</option>
+                        <option value="+49">🇩🇪 +49</option>
+                        <option value="+39">🇮🇹 +39</option>
+                        <option value="+34">🇪🇸 +34</option>
+                        <option value="+33">🇫🇷 +33</option>
+                        <option value="+43">🇦🇹 +43</option>
+                        <option value="+1">🇺🇸 +1</option>
+                      </select>
+                    </div>
+                    <input id="phoneNumber" name="phoneNumber" type="tel" class="field-input phone-number-input" autocomplete="tel" required placeholder="7XX XXX XXX" />
+                  </div>
                 </div>
                 <div class="field">
                   <label for="birthDate" class="field-label">Data nașterii<span class="field-required">*</span></label>
@@ -159,8 +165,8 @@
                   <input id="nationalId" name="nationalId" type="text" class="field-input" required placeholder="Ex: RX 123456 / 123456789" />
                 </div>
                 <div class="field">
-                  <label for="cnp" class="field-label">CNP (opțional)</label>
-                  <input id="cnp" name="cnp" type="text" class="field-input" inputmode="numeric" placeholder="Doar dacă dorești pe factură" />
+                  <label for="cnp" class="field-label">CNP<span class="field-required">*</span></label>
+                  <input id="cnp" name="cnp" type="text" class="field-input" inputmode="numeric" required placeholder="Exact ca în actul de identitate" />
                 </div>
                 <div class="field field-full">
                   <label for="address" class="field-label">Adresă completă de domiciliu<span class="field-required">*</span></label>
@@ -192,7 +198,7 @@
             <div class="form-section">
               <h3 class="form-section-title">Încarcă documentele necesare</h3>
               <p class="form-section-helper">
-                Sunt acceptate fotografii clare sau documente PDF. Maximum 10MB / fișier. Te rugăm să acoperi CNP-ul dacă nu vrei să îl comunici.
+                Sunt acceptate fotografii clare sau documente PDF. Maximum 10MB / fișier.
               </p>
               <div class="upload-grid">
                 <div class="upload-field">

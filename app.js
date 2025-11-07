@@ -421,16 +421,23 @@ document.addEventListener('DOMContentLoaded', () => {
       btn.addEventListener('click', ()=>{
         const nameEl = card.querySelector('.car-name');
         const altEl = card.querySelector('.car-name-alt');
-        const price = card.getAttribute('data-price') || '';
+        const dayPrice = card.getAttribute('data-price') || '';
         const segment = card.getAttribute('data-segment') || '';
         const gear = card.getAttribute('data-transmission') || '';
         const carName = nameEl ? nameEl.textContent.trim() : '';
         const carAlt = altEl ? altEl.textContent.trim() : '';
 
+        const totalEl = card.querySelector('.car-price-note');
+        let totalText = '';
+        if(totalEl){
+          totalText = totalEl.textContent.replace(/[^0-9.,]/g,'').trim();
+        }
+        const priceToSend = totalText || dayPrice;
+
         const nextParams = new URLSearchParams(params.toString());
         if(carName) nextParams.set('carName', carName);
         if(carAlt) nextParams.set('carAlt', carAlt);
-        if(price) nextParams.set('carPrice', price);
+        if(priceToSend) nextParams.set('carPrice', priceToSend);
         if(segment) nextParams.set('segment', segment);
         if(gear) nextParams.set('gear', gear);
 
