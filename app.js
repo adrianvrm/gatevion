@@ -440,7 +440,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Topbar sort selector interactions (UI only, sorting logic to be wired server-side)
     const sortRoot = document.querySelector('.results-topbar-sort');
-    const sortRoot = document.querySelector('.results-topbar-sort');
     const sortTrigger = sortRoot ? sortRoot.querySelector('.results-topbar-sort-trigger') : null;
     const sortValueEl = sortRoot ? sortRoot.querySelector('.results-topbar-sort-value') : null;
     const sortMenu = sortRoot ? sortRoot.querySelector('.results-topbar-sort-menu') : null;
