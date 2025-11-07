@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Finalizează rezervarea | Gatevion</title>
+  <meta name="description" content="Completează datele personale, încarcă documentele necesare și confirmă rezervarea pentru mașina selectată prin Gatevion." />
+  <link rel="stylesheet" href="styles.css" />
+  <script defer src="app.js"></script>
+</head>
+<body class="page-shell booking-page">
+  <!-- Topbar (same structure as celelalte pagini) -->
+  <header class="topbar sticky top-0 z-50 bg-white/90 border-b border-slate-200/60" id="topbar">
+    <div class="topbar-inner">
+      <div class="wrap topbar-layout">
+        <a href="index.html" class="logo-link" aria-label="Înapoi la pagina principală Gatevion">
+          <span class="logo-mark">G</span>
+          <span class="logo-text">
+            <span class="logo-main">Gatevion</span>
+            <span class="logo-sub">Car rental broker</span>
+          </span>
+        </a>
+
+        <div class="topbar-utility" aria-label="Informații și acțiuni rapide">
+          <div class="util-item">
+            <span class="util-label">Asistență 24/7</span>
+            <span class="util-value">+40 7XX XXX XXX</span>
+          </div>
+          <div class="util-item">
+            <span class="util-label">Email</span>
+            <span class="util-value">support@gatevion.ro</span>
+          </div>
+          <a href="/contul-meu.html" class="btn-account" aria-label="Contul meu">Contul meu</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="page-shell-main">
+    <div class="main-shell booking-shell">
+      <div class="wrap booking-layout" aria-label="Detalii mașină și formular de rezervare">
+        <!-- Col stânga: sumar mașină + context -->
+        <section class="booking-summary" aria-labelledby="bookingSummaryTitle">
+          <header class="booking-summary-header">
+            <p class="booking-step-eyebrow">Pasul 2 din 3</p>
+            <h1 id="bookingSummaryTitle" class="booking-summary-title">
+              Confirmă mașina și completează datele
+            </h1>
+            <p class="booking-summary-subtitle">
+              Verifică detaliile mașinii alese și completează datele personale, plus documentele necesare
+              pentru verificare rapidă. Nu se percepe plată online – confirmarea fermă vine după validarea documentelor.
+            </p>
+          </header>
+
+          <article class="booking-car-card" aria-label="Mașina aleasă">
+            <header class="booking-car-header">
+              <div class="booking-car-title">
+                <p class="booking-car-label">Mașina ta</p>
+                <h2 id="bkCarName" class="booking-car-name">[Nume mașină]</h2>
+                <p id="bkCarNameAlt" class="booking-car-name-alt">[Variantă / motorizare]</p>
+              </div>
+              <div class="booking-car-badges">
+                <span id="bkSegment" class="booking-car-badge">[Clasă]</span>
+                <span id="bkGear" class="booking-car-badge">[Cutie]</span>
+              </div>
+            </header>
+
+            <div class="booking-car-body">
+              <div class="booking-car-media">
+                <div class="car-image-skeleton" aria-hidden="true">
+                  <span class="skeleton-label">Imagine reprezentativă flotă</span>
+                </div>
+              </div>
+
+              <dl class="booking-car-meta">
+                <div class="booking-meta-row">
+                  <dt>Preluare</dt>
+                  <dd id="bkPickup">–</dd>
+                </div>
+                <div class="booking-meta-row">
+                  <dt>Returnare</dt>
+                  <dd id="bkReturn">–</dd>
+                </div>
+                <div class="booking-meta-row">
+                  <dt>Locație</dt>
+                  <dd id="bkRoute">–</dd>
+                </div>
+                <div class="booking-meta-row">
+                  <dt>Politică combustibil</dt>
+                  <dd>Full to full</dd>
+                </div>
+                <div class="booking-meta-row">
+                  <dt>Inclus</dt>
+                  <dd>Asigurare CASCO, km nelimitați, asistență rutieră</dd>
+                </div>
+              </dl>
+            </div>
+
+            <footer class="booking-car-footer">
+              <div class="booking-price">
+                <p class="booking-price-main">
+                  <span id="bkCarPrice">€[preț]</span>
+                  <span class="booking-price-unit">/ zi</span>
+                </p>
+                <p class="booking-price-note">
+                  Estimare pentru perioada selectată, poate varia ușor în funcție de disponibilitate.
+                </p>
+              </div>
+              <ul class="booking-guarantees">
+                <li>Nu se retrag bani online</li>
+                <li>Datele sunt criptate și verificate manual</li>
+                <li>Documentele sunt șterse la scurt timp după închiriere</li>
+              </ul>
+            </footer>
+          </article>
+
+          <section class="booking-security">
+            <h2 class="booking-security-title">Cum folosim documentele tale</h2>
+            <ul class="booking-security-list">
+              <li>Verificăm identitatea și eligibilitatea șoferului pentru a preveni fraudele.</li>
+              <li>Transmitem partenerului doar informațiile strict necesare pentru contract.</li>
+              <li>Nu folosim niciodată documentele în alte scopuri decât cele legale legate de închiriere.</li>
+            </ul>
+          </section>
+        </section>
+
+        <!-- Col dreapta: formular date personale & upload documente -->
+        <section class="booking-form" aria-labelledby="bookingFormTitle">
+          <header class="booking-form-header">
+            <h2 id="bookingFormTitle" class="booking-form-title">Date personale & documente</h2>
+            <p class="booking-form-subtitle">
+              Completează cu atenție. Informațiile trebuie să coincidă cu cele din actele încărcate.
+            </p>
+          </header>
+
+          <form class="booking-form-body" action="#" method="post" enctype="multipart/form-data" novalidate>
+            <!-- Date personale -->
+            <div class="form-section">
+              <h3 class="form-section-title">Date de identificare</h3>
+              <div class="form-grid">
+                <div class="field">
+                  <label for="fullName" class="field-label">Nume complet<span class="field-required">*</span></label>
+                  <input id="fullName" name="fullName" type="text" class="field-input" autocomplete="name" required placeholder="Nume și prenume exact ca în act" />
+                </div>
+                <div class="field">
+                  <label for="email" class="field-label">Email<span class="field-required">*</span></label>
+                  <input id="email" name="email" type="email" class="field-input" autocomplete="email" required placeholder="nume@exemplu.com" />
+                </div>
+                <div class="field">
+                  <label for="phone" class="field-label">Telefon mobil (WhatsApp)<span class="field-required">*</span></label>
+                  <input id="phone" name="phone" type="tel" class="field-input" autocomplete="tel" required placeholder="+40 7XX XXX XXX" />
+                </div>
+                <div class="field">
+                  <label for="birthDate" class="field-label">Data nașterii<span class="field-required">*</span></label>
+                  <input id="birthDate" name="birthDate" type="date" class="field-input" required />
+                </div>
+                <div class="field">
+                  <label for="nationalId" class="field-label">Serie & număr CI / Pașaport<span class="field-required">*</span></label>
+                  <input id="nationalId" name="nationalId" type="text" class="field-input" required placeholder="Ex: RX 123456 / 123456789" />
+                </div>
+                <div class="field">
+                  <label for="cnp" class="field-label">CNP (opțional)</label>
+                  <input id="cnp" name="cnp" type="text" class="field-input" inputmode="numeric" placeholder="Doar dacă dorești pe factură" />
+                </div>
+                <div class="field field-full">
+                  <label for="address" class="field-label">Adresă completă de domiciliu<span class="field-required">*</span></label>
+                  <input id="address" name="address" type="text" class="field-input" autocomplete="street-address" required placeholder="Stradă, număr, bloc, scara, oraș, țară" />
+                </div>
+              </div>
+            </div>
+
+            <!-- Detalii de zbor -->
+            <div class="form-section">
+              <h3 class="form-section-title">Detalii de zbor</h3>
+              <div class="form-grid">
+                <div class="field">
+                  <label for="flightNumber" class="field-label">Număr zbor (dacă există)</label>
+                  <input id="flightNumber" name="flightNumber" type="text" class="field-input" placeholder="Ex: RO1234" />
+                </div>
+                <div class="field">
+                  <label for="arrivalTime" class="field-label">Ora estimată de aterizare</label>
+                  <input id="arrivalTime" name="arrivalTime" type="time" class="field-input" />
+                </div>
+                <div class="field field-full">
+                  <label for="extraNotes" class="field-label">Observații pentru livrare</label>
+                  <textarea id="extraNotes" name="extraNotes" rows="3" class="field-input field-textarea" placeholder="Ex: Călătoresc cu copii mici, am bagaj voluminos, vreau scaun de copil etc."></textarea>
+                </div>
+              </div>
+            </div>
+
+            <!-- Upload documente -->
+            <div class="form-section">
+              <h3 class="form-section-title">Încarcă documentele necesare</h3>
+              <p class="form-section-helper">
+                Sunt acceptate fotografii clare sau documente PDF. Maximum 10MB / fișier. Te rugăm să acoperi CNP-ul dacă nu vrei să îl comunici.
+              </p>
+              <div class="upload-grid">
+                <div class="upload-field">
+                  <label for="idFront" class="field-label">Cartea de identitate – față<span class="field-required">*</span></label>
+                  <label class="upload-drop">
+                    <span class="upload-icon" aria-hidden="true">⬆</span>
+                    <span class="upload-main">Alege fișier sau trage aici</span>
+                    <span class="upload-hint">JPG, PNG sau PDF</span>
+                    <input id="idFront" name="idFront" type="file" accept=".jpg,.jpeg,.png,.pdf" required />
+                  </label>
+                </div>
+
+                <div class="upload-field">
+                  <label for="idBack" class="field-label">Cartea de identitate – verso<span class="field-required">*</span></label>
+                  <label class="upload-drop">
+                    <span class="upload-icon" aria-hidden="true">⬆</span>
+                    <span class="upload-main">Alege fișier sau trage aici</span>
+                    <span class="upload-hint">JPG, PNG sau PDF</span>
+                    <input id="idBack" name="idBack" type="file" accept=".jpg,.jpeg,.png,.pdf" required />
+                  </label>
+                </div>
+
+                <div class="upload-field">
+                  <label for="licenseFront" class="field-label">Permis de conducere – față<span class="field-required">*</span></label>
+                  <label class="upload-drop">
+                    <span class="upload-icon" aria-hidden="true">⬆</span>
+                    <span class="upload-main">Alege fișier sau trage aici</span>
+                    <span class="upload-hint">JPG, PNG sau PDF</span>
+                    <input id="licenseFront" name="licenseFront" type="file" accept=".jpg,.jpeg,.png,.pdf" required />
+                  </label>
+                </div>
+
+                <div class="upload-field">
+                  <label for="licenseBack" class="field-label">Permis de conducere – verso<span class="field-required">*</span></label>
+                  <label class="upload-drop">
+                    <span class="upload-icon" aria-hidden="true">⬆</span>
+                    <span class="upload-main">Alege fișier sau trage aici</span>
+                    <span class="upload-hint">JPG, PNG sau PDF</span>
+                    <input id="licenseBack" name="licenseBack" type="file" accept=".jpg,.jpeg,.png,.pdf" required />
+                  </label>
+                </div>
+
+                <div class="upload-field">
+                  <label for="flightTicket" class="field-label">Bilet de avion / boarding pass<span class="field-required">*</span></label>
+                  <label class="upload-drop">
+                    <span class="upload-icon" aria-hidden="true">⬆</span>
+                    <span class="upload-main">Alege fișier sau trage aici</span>
+                    <span class="upload-hint">JPG, PNG sau PDF</span>
+                    <input id="flightTicket" name="flightTicket" type="file" accept=".jpg,.jpeg,.png,.pdf" required />
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <!-- Consimțământ & submit -->
+            <div class="form-section form-section-footer">
+              <div class="consent-block">
+                <label class="consent-item">
+                  <input type="checkbox" name="agreeTerms" required />
+                  <span>
+                    Confirm că informațiile completate sunt reale și că sunt de acord cu
+                    <a href="#" target="_blank" rel="noopener">Termenii &amp; Condițiile</a> și
+                    <a href="#" target="_blank" rel="noopener">Politica de confidențialitate</a>.
+                  </span>
+                </label>
+                <label class="consent-item">
+                  <input type="checkbox" name="agreeMarketing" />
+                  <span>
+                    Sunt de acord să primesc ocazional oferte personalizate Gatevion (opțional).
+                  </span>
+                </label>
+              </div>
+
+              <div class="booking-submit-row">
+                <button type="submit" class="btn btn-primary-lg">
+                  Trimite datele pentru verificare
+                </button>
+                <p class="submit-helper">
+                  În următoarele ore, un operator verifică documentele și îți confirmă rezervarea pe email și WhatsApp.
+                </p>
+              </div>
+            </div>
+          </form>
+        </section>
+      </div>
+    </div>
+  </main>
+</body>
+</html>

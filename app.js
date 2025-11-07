@@ -413,7 +413,33 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     if(resPickupDetail && pickupText.trim()) resPickupDetail.textContent = pickupText;
     if(resReturnDetail && returnText.trim()) resReturnDetail.textContent = returnText;
+
+    // Wire "Alege mașina" buttons to booking page with car & search details
+    document.querySelectorAll('.car-card').forEach((card)=>{
+      const btn = card.querySelector('.car-cta-main');
+      if(!btn) return;
+      btn.addEventListener('click', ()=>{
+        const nameEl = card.querySelector('.car-name');
+        const altEl = card.querySelector('.car-name-alt');
+        const price = card.getAttribute('data-price') || '';
+        const segment = card.getAttribute('data-segment') || '';
+        const gear = card.getAttribute('data-transmission') || '';
+        const carName = nameEl ? nameEl.textContent.trim() : '';
+        const carAlt = altEl ? altEl.textContent.trim() : '';
+
+        const nextParams = new URLSearchParams(params.toString());
+        if(carName) nextParams.set('carName', carName);
+        if(carAlt) nextParams.set('carAlt', carAlt);
+        if(price) nextParams.set('carPrice', price);
+        if(segment) nextParams.set('segment', segment);
+        if(gear) nextParams.set('gear', gear);
+
+        window.location.href = 'alegere-masina.html?' + nextParams.toString();
+      });
+    });
+
     // Topbar sort selector interactions (UI only, sorting logic to be wired server-side)
+    const sortRoot = document.querySelector('.results-topbar-sort');
     const sortRoot = document.querySelector('.results-topbar-sort');
     const sortTrigger = sortRoot ? sortRoot.querySelector('.results-topbar-sort-trigger') : null;
     const sortValueEl = sortRoot ? sortRoot.querySelector('.results-topbar-sort-value') : null;
@@ -528,4 +554,47 @@ document.addEventListener('DOMContentLoaded', () => {
 
 const y = document.getElementById('y');
   if(y) y.textContent = new Date().getFullYear();
+
+  // Booking page: hydrate summary from query params
+  if(window.location.pathname && window.location.pathname.endsWith('alegere-masina.html')){
+    const params = new URLSearchParams(window.location.search || '');
+    const carName = params.get('carName') || '[Nume mașină]';
+    const carAlt = params.get('carAlt') || '[Variantă / motorizare]';
+    const carPrice = params.get('carPrice') || '[preț]';
+    const segment = params.get('segment') || '';
+    const gear = params.get('gear') || '';
+    const arrLabel = params.get('arrLabel') || params.get('arr') || '';
+    const depLabel = params.get('depLabel') || params.get('dep') || '';
+    const sd = params.get('sd') || '';
+    const st = params.get('st') || '';
+    const ed = params.get('ed') || '';
+    const et = params.get('et') || '';
+
+    const fmtDate = (iso)=>{
+      if(!iso) return '';
+      const parts = iso.split('-');
+      if(parts.length!==3) return iso;
+      const [y,m,d] = parts;
+      return `${d}.${m}.${y}`;
+    };
+
+    const routeText = (arrLabel || '—') + (depLabel ? ` → ${depLabel}` : '');
+    const pickupText = (sd ? fmtDate(sd) : '—') + (st ? ` • ${st}` : '');
+    const returnText = (ed ? fmtDate(ed) : '—') + (et ? ` • ${et}` : '');
+
+    const setText = (id, value)=>{
+      const el = document.getElementById(id);
+      if(el && value) el.textContent = value;
+    };
+
+    setText('bkCarName', carName);
+    setText('bkCarNameAlt', carAlt);
+    setText('bkCarPrice', carPrice ? `€${carPrice}` : '');
+    setText('bkSegment', segment || 'Clasă flotă');
+    setText('bkGear', gear ? (gear === 'automata' ? 'Automată' : 'Manuală') : '');
+
+    setText('bkRoute', routeText);
+    setText('bkPickup', pickupText);
+    setText('bkReturn', returnText);
+  }
 });
