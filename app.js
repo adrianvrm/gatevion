@@ -205,7 +205,8 @@ function toggleLang(){ const l = localStorage.getItem('lang')==='en'?'ro':'en'; 
 
 document.addEventListener('DOMContentLoaded', () => {
 
-const topbar = document.getElementById('topbar');
+
+  const topbar = document.getElementById('topbar');
   if(topbar){
     const onScroll = ()=>{ if(window.scrollY>4) topbar.classList.add('shadow'); else topbar.classList.remove('shadow'); };
     onScroll(); window.addEventListener('scroll', onScroll, {passive:true});
