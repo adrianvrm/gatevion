@@ -4506,3 +4506,20 @@ body{
 .cal-dd-item:hover{
   background:#f1f5f9;
 }
+
+
+.submit-helper{
+  margin-top:0.85rem;
+  font-size:0.9rem;
+  color:#4b5563;
+}
+
+@media (max-width: 640px){
+  .submit-helper{
+    font-size:0.85rem;
+    text-align:center;
+    max-width:22rem;
+    margin-left:auto;
+    margin-right:auto;
+  }
+}
