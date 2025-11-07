@@ -3833,24 +3833,22 @@ body{
 
 .booking-car-body{
   position:relative;
-  display:grid;
-  grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);
-  gap:1.2rem;
+  display:flex;
+  flex-direction:column;
+  gap:1.1rem;
   z-index:1;
 }
 
-@media (max-width: 900px){
-  .booking-car-body{
-    grid-template-columns:1fr;
-  }
+.booking-car-meta{
+  display:flex;
+  flex-direction:column;
+  gap:.45rem;
+  font-size:.86rem;
 }
 
-
-.booking-car-meta{
-  display:grid;
-  grid-template-columns:minmax(0,1fr) minmax(0,1fr);
-  gap:.6rem 1.1rem;
-  font-size:.86rem;
+.booking-meta-row{
+  display:flex;
+  flex-direction:column;
 }
 
 .booking-meta-row dt{
@@ -3858,22 +3856,13 @@ body{
   text-transform:uppercase;
   letter-spacing:.12em;
   color:#9ca3af;
-  margin-bottom:.1rem;
+  margin-bottom:.05rem;
 }
 
 .booking-meta-row dd{
   color:#e5e7eb;
   font-weight:500;
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
   letter-spacing:.01em;
-}
-
-@media (max-width: 900px){
-  .booking-car-meta{
-    grid-template-columns:1fr;
-  }
 }
 
 .booking-car-footer{
@@ -4215,6 +4204,7 @@ body{
 /* Phone input with country selector */
 .phone-row{
   display:flex;
+  flex-wrap:wrap;
   gap:.4rem;
 }
 .phone-country{
@@ -4224,11 +4214,14 @@ body{
   padding-right:1.8rem;
 }
 .phone-number-input{
-  flex:1;
+  flex:1 1 8rem;
 }
-@media (max-width: 480px){
+@media (max-width: 640px){
   .phone-row{
-    flex-direction:row;
+    flex-direction:column;
+  }
+  .phone-country{
+    flex:0 0 100%;
   }
 }
 
