@@ -356,7 +356,7 @@
 .summary .chip{
   max-width:100%;
   white-space:nowrap;
-  overflow:hidden;
+  overflow:visible;
   text-overflow:ellipsis;
 }
 .summary .chip strong{ margin-right:.25rem; }
@@ -1703,7 +1703,7 @@ body{
   border:1px solid rgba(148,163,184,0.55);
   background:linear-gradient(145deg, rgba(255,255,255,0.98), rgba(241,245,249,0.96));
   box-shadow:0 26px 72px rgba(15,23,42,0.16);
-  overflow:hidden;
+  overflow:visible;
 }
 .step-card::before{
   content:"";
@@ -2247,7 +2247,7 @@ body{
   background:linear-gradient(180deg,#ffffff,#fbfbfd);
   border:1px solid rgba(148,163,184,0.55);
   box-shadow:0 22px 70px rgba(2,6,23,0.12);
-  overflow:hidden;
+  overflow:visible;
 }
 .step-card::before, .airport-card::before, .faq-item::before{
   content:"";
@@ -2338,7 +2338,7 @@ body{
   background:radial-gradient(160% 200% at 0% 0%, rgba(2,172,142,0.12), rgba(15,23,42,0.96));
   color:#e5e7eb;
   box-shadow:0 24px 70px rgba(15,23,42,0.45);
-  overflow:hidden;
+  overflow:visible;
 }
 .results-search-card::before{
   content:"";
@@ -2465,7 +2465,7 @@ body{
     linear-gradient(180deg,#ffffff,#f9fafb);
   border:1px solid rgba(148,163,184,0.55);
   box-shadow:0 18px 50px rgba(15,23,42,0.12);
-  overflow:hidden;
+  overflow:visible;
   isolation:isolate;
   transition:
     border-color .35s ease,
@@ -2537,7 +2537,7 @@ body{
 .car-media{
   position:relative;
   border-radius:1.15rem;
-  overflow:hidden;
+  overflow:visible;
   min-height:135px;
   aspect-ratio:21/9;
   max-width:520px;
@@ -2566,7 +2566,7 @@ body{
   border:1px dashed rgba(148,163,184,0.55);
   background:linear-gradient(120deg,#e5e7eb,#f8fafc);
   position:relative;
-  overflow:hidden;
+  overflow:visible;
 }
 
 .skeleton-label{
@@ -2639,7 +2639,7 @@ body{
   height:1.9rem;
   border-radius:999px;
   position:relative;
-  overflow:hidden;
+  overflow:visible;
   display:flex;
   align-items:center;
   justify-content:center;
@@ -2914,7 +2914,7 @@ body{
   box-shadow:
     0 18px 60px rgba(15,23,42,0.18),
     0 0 0 1px rgba(148,163,184,0.55);
-  overflow:hidden;
+  overflow:visible;
 }
 .results-topbar-inner::before{
   content:"";
@@ -2965,7 +2965,8 @@ body{
   font-size:.95rem;
   font-weight:600;
   color:#020617;
-  white-space:nowrap;
+  white-space:normal;
+  word-break:break-word;
 }
 .results-topbar-actions{
   position:relative;
@@ -3069,7 +3070,7 @@ body{
 /* Compact premium filters in sidebar */
 .filter-card{
   position:relative;
-  overflow:hidden;
+  overflow:visible;
 }
 .filter-card::before{
   content:"";
@@ -3171,7 +3172,7 @@ body{
 }
 .pill{
   position:relative;
-  overflow:hidden;
+  overflow:visible;
 }
 .pill::before{
   content:"";
@@ -3490,17 +3491,6 @@ body{
 
 
 
-@media (max-width: 640px){
-  html, body{
-    width:100%;
-    max-width:100%;
-    overflow-x:hidden;
-  }
-  .wrap{
-    max-width:100%;
-    padding:0 .8rem;
-  }
-}
 
 
 
@@ -3665,23 +3655,23 @@ body{
   }
 }
 \n\n
+
 @media (max-width: 640px){
   html, body{
-    height:auto !important;
-    min-height:0 !important;
-    overflow-y:auto !important;
+    width:100%;
+    max-width:100%;
     overflow-x:hidden;
     -webkit-overflow-scrolling:touch;
   }
-  .results-main{
-    min-height:auto !important;
-    height:auto !important;
+}
+
+@media (max-width: 640px){
+  .results-topbar::before,
+  .results-topbar::after{
+    display:none;
   }
-  .results-page .results-topbar{
-    margin-bottom:-.3rem;
-  }
-  .results-page .results-sidebar .filter-card{
-    margin-top:0;
-    padding-top:.3rem;
+  .results-topbar-inner::before,
+  .results-topbar-inner::after{
+    content:none;
   }
 }
