@@ -16,60 +16,20 @@ const RO_DOW = ['Lu','Ma','Mi','Jo','Vi','Sa','Du']; // Monday-first
 const pad = (n)=> String(n).padStart(2,'0');
 const fmtISO = (d)=> `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
 const fmtDisplayDate = (iso)=> { if(!iso) return ''; const [y,m,d]=iso.split('-'); return `${d}.${m}.${y}`; };
-const fmtDisplayDateSlash = (iso)=> { if(!iso) return ''; const [y,m,d]=iso.split('-'); return `${d}/${m}/${y}`; };
 const cmpTime = (a,b)=> (a===b?0:(a<b?-1:1)); // HH:MM strings (zero-padded)
 
-function makeCalendar(date, selectedISO, boundISO, mode){
+function makeCalendar(date, selectedISO, minISO){
   // returns HTML string for a calendar month grid
   const year = date.getFullYear();
   const month = date.getMonth();
   const first = new Date(year, month, 1);
   const startOffset = (first.getDay()+6)%7; // Monday-first; 0=Mon ... 6=Sun
   const daysInMonth = new Date(year, month+1, 0).getDate();
-  const today = new Date();
-  const todayISO = fmtISO(today);
-  let minBound = null;
-  let maxBound = null;
-  if(mode === 'maxPast'){
-    // Pentru data nașterii: interval permis între 22 și 65 de ani
-    const maxAgeYears = 65;
-    const minDate = new Date(today.getFullYear() - maxAgeYears, today.getMonth(), today.getDate());
-    minBound = fmtISO(minDate);           // prea vechi => prea bătrân (>65)
-    maxBound = boundISO || todayISO;      // prea nou => prea tânăr (<22)
-  }else{
-    minBound = boundISO || todayISO; // block past days by default
-  }
-  const monthLabel = (mode === 'maxPast') ? RO_MONTHS[month] : RO_MONTHS[month]+' '+year;
-  
-  
-  let html = '';
-  if(mode === 'maxPast'){
-    const currentYear = today.getFullYear();
-    const minYear = currentYear - 65;
-    const maxYear = currentYear - 22;
-    html += '<header><div class="month">';
-    html += '<button type="button" class="cal-dd cal-dd-month" data-dd="month"><span class="cal-dd-label">'+RO_MONTHS[month]+'</span><span class="cal-dd-arrow">▾</span></button>';
-    html += '<div class="cal-dd-menu cal-dd-menu-month">';
-    for(let m=0; m<12; m++){
-      html += '<button type="button" class="cal-dd-item" data-month="'+m+'">'+RO_MONTHS[m]+'</button>';
-    }
-    html += '</div></div><div class="nav">';
-    html += '<button type="button" class="cal-dd cal-dd-year" data-dd="year"><span class="cal-dd-label">'+year+'</span><span class="cal-dd-arrow">▾</span></button>';
-    html += '<div class="cal-dd-menu cal-dd-menu-year">';
-    for(let y = maxYear; y >= minYear; y--){
-      html += '<button type="button" class="cal-dd-item" data-year="'+y+'">'+y+'</button>';
-    }
-    html += '</div></div></header>';
-  }else{
-    const monthLabel = RO_MONTHS[month]+' '+year;
-    html += '<header><div class="month">'+monthLabel+'</div><div class="nav">';
-    html += '<button class="icon-btn" data-cal="prev" aria-label="Luna anterioară">‹</button>';
-    html += '<button class="icon-btn" data-cal="today" aria-label="Astăzi">•</button>';
-    html += '<button class="icon-btn" data-cal="next" aria-label="Luna următoare">›</button>';
-    html += '</div></header>';
-  }
+  const todayISO = fmtISO(new Date());
+  const minBound = minISO || todayISO; // block past days by default
 
-html += '<div class=\"cal-grid\">';
+  let html = '<header><button class=\"icon-btn\" data-cal=\"prev\" aria-label=\"Luna anterioară\">‹</button><div class=\"month\">'+RO_MONTHS[month]+' '+year+'</div><div class=\"nav\"><button class=\"icon-btn\" data-cal=\"today\" aria-label=\"Astăzi\">•</button><button class=\"icon-btn\" data-cal=\"next\" aria-label=\"Luna următoare\">›</button></div></header>';
+  html += '<div class=\"cal-grid\">';
   // DOW
   for(const d of RO_DOW){ html += '<div class=\"cal-dow\">'+d+'</div>'; }
   // Leading blanks (previous month)
@@ -78,8 +38,7 @@ html += '<div class=\"cal-grid\">';
   for(let day=1; day<=daysInMonth; day++){
     const iso = `${year}-${pad(month+1)}-${pad(day)}`;
     let cls = 'cal-day';
-    if(minBound && iso < minBound) cls += ' disabled';
-    if(maxBound && iso > maxBound) cls += ' disabled';
+    if(iso < minBound) cls += ' disabled';
     if(iso===fmtISO(new Date())) cls += ' today';
     if(selectedISO && iso===selectedISO) cls += ' selected';
     html += `<div class=\"${cls}\" data-date=\"${iso}\">${day}</div>`;
@@ -184,119 +143,6 @@ function initDatePicker(picker){
   picker._renderCal = render;
 }
 
-
-
-function initDobPicker(picker){
-  const hidden = picker.querySelector('input[type="hidden"]');
-  const display = picker.querySelector('.dp-input');
-  const pop = picker.querySelector('.calendar-pop');
-  const cal = pop.querySelector('.calendar');
-
-  const today = new Date();
-  const minAgeYears = 22;
-  const maxDate = new Date(today.getFullYear() - minAgeYears, today.getMonth(), today.getDate());
-  const maxISO = fmtISO(maxDate);
-  let viewDate = hidden.value ? new Date(hidden.value) : maxDate;
-
-  function open(){
-    closeAllPopovers();
-    pop.classList.add('open');
-    activateField(picker);
-  }
-  function close(){
-    pop.classList.remove('open');
-    deactivateField(picker);
-  }
-
-  function render(){
-    cal.innerHTML = makeCalendar(viewDate, hidden.value, maxISO, 'maxPast');
-
-    const monthBtn = cal.querySelector('.cal-dd-month');
-    const yearBtn = cal.querySelector('.cal-dd-year');
-    const monthMenu = cal.querySelector('.cal-dd-menu-month');
-    const yearMenu = cal.querySelector('.cal-dd-menu-year');
-
-    const closeMenus = ()=>{
-      if(monthMenu) monthMenu.classList.remove('open');
-      if(yearMenu) yearMenu.classList.remove('open');
-      if(monthBtn) monthBtn.classList.remove('open');
-      if(yearBtn) yearBtn.classList.remove('open');
-    };
-
-    if(monthBtn && monthMenu){
-      monthBtn.addEventListener('click', (e)=>{
-        e.stopPropagation();
-        const willOpen = !monthMenu.classList.contains('open');
-        closeMenus();
-        if(willOpen){
-          monthMenu.classList.add('open');
-          monthBtn.classList.add('open');
-        }
-      });
-
-      monthMenu.addEventListener('click', (e)=>{
-        const item = e.target.closest('.cal-dd-item[data-month]');
-        if(!item) return;
-        const m = parseInt(item.getAttribute('data-month'), 10);
-        if(isNaN(m)) return;
-        viewDate = new Date(viewDate.getFullYear(), m, 1);
-        closeMenus();
-        render();
-      });
-    }
-
-    if(yearBtn && yearMenu){
-      yearBtn.addEventListener('click', (e)=>{
-        e.stopPropagation();
-        const willOpen = !yearMenu.classList.contains('open');
-        closeMenus();
-        if(willOpen){
-          yearMenu.classList.add('open');
-          yearBtn.classList.add('open');
-        }
-      });
-
-      yearMenu.addEventListener('click', (e)=>{
-        const item = e.target.closest('.cal-dd-item[data-year]');
-        if(!item) return;
-        const y = parseInt(item.getAttribute('data-year'), 10);
-        if(isNaN(y)) return;
-        viewDate = new Date(y, viewDate.getMonth(), 1);
-        closeMenus();
-        render();
-      });
-    }
-  }
-
-  display.addEventListener('click', (e)=>{
-    e.stopPropagation();
-    if(pop.classList.contains('open')){
-      close();
-    }else{
-      open();
-      render();
-    }
-  });
-
-  cal.addEventListener('click', (e)=>{
-    const day = e.target.closest('.cal-day');
-    if(day && day.dataset.date){
-      if(day.classList.contains('disabled')) return;
-      hidden.value = day.dataset.date;
-      if(typeof fmtDisplayDateSlash === 'function'){
-        display.value = fmtDisplayDateSlash(hidden.value);
-      }else{
-        display.value = hidden.value;
-      }
-      picker.closest('.field')?.classList.add('filled');
-      close();
-    }
-  });
-
-  // First render so controls are ready when popover is opened
-  render();
-}
-
 function initTimePicker(picker){
   const hidden = picker.querySelector('input[type=\"hidden\"]');
   const display = picker.querySelector('.tp-input');
@@ -372,10 +218,9 @@ document.addEventListener('DOMContentLoaded', () => {
   if(langBtn2) langBtn2.addEventListener('click', toggleLang);
 
   // Initialize custom pickers
-  document.querySelectorAll('.picker[data-type="airport"]').forEach(initAirportPicker);
-  document.querySelectorAll('.picker[data-type="date"]').forEach(initDatePicker);
-  document.querySelectorAll('.picker[data-type="dob"]').forEach(initDobPicker);
-  document.querySelectorAll('.picker[data-type="time"]').forEach(initTimePicker);
+  document.querySelectorAll('.picker[data-type=\"airport\"]').forEach(initAirportPicker);
+  document.querySelectorAll('.picker[data-type=\"date\"]').forEach(initDatePicker);
+  document.querySelectorAll('.picker[data-type=\"time\"]').forEach(initTimePicker);
   initFAQ();
 
 
@@ -758,234 +603,26 @@ const y = document.getElementById('y');
     setText('bkPickup', pickupText);
     setText('bkReturn', returnText);
 
-    // Normalize & validate phone number according to selected country prefix
+    // Normalize phone number according to selected country prefix
     const phoneCountry = document.getElementById('phoneCountry');
     const phoneInput = document.getElementById('phoneNumber');
 
     if(phoneCountry && phoneInput){
-      // Basic per-country rules: number of digits expected for the national number (without prefix)
-      const PHONE_RULES = {
-        '+40': { min:9, max:9 },   // România: 9 cifre fără prefix (ex: 7XX XXX XXX)
-        '+33': { min:9, max:9 },   // Franța
-        '+34': { min:9, max:9 },   // Spania
-        '+39': { min:8, max:11 },  // Italia (variază)
-        '+49': { min:7, max:13 },  // Germania
-        '+44': { min:9, max:10 },  // Marea Britanie
-        '+43': { min:10, max:13 }, // Austria
-        '+31': { min:9, max:9 },   // Olanda
-        '+32': { min:8, max:9 },   // Belgia
-        '+41': { min:9, max:9 },   // Elveția
-        '+30': { min:10, max:10 }, // Grecia
-        '+420': { min:9, max:9 },  // Cehia
-        '+421': { min:9, max:9 },  // Slovacia
-        '+36': { min:8, max:9 },   // Ungaria
-        '+48': { min:9, max:9 },   // Polonia
-        '+386': { min:8, max:8 },  // Slovenia
-        '+385': { min:8, max:9 },  // Croația
-
-        /* Extinse pentru mai multe țări din dropdown: valori aproximative
-           (suficient de strict încât să prindă o cifră în plus sau în minus) */
-        '+355': { min:8, max:9 },   // Albania
-        '+213': { min:8, max:9 },   // Algeria
-        '+54':  { min:8, max:10 },  // Argentina
-        '+61':  { min:8, max:9 },   // Australia
-        '+994': { min:8, max:9 },   // Azerbaidjan
-        '+973': { min:7, max:8 },   // Bahrain
-        '+880': { min:8, max:10 },  // Bangladesh
-        '+591': { min:8, max:9 },   // Bolivia
-        '+387': { min:8, max:9 },   // Bosnia și Herțegovina
-        '+55':  { min:8, max:11 },  // Brazilia
-        '+359': { min:8, max:9 },   // Bulgaria
-        '+855': { min:8, max:9 },   // Cambodgia
-        '+237': { min:8, max:9 },   // Camerun
-        '+1':   { min:10, max:10 }, // SUA / Canada
-        '+56':  { min:8, max:9 },   // Chile
-        '+86':  { min:8, max:11 },  // China
-        '+57':  { min:8, max:10 },  // Columbia
-        '+506': { min:8, max:8 },   // Costa Rica
-        '+357': { min:8, max:8 },   // Cipru
-        '+45':  { min:8, max:8 },   // Danemarca
-        '+20':  { min:8, max:9 },   // Egipt
-        '+372': { min:7, max:8 },   // Estonia
-        '+251': { min:8, max:9 },   // Etiopia
-        '+358': { min:8, max:10 },  // Finlanda
-        '+995': { min:8, max:9 },   // Georgia
-        '+502': { min:8, max:8 },   // Guatemala
-        '+504': { min:8, max:8 },   // Honduras
-        '+852': { min:8, max:8 },   // Hong Kong
-        '+354': { min:7, max:7 },   // Islanda
-        '+91':  { min:10, max:10 }, // India
-        '+62':  { min:9, max:11 },  // Indonezia
-        '+353': { min:8, max:9 },   // Irlanda
-        '+972': { min:8, max:9 },   // Israel
-        '+81':  { min:9, max:10 },  // Japonia
-        '+962': { min:8, max:9 },   // Iordania
-        '+7':   { min:10, max:10 }, // Rusia / Kazahstan (simplificat)
-        '+254': { min:9, max:9 },   // Kenya
-        '+82':  { min:9, max:9 },   // Coreea de Sud
-        '+965': { min:8, max:8 },   // Kuweit
-        '+996': { min:8, max:9 },   // Kârgâzstan
-        '+371': { min:8, max:8 },   // Letonia
-        '+961': { min:8, max:8 },   // Liban
-        '+370': { min:8, max:8 },   // Lituania
-        '+352': { min:8, max:9 },   // Luxemburg
-        '+353': { min:8, max:9 },   // Irlanda (deja definită mai sus)
-        '+389': { min:8, max:9 },   // Macedonia de Nord
-        '+60':  { min:8, max:10 },  // Malaysia
-        '+356': { min:8, max:8 },   // Malta
-        '+52':  { min:10, max:10 }, // Mexic
-        '+373': { min:8, max:8 },   // Moldova
-        '+377': { min:8, max:9 },   // Monaco
-        '+212': { min:8, max:9 },   // Maroc
-        '+64':  { min:8, max:9 },   // Noua Zeelandă
-        '+234': { min:8, max:10 },  // Nigeria
-        '+47':  { min:8, max:8 },   // Norvegia
-        '+92':  { min:9, max:10 },  // Pakistan
-        '+507': { min:7, max:8 },   // Panama
-        '+595': { min:8, max:9 },   // Paraguay
-        '+51':  { min:8, max:9 },   // Peru
-        '+63':  { min:9, max:10 },  // Filipine
-        '+351': { min:9, max:9 },   // Portugalia
-        '+974': { min:7, max:8 },   // Qatar
-        '+381': { min:8, max:9 },   // Serbia
-        '+65':  { min:8, max:8 },   // Singapore
-        '+27':  { min:9, max:9 },   // Africa de Sud
-        '+94':  { min:9, max:9 },   // Sri Lanka
-        '+46':  { min:7, max:9 },   // Suedia
-        '+886': { min:8, max:9 },   // Taiwan
-        '+66':  { min:8, max:9 },   // Thailanda
-        '+90':  { min:10, max:10 }, // Turcia
-        '+380': { min:9, max:9 },   // Ucraina
-        '+971': { min:8, max:9 },   // Emiratele Arabe Unite
-        '+598': { min:7, max:8 },   // Uruguay
-        '+58':  { min:7, max:9 },   // Venezuela
-        '+84':  { min:8, max:10 },  // Vietnam
-
-        // Fallback: valori rezonabile pentru restul țărilor
-        'default': { min:6, max:14 }
-      };
-
-      const phoneRow = phoneInput.closest('.phone-row');
-      const phoneFlagEl = document.getElementById('phoneCountryFlag');
-
-      const updateFlag = ()=>{
-        if(!phoneFlagEl || !phoneCountry) return;
-        const selected = phoneCountry.options[phoneCountry.selectedIndex];
-        if(!selected) return;
-        const text = (selected.textContent || '').trim();
-        const flagChar = text.split(' ')[0] || '';
-        phoneFlagEl.textContent = flagChar;
-      };
-
-
-      let phoneErrorEl = document.getElementById('phoneNumberError');
-      if(!phoneErrorEl){
-        phoneErrorEl = document.createElement('p');
-        phoneErrorEl.id = 'phoneNumberError';
-        phoneErrorEl.className = 'field-error';
-        phoneErrorEl.style.display = 'none';
-        if(phoneRow && phoneRow.parentNode){
-          phoneRow.insertAdjacentElement('afterend', phoneErrorEl);
-        }
-      }
-
-      const setPhoneError = (msg)=>{
-        if(!phoneErrorEl) return;
-        if(msg){
-          phoneErrorEl.textContent = msg;
-          phoneErrorEl.style.display = 'block';
-          phoneInput.classList.add('field-input-error');
-          phoneInput.setAttribute('aria-invalid','true');
-          phoneInput.setCustomValidity(msg);
-        }else{
-          phoneErrorEl.textContent = '';
-          phoneErrorEl.style.display = 'none';
-          phoneInput.classList.remove('field-input-error');
-          phoneInput.removeAttribute('aria-invalid');
-          phoneInput.setCustomValidity('');
-        }
-      };
-
       const normalizePhone = ()=>{
         const cc = phoneCountry.value || '';
         const ccDigits = cc.replace('+','');
         let raw = phoneInput.value || '';
         let digits = raw.replace(/\D/g,'');
-
-        if(!digits){
-          setPhoneError('');
-          return;
-        }
-
-        // Accept forme de tip 00 + prefix + număr
-        while(digits.startsWith('00')){
-          digits = digits.slice(2);
-        }
-
-        // Dacă utilizatorul a introdus deja prefixul țării, îl eliminăm din zona de număr
         if(ccDigits && digits.startsWith(ccDigits)){
           digits = digits.slice(ccDigits.length);
         }
-
-        // Eliminăm un 0 inițial de tip prefix național (ex: 07xx -> 7xx)
         if(digits.startsWith('0')){
           digits = digits.slice(1);
         }
-
-        // Validare pe baza regulilor
-        const rule = PHONE_RULES[cc] || PHONE_RULES['default'];
-        const len = digits.length;
-
-        if(len < rule.min || len > rule.max){
-          const msg = (rule.min === rule.max)
-            ? `Numărul de telefon trebuie să conțină exact ${rule.min} cifre pentru această țară.`
-            : `Numărul de telefon trebuie să conțină între ${rule.min} și ${rule.max} cifre pentru această țară.`;
-          setPhoneError(msg);
-        }else{
-          setPhoneError('');
-        }
-
-        // Rescriem vizibil numărul în format normalizat: prefix + număr fără spații
-        phoneInput.value = cc + ' ' + digits;
+        phoneInput.value = digits;
       };
-
-      // Actualizăm și steagul, și normalizăm numărul la schimbarea țării
-      phoneCountry.addEventListener('change', ()=>{
-        updateFlag();
-        normalizePhone();
-      });
+      phoneCountry.addEventListener('change', normalizePhone);
       phoneInput.addEventListener('blur', normalizePhone);
-
-      // Setăm steagul inițial la încărcarea paginii
-      updateFlag();
     }
-
-  // Restricție dinamică pentru data nașterii (minim 22 de ani)
-  const birthHidden = document.getElementById('birthDate');
-  const birthDisplay = document.getElementById('birthDateDisplay');
-  if(birthHidden && birthDisplay){
-    const today = new Date();
-    const minAgeYears = 22;
-    const maxAgeYears = 65;
-    const maxDate = new Date(today.getFullYear() - minAgeYears, today.getMonth(), today.getDate()); // cel mai tânăr (22)
-    const minDate = new Date(today.getFullYear() - maxAgeYears, today.getMonth(), today.getDate()); // cel mai în vârstă (65)
-    const maxISO = fmtISO(maxDate);
-    const minISO = fmtISO(minDate);
-
-    const validateBirthDate = ()=>{
-      const isoVal = birthHidden.value;
-      if(!isoVal){
-        birthDisplay.setCustomValidity('Completează data nașterii.');
-        return;
-      }
-      if(isoVal > maxISO || isoVal < minISO){
-        birthDisplay.setCustomValidity('Trebuie să ai între 22 și 65 de ani pentru a închiria o mașină.');
-      }else{
-        birthDisplay.setCustomValidity('');
-      }
-    };
-
-    birthDisplay.addEventListener('blur', validateBirthDate);
-  }
   }
 });

@@ -104,16 +104,10 @@
 .picker--airport .popover{ z-index:100000; } /* ensure airport is top-most */
 .popover.open{ display:block; }
 
-.calendar{ width:380px; max-width:100%; }
-.calendar header{
-  display:flex;
-  align-items:center;
-  padding:.75rem 1rem;
-  border-bottom:1px solid var(--line);
-  gap:.5rem;
-}
-.calendar header .month{ flex:1; font-weight:600; color:#0f172a; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-.calendar header .nav{ display:flex; align-items:center; gap:.25rem; flex-shrink:0; }
+.calendar{ width:320px; }
+.calendar header{ display:flex; align-items:center; justify-content:space-between; padding:.75rem 1rem; border-bottom:1px solid var(--line); }
+.calendar header .month{ font-weight:600; color:#0f172a; }
+.calendar header .nav{ display:flex; gap:.25rem; }
 .icon-btn{ display:inline-flex; align-items:center; justify-content:center; width:32px; height:32px; border-radius:10px; border:1px solid var(--line); background:#fff; }
 .icon-btn:hover{ background:#f8fafc; }
 .cal-grid{ display:grid; grid-template-columns:repeat(7,1fr); gap:2px; padding:8px; }
@@ -235,13 +229,7 @@
 /* === Compact calendar popover === */
 .popover{ border-radius:12px; margin-top:.35rem; }
 .calendar{ width:260px; }
-.calendar header{
-  display:flex;
-  align-items:center;
-  padding:.75rem 1rem;
-  border-bottom:1px solid var(--line);
-  gap:.5rem;
-}
+.calendar header{ padding:.5rem .75rem; }
 .icon-btn{ width:28px; height:28px; border-radius:8px; }
 .cal-grid{ gap:1px; padding:6px; }
 .cal-dow{ font-size:11px; padding:.2rem 0; }
@@ -4064,17 +4052,6 @@ body{
   resize:vertical;
   min-height:3.2rem;
 }
-.field-input.field-input-error{
-  border-color:#b91c1c;
-  box-shadow:0 0 0 1px rgba(185,28,28,.18);
-}
-
-.field-error{
-  margin-top:0.25rem;
-  font-size:0.78rem;
-  color:#b91c1c;
-}
-
 
 /* Uploads */
 .upload-grid{
@@ -4227,56 +4204,24 @@ body{
 /* Phone input with country selector */
 .phone-row{
   display:flex;
-  align-items:center;
-  flex-wrap:nowrap;
+  flex-wrap:wrap;
   gap:.4rem;
 }
-
 .phone-country{
-  flex:0 0 auto;
-  position:relative;
-  width:3rem;
+  flex:0 0 7.2rem;
 }
-
-.phone-country-toggle{
-  width:100%;
-  height:2.6rem;
-  border-radius:.7rem;
-  border:1px solid #d1d5db;
-  background:#f9fafb;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding:0;
-  cursor:pointer;
-}
-
-.phone-country-flag{
-  font-size:1.1rem;
-  line-height:1;
-}
-
 .phone-country-select{
-  position:absolute;
-  inset:0;
-  width:100%;
-  height:100%;
-  opacity:0;
-  cursor:pointer;
-}
-
-/* focus vizual pentru container când selectul este focusat */
-.phone-country:focus-within .phone-country-toggle{
-  border-color:#06b6d4;
-  box-shadow:0 0 0 1px rgba(6,182,212,.2);
-  background:#ffffff;
+  padding-right:1.8rem;
 }
 .phone-number-input{
-  flex:1 1 auto;
+  flex:1 1 8rem;
 }
 @media (max-width: 640px){
   .phone-row{
-    flex-wrap:nowrap;
+    flex-direction:column;
+  }
+  .phone-country{
+    flex:0 0 100%;
   }
 }
 
@@ -4308,237 +4253,4 @@ body{
   align-items:center;
   justify-content:center;
   box-shadow:0 16px 40px rgba(15,23,42,0.16);
-}
-
-
-/* Booking page progress-style top nav (steps) */
-.nav-step{
-  position:relative;
-  padding-left:1.9rem;
-  font-size:0.9rem;
-}
-
-.nav-step::before{
-  content: attr(data-step);
-  position:absolute;
-  left:0;
-  top:50%;
-  transform:translateY(-50%);
-  width:1.3rem;
-  height:1.3rem;
-  border-radius:999px;
-  border:1px solid var(--line, rgba(148,163,184,0.7));
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:0.7rem;
-  font-weight:600;
-  line-height:1;
-  background:rgba(248,250,252,0.8);
-  color:#0f172a;
-}
-
-.nav-step{
-  opacity:0.6;
-}
-
-.nav-step-current{
-  opacity:1;
-  font-weight:600;
-}
-
-.nav-step-current::before{
-  background:#02ac8e;
-  border-color:#02ac8e;
-  color:#ffffff;
-  box-shadow:0 0 0 4px rgba(2,172,142,0.18);
-}
-
-/* Compact progress feel on very small screens when shown in mobile menu */
-.mnav-step{
-  position:relative;
-  padding-left:1.8rem;
-}
-
-.mnav-step::before{
-  content: attr(data-step);
-  position:absolute;
-  left:0;
-  top:0.45rem;
-  width:1.2rem;
-  height:1.2rem;
-  border-radius:999px;
-  border:1px solid var(--line, rgba(148,163,184,0.7));
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:0.7rem;
-  font-weight:600;
-  background:rgba(248,250,252,0.9);
-  color:#0f172a;
-}
-
-.mnav-step-current{
-  font-weight:600;
-}
-
-.mnav-step-current::before{
-  background:#02ac8e;
-  border-color:#02ac8e;
-  color:#ffffff;
-}
-
-
-/* Fix: ensure progress bullets in main nav don't overlap text */
-.main-nav .nav-step{
-  position:relative;
-  padding-left:2.1rem; /* override generic nav-link padding */
-}
-
-.main-nav .nav-step::before{
-  left:0;
-  top:50%;
-  transform:translateY(-50%);
-}
-
-/* Fix mobile bullets alignment and padding */
-.mobile-nav .mnav-step{
-  position:relative;
-  padding-left:2.0rem;
-}
-
-.mobile-nav .mnav-step::before{
-  left:0;
-}
-
-
-/* Date of birth input styling */
-#birthDate.field-input{
-  position:relative;
-  color:#0f172a;
-  font-size:0.9rem;
-}
-
-#birthDate.field-input::-webkit-calendar-picker-indicator{
-  cursor:pointer;
-  opacity:0.7;
-}
-
-#birthDate.field-input::-webkit-calendar-picker-indicator:hover{
-  opacity:1;
-}
-
-/* Remove default inner padding in some browsers for date input */
-#birthDate.field-input::-webkit-datetime-edit,
-#birthDate.field-input::-webkit-datetime-edit-fields-wrapper{
-  padding:0;
-}
-
-.cal-year-select{
-  margin-left:0.35rem;
-  padding:0.15rem 0.5rem;
-  font-size:0.8rem;
-  border-radius:999px;
-  border:1px solid var(--line);
-  background:#ffffff;
-}
-
-.cal-month-select{
-  padding:0.15rem 0.5rem;
-  font-size:0.8rem;
-  border-radius:999px;
-  border:1px solid var(--line);
-  background:#ffffff;
-}
-
-.cal-dd{
-  display:inline-flex;
-  align-items:center;
-  gap:0.25rem;
-  padding:0.25rem 0.6rem;
-  border-radius:999px;
-  border:1px solid var(--line);
-  background:#ffffff;
-  font-size:0.8rem;
-  cursor:pointer;
-}
-.cal-dd-label{
-  white-space:nowrap;
-}
-.cal-dd-arrow{
-  font-size:0.7rem;
-}
-.cal-dd-menu{
-  position:absolute;
-  margin-top:0.25rem;
-  padding:0.25rem 0;
-  border-radius:0.75rem;
-  border:1px solid var(--line);
-  background:#ffffff;
-  box-shadow:0 10px 25px rgba(15,23,42,.12);
-  max-height:220px;
-  overflow-y:auto;
-  display:none;
-  z-index:20;
-}
-.month .cal-dd-menu{
-  left:1rem;
-}
-.calendar header .nav{
-  position:relative;
-}
-.cal-dd-menu-year{
-  right:1rem;
-}
-.cal-dd-menu.open{
-  display:block;
-}
-.cal-dd-item{
-  display:block;
-  width:100%;
-  text-align:left;
-  padding:0.2rem 0.75rem;
-  font-size:0.8rem;
-  background:transparent;
-  border:none;
-  cursor:pointer;
-}
-.cal-dd-item:hover{
-  background:#f1f5f9;
-}
-
-
-.submit-helper{
-  margin-top:0.85rem;
-  font-size:0.9rem;
-  color:#4b5563;
-}
-
-@media (max-width: 640px){
-  .submit-helper{
-    font-size:0.85rem;
-    text-align:center;
-    max-width:22rem;
-    margin-left:auto;
-    margin-right:auto;
-  }
-}
-
-
-.submit-helper{
-  margin-top:0.85rem;
-  font-size:0.85rem;
-  color:#4b5563;
-  white-space:nowrap;
-}
-
-@media (max-width: 640px){
-  .submit-helper{
-    font-size:0.85rem;
-    text-align:center;
-    max-width:22rem;
-    margin-left:auto;
-    margin-right:auto;
-    white-space:normal;
-  }
 }
