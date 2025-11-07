@@ -1162,9 +1162,6 @@ const phoneCountry = document.getElementById('phoneCountry');
     };
 
     birthDisplay.addEventListener('blur', validateBirthDate);
-  }
-
-
   // Thank you page: hydrate recap from query params
   if(window.location.pathname && window.location.pathname.indexOf('multumire') !== -1){
     const params = new URLSearchParams(window.location.search || '');
@@ -1230,4 +1227,72 @@ const phoneCountry = document.getElementById('phoneCountry');
 
   }
   }
+});
+
+
+// Standalone thank-you page hydration to ensure recap card is populated
+document.addEventListener('DOMContentLoaded', function(){
+  if(!window.location || !window.location.pathname) return;
+  if(window.location.pathname.indexOf('multumire') === -1) return;
+
+  var params = new URLSearchParams(window.location.search || '');
+
+  var arrLabel = params.get('arrLabel') || params.get('arr') || '';
+  var depLabel = params.get('depLabel') || params.get('dep') || '';
+  var sd = params.get('sd') || '';
+  var st = params.get('st') || '';
+  var ed = params.get('ed') || '';
+  var et = params.get('et') || '';
+
+  var carName = params.get('carName') || '';
+  var carPrice = params.get('carPrice') || '';
+  var segment = params.get('segment') || '';
+  var gear = params.get('gear') || '';
+
+  var travelCountry = params.get('travelCountry') || '';
+  var flightNumber = params.get('flightNumber') || '';
+  var fullName = params.get('fullName') || '';
+  var email = params.get('email') || '';
+  var phoneCountry = params.get('phoneCountry') || '';
+  var phoneNumber = params.get('phoneNumber') || '';
+
+  function fmtDate(iso){
+    if(!iso) return '';
+    var parts = iso.split('-');
+    if(parts.length !== 3) return iso;
+    var y = parts[0], m = parts[1], d = parts[2];
+    return d + '.' + m + '.' + y;
+  }
+
+  var routeText = (arrLabel || '—') + (depLabel ? (' → ' + depLabel) : '');
+  var pickupText = (sd ? fmtDate(sd) : '—') + (st ? (' • ' + st) : '');
+  var returnText = (ed ? fmtDate(ed) : '—') + (et ? (' • ' + et) : '');
+  var periodText = (pickupText && returnText)
+    ? (pickupText + '  →  ' + returnText)
+    : (pickupText || returnText || '—');
+
+  var phoneDisplay = (phoneCountry || '') +
+    (phoneNumber ? ((phoneCountry ? ' ' : '') + phoneNumber) : '');
+
+  function setText(id, value){
+    var el = document.getElementById(id);
+    if(el && value){ el.textContent = value; }
+  }
+
+  if(carName) setText('tyCarName', carName);
+  if(segment) setText('tyCarSegment', segment);
+  if(gear){
+    var gearLabel = (gear === 'automata' ? 'Automată' : 'Manuală');
+    setText('tyCarGear', gearLabel);
+  }
+  if(carPrice) setText('tyCarPrice', '€' + carPrice);
+
+  setText('tyRoute', routeText);
+  setText('tyPeriod', periodText);
+
+  if(travelCountry) setText('tyTravelCountry', travelCountry);
+  if(flightNumber) setText('tyFlightNumber', flightNumber);
+  if(fullName) setText('tyName', fullName);
+  if(email) setText('tyEmail', email);
+  if(phoneDisplay) setText('tyPhone', phoneDisplay);
 });
