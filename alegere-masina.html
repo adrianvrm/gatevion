@@ -7,105 +7,6 @@
   <meta name="description" content="Completează datele personale, încarcă documentele necesare și confirmă rezervarea pentru mașina selectată prin Gatevion." />
   <link rel="stylesheet" href="styles.css" />
   <script defer src="app.js"></script>
-
-<style>
-  /* Booking page: header progress indicator (desktop + mobile) */
-  .booking-progress-nav{
-    display:none;
-  }
-  @media (min-width:768px){
-    .booking-progress-nav{
-      display:flex;
-      align-items:center;
-      justify-content:center;
-    }
-  }
-  .booking-progress{
-    display:flex;
-    align-items:center;
-    gap:.5rem;
-    font-size:12px;
-    font-weight:600;
-    color:#64748b;
-    letter-spacing:.02em;
-  }
-  .booking-progress-step{
-    display:flex;
-    align-items:center;
-    gap:.35rem;
-  }
-  .booking-progress-step-badge{
-    width:22px;
-    height:22px;
-    border-radius:999px;
-    border:1px solid #cbd5f5;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:11px;
-    background:#f9fafb;
-    color:#475569;
-  }
-  .booking-progress-step-badge.done{
-    background:#ecfdf5;
-    border-color:rgba(22,163,74,.6);
-    color:#15803d;
-  }
-  .booking-progress-step-badge.current{
-    background:#0f172a;
-    border-color:#0f172a;
-    color:#f9fafb;
-    box-shadow:0 0 0 1px rgba(15,23,42,.2);
-  }
-  .booking-progress-step-label{
-    white-space:nowrap;
-  }
-  .booking-progress-track{
-    width:30px;
-    height:2px;
-    border-radius:999px;
-    background:linear-gradient(90deg, rgba(148,163,184,.5), rgba(148,163,184,.1));
-    position:relative;
-    overflow:hidden;
-  }
-  .booking-progress-track::after{
-    content:"";
-    position:absolute;
-    inset:0;
-    background:linear-gradient(90deg,#22c55e,#a3e635,#22c55e);
-    transform:translateX(-100%);
-    animation:bookingProgressSlide 1.4s ease-in-out infinite;
-  }
-  @keyframes bookingProgressSlide{
-    0%{ transform:translateX(-100%); opacity:0; }
-    25%{ opacity:1; }
-    70%{ transform:translateX(0%); opacity:1; }
-    100%{ transform:translateX(80%); opacity:0; }
-  }
-  .booking-progress-mobile{
-    display:flex;
-    flex-direction:column;
-    gap:.5rem;
-    padding:.25rem .25rem .1rem;
-  }
-  .booking-progress-mobile-eyebrow{
-    font-size:11px;
-    font-weight:700;
-    text-transform:uppercase;
-    letter-spacing:.12em;
-    color:#0f766e;
-  }
-  .booking-progress-mobile-text{
-    font-size:13px;
-    color:#475569;
-  }
-  .booking-progress-mobile .booking-progress{
-    margin-top:.25rem;
-  }
-  .booking-progress-mobile .booking-progress-step-label{
-    font-size:11px;
-  }
-</style>
 </head>
 <body class="font-sans text-slate-900 bg-white">
   <!-- Topbar (same structure as celelalte pagini) -->
@@ -138,23 +39,10 @@
       <button id="mobileToggle" class="md:hidden inline-flex items-center justify-center w-10 h-10 rounded-lg border border-slate-200 mr-2" aria-label="Deschide meniul">
   <svg viewBox="0 0 24 24" width="20" height="20"><path d="M4 7h16M4 12h16M4 17h16" stroke="#0f172a" stroke-width="2" stroke-linecap="round"/></svg>
 </button>
-<nav class="booking-progress-nav" aria-label="Progres rezervare">
-        <div class="booking-progress">
-          <div class="booking-progress-step">
-            <span class="booking-progress-step-badge done">1</span>
-            <span class="booking-progress-step-label">Cauți mașina</span>
-          </div>
-          <div class="booking-progress-track" aria-hidden="true"></div>
-          <div class="booking-progress-step">
-            <span class="booking-progress-step-badge current">2</span>
-            <span class="booking-progress-step-label">Completezi datele</span>
-          </div>
-          <div class="booking-progress-track" aria-hidden="true"></div>
-          <div class="booking-progress-step">
-            <span class="booking-progress-step-badge">3</span>
-            <span class="booking-progress-step-label">Confirmare</span>
-          </div>
-        </div>
+<nav class="main-nav hidden md:flex items-center gap-6">
+        <span class="nav-link">Alegi mașina</span>
+        <span class="nav-link nav-current">Completezi datele</span>
+        <span class="nav-link">Confirmare</span>
       </nav>
       <div class="flex items-center gap-3">
         <a href="/contul-meu.html" class="btn-account" aria-label="Contul meu">Contul meu</a>
@@ -162,33 +50,16 @@
       </div>
     </div>
   <div id="mobileNav" class="mobile-nav" hidden>
-    <div class="booking-progress-mobile">
-      <p class="booking-progress-mobile-eyebrow">Progres rezervare</p>
-      <p class="booking-progress-mobile-text">
-        Ești la pasul <strong>2 din 3</strong> – completează datele pentru a confirma mașina aleasă.
-      </p>
-      <div class="booking-progress">
-        <div class="booking-progress-step">
-          <span class="booking-progress-step-badge done">1</span>
-          <span class="booking-progress-step-label">Căutare</span>
-        </div>
-        <div class="booking-progress-track" aria-hidden="true"></div>
-        <div class="booking-progress-step">
-          <span class="booking-progress-step-badge current">2</span>
-          <span class="booking-progress-step-label">Date personale</span>
-        </div>
-        <div class="booking-progress-track" aria-hidden="true"></div>
-        <div class="booking-progress-step">
-          <span class="booking-progress-step-badge">3</span>
-          <span class="booking-progress-step-label">Confirmare</span>
-        </div>
-      </div>
+ <div id="mobileNav" class="mobile-nav" hidden>
+  <div class="mnav-progress">
+    <p class="mnav-label">Ești la pasul 2 din 3</p>
+    <div class="mnav-steps">
+      <span class="mnav-step done">1. Alegi mașina</span>
+      <span class="mnav-step current">2. Completezi datele</span>
+      <span class="mnav-step">3. Confirmare</span>
     </div>
-</div>
-</header>
-
-  <main class="page-shell-main">
-    <div class="main-shell booking-shell booking-page">
+  </div>
+</div> <div class="main-shell booking-shell booking-page">
       <div class="wrap booking-layout" aria-label="Detalii mașină și formular de rezervare">
         <!-- Col stânga: sumar mașină + context -->
         <section class="booking-summary" aria-labelledby="bookingSummaryTitle">
