@@ -4684,6 +4684,19 @@ body{
   color:#0f172a;
 }
 
+
+.thankyou-inner > .thankyou-icon,
+.thankyou-inner > .thankyou-eyebrow,
+.thankyou-inner > .thankyou-title,
+.thankyou-inner > .thankyou-subtitle{
+  text-align:center;
+  margin-left:auto;
+  margin-right:auto;
+}
+
+.thankyou-subtitle{
+  text-align:center;
+}
 .thankyou-content{
   margin-top:1.9rem;
   display:grid;
