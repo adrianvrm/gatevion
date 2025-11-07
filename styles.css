@@ -12,53 +12,7 @@
 .main-nav .nav-link::after{ content:""; position:absolute; left:0; right:100%; bottom:-6px; height:2px; background:#0f172a; border-radius:2px; transition: right .18s ease; opacity:.9; }
 .main-nav .nav-link:hover::after{ right:0; }
 
-
-.main-nav .nav-link.nav-current::after{
-  right:0;
-  animation:navPulse 1.6s ease-in-out infinite;
-}
-
-@keyframes navPulse{
-  0%{ opacity:.4; }
-  100%{ opacity:1; }
-}
-
-.mnav-progress{
-  padding:0.75rem 1rem 1rem;
-  border-top:1px solid var(--line);
-}
-
-.mnav-label{
-  font-size:.75rem;
-  text-transform:uppercase;
-  letter-spacing:.16em;
-  color:var(--muted);
-  margin-bottom:.35rem;
-}
-
-.mnav-steps{
-  display:flex;
-  flex-direction:column;
-  gap:.2rem;
-  font-size:.85rem;
-}
-
-.mnav-step{
-  color:#0f172a;
-  opacity:.65;
-}
-
-.mnav-step.done{
-  opacity:.8;
-}
-
-.mnav-step.current{
-  font-weight:600;
-  opacity:1;
-}
-
 /* Hero */
-
 .hero{ position:relative; }
 .hero::before{ content:""; position:absolute; inset:-20%; pointer-events:none;
   background:

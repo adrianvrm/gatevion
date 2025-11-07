@@ -1,12 +1,28 @@
 <!DOCTYPE html>
 <html lang="ro">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Finalizează rezervarea | Gatevion</title>
-  <meta name="description" content="Completează datele personale, încarcă documentele necesare și confirmă rezervarea pentru mașina selectată prin Gatevion." />
-  <link rel="stylesheet" href="styles.css" />
-  <script defer src="app.js"></script>
+  <meta name="description" content="Completează datele personale și confirmă rezervarea pentru mașina selectată prin Gatevion." />
+  <link rel="canonical" href="https://gatevion.ro/" />
+  <link rel="alternate" href="https://gatevion.ro/" hreflang="ro" />
+  <link rel="alternate" href="https://gatevion.ro/en" hreflang="en" />
+  <meta name="theme-color" content="#0f172a" />
+
+  <!-- TailwindCSS CDN for prototyping -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: { extend: { colors: { primary: '#0f172a' }, fontFamily: { sans: ['Manrope','Inter','system-ui','Segoe UI','Roboto','Helvetica','Arial','sans-serif'] }, boxShadow:{ soft:'0 10px 30px rgba(0,0,0,.08)' } } }
+    }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="./styles.css" />
+
 </head>
 <body class="font-sans text-slate-900 bg-white">
   <!-- Topbar (same structure as celelalte pagini) -->
@@ -40,26 +56,24 @@
   <svg viewBox="0 0 24 24" width="20" height="20"><path d="M4 7h16M4 12h16M4 17h16" stroke="#0f172a" stroke-width="2" stroke-linecap="round"/></svg>
 </button>
 <nav class="main-nav hidden md:flex items-center gap-6">
-        <span class="nav-link">Alegi mașina</span>
-        <span class="nav-link nav-current">Completezi datele</span>
-        <span class="nav-link">Confirmare</span>
+        <a href="#cum-functioneaza" class="nav-link">Alegi mașina</a>
+        <a href="#aeroporturi" class="nav-link">Completezi datele</a>
+        <a href="#faq" class="nav-link">Trimiți cererea</a>
       </nav>
       <div class="flex items-center gap-3">
         <a href="/contul-meu.html" class="btn-account" aria-label="Contul meu">Contul meu</a>
-        <a href="/rezultate.html" class="btn btn-primary" aria-label="Alege altă mașină">Alege altă mașină</a>
+        <a href="/rezultate.html" class="btn btn-primary" aria-label="Alege mașina">Alege mașina</a>
       </div>
     </div>
   <div id="mobileNav" class="mobile-nav" hidden>
- <div id="mobileNav" class="mobile-nav" hidden>
-  <div class="mnav-progress">
-    <p class="mnav-label">Ești la pasul 2 din 3</p>
-    <div class="mnav-steps">
-      <span class="mnav-step done">1. Alegi mașina</span>
-      <span class="mnav-step current">2. Completezi datele</span>
-      <span class="mnav-step">3. Confirmare</span>
-    </div>
-  </div>
-</div> <div class="main-shell booking-shell booking-page">
+  <a href="#cum-functioneaza" class="mnav-link mnav-cf">Alegi mașina</a>
+  <a href="#aeroporturi" class="mnav-link mnav-ap">Completezi datele</a>
+  <a href="#faq" class="mnav-link mnav-faq">Trimiți cererea</a>
+</div>
+</header>
+
+  <main class="page-shell-main">
+    <div class="main-shell booking-shell booking-page">
       <div class="wrap booking-layout" aria-label="Detalii mașină și formular de rezervare">
         <!-- Col stânga: sumar mașină + context -->
         <section class="booking-summary" aria-labelledby="bookingSummaryTitle">
@@ -408,5 +422,6 @@
       </div>
     </div>
   </main>
+  <script src="./app.js" defer></script>
 </body>
 </html>
