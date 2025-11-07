@@ -581,7 +581,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   // Results page: hydrate summary/topbar from query params
-  if(window.location.pathname && window.location.pathname.endsWith('rezultate.html')){
+  if(window.location.pathname && window.location.pathname.indexOf('rezultate') !== -1){
     const params = new URLSearchParams(window.location.search || '');
     const arrLabel = params.get('arrLabel') || params.get('arr') || '';
     const depLabel = params.get('depLabel') || params.get('dep') || '';
@@ -830,7 +830,7 @@ const y = document.getElementById('y');
   if(y) y.textContent = new Date().getFullYear();
 
   // Booking page: hydrate summary from query params
-  if(window.location.pathname && window.location.pathname.endsWith('alegere-masina.html')){
+  if(window.location.pathname && window.location.pathname.indexOf('alegere-masina') !== -1){
     const params = new URLSearchParams(window.location.search || '');
     const carName = params.get('carName') || '[Nume mașină]';
     const carAlt = params.get('carAlt') || '[Variantă / motorizare]';
@@ -935,7 +935,8 @@ const y = document.getElementById('y');
         window.location.href = './multumire.html' + (qs ? `?${qs}` : '');
       });
     }
-t.getElementById('phoneNumber');
+const phoneCountry = document.getElementById('phoneCountry');
+    const phoneInput = document.getElementById('phoneNumber');
 
     if(phoneCountry && phoneInput){
       // Basic per-country rules: number of digits expected for the national number (without prefix)
@@ -1162,7 +1163,7 @@ t.getElementById('phoneNumber');
 
     birthDisplay.addEventListener('blur', validateBirthDate);
   // Thank you page: hydrate recap from query params
-  if(window.location.pathname && window.location.pathname.endsWith('multumire.html')){
+  if(window.location.pathname && window.location.pathname.indexOf('multumire') !== -1){
     const params = new URLSearchParams(window.location.search || '');
 
     const arrLabel = params.get('arrLabel') || params.get('arr') || '';
