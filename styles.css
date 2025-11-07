@@ -4332,3 +4332,26 @@ body{
   border-color:#02ac8e;
   color:#ffffff;
 }
+
+
+/* Fix: ensure progress bullets in main nav don't overlap text */
+.main-nav .nav-step{
+  position:relative;
+  padding-left:2.1rem; /* override generic nav-link padding */
+}
+
+.main-nav .nav-step::before{
+  left:0;
+  top:50%;
+  transform:translateY(-50%);
+}
+
+/* Fix mobile bullets alignment and padding */
+.mobile-nav .mnav-step{
+  position:relative;
+  padding-left:2.0rem;
+}
+
+.mobile-nav .mnav-step::before{
+  left:0;
+}
