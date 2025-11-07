@@ -886,7 +886,5 @@ const y = document.getElementById('y');
 
     birthDisplay.addEventListener('blur', validateBirthDate);
   }
-
-  }
   }
 });
