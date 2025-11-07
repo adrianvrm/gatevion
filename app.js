@@ -1162,6 +1162,9 @@ const phoneCountry = document.getElementById('phoneCountry');
     };
 
     birthDisplay.addEventListener('blur', validateBirthDate);
+  }
+
+
   // Thank you page: hydrate recap from query params
   if(window.location.pathname && window.location.pathname.indexOf('multumire') !== -1){
     const params = new URLSearchParams(window.location.search || '');
