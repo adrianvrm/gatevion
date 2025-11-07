@@ -437,18 +437,22 @@ document.addEventListener('DOMContentLoaded', () => {
   // React to picker changes
   document.addEventListener('picker:changed', (e)=>{
     renderSummary();
+
     // Enforce end_date >= start_date
     if(e.detail?.name==='start_date'){
       const sd = e.detail.value;
-      const endHidden = document.querySelector('input[name=\"end_date\"]');
-      const endDisplay = document.querySelector('.picker[data-target=\"end_date\"] .dp-input');
-      const endField = document.querySelector('.picker[data-target=\"end_date\"]').closest('.field');
+      const endHidden = document.querySelector('input[name="end_date"]');
+      const endDisplay = document.querySelector('.picker[data-target="end_date"] .dp-input');
+      const endField = document.querySelector('.picker[data-target="end_date"]').closest('.field');
       if(endHidden && endHidden.value && endHidden.value < sd){
-        endHidden.value=''; if(endDisplay) endDisplay.value=''; if(endField) endField.classList.remove('filled');
+        endHidden.value='';
+        if(endDisplay) endDisplay.value='';
+        if(endField) endField.classList.remove('filled');
       }
-      const endPicker = document.querySelector('.picker[data-target=\"end_date\"]');
+      const endPicker = document.querySelector('.picker[data-target="end_date"]');
       if(endPicker && endPicker._renderCal) endPicker._renderCal();
     }
+
     // Enforce minim 24h între preluare și returnare (fără mesaje, ajustăm automat selecția)
     if(e.detail?.name==='start_date' || e.detail?.name==='start_time' || e.detail?.name==='end_date' || e.detail?.name==='end_time'){
       const form = document.getElementById('searchForm');
@@ -460,8 +464,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
       if(sd && ed && st && et){
         const startDateTime = new Date(`${sd}T${st}:00`);
-        const endDateTime   = new Date(`${ed}T${et}:00`);
         const minReturn = new Date(startDateTime.getTime() + 24*60*60*1000);
+        const endDateTime   = new Date(`${ed}T${et}:00`);
 
         if(endDateTime < minReturn){
           const minDateISO = fmtISO(minReturn);
@@ -469,6 +473,7 @@ document.addEventListener('DOMContentLoaded', () => {
           const mm = minReturn.getMinutes() >= 30 ? '30' : '00';
           const minTime = `${mh}:${mm}`;
 
+          // Actualizează data de returnare
           const endPickerEl = document.querySelector('.picker[data-target="end_date"]');
           const endHidden = form.end_date;
           const endDisplay = endPickerEl ? endPickerEl.querySelector('.dp-input') : null;
@@ -479,6 +484,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if(endField) endField.classList.add('filled');
           }
 
+          // Actualizează ora de returnare
           const endTimePickerEl = document.querySelector('.picker[data-target="end_time"]');
           const eHiddenTime = form.end_time;
           const eDisplayTime = endTimePickerEl ? endTimePickerEl.querySelector('.tp-input') : null;
@@ -490,8 +496,6 @@ document.addEventListener('DOMContentLoaded', () => {
           }
         }
       }
-    }
-
     }
   });
 
