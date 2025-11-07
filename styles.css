@@ -3689,3 +3689,9 @@ body{
     top:auto;
   }
 }
+
+@media (max-width: 640px){
+  .hero.hero-premium{
+    overflow:visible;
+  }
+}
