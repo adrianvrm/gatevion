@@ -4685,7 +4685,6 @@ body{
 }
 
 
-.thankyou-inner > .thankyou-eyebrow,
 .thankyou-inner > .thankyou-title,
 .thankyou-inner > .thankyou-subtitle{
   text-align:center;
@@ -4770,6 +4769,34 @@ body{
   background:#02ac8e;
 }
 
+
+.thankyou-pill--segment{
+  background:rgba(2,172,142,0.08);
+  color:#0f766e;
+}
+
+.thankyou-pill--gear{
+  background:rgba(15,23,42,0.04);
+}
+
+.thankyou-pill--price{
+  background:linear-gradient(120deg,#0f172a,#020617);
+  color:#f9fafb;
+  box-shadow:0 10px 25px rgba(15,23,42,0.35);
+}
+
+.thankyou-pill-price-label{
+  font-weight:500;
+  letter-spacing:.02em;
+  text-transform:uppercase;
+  font-size:.72rem;
+  opacity:.85;
+}
+
+.thankyou-pill--price #tyCarPrice{
+  font-weight:600;
+  font-size:.86rem;
+}
 .thankyou-summary-grid{
   display:grid;
   grid-template-columns:minmax(0,1.1fr) minmax(0,1.1fr);
