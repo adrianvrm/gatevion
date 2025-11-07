@@ -41,23 +41,25 @@ function makeCalendar(date, selectedISO, boundISO, mode){
   }
   const monthLabel = (mode === 'maxPast') ? RO_MONTHS[month] : RO_MONTHS[month]+' '+year;
   
+  
   let html = '';
   if(mode === 'maxPast'){
     const currentYear = today.getFullYear();
     const minYear = currentYear - 65;
     const maxYear = currentYear - 22;
-    html += '<header><div class="month"><select class="cal-month-select" data-cal="month">';
+    html += '<header><div class="month">';
+    html += '<button type="button" class="cal-dd cal-dd-month" data-dd="month"><span class="cal-dd-label">'+RO_MONTHS[month]+'</span><span class="cal-dd-arrow">▾</span></button>';
+    html += '<div class="cal-dd-menu cal-dd-menu-month">';
     for(let m=0; m<12; m++){
-      const selM = m === month ? ' selected' : '';
-      html += '<option value="'+m+'"'+selM+'">'+RO_MONTHS[m]+'</option>';
+      html += '<button type="button" class="cal-dd-item" data-month="'+m+'">'+RO_MONTHS[m]+'</button>';
     }
-    html += '</select></div><div class="nav">';
-    html += '<select class="cal-year-select" data-cal="year">';
+    html += '</div></div><div class="nav">';
+    html += '<button type="button" class="cal-dd cal-dd-year" data-dd="year"><span class="cal-dd-label">'+year+'</span><span class="cal-dd-arrow">▾</span></button>';
+    html += '<div class="cal-dd-menu cal-dd-menu-year">';
     for(let y = maxYear; y >= minYear; y--){
-      const sel = y === year ? ' selected' : '';
-      html += '<option value="'+y+'"'+sel+'">'+y+'</option>';
+      html += '<button type="button" class="cal-dd-item" data-year="'+y+'">'+y+'</button>';
     }
-    html += '</select></div></header>';
+    html += '</div></div></header>';
   }else{
     const monthLabel = RO_MONTHS[month]+' '+year;
     html += '<header><div class="month">'+monthLabel+'</div><div class="nav">';
@@ -67,9 +69,7 @@ function makeCalendar(date, selectedISO, boundISO, mode){
     html += '</div></header>';
   }
 
-
-
-  html += '<div class=\"cal-grid\">';
+html += '<div class=\"cal-grid\">';
   // DOW
   for(const d of RO_DOW){ html += '<div class=\"cal-dow\">'+d+'</div>'; }
   // Leading blanks (previous month)
@@ -186,6 +186,87 @@ function initDatePicker(picker){
 
 
 
+function initDobPicker(picker){
+  const hidden = picker.querySelector('input[type="hidden"]');
+  const display = picker.querySelector('.dp-input');
+  const pop = picker.querySelector('.calendar-pop');
+  const cal = pop.querySelector('.calendar');
+
+  const today = new Date();
+  const minAgeYears = 22;
+  const maxDate = new Date(today.getFullYear() - minAgeYears, today.getMonth(), today.getDate());
+  const maxISO = fmtISO(maxDate);
+  let viewDate = hidden.value ? new Date(hidden.value) : maxDate;
+
+  function open(){
+    closeAllPopovers();
+    pop.classList.add('open');
+    activateField(picker);
+  }
+  function close(){
+    pop.classList.remove('open');
+    deactivateField(picker);
+  }
+
+      function render(){
+    cal.innerHTML = makeCalendar(viewDate, hidden.value, maxISO, 'maxPast');
+
+    const monthBtn = cal.querySelector('.cal-dd-month');
+    const yearBtn = cal.querySelector('.cal-dd-year');
+    const monthMenu = cal.querySelector('.cal-dd-menu-month');
+    const yearMenu = cal.querySelector('.cal-dd-menu-year');
+
+    const closeMenus = ()=>{
+      if(monthMenu) monthMenu.classList.remove('open');
+      if(yearMenu) yearMenu.classList.remove('open');
+      if(monthBtn) monthBtn.classList.remove('open');
+      if(yearBtn) yearBtn.classList.remove('open');
+    };
+
+    if(monthBtn && monthMenu){
+      monthBtn.addEventListener('click', (e)=>{
+        e.stopPropagation();
+        const willOpen = !monthMenu.classList.contains('open');
+        closeMenus();
+        if(willOpen){
+          monthMenu.classList.add('open');
+          monthBtn.classList.add('open');
+        }
+      });
+
+      monthMenu.addEventListener('click', (e)=>{
+        const item = e.target.closest('.cal-dd-item[data-month]');
+        if(!item) return;
+        const m = parseInt(item.getAttribute('data-month'), 10);
+        if(isNaN(m)) return;
+        viewDate = new Date(viewDate.getFullYear(), m, 1);
+        closeMenus();
+        render();
+      });
+    }
+
+    if(yearBtn && yearMenu){
+      yearBtn.addEventListener('click', (e)=>{
+        e.stopPropagation();
+        const willOpen = !yearMenu.classList.contains('open');
+        closeMenus();
+        if(willOpen){
+          yearMenu.classList.add('open');
+          yearBtn.classList.add('open');
+        }
+      });
+
+      yearMenu.addEventListener('click', (e)=>{
+        const item = e.target.closest('.cal-dd-item[data-year]');
+        if(!item) return;
+        const y = parseInt(item.getAttribute('data-year'), 10);
+        if(isNaN(y)) return;
+        viewDate = new Date(y, viewDate.getMonth(), 1);
+        closeMenus();
+        render();
+      });
+    }
+  }
 function initDobPicker(picker){
   const hidden = picker.querySelector('input[type="hidden"]');
   const display = picker.querySelector('.dp-input');

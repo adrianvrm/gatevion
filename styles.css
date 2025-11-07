@@ -4450,3 +4450,59 @@ body{
   border:1px solid var(--line);
   background:#ffffff;
 }
+
+.cal-dd{
+  display:inline-flex;
+  align-items:center;
+  gap:0.25rem;
+  padding:0.25rem 0.6rem;
+  border-radius:999px;
+  border:1px solid var(--line);
+  background:#ffffff;
+  font-size:0.8rem;
+  cursor:pointer;
+}
+.cal-dd-label{
+  white-space:nowrap;
+}
+.cal-dd-arrow{
+  font-size:0.7rem;
+}
+.cal-dd-menu{
+  position:absolute;
+  margin-top:0.25rem;
+  padding:0.25rem 0;
+  border-radius:0.75rem;
+  border:1px solid var(--line);
+  background:#ffffff;
+  box-shadow:0 10px 25px rgba(15,23,42,.12);
+  max-height:220px;
+  overflow-y:auto;
+  display:none;
+  z-index:20;
+}
+.month .cal-dd-menu{
+  left:1rem;
+}
+.calendar header .nav{
+  position:relative;
+}
+.cal-dd-menu-year{
+  right:1rem;
+}
+.cal-dd-menu.open{
+  display:block;
+}
+.cal-dd-item{
+  display:block;
+  width:100%;
+  text-align:left;
+  padding:0.2rem 0.75rem;
+  font-size:0.8rem;
+  background:transparent;
+  border:none;
+  cursor:pointer;
+}
+.cal-dd-item:hover{
+  background:#f1f5f9;
+}
