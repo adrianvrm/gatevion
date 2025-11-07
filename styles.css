@@ -4421,3 +4421,12 @@ body{
 #birthDate.field-input::-webkit-datetime-edit-fields-wrapper{
   padding:0;
 }
+
+.cal-year-select{
+  margin-left:0.35rem;
+  padding:0.15rem 0.5rem;
+  font-size:0.8rem;
+  border-radius:999px;
+  border:1px solid var(--line);
+  background:#ffffff;
+}

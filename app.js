@@ -34,8 +34,25 @@ function makeCalendar(date, selectedISO, boundISO, mode){
   }else{
     minBound = boundISO || todayISO; // block past days by default
   }
+  let html = '<header><div class="month">'+RO_MONTHS[month]+' '+year+'</div><div class="nav">';
+  html += '<button class="icon-btn" data-cal="prev" aria-label="Luna anterioară">‹</button>';
+  if(mode !== 'maxPast'){
+    html += '<button class="icon-btn" data-cal="today" aria-label="Astăzi">•</button>';
+  }
+  html += '<button class="icon-btn" data-cal="next" aria-label="Luna următoare">›</button>';
+  if(mode === 'maxPast'){
+    const currentYear = (new Date()).getFullYear();
+    const minYear = currentYear - 100;
+    const maxYear = currentYear - 22;
+    html += '<select class="cal-year-select" data-cal="year">';
+    for(let y = maxYear; y >= minYear; y--){
+      const sel = y === year ? ' selected' : '';
+      html += '<option value="'+y+'"'+sel+'>'+y+'</option>';
+    }
+    html += '</select>';
+  }
+  html += '</div></header>';
 
-  let html = '<header><button class=\"icon-btn\" data-cal=\"prev\" aria-label=\"Luna anterioară\">‹</button><div class=\"month\">'+RO_MONTHS[month]+' '+year+'</div><div class=\"nav\"><button class=\"icon-btn\" data-cal=\"today\" aria-label=\"Astăzi\">•</button><button class=\"icon-btn\" data-cal=\"next\" aria-label=\"Luna următoare\">›</button></div></header>';
   html += '<div class=\"cal-grid\">';
   // DOW
   for(const d of RO_DOW){ html += '<div class=\"cal-dow\">'+d+'</div>'; }
@@ -171,6 +188,16 @@ function initDobPicker(picker){
 
   function render(){
     cal.innerHTML = makeCalendar(viewDate, hidden.value, maxISO, 'maxPast');
+    const yearSelect = cal.querySelector('.cal-year-select');
+    if(yearSelect){
+      yearSelect.addEventListener('change', ()=>{
+        const y = parseInt(yearSelect.value,10);
+        if(!isNaN(y)){
+          viewDate = new Date(y, viewDate.getMonth(), 1);
+          render();
+        }
+      });
+    }
   }
 
   display.addEventListener('click', (e)=>{ e.stopPropagation(); pop.classList.contains('open')? close(): open(); });
