@@ -4239,3 +4239,18 @@ body{
   border-radius:999px;
   background:linear-gradient(90deg,#22c55e,#0ea5e9);
 }
+
+.booking-car-media{
+  position:relative;
+  border-radius:1.15rem;
+  overflow:hidden;
+  min-height:135px;
+  aspect-ratio:21/9;
+  max-width:520px;
+  margin:0 auto;
+  background:radial-gradient(circle at 0 0,#e5f9f5,#e2e8f0);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  box-shadow:0 16px 40px rgba(15,23,42,0.16);
+}

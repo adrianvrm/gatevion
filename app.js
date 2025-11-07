@@ -602,5 +602,27 @@ const y = document.getElementById('y');
     setText('bkRoute', routeText);
     setText('bkPickup', pickupText);
     setText('bkReturn', returnText);
+
+    // Normalize phone number according to selected country prefix
+    const phoneCountry = document.getElementById('phoneCountry');
+    const phoneInput = document.getElementById('phoneNumber');
+
+    if(phoneCountry && phoneInput){
+      const normalizePhone = ()=>{
+        const cc = phoneCountry.value || '';
+        const ccDigits = cc.replace('+','');
+        let raw = phoneInput.value || '';
+        let digits = raw.replace(/\D/g,'');
+        if(ccDigits && digits.startsWith(ccDigits)){
+          digits = digits.slice(ccDigits.length);
+        }
+        if(digits.startsWith('0')){
+          digits = digits.slice(1);
+        }
+        phoneInput.value = digits;
+      };
+      phoneCountry.addEventListener('change', normalizePhone);
+      phoneInput.addEventListener('blur', normalizePhone);
+    }
   }
 });

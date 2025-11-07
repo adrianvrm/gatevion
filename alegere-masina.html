@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="styles.css" />
   <script defer src="app.js"></script>
 </head>
-<body class="page-shell booking-page">
+<body class="font-sans text-slate-900 bg-white page-shell booking-page">
   <!-- Topbar (same structure as celelalte pagini) -->
   <header class="sticky top-0 z-50 bg-white/90 border-b border-slate-100 topbar" id="topbar">
 <div class="topbar-utility">
@@ -21,7 +21,7 @@
     <span class="label">WhatsApp</span>
   </a>
   <div class="util-spacer"></div>
-  <a class="util-item" href="./index.html#faq">Întrebări frecvente</a>
+  <a class="util-item" href="#faq">Întrebări frecvente</a>
   <button class="util-item lang-switch" type="button" aria-label="Schimbă limba">RO <span class="muted">/ EN</span></button>
 </div>
 
@@ -40,19 +40,19 @@
   <svg viewBox="0 0 24 24" width="20" height="20"><path d="M4 7h16M4 12h16M4 17h16" stroke="#0f172a" stroke-width="2" stroke-linecap="round"/></svg>
 </button>
 <nav class="main-nav hidden md:flex items-center gap-6">
-        <a href="./index.html#cum-functioneaza" class="nav-link">Cum funcționează</a>
-        <a href="./index.html#aeroporturi" class="nav-link">Aeroporturi</a>
-        <a href="./index.html#faq" class="nav-link">Întrebări frecvente</a>
+        <a href="#cum-functioneaza" class="nav-link">Cum funcționează</a>
+        <a href="#aeroporturi" class="nav-link">Aeroporturi</a>
+        <a href="#faq" class="nav-link">Întrebări frecvente</a>
       </nav>
       <div class="flex items-center gap-3">
         <a href="/contul-meu.html" class="btn-account" aria-label="Contul meu">Contul meu</a>
-        <a href="./index.html" class="btn btn-primary" aria-label="Modifică căutarea">Modifică căutarea</a>
+        <a href="/rezultate.html" class="btn btn-primary" aria-label="Caută mașini disponibile">Caută mașini disponibile</a>
       </div>
     </div>
   <div id="mobileNav" class="mobile-nav" hidden>
-  <a href="./index.html#cum-functioneaza" class="mnav-link mnav-cf">Cum funcționează</a>
-  <a href="./index.html#aeroporturi" class="mnav-link mnav-ap">Aeroporturi</a>
-  <a href="./index.html#faq" class="mnav-link mnav-faq">Întrebări frecvente</a>
+  <a href="#cum-functioneaza" class="mnav-link mnav-cf">Cum funcționează</a>
+  <a href="#aeroporturi" class="mnav-link mnav-ap">Aeroporturi</a>
+  <a href="#faq" class="mnav-link mnav-faq">Întrebări frecvente</a>
 </div>
 </header>
 
@@ -163,57 +163,110 @@
                   <div class="phone-row">
                     <div class="phone-country">
                       <select id="phoneCountry" name="phoneCountry" class="field-input phone-country-select" required>
-                        <option value="+40" selected>🇷🇴 România +40</option>
+                        <option value="+93">🇦🇫 Afganistan +93</option>
                         <option value="+355">🇦🇱 Albania +355</option>
+                        <option value="+213">🇩🇿 Algeria +213</option>
                         <option value="+376">🇦🇩 Andorra +376</option>
+                        <option value="+244">🇦🇴 Angola +244</option>
+                        <option value="+54">🇦🇷 Argentina +54</option>
+                        <option value="+374">🇦🇲 Armenia +374</option>
+                        <option value="+61">🇦🇺 Australia +61</option>
                         <option value="+43">🇦🇹 Austria +43</option>
+                        <option value="+994">🇦🇿 Azerbaidjan +994</option>
+                        <option value="+973">🇧🇭 Bahrain +973</option>
+                        <option value="+880">🇧🇩 Bangladesh +880</option>
                         <option value="+32">🇧🇪 Belgia +32</option>
+                        <option value="+591">🇧🇴 Bolivia +591</option>
+                        <option value="+387">🇧🇦 Bosnia și Herțegovina +387</option>
+                        <option value="+55">🇧🇷 Brazilia +55</option>
                         <option value="+359">🇧🇬 Bulgaria +359</option>
+                        <option value="+855">🇰🇭 Cambodgia +855</option>
+                        <option value="+237">🇨🇲 Camerun +237</option>
+                        <option value="+1">🇨🇦 Canada +1</option>
+                        <option value="+56">🇨🇱 Chile +56</option>
+                        <option value="+86">🇨🇳 China +86</option>
+                        <option value="+57">🇨🇴 Columbia +57</option>
+                        <option value="+506">🇨🇷 Costa Rica +506</option>
                         <option value="+385">🇭🇷 Croația +385</option>
                         <option value="+357">🇨🇾 Cipru +357</option>
                         <option value="+420">🇨🇿 Cehia +420</option>
                         <option value="+45">🇩🇰 Danemarca +45</option>
+                        <option value="+20">🇪🇬 Egipt +20</option>
+                        <option value="+503">🇸🇻 El Salvador +503</option>
                         <option value="+372">🇪🇪 Estonia +372</option>
+                        <option value="+251">🇪🇹 Etiopia +251</option>
                         <option value="+358">🇫🇮 Finlanda +358</option>
                         <option value="+33">🇫🇷 Franța +33</option>
+                        <option value="+995">🇬🇪 Georgia +995</option>
                         <option value="+49">🇩🇪 Germania +49</option>
                         <option value="+30">🇬🇷 Grecia +30</option>
+                        <option value="+502">🇬🇹 Guatemala +502</option>
+                        <option value="+509">🇭🇹 Haiti +509</option>
+                        <option value="+504">🇭🇳 Honduras +504</option>
+                        <option value="+852">🇭🇰 Hong Kong +852</option>
                         <option value="+36">🇭🇺 Ungaria +36</option>
+                        <option value="+354">🇮🇸 Islanda +354</option>
+                        <option value="+91">🇮🇳 India +91</option>
+                        <option value="+62">🇮🇩 Indonezia +62</option>
                         <option value="+353">🇮🇪 Irlanda +353</option>
+                        <option value="+972">🇮🇱 Israel +972</option>
                         <option value="+39">🇮🇹 Italia +39</option>
+                        <option value="+81">🇯🇵 Japonia +81</option>
+                        <option value="+962">🇯🇴 Iordania +962</option>
+                        <option value="+7">🇰🇿 Kazahstan +7</option>
+                        <option value="+254">🇰🇪 Kenya +254</option>
+                        <option value="+82">🇰🇷 Coreea de Sud +82</option>
+                        <option value="+965">🇰🇼 Kuweit +965</option>
+                        <option value="+996">🇰🇬 Kârgâzstan +996</option>
                         <option value="+371">🇱🇻 Letonia +371</option>
+                        <option value="+961">🇱🇧 Liban +961</option>
+                        <option value="+218">🇱🇾 Libia +218</option>
                         <option value="+423">🇱🇮 Liechtenstein +423</option>
                         <option value="+370">🇱🇹 Lituania +370</option>
                         <option value="+352">🇱🇺 Luxemburg +352</option>
+                        <option value="+853">🇲🇴 Macao +853</option>
+                        <option value="+389">🇲🇰 Macedonia de Nord +389</option>
+                        <option value="+261">🇲🇬 Madagascar +261</option>
+                        <option value="+60">🇲🇾 Malaysia +60</option>
                         <option value="+356">🇲🇹 Malta +356</option>
+                        <option value="+52">🇲🇽 Mexic +52</option>
+                        <option value="+373">🇲🇩 Moldova +373</option>
+                        <option value="+377">🇲🇨 Monaco +377</option>
+                        <option value="+212">🇲🇦 Maroc +212</option>
                         <option value="+31">🇳🇱 Olanda +31</option>
+                        <option value="+64">🇳🇿 Noua Zeelandă +64</option>
+                        <option value="+234">🇳🇬 Nigeria +234</option>
                         <option value="+47">🇳🇴 Norvegia +47</option>
+                        <option value="+92">🇵🇰 Pakistan +92</option>
+                        <option value="+507">🇵🇦 Panama +507</option>
+                        <option value="+595">🇵🇾 Paraguay +595</option>
+                        <option value="+51">🇵🇪 Peru +51</option>
+                        <option value="+63">🇵🇭 Filipine +63</option>
                         <option value="+48">🇵🇱 Polonia +48</option>
                         <option value="+351">🇵🇹 Portugalia +351</option>
+                        <option value="+974">🇶🇦 Qatar +974</option>
+                        <option value="+40" selected>🇷🇴 România +40</option>
                         <option value="+7">🇷🇺 Rusia +7</option>
+                        <option value="+966">🇸🇦 Arabia Saudită +966</option>
                         <option value="+381">🇷🇸 Serbia +381</option>
+                        <option value="+65">🇸🇬 Singapore +65</option>
                         <option value="+421">🇸🇰 Slovacia +421</option>
                         <option value="+386">🇸🇮 Slovenia +386</option>
+                        <option value="+27">🇿🇦 Africa de Sud +27</option>
                         <option value="+34">🇪🇸 Spania +34</option>
+                        <option value="+94">🇱🇰 Sri Lanka +94</option>
                         <option value="+46">🇸🇪 Suedia +46</option>
                         <option value="+41">🇨🇭 Elveția +41</option>
+                        <option value="+886">🇹🇼 Taiwan +886</option>
+                        <option value="+66">🇹🇭 Thailanda +66</option>
                         <option value="+90">🇹🇷 Turcia +90</option>
                         <option value="+380">🇺🇦 Ucraina +380</option>
+                        <option value="+971">🇦🇪 Emiratele Arabe Unite +971</option>
                         <option value="+44">🇬🇧 Regatul Unit +44</option>
                         <option value="+1">🇺🇸 Statele Unite +1</option>
-                        <option value="+1">🇨🇦 Canada +1</option>
-                        <option value="+52">🇲🇽 Mexic +52</option>
-                        <option value="+55">🇧🇷 Brazilia +55</option>
-                        <option value="+54">🇦🇷 Argentina +54</option>
-                        <option value="+61">🇦🇺 Australia +61</option>
-                        <option value="+64">🇳🇿 Noua Zeelandă +64</option>
-                        <option value="+81">🇯🇵 Japonia +81</option>
-                        <option value="+82">🇰🇷 Coreea de Sud +82</option>
-                        <option value="+86">🇨🇳 China +86</option>
-                        <option value="+91">🇮🇳 India +91</option>
-                        <option value="+971">🇦🇪 Emiratele Arabe Unite +971</option>
-                        <option value="+966">🇸🇦 Arabia Saudită +966</option>
-                        <option value="+27">🇿🇦 Africa de Sud +27</option>
+                        <option value="+598">🇺🇾 Uruguay +598</option>
+                        <option value="+58">🇻🇪 Venezuela +58</option>
+                        <option value="+84">🇻🇳 Vietnam +84</option>
                       </select>
                     </div>
                     <input id="phoneNumber" name="phoneNumber" type="tel" class="field-input phone-number-input" autocomplete="tel" required placeholder="7XX XXX XXX" />
