@@ -4399,3 +4399,25 @@ body{
   left:0;
 }
 
+
+/* Date of birth input styling */
+#birthDate.field-input{
+  position:relative;
+  color:#0f172a;
+  font-size:0.9rem;
+}
+
+#birthDate.field-input::-webkit-calendar-picker-indicator{
+  cursor:pointer;
+  opacity:0.7;
+}
+
+#birthDate.field-input::-webkit-calendar-picker-indicator:hover{
+  opacity:1;
+}
+
+/* Remove default inner padding in some browsers for date input */
+#birthDate.field-input::-webkit-datetime-edit,
+#birthDate.field-input::-webkit-datetime-edit-fields-wrapper{
+  padding:0;
+}

@@ -804,5 +804,31 @@ const y = document.getElementById('y');
       // Setăm steagul inițial la încărcarea paginii
       updateFlag();
     }
+
+  // Restricție dinamică pentru data nașterii (minim 22 de ani)
+  const birthInput = document.getElementById('birthDate');
+  if(birthInput){
+    const today = new Date();
+    const minAgeYears = 22;
+    const maxDate = new Date(today.getFullYear() - minAgeYears, today.getMonth(), today.getDate());
+    const maxISO = fmtISO(maxDate);
+    birthInput.setAttribute('max', maxISO);
+
+    const validateBirthDate = ()=>{
+      const val = birthInput.value;
+      if(!val){
+        birthInput.setCustomValidity('');
+        return;
+      }
+      if(val > maxISO){
+        birthInput.setCustomValidity('Trebuie să ai cel puțin 22 de ani pentru a închiria o mașină.');
+      }else{
+        birthInput.setCustomValidity('');
+      }
+    };
+
+    birthInput.addEventListener('change', validateBirthDate);
+    birthInput.addEventListener('blur', validateBirthDate);
+  }
   }
 });
