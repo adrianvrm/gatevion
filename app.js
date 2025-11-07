@@ -758,7 +758,22 @@ const y = document.getElementById('y');
     setText('bkPickup', pickupText);
     setText('bkReturn', returnText);
 
-    // Normalize & validate phone number according to selected country prefix
+    // Build back URL towards results page using original search params (without car-specific keys)
+    const baseParams = new URLSearchParams(window.location.search || '');
+    ['carName','carAlt','carPrice','segment','gear'].forEach((k)=> baseParams.delete(k));
+    const backQs = baseParams.toString();
+    const backUrl = './rezultate.html' + (backQs ? `?${backQs}` : '');
+
+    const backBtn = document.getElementById('backToResultsBtn');
+    if(backBtn){ backBtn.href = backUrl; }
+
+    const step1Desktop = document.querySelector('.main-nav .nav-step[data-step="1"]');
+    if(step1Desktop && step1Desktop.tagName === 'A'){ step1Desktop.href = backUrl; }
+
+    const step1Mobile = document.querySelector('#mobileNav .mnav-step[data-step="1"]');
+    if(step1Mobile && step1Mobile.tagName === 'A'){ step1Mobile.href = backUrl; }
+
+// Normalize & validate phone number according to selected country prefix
     const phoneCountry = document.getElementById('phoneCountry');
     const phoneInput = document.getElementById('phoneNumber');
 

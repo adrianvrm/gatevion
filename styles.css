@@ -4354,6 +4354,13 @@ body{
   box-shadow:0 0 0 4px rgba(2,172,142,0.18);
 }
 
+
+.nav-step-disabled,
+.mnav-step-disabled{
+  opacity:0.35;
+  cursor:default;
+  pointer-events:none;
+}
 /* Compact progress feel on very small screens when shown in mobile menu */
 .mnav-step{
   position:relative;
