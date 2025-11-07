@@ -773,6 +773,67 @@ const y = document.getElementById('y');
     const step1Mobile = document.querySelector('#mobileNav .mnav-step[data-step="1"]');
     if(step1Mobile && step1Mobile.tagName === 'A'){ step1Mobile.href = backUrl; }
 
+    // Handle final submit: later we will send data to backend, for acum doar redirecționăm spre pagina de mulțumire
+    const bookingForm = document.getElementById('bookingForm');
+    if(bookingForm){
+      bookingForm.addEventListener('submit', (e)=>{
+        e.preventDefault();
+        const submitParams = new URLSearchParams(baseParams.toString());
+        const fullNameInput = bookingForm.querySelector('input[name="fullName"]');
+        const emailInput = bookingForm.querySelector('input[name="email"]');
+        if(fullNameInput && fullNameInput.value){
+          submitParams.set('fullName', fullNameInput.value.trim());
+        }
+        if(emailInput && emailInput.value){
+          submitParams.set('email', emailInput.value.trim());
+        }
+        const qs = submitParams.toString();
+        // TODO: aici vom trimite datele către backend / API când baza de date este implementată
+        window.location.href = './multumire.html' + (qs ? `?${qs}` : '');
+      });
+    }
+
+
+  // Thank you page: hydrate recap from query params
+  if(window.location.pathname && window.location.pathname.endsWith('multumire.html')){
+    const params = new URLSearchParams(window.location.search || '');
+    const arrLabel = params.get('arrLabel') || params.get('arr') || '';
+    const depLabel = params.get('depLabel') || params.get('dep') || '';
+    const sd = params.get('sd') || '';
+    const st = params.get('st') || '';
+    const ed = params.get('ed') || '';
+    const et = params.get('et') || '';
+    const fullName = params.get('fullName') || '';
+    const email = params.get('email') || '';
+
+    const fmtDate = (iso)=>{
+      if(!iso) return '';
+      const parts = iso.split('-');
+      if(parts.length!==3) return iso;
+      const [y,m,d] = parts;
+      return `${d}.${m}.${y}`;
+    };
+
+    const routeText = (arrLabel || '—') + (depLabel ? ` → ${depLabel}` : '');
+    const pickupText = (sd ? fmtDate(sd) : '—') + (st ? ` • ${st}` : '');
+    const returnText = (ed ? fmtDate(ed) : '—') + (et ? ` • ${et}` : '');
+    const periodText = (pickupText && returnText) ? `${pickupText}  →  ${returnText}` : (pickupText || returnText || '—');
+
+    const setText = (id, value)=>{
+      const el = document.getElementById(id);
+      if(el && value) el.textContent = value;
+    };
+
+    setText('tyRoute', routeText);
+    setText('tyPeriod', periodText);
+    if(fullName){
+      setText('tyName', fullName);
+    }
+    if(email){
+      setText('tyEmail', email);
+    }
+  }
+
 // Normalize & validate phone number according to selected country prefix
     const phoneCountry = document.getElementById('phoneCountry');
     const phoneInput = document.getElementById('phoneNumber');

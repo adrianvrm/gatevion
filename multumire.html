@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Mulțumim pentru rezervare | Gatevion</title>
+  <meta name="description" content="Mulțumim că ai ales Gatevion. Cererea ta de rezervare a fost trimisă spre verificare de către echipa noastră și partenerii de închirieri auto." />
+  <link rel="canonical" href="https://gatevion.ro/" />
+  <link rel="alternate" href="https://gatevion.ro/" hreflang="ro" />
+  <link rel="alternate" href="https://gatevion.ro/en" hreflang="en" />
+  <meta name="theme-color" content="#0f172a" />
+
+  <!-- TailwindCSS CDN for prototyping -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#0f172a',
+            accent: '#02ac8e'
+          },
+          fontFamily: {
+            sans: ['Manrope', 'system-ui', 'sans-serif']
+          }
+        }
+      }
+    };
+  </script>
+
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body class="font-sans text-slate-900 bg-white thankyou-page">
+  <!-- Header -->
+  <header class="sticky top-0 z-50 bg-white/90 border-b border-slate-100 topbar" id="topbar">
+<div class="topbar-utility">
+  <a class="util-item" href="tel:+40700000000" aria-label="Sună-ne">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3.5l2.1-.5c.5-.1 1 .2 1.2.7l1.2 3c.2.5.1 1-.3 1.4L8.7 9.8c.8 1.5 2 2.8 3.5 3.6l1.8-1.4c.4-.3.9-.4 1.4-.3l3 1.2c.5.2.8.7.7 1.2l-.5 2.1c-.1.5-.5.9-1 1-2.3.4-4.9-.2-7.5-2.1-2.5-1.8-4.1-4.1-4.8-6.3-.2-.5 0-1 .4-1.4l1.3-1.3c.3-.4.5-.9.3-1.4l-1.2-3C5.1 4 5.4 3.5 6 3.5z" fill="currentColor"/></svg>
+    <span class="label">+40 700 000 000</span>
+  </a>
+  <a class="util-item" href="https://wa.me/40700000000" target="_blank" rel="noopener" aria-label="WhatsApp">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5C7.3 2.5 3.5 6.3 3.5 11c0 1.7.5 3.3 1.4 4.7L3 21l5.5-1.8c1.3.7 2.8 1.1 4.3 1.1 4.7 0 8.5-3.8 8.5-8.5S16.7 2.5 12 2.5zm0 1.8c3.7 0 6.7 3 6.7 6.7 0 3.7-3 6.7-6.7 6.7-1.3 0-2.5-.4-3.6-1l-.3-.2-3.3 1.1 1.1-3.2-.2-.3c-.8-1.1-1.2-2.4-1.2-3.8 0-3.7 3-6.7 6.7-6.7zm3.7 3.7c-.2 0-.5.1-.8.1-.2 0-.4 0-.6.2-.2.1-.5.4-.7.7-.2.3-.8.9-.8 2s.8 2.3.9 2.4c.1.2 1.5 2.4 3.6 3.3 1.8.7 2.2.7 2.6.6.4 0 1.3-.5 1.5-1 .2-.5.2-.9.2-.9s0-.7-.3-1c-.2-.3-.7-.4-.9-.5-.3-.1-1.7-.8-1.9-.8-.3 0-.5-.1-.8.2-.2.3-.9 1-1 1.1-.2.1-.4.2-.7.1-.3-.2-1.1-.4-2-1.3-.7-.7-1.3-1.8-1.4-2.1-.1-.3 0-.5.1-.6.1-.1.3-.4.4-.5.1-.2.2-.3.3-.5.1-.2 0-.4 0-.5 0-.1-.8-2.1-1.1-2.8-.3-.7-.5-.6-.7-.7-.2 0-.4-.1-.6-.1-.2 0-.5.1-.7.3-.2.3-.9.8-.9 2s.9 2.3 1 2.4c.1.2 1.8 3.1 4.4 4.4 2.6 1.3 2.6.9 3.1.8.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2 0-.1-.1-.2-.2-.2-.1 0-1.3-.6-1.8-.8-.5-.2-.8-.3-1-.2z" fill="#fff"/></svg>
+    <span class="label">WhatsApp</span>
+  </a>
+  <div class="util-spacer"></div>
+  <a class="util-item" href="./index.html#faq">Întrebări frecvente</a>
+  <button class="util-item lang-switch" type="button" aria-label="Schimbă limba">RO <span class="muted">/ EN</span></button>
+</div>
+
+    <div class="wrap h-16 flex items-center justify-between">
+      <a href="/" class="flex items-center gap-2" aria-label="Gatevion home">
+        <!-- Inline SVG logo -->
+        <svg class="h-8 w-auto" viewBox="0 0 180 32" aria-label="Gatevion logo" role="img">
+          <g>
+            <circle cx="16" cy="16" r="12" fill="#0f172a" fill-opacity="0.08"></circle>
+            <path d="M16 8c-4.4 0-8 3.6-8 8s3.6 8 8 8c3 0 5.7-1.3 7.3-3.7.3-.4.2-1-.2-1.3-.4-.3-1-.2-1.3.2-1.1 1.7-3.1 2.8-5.2 2.8-3.4 0-6.1-2.7-6.1-6.1S12.6 9.9 16 9.9c1.4 0 2.8.5 3.8 1.4.3.3.8.3 1.2.1.4-.3.5-.9.2-1.3C19.8 8.7 17.9 8 16 8zm0 3.4c-2.2 0-4 1.8-4 4s1.8 4 4 4c1.8 0 3.3-1.2 3.8-2.8.1-.4 0-.8-.3-1.1-.3-.3-.7-.4-1.1-.3-.5.2-1.1.3-1.7.3-1.3 0-2.4-.5-3.2-1.4-.4-.4-1-.4-1.4 0-.4.4-.4 1 0 1.4.9 1 2.2 1.6 3.6 1.6.4 0 .8 0 1.2-.1-.5.7-1.3 1.1-2.2 1.1-1.5 0-2.8-1.2-2.8-2.8 0-1.5 1.2-2.8 2.8-2.8.5 0 1 .1 1.4.4.4.3 1.1.2 1.4-.3.3-.4.2-1-.3-1.3-.7-.5-1.6-.7-2.5-.7z" fill="#0f172a"></path>
+            <text x="36" y="22" font-family="Manrope, Inter, Segoe UI, system-ui, -apple-system, BlinkMacSystemFont, sans-serif" font-size="16" fill="#0f172a" letter-spacing=".5">Gatevion</text>
+          </g>
+        </svg>
+      </a>
+      <button id="mobileToggle" class="md:hidden inline-flex items-center justify-center rounded-lg border border-slate-200 mr-2" aria-label="Deschide meniul">
+  <svg viewBox="0 0 24 24" width="20" height="20"><path d="M4 7h16M4 12h16M4 17h16" fill="none" stroke="#0f172a" stroke-width="2" stroke-linecap="round"/></svg>
+</button>
+<nav class="main-nav hidden md:flex items-center gap-6">
+        <span class="nav-link nav-step nav-step-disabled" data-step="1" aria-disabled="true">Alegi mașina</span>
+        <span class="nav-link nav-step nav-step-disabled" data-step="2" aria-disabled="true">Completezi datele</span>
+        <span class="nav-link nav-step nav-step-current" data-step="3">Trimiți cererea</span>
+      </nav>
+      <div class="flex items-center gap-3">
+        <a href="/contul-meu.html" class="btn-account" aria-label="Contul meu">Contul meu</a>
+        <a href="./index.html" class="btn btn-primary" aria-label="Fă o nouă căutare">Fă o nouă căutare</a>
+      </div>
+    </div>
+  <div id="mobileNav" class="mobile-nav" hidden>
+  <span class="mnav-link mnav-cf mnav-step mnav-step-disabled" data-step="1" aria-disabled="true">Alegi mașina</span>
+  <span class="mnav-link mnav-ap mnav-step mnav-step-disabled" data-step="2" aria-disabled="true">Completezi datele</span>
+  <span class="mnav-link mnav-faq mnav-step mnav-step-current" data-step="3">Trimiți cererea</span>
+</div>
+</header>
+
+  <main class="thankyou-main">
+    <section class="thankyou-hero">
+      <div class="wrap thankyou-layout">
+        <article class="thankyou-card" aria-labelledby="thankyouTitle">
+          <div class="thankyou-inner">
+            <div class="thankyou-icon">
+              <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
+                <circle cx="12" cy="12" r="11" fill="currentColor" fill-opacity="0.06"></circle>
+                <path d="M17.2 9.1l-5.2 6.3c-.2.3-.5.4-.8.4-.3 0-.6-.1-.8-.3L7 12.1c-.4-.4-.4-1.1 0-1.5.4-.4 1-.4 1.4 0l2.1 2.1 4.4-5.3c.4-.4 1.1-.5 1.5-.1.5.4.5 1 .1 1.8z" fill="currentColor"/>
+              </svg>
+            </div>
+            <p class="thankyou-eyebrow">Pasul 3 din 3</p>
+            <h1 id="thankyouTitle" class="thankyou-title">
+              Mulțumim, cererea ta a ajuns la <span class="thankyou-highlight">Gatevion</span>
+            </h1>
+            <p class="thankyou-subtitle">
+              Cererea ta de rezervare a intrat în <span class="thankyou-highlight">verificare manuală</span>. 
+              Un operator Gatevion analizează detaliile și contactează partenerii noștri pentru a confirma disponibilitatea mașinii.
+            </p>
+
+            <div class="thankyou-content">
+              <div>
+                <div class="thankyou-summary">
+                  <p class="thankyou-summary-title">Rezumatul cererii</p>
+                  <div class="thankyou-summary-grid">
+                    <div>
+                      <p class="thankyou-summary-item-label">Rută</p>
+                      <p id="tyRoute" class="thankyou-summary-item-value">—</p>
+                    </div>
+                    <div>
+                      <p class="thankyou-summary-item-label">Perioadă</p>
+                      <p id="tyPeriod" class="thankyou-summary-item-value">—</p>
+                    </div>
+                    <div>
+                      <p class="thankyou-summary-item-label">Nume client</p>
+                      <p id="tyName" class="thankyou-summary-item-value">Client Gatevion</p>
+                    </div>
+                    <div>
+                      <p class="thankyou-summary-item-label">Email de contact</p>
+                      <p id="tyEmail" class="thankyou-summary-item-value">—</p>
+                    </div>
+                  </div>
+                  <p class="thankyou-tagline">
+                    Te vom contacta doar pentru confirmare sau clarificări legate de această rezervare.
+                  </p>
+                </div>
+              </div>
+
+              <div>
+                <ul class="thankyou-list">
+                  <li>
+                    <span class="thankyou-bullet-dot"></span>
+                    <span>
+                      <strong>Nu ți-am debitat niciun ban.</strong> Cererea ta rămâne în status <em>PENDING</em> până când un partener acceptă rezervarea.
+                    </span>
+                  </li>
+                  <li>
+                    <span class="thankyou-bullet-dot"></span>
+                    <span>
+                      <strong>Primești un email de confirmare</strong> cu toate detaliile și contactul direct al companiei de închirieri auto.
+                    </span>
+                  </li>
+                  <li>
+                    <span class="thankyou-bullet-dot"></span>
+                    <span>
+                      Dacă nu există mașini disponibile exact pe perioada aleasă, îți vom propune 
+                      <strong>alternative premium similare</strong> ca preț și clasă.
+                    </span>
+                  </li>
+                  <li>
+                    <span class="thankyou-bullet-dot"></span>
+                    <span>
+                      <strong>Datele și documentele tale sunt protejate.</strong> Le folosim exclusiv pentru verificare și pentru întocmirea contractului,
+                      apoi le ștergem conform politicilor noastre de retenție.
+                    </span>
+                  </li>
+                </ul>
+
+                <div class="thankyou-actions">
+                  <a href="./index.html" class="btn btn-primary-lg">
+                    Începe o nouă căutare
+                  </a>
+                  <a href="./index.html#faq" class="btn btn-ghost">
+                    Vezi întrebări frecvente
+                  </a>
+                </div>
+
+                <p class="thankyou-meta">
+                  În următoarele ore vei primi un răspuns pe email. Pentru întrebări urgente, ne poți suna sau scrie pe WhatsApp.
+                </p>
+
+                <div class="mt-4">
+                  <span class="badge-soft">
+                    <span class="badge-soft-dot"></span>
+                    Verificare făcută de oameni, nu de roboți
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <script src="./app.js" defer></script>
+</body>
+</html>
