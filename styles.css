@@ -3863,6 +3863,11 @@ body{
 
 .booking-meta-row dd{
   color:#e5e7eb;
+  font-weight:500;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  letter-spacing:.01em;
 }
 
 @media (max-width: 900px){
@@ -4205,35 +4210,6 @@ body{
     padding-top:1.8rem;
     padding-bottom:2.6rem;
   }
-}
-
-/* Booking page toolbar refinement */
-.booking-page .topbar{
-  background:linear-gradient(120deg,rgba(15,23,42,0.98),#020617);
-  border-bottom:1px solid rgba(148,163,184,0.5);
-}
-.booking-page .topbar-inner{
-  backdrop-filter:blur(18px);
-}
-.booking-page .topbar-layout{
-  padding-top:.6rem;
-  padding-bottom:.6rem;
-}
-.booking-page .logo-mark{
-  background:radial-gradient(circle at 30% 0%,#22c55e,#0f766e);
-  color:#ecfeff;
-}
-.booking-page .logo-main{
-  color:#e5e7eb;
-}
-.booking-page .logo-sub{
-  color:#94a3b8;
-}
-.booking-page .topbar-utility .util-label{
-  color:#94a3b8;
-}
-.booking-page .topbar-utility .util-value{
-  color:#e5e7eb;
 }
 
 /* Phone input with country selector */
