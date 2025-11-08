@@ -655,7 +655,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const headerSearchBtn = document.getElementById('headerSearchBtn');
   const formCard = document.querySelector('.hero-form-card');
 
-  const runSearchHighlight = ()=>{
+  const runSearchHighlight = (opts = {})=>{
     if(!formCard) return false;
 
     const isDesktop = window.innerWidth > 768;
@@ -670,7 +670,9 @@ document.addEventListener('DOMContentLoaded', () => {
       if(targetTop < 0) targetTop = 0;
     }
 
-    window.scrollTo({ top: targetTop, behavior: 'smooth' });
+    const behavior = opts.instant ? 'auto' : 'smooth';
+
+    window.scrollTo({ top: targetTop, behavior });
     formCard.classList.add('hero-form-highlight');
     setTimeout(()=>{
       formCard.classList.remove('hero-form-highlight');
@@ -697,7 +699,7 @@ document.addEventListener('DOMContentLoaded', () => {
     try{
       if(window.sessionStorage && sessionStorage.getItem('gvTriggerSearchFocus') === '1'){
         sessionStorage.removeItem('gvTriggerSearchFocus');
-        runSearchHighlight();
+        runSearchHighlight({ instant: true });
       }
     }catch(_e){}
   }
