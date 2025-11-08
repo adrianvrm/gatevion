@@ -624,13 +624,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-  // Header "Caută mașini disponibile" de pe alte pagini + CTA "Caută o mașină" din cont -> pregătesc focus pe formularul din index (desktop only)
+  // Header "Caută mașini disponibile" de pe alte pagini + CTA "Caută o mașină" din cont -> pregătesc focus pe formularul din index (toate device-urile)
   (()=>{
     const path = window.location.pathname || '';
     const isIndex = path.endsWith('/index.html') || path === '/' || path === '';
     if(isIndex) return;
 
-    const headerLinks = Array.from(document.querySelectorAll('a[aria-label="Caută mașini disponibile"][href="/index.html#searchForm"]'));
+    const headerLinks = Array.from(document.querySelectorAll('a[aria-label="Caută mașini disponibile"][href="/index.html"]'));
     const accountSearchBtn = document.getElementById('accountSearchBtn');
 
     const triggers = headerLinks.slice();
@@ -640,11 +640,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     triggers.forEach((link)=>{
       link.addEventListener('click', (e)=>{
-        const isDesktop = window.innerWidth > 768;
-        if(!isDesktop){
-          // pe mobil lăsăm browserul să se ocupe de ancoră
-          return;
-        }
         try{
           if(window.sessionStorage){
             sessionStorage.setItem('gvTriggerSearchFocus','1');
@@ -661,10 +656,21 @@ document.addEventListener('DOMContentLoaded', () => {
   const formCard = document.querySelector('.hero-form-card');
 
   const runSearchHighlight = ()=>{
-    const isDesktop = window.innerWidth > 768;
-    if(!isDesktop) return false;
+    if(!formCard) return false;
 
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    const isDesktop = window.innerWidth > 768;
+    let targetTop = 0;
+
+    if(isDesktop){
+      targetTop = 0;
+    }else{
+      const rect = formCard.getBoundingClientRect();
+      const offset = 96; // compensăm topbar-ul pe mobil
+      targetTop = rect.top + window.scrollY - offset;
+      if(targetTop < 0) targetTop = 0;
+    }
+
+    window.scrollTo({ top: targetTop, behavior: 'smooth' });
     formCard.classList.add('hero-form-highlight');
     setTimeout(()=>{
       formCard.classList.remove('hero-form-highlight');
@@ -1515,6 +1521,37 @@ document.addEventListener('DOMContentLoaded', () => {
         }else if(label.indexOf('Preferințe') !== -1){
           scrollToSection(documentsSection || detailsSection);
         }
+      });
+    });
+  })();
+
+
+  // Smooth scroll pentru ancore interne pe mobil (href="#...") pentru experiență fluidă
+  (()=>{
+    const isMobile = window.innerWidth <= 768;
+    if(!isMobile) return;
+
+    const anchorLinks = document.querySelectorAll('a[href^="#"]:not([href="#"]):not([href="#!"])');
+    if(!anchorLinks.length) return;
+
+    const getOffsetTop = (el)=>{
+      const rect = el.getBoundingClientRect();
+      const offset = 96; // compensăm topbar-ul
+      return rect.top + window.scrollY - offset;
+    };
+
+    anchorLinks.forEach((link)=>{
+      link.addEventListener('click', (e)=>{
+        const href = link.getAttribute('href');
+        if(!href || !href.startsWith('#')) return;
+
+        const targetId = href.slice(1);
+        const targetEl = document.getElementById(targetId);
+        if(!targetEl) return;
+
+        e.preventDefault();
+        const targetY = getOffsetTop(targetEl);
+        window.scrollTo({ top: targetY < 0 ? 0 : targetY, behavior: 'smooth' });
       });
     });
   })();
