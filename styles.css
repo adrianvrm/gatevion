@@ -5841,3 +5841,33 @@ body{
   box-shadow:none;
   transform:none;
 }
+
+
+/* Account inline edit styles */
+
+.account-input{
+  width:100%;
+  border-radius:.5rem;
+  border:1px solid rgba(148,163,184,0.6);
+  background:rgba(15,23,42,0.4);
+  padding:.4rem .6rem;
+  font-size:.85rem;
+  color:#e5e7eb;
+}
+.account-input::placeholder{
+  color:rgba(148,163,184,0.9);
+}
+.account-input:focus-visible{
+  outline:2px solid var(--ring);
+  outline-offset:1px;
+}
+
+.account-card--editing{
+  box-shadow:0 0 0 1px rgba(56,189,248,0.6);
+}
+.account-card--editing .account-card-header .account-card-title::after{
+  content:" · în editare";
+  font-size:.75rem;
+  font-weight:500;
+  color:rgba(148,163,184,0.9);
+}

@@ -412,8 +412,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // Account page: toggling detaliilor din istoricul rezervărilor
+  // Account page: comportamente pentru istoricul rezervărilor, rezervarea activă și detaliile personale
   if(window.location.pathname && window.location.pathname.indexOf('contul-meu') !== -1){
+    // Istoric rezervări: expand/collapse detalii
     const detailButtons = document.querySelectorAll('.account-details-toggle');
     detailButtons.forEach((btn)=>{
       btn.addEventListener('click', ()=>{
@@ -425,6 +426,161 @@ document.addEventListener('DOMContentLoaded', () => {
         btn.textContent = isOpen ? 'Ascunde detalii' : 'Vezi detalii';
       });
     });
+
+    // Rezervarea activă (demo): modifică datele & orele -> duce către formularul de pe index
+    const modifyBtn = document.getElementById('accountModifyReservationBtn');
+    if(modifyBtn){
+      modifyBtn.addEventListener('click', (e)=>{
+        e.preventDefault();
+        try{
+          if(window.sessionStorage){
+            sessionStorage.setItem('gvTriggerSearchFocus','1');
+          }
+        }catch(_e){}
+        window.location.href = '/index.html';
+      });
+    }
+
+    // Rezervarea activă (demo): anulare rezervare -> feedback elegant în prototip
+    const cancelBtn = document.getElementById('accountCancelReservationBtn');
+    if(cancelBtn){
+      cancelBtn.addEventListener('click', (e)=>{
+        e.preventDefault();
+        window.alert('În acest prototip nu există încă o rezervare activă de anulat. În versiunea completă, aici vei putea solicita anularea unei rezervări confirmate.');
+      });
+    }
+
+    // Detalii personale: Editează datele -> mod edit in-card, cu salvare locală
+    const detailsSection = document.getElementById('accountDetailsSection');
+    if(detailsSection){
+      const contactCard = detailsSection.querySelector('.account-card');
+      if(contactCard){
+        const editBtn = contactCard.querySelector('.btn-ghost');
+        const detailsList = contactCard.querySelector('.account-details');
+        if(editBtn && detailsList){
+          const rows = Array.from(detailsList.querySelectorAll('.account-details-row'));
+          const fields = rows.map((row)=>{
+            const labelEl = row.querySelector('dt');
+            const valueEl = row.querySelector('dd');
+            return {
+              row,
+              label: labelEl ? labelEl.textContent.trim() : '',
+              valueEl,
+              value: valueEl ? valueEl.textContent.trim() : ''
+            };
+          });
+
+          // Aplică valori din localStorage, dacă există
+          try{
+            if(window.localStorage){
+              const saved = localStorage.getItem('gvAccountContact');
+              if(saved){
+                const parsed = JSON.parse(saved);
+                fields.forEach((f)=>{
+                  if(!f.valueEl || !f.label) return;
+                  const key = f.label;
+                  if(Object.prototype.hasOwnProperty.call(parsed, key)){
+                    const val = parsed[key] || '—';
+                    f.value = val;
+                    f.valueEl.textContent = val;
+                  }
+                });
+              }
+            }
+          }catch(_e){}
+
+          const buildInputForLabel = (label, value)=>{
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.className = 'account-input';
+            input.value = value && value !== '—' ? value : '';
+            input.placeholder = label;
+            if(label === 'Adresă email') input.type = 'email';
+            if(label === 'Telefon') input.type = 'tel';
+            return input;
+          };
+
+          let isEditing = false;
+
+          const enterEditMode = ()=>{
+            if(isEditing) return;
+            isEditing = true;
+            contactCard.classList.add('account-card--editing');
+            editBtn.textContent = 'Salvează datele';
+
+            let cancelBtn = contactCard.querySelector('.account-cancel-edit');
+            if(!cancelBtn){
+              cancelBtn = document.createElement('button');
+              cancelBtn.type = 'button';
+              cancelBtn.className = 'btn-text account-cancel-edit';
+              cancelBtn.textContent = 'Renunță';
+              const header = contactCard.querySelector('.account-card-header');
+              if(header){
+                header.appendChild(cancelBtn);
+              }
+              cancelBtn.addEventListener('click', (e)=>{
+                e.preventDefault();
+                // Revine la valorile dinainte de editare
+                fields.forEach((f)=>{
+                  if(!f.valueEl) return;
+                  f.valueEl.textContent = f.value || '—';
+                  if(f.input){
+                    f.input = null;
+                  }
+                });
+                contactCard.classList.remove('account-card--editing');
+                editBtn.textContent = 'Editează datele';
+                cancelBtn.remove();
+                isEditing = false;
+              });
+            }
+
+            // Transformăm dd-urile în inputuri
+            fields.forEach((f)=>{
+              if(!f.valueEl) return;
+              const currentVal = f.valueEl.textContent.trim();
+              const input = buildInputForLabel(f.label, currentVal);
+              f.valueEl.textContent = '';
+              f.valueEl.appendChild(input);
+              f.input = input;
+            });
+          };
+
+          const exitEditModeAndSave = ()=>{
+            if(!isEditing) return;
+            isEditing = false;
+            contactCard.classList.remove('account-card--editing');
+            const payload = {};
+            fields.forEach((f)=>{
+              if(!f.valueEl) return;
+              const newVal = (f.input && f.input.value ? f.input.value.trim() : '') || '—';
+              f.value = newVal;
+              f.valueEl.textContent = newVal;
+              payload[f.label] = newVal;
+              f.input = null;
+            });
+            // Persistă în localStorage pentru sesiuni viitoare
+            try{
+              if(window.localStorage){
+                localStorage.setItem('gvAccountContact', JSON.stringify(payload));
+              }
+            }catch(_e){}
+            editBtn.textContent = 'Editează datele';
+            const cancelBtn = contactCard.querySelector('.account-cancel-edit');
+            if(cancelBtn) cancelBtn.remove();
+          };
+
+          editBtn.addEventListener('click', (e)=>{
+            e.preventDefault();
+            if(!isEditing){
+              enterEditMode();
+            }else{
+              exitEditModeAndSave();
+            }
+          });
+        }
+      }
+    }
   }
 
 
