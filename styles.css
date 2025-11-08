@@ -4108,6 +4108,16 @@ body{
   position:relative;
   overflow:hidden;
 }
+.upload-drop--filled{
+  border-style:solid;
+  border-color:#02ac8e;
+  background:linear-gradient(145deg,#ecfdf5,#d1fae5);
+}
+
+.upload-drop--filled .upload-icon{
+  transform:translateY(1px);
+}
+
 
 .upload-drop::before{
   content:'';
@@ -4826,13 +4836,6 @@ body{
   color:#0f172a;
 }
 
-#tyEmail{
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
-}
-
-
 .thankyou-tagline{
   margin-top:.7rem;
   font-size:.82rem;
@@ -4907,4 +4910,11 @@ body{
   0% { opacity:0; transform:translateY(12px); }
   55%{ opacity:1; transform:translateY(-2px); }
   100%{ opacity:1; transform:translateY(0); }
+}
+
+
+#tyEmail{
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
 }

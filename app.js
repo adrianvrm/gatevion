@@ -889,9 +889,42 @@ const y = document.getElementById('y');
     if(step1Mobile && step1Mobile.tagName === 'A'){ step1Mobile.href = backUrl; }
 
     // Final submit: trimite datele spre pagina de mulțumire (backend-ul se va lega ulterior aici)
-    const bookingForm = document.getElementById('bookingForm');
+    
+const bookingForm = document.getElementById('bookingForm');
     if(bookingForm){
+
+      // Marcare vizuală pentru fișiere încărcate (CI, permis, bilet avion)
+      const uploadInputs = bookingForm.querySelectorAll('.upload-drop input[type="file"]');
+      uploadInputs.forEach((input)=>{
+        const drop = input.closest('.upload-drop');
+        if(!drop) return;
+        const main = drop.querySelector('.upload-main');
+        const hint = drop.querySelector('.upload-hint');
+        const defaultMain = main ? main.textContent : '';
+        const defaultHint = hint ? hint.textContent : '';
+
+        const syncUploadState = ()=>{
+          const hasFile = input.files && input.files.length > 0;
+          if(hasFile){
+            drop.classList.add('upload-drop--filled');
+            const fileName = input.files[0].name;
+            if(main) main.textContent = 'Fișier încărcat';
+            if(hint) hint.textContent = fileName;
+          }else{
+            drop.classList.remove('upload-drop--filled');
+            if(main) main.textContent = defaultMain || 'Alege fișier sau trage aici';
+            if(hint) hint.textContent = defaultHint || 'JPG, PNG sau PDF';
+          }
+        };
+
+        // Inițializare (în cazul în care browserul reține fișierele)
+        syncUploadState();
+
+        input.addEventListener('change', syncUploadState);
+      });
+
       bookingForm.addEventListener('submit', (e)=>{
+
         e.preventDefault();
 
         // Validează toate câmpurile obligatorii, inclusiv fișierele și checkbox-ul de consimțământ
