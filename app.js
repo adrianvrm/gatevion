@@ -397,6 +397,22 @@ document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('.picker[data-type="time"]').forEach(initTimePicker);
   initFAQ();
 
+  // Account page: toggling detaliilor din istoricul rezervărilor
+  if(window.location.pathname && window.location.pathname.indexOf('contul-meu') !== -1){
+    const detailButtons = document.querySelectorAll('.account-details-toggle');
+    detailButtons.forEach((btn)=>{
+      btn.addEventListener('click', ()=>{
+        const table = btn.closest('.account-table');
+        if(!table) return;
+        const panel = table.querySelector('.account-details-panel');
+        if(!panel) return;
+        const isOpen = panel.classList.toggle('account-details-panel--open');
+        btn.textContent = isOpen ? 'Ascunde detalii' : 'Vezi detalii';
+      });
+    });
+  }
+
+
 
   // Mobile nav
   const mToggle = document.getElementById('mobileToggle');

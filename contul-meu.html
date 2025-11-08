@@ -95,10 +95,6 @@
             <span class="account-kpi-label">Rezervări finalizate</span>
             <span class="account-kpi-value">0</span>
           </div>
-          <div class="account-kpi">
-            <span class="account-kpi-label">Status client</span>
-            <span class="account-kpi-pill">Standard</span>
-          </div>
         </div>
       </div>
 
@@ -188,11 +184,69 @@
                 <span>Mașină</span>
                 <span>Status</span>
               </div>
-              <div class="account-table-row account-table-row--empty">
-                <span class="col-span-4 text-xs md:text-sm text-slate-500">
-                  Nu există încă rezervări înregistrate în cont. După ce vei face prima rezervare, o vei regăsi aici
-                  cu toate detaliile esențiale.
+              <div class="account-table-row">
+                <span>12–15 iulie 2025</span>
+                <span>OTP → BBU</span>
+                <span>Compact • Automată</span>
+                <span class="account-table-status">
+                  Confirmată
+                  <button type="button" class="account-details-toggle">Vezi detalii</button>
                 </span>
+              </div>
+              <div class="account-details-panel">
+                <div class="account-details-panel-inner">
+                  <div class="account-details-col">
+                    <h3>Detalii perioadă</h3>
+                    <dl>
+                      <div>
+                        <dt>Preluare</dt>
+                        <dd>12.07.2025 • 10:00</dd>
+                      </div>
+                      <div>
+                        <dt>Returnare</dt>
+                        <dd>15.07.2025 • 10:00</dd>
+                      </div>
+                      <div>
+                        <dt>Aeroport</dt>
+                        <dd>OTP &rarr; BBU</dd>
+                      </div>
+                    </dl>
+                  </div>
+                  <div class="account-details-col">
+                    <h3>Mașină &amp; tarif</h3>
+                    <dl>
+                      <div>
+                        <dt>Mașină</dt>
+                        <dd>Compact • Automată</dd>
+                      </div>
+                      <div>
+                        <dt>Partener</dt>
+                        <dd>Partener local Gatevion</dd>
+                      </div>
+                      <div>
+                        <dt>Preț total</dt>
+                        <dd>&euro;0 <span class="text-slate-400">(exemplu UI)</span></dd>
+                      </div>
+                    </dl>
+                  </div>
+                  <div class="account-details-col">
+                    <h3>Stare rezervare</h3>
+                    <dl>
+                      <div>
+                        <dt>Status</dt>
+                        <dd>Confirmată</dd>
+                      </div>
+                      <div>
+                        <dt>Număr rezervare</dt>
+                        <dd>GV-EXAMPLE-1234</dd>
+                      </div>
+                      <div>
+                        <dt>Observații</dt>
+                        <dd>Acesta este un exemplu de afișare a detaliilor unei rezervări.</dd>
+                      </div>
+                    </dl>
+                  </div>
+                </div>
               </div>
             </div>
           </section>
