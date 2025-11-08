@@ -427,30 +427,58 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
 
-    // Rezervarea activă (demo): modifică datele & orele -> duce către formularul de pe index
+    // Rezervarea activă: acțiuni principale (modificare, prelungire, anulare)
     const modifyBtn = document.getElementById('accountModifyReservationBtn');
+    const extendBtn = document.getElementById('accountExtendReservationBtn');
+    const cancelBtn = document.getElementById('accountCancelReservationBtn');
+
+    const goToIndexForChange = (action)=>{
+      try{
+        if(window.sessionStorage){
+          sessionStorage.setItem('gvTriggerSearchFocus','1');
+          if(action){
+            sessionStorage.setItem('gvReservationAction', action);
+          }
+        }
+      }catch(_e){}
+      window.location.href = '/index.html';
+    };
+
+    const canCancelReservation = ()=>{
+      // TODO: în versiunea completă, aici se va verifica data/ora reală de preluare
+      // și se va permite anularea doar dacă mai sunt >24h până la preluare.
+      // Momentan, în prototip, permitem doar un mesaj informativ.
+      return false;
+    };
+
     if(modifyBtn){
       modifyBtn.addEventListener('click', (e)=>{
         e.preventDefault();
-        try{
-          if(window.sessionStorage){
-            sessionStorage.setItem('gvTriggerSearchFocus','1');
-          }
-        }catch(_e){}
-        window.location.href = '/index.html';
+        goToIndexForChange('modify');
       });
     }
 
-    // Rezervarea activă (demo): anulare rezervare -> feedback elegant în prototip
-    const cancelBtn = document.getElementById('accountCancelReservationBtn');
+    if(extendBtn){
+      extendBtn.addEventListener('click', (e)=>{
+        e.preventDefault();
+        goToIndexForChange('extend');
+      });
+    }
+
     if(cancelBtn){
       cancelBtn.addEventListener('click', (e)=>{
         e.preventDefault();
-        window.alert('În acest prototip nu există încă o rezervare activă de anulat. În versiunea completă, aici vei putea solicita anularea unei rezervări confirmate.');
+        if(!canCancelReservation()){
+          window.alert('Anularea rezervării este permisă doar dacă se face cu cel puțin 24 de ore înainte de ora de preluare a mașinii. În această versiune demo nu avem încă o rezervare activă reală pentru a verifica această regulă.');
+          return;
+        }
+        // În versiunea completă, aici se va trimite cererea de anulare către sistem / partener.
+        window.alert('Cererea ta de anulare a rezervării a fost înregistrată. În varianta finală a aplicației, aici vor apărea detaliile privind rambursarea și confirmarea anulării.');
       });
     }
 
-    // Detalii personale: Editează datele -> mod edit in-card, cu salvare locală
+
+// Detalii personale: Editează datele -> mod edit in-card, cu salvare locală
     const detailsSection = document.getElementById('accountDetailsSection');
     if(detailsSection){
       const contactCard = detailsSection.querySelector('.account-card');
