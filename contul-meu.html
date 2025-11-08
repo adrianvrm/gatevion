@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Contul meu – Gatevion</title>
+  <meta name="description" content="Accesează contul tău Gatevion: vezi rezervările, datele de contact și documentele încărcate într-un spațiu sigur și clar.">
+  <link rel="canonical" href="https://gatevion.ro/contul-meu" />
+  <link rel="alternate" href="https://gatevion.ro/" hreflang="ro" />
+  <link rel="alternate" href="https://gatevion.ro/en" hreflang="en" />
+  <meta name="theme-color" content="#0f172a" />
+
+  <!-- TailwindCSS CDN for prototyping -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: { extend: { colors: { primary: '#0f172a' }, fontFamily: { sans: ['Manrope','Inter','system-ui','Segoe UI','Roboto','Helvetica','Arial','sans-serif'] }, boxShadow:{ soft:'0 10px 30px rgba(0,0,0,.08)' } } }
+    }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body class="font-sans text-slate-900 bg-white">
+  <!-- Header -->
+  <header class="sticky top-0 z-50 bg-white/90 border-b border-slate-100 topbar" id="topbar">
+<div class="topbar-utility">
+  <a class="util-item" href="tel:+40700000000" aria-label="Sună-ne">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3.5l4 2v3l-2 1.5a12 12 0 006 6l1.5-2h3l2 4-2.5 2.5c-.7.7-2 .9-3 .6-8.1-2.1-13-7.9-15.1-16-.3-1 .0-2.2.7-2.9L6 3.5z" fill="currentColor"/></svg>
+    <span class="label">+40 700 000 000</span>
+  </a>
+  <a class="util-item" href="https://wa.me/40700000000" target="_blank" rel="noopener" aria-label="WhatsApp">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5a9.5 9.5 0 00-8.2 14.4L3 22l5.3-1a9.5 9.5 0 004.7 1.2 9.5 9.5 0 000-19z" fill="currentColor"/><path d="M8.5 9.8c.1-.2.3-.3.5-.3h.4c.1 0 .2 0 .3.2l.8 1.4c.1.2.1.4 0 .5l-.4.5c.9 1.6 2.2 2.6 3.7 3.3l.4-.4c.1-.1.3-.2.5-.1l1.6.6c.2.1.3.2.3.4l-.1.6c0 .2-.2.4-.4.5-.6.3-1.2.4-1.8.3-3.3-.6-6-3.1-7.2-6.2-.2-.6-.2-1.2 0-1.8z" fill="#fff"/></svg>
+    <span class="label">WhatsApp</span>
+  </a>
+  <div class="util-spacer"></div>
+  <a class="util-item" href="#faq">Întrebări frecvente</a>
+  <button class="util-item lang-switch" type="button" aria-label="Schimbă limba">RO <span class="muted">/ EN</span></button>
+</div>
+
+    <div class="wrap h-16 flex items-center justify-between">
+      <a href="/" class="flex items-center gap-2" aria-label="Gatevion home">
+        <!-- Inline SVG logo -->
+        <svg class="h-8 w-auto" viewBox="0 0 180 32" aria-label="Gatevion logo" role="img">
+          <g>
+            <circle cx="16" cy="16" r="12" fill="#0f172a" fill-opacity="0.08"></circle>
+            <path d="M16 8c-4.4 0-8 3.6-8 8s3.6 8 8 8c3 0 5.7-1.6 7.1-4.1l-3.2-1.8c-.8 1.4-2.2 2.3-3.9 2.3-2.5 0-4.5-2-4.5-4.5S13.5 11.5 16 11.5c1.7 0 3.1.9 3.9 2.3H16 v3h7.5c.1-.4.1-.8.1-1.3 0-4.4-3.6-8-7.6-8z" fill="#0f172a"></path>
+            <text x="36" y="22" font-family="Manrope, Inter, Segoe UI, Roboto, Arial, sans-serif" font-weight="700" font-size="16" fill="#0f172a" letter-spacing=".5">Gatevion</text>
+          </g>
+        </svg>
+      </a>
+      <button id="mobileToggle" class="md:hidden inline-flex items-center justify-center w-10 h-10 rounded-lg border border-slate-200 mr-2" aria-label="Deschide meniul">
+  <svg viewBox="0 0 24 24" width="20" height="20"><path d="M4 7h16M4 12h16M4 17h16" stroke="#0f172a" stroke-width="2" stroke-linecap="round"/></svg>
+</button>
+<nav class="main-nav hidden md:flex items-center gap-6">
+        <a href="#cum-functioneaza" class="nav-link">Cum funcționează</a>
+        <a href="#aeroporturi" class="nav-link">Aeroporturi</a>
+        <a href="#faq" class="nav-link">Întrebări frecvente</a>
+      </nav>
+      <div class="flex items-center gap-3">
+        <a href="/contul-meu.html" class="btn-account" aria-label="Contul meu">Contul meu</a>
+        <a href="/rezultate.html" class="btn btn-primary" aria-label="Caută mașini disponibile">Caută mașini disponibile</a>
+      </div>
+    </div>
+  <div id="mobileNav" class="mobile-nav" hidden>
+  <a href="#cum-functioneaza" class="mnav-link mnav-cf">Cum funcționează</a>
+  <a href="#aeroporturi" class="mnav-link mnav-ap">Aeroporturi</a>
+  <a href="#faq" class="mnav-link mnav-faq">Întrebări frecvente</a>
+</div>
+</header>
+
+  <!-- Hero – versiunea p
+  <!-- Contul meu -->
+  <main class="account-page">
+    <div class="wrap account-shell">
+      <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 mb-10">
+        <div>
+          <p class="text-xs font-semibold tracking-[.2em] uppercase text-slate-500 mb-2">Contul meu</p>
+          <h1 class="text-2xl md:text-3xl font-semibold text-slate-900 tracking-tight mb-3">
+            Bine ai revenit la <span class="text-emerald-600">Gatevion</span>
+          </h1>
+          <p class="text-sm md:text-[0.95rem] text-slate-600 max-w-xl">
+            Aici vei găsi o imagine clară a rezervărilor tale, a datelor de contact și a documentelor încărcate
+            pentru validare. Totul într-un singur loc, gândit pentru transparență și control.
+          </p>
+        </div>
+        <div class="account-hero-kpis">
+          <div class="account-kpi">
+            <span class="account-kpi-label">Rezervări active</span>
+            <span class="account-kpi-value">0</span>
+          </div>
+          <div class="account-kpi">
+            <span class="account-kpi-label">Rezervări finalizate</span>
+            <span class="account-kpi-value">0</span>
+          </div>
+          <div class="account-kpi">
+            <span class="account-kpi-label">Status client</span>
+            <span class="account-kpi-pill">Standard</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="account-layout">
+        <!-- Sidebar -->
+        <aside class="account-sidebar">
+          <div class="account-hero-card">
+            <div class="flex items-center gap-3 mb-4">
+              <div class="account-avatar" aria-hidden="true">
+                <span class="account-avatar-initial">C</span>
+              </div>
+              <div>
+                <p class="text-xs font-semibold tracking-[.18em] uppercase text-emerald-300/90 mb-0.5">Client Gatevion</p>
+                <p class="text-sm font-medium text-slate-100">Nume client</p>
+              </div>
+            </div>
+            <p class="text-xs text-slate-300/90 mb-4">
+              Pe viitor, aici vei putea vizualiza și actualiza datele contului tău Gatevion și vei urmări ușor istoricul rezervărilor.
+            </p>
+            <div class="flex flex-wrap gap-2">
+              <span class="account-tag">Verificare documente</span>
+              <span class="account-tag account-tag-soft">Rezervări fără plata online</span>
+            </div>
+          </div>
+
+          <nav class="account-menu" aria-label="Secțiuni cont">
+            <button class="account-menu-item account-menu-item--active" type="button">
+              <span class="ami-dot" aria-hidden="true"></span>
+              <span>Rezervările mele</span>
+            </button>
+            <button class="account-menu-item" type="button">
+              <span class="ami-dot" aria-hidden="true"></span>
+              <span>Detalii personale</span>
+            </button>
+            <button class="account-menu-item" type="button">
+              <span class="ami-dot" aria-hidden="true"></span>
+              <span>Documente încărcate</span>
+            </button>
+            <button class="account-menu-item" type="button">
+              <span class="ami-dot" aria-hidden="true"></span>
+              <span>Preferințe &amp; securitate</span>
+            </button>
+          </nav>
+
+          <div class="account-side-help">
+            <p class="account-side-title">Ai nevoie de ajutor?</p>
+            <p class="account-side-text">
+              Echipa Gatevion te poate ajuta cu modificări de rezervare, întrebări despre parteneri sau clarificări privind documentele.
+            </p>
+            <a href="mailto:hello@gatevion.ro" class="account-side-link">Scrie-ne la hello@gatevion.ro</a>
+          </div>
+        </aside>
+
+        <!-- Main content -->
+        <div class="account-main">
+          <!-- Rezervare viitoare / activă -->
+          <section class="account-card">
+            <div class="account-card-header">
+              <div>
+                <p class="account-card-eyebrow">Rezervarea ta</p>
+                <h2 class="account-card-title">Nu există încă o rezervare activă</h2>
+              </div>
+              <span class="account-status-pill account-status-pill--empty">Informație demo</span>
+            </div>
+            <p class="account-card-text">
+              După ce finalizezi o rezervare prin Gatevion, o vei vedea aici: aeroportul de preluare, datele și orele selectate,
+              mașina confirmată de partener și statusul acesteia (PENDING, Confirmată, Închiriere în curs, Finalizată).
+            </p>
+            <div class="account-card-cta">
+              <a href="/rezultate.html" class="btn btn-primary text-sm">Caută o mașină</a>
+              <button type="button" class="btn-text">Vezi cum funcționează Gatevion</button>
+            </div>
+          </section>
+
+          <!-- Istoric rezervări -->
+          <section class="account-card">
+            <div class="account-card-header">
+              <div>
+                <p class="account-card-eyebrow">Istoric rezervări</p>
+                <h2 class="account-card-title">Rezervările mele</h2>
+              </div>
+            </div>
+            <div class="account-table">
+              <div class="account-table-head">
+                <span>Perioadă</span>
+                <span>Aeroport</span>
+                <span>Mașină</span>
+                <span>Status</span>
+              </div>
+              <div class="account-table-row account-table-row--empty">
+                <span class="col-span-4 text-xs md:text-sm text-slate-500">
+                  Nu există încă rezervări înregistrate în cont. După ce vei face prima rezervare, o vei regăsi aici
+                  cu toate detaliile esențiale.
+                </span>
+              </div>
+            </div>
+          </section>
+
+          <!-- Detalii personale & securitate -->
+          <section class="account-grid">
+            <div class="account-card">
+              <div class="account-card-header">
+                <div>
+                  <p class="account-card-eyebrow">Date de contact</p>
+                  <h2 class="account-card-title">Detalii personale</h2>
+                </div>
+                <button type="button" class="btn-ghost">Editează datele</button>
+              </div>
+              <dl class="account-details">
+                <div class="account-details-row">
+                  <dt>Nume complet</dt>
+                  <dd>Client Gatevion</dd>
+                </div>
+                <div class="account-details-row">
+                  <dt>Adresă email</dt>
+                  <dd>hello@gatevion.ro</dd>
+                </div>
+                <div class="account-details-row">
+                  <dt>Telefon</dt>
+                  <dd>+40 7xx xxx xxx</dd>
+                </div>
+                <div class="account-details-row">
+                  <dt>Țara de rezidență</dt>
+                  <dd>—</dd>
+                </div>
+              </dl>
+              <p class="account-note">
+                Pe viitor, aceste date vor fi preluate automat în formularul de rezervare și în contractele generate de parteneri.
+              </p>
+            </div>
+
+            <div class="account-card">
+              <div class="account-card-header">
+                <div>
+                  <p class="account-card-eyebrow">Securitate &amp; preferințe</p>
+                  <h2 class="account-card-title">Controlul contului</h2>
+                </div>
+              </div>
+              <ul class="account-list">
+                <li>
+                  <div>
+                    <p class="account-list-title">Acces la rezervări</p>
+                    <p class="account-list-text">
+                      În această secțiune vei putea vedea toate rezervările tale, indiferent de partenerul care le onorează.
+                    </p>
+                  </div>
+                </li>
+                <li>
+                  <div>
+                    <p class="account-list-title">Gestionează anulările</p>
+                    <p class="account-list-text">
+                      Vei putea anula singur rezervările care mai au peste 24h până la preluare,
+                      în linie cu politica Gatevion și a partenerilor.
+                    </p>
+                  </div>
+                </li>
+                <li>
+                  <div>
+                    <p class="account-list-title">Documente și verificări</p>
+                    <p class="account-list-text">
+                      CI, permisul și alte documente încărcate pentru o rezervare vor fi vizibile aici, astfel încât să știi mereu ce este validat.
+                    </p>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+  </main>
+ border-slate-200 site-footer">
+    <div class="wrap py-10 grid md:grid-cols-4 gap-8">
+      <div>
+        <svg class="h-8 w-auto" viewBox="0 0 180 32" aria-label="Gatevion logo" role="img">
+          <g>
+            <circle cx="16" cy="16" r="12" fill="#0f172a" fill-opacity="0.18"></circle>
+            <path d="M16 8c-4.4 0-8 3.6-8 8s3.6 8 8 8c3 0 5.7-1.7 7.1-4.3l-2.9-1.2c-.8 1.5-2.3 2.5-4.2 2.5-2.5 0-4.5-2-4.5-4.5s2-4.5 4.5-4.5c1.2 0 2.3.5 3.1 1.2H16v3h7.5c.1-.4.1-.8.1-1.3 0-4.4-3.6-8-7.6-8z" fill="#0f172a"></path>
+            <text x="36" y="22" font-family="Manrope, Inter, Segoe UI, Roboto, Arial, sans-serif" font-weight="700" font-size="16" fill="#e5e7eb" letter-spacing=".5">Gatevion</text>
+          </g>
+        </svg>
+        <p class="mt-3 text-sm text-slate-300">Broker premium de închirieri auto, cu solicitări PENDING și confirmare directă de la parteneri.</p>
+      </div>
+      <div>
+        <h4 class="font-semibold text-slate-100">Legal</h4>
+        <ul class="mt-3 space-y-2 text-slate-400">
+          <li><a href="/termeni.html" class="hover:text-slate-100">Termeni &amp; Condiții</a></li>
+          <li><a href="/confidentialitate.html" class="hover:text-slate-100">Politica de Confidențialitate</a></li>
+          <li><a href="/cookies.html" class="hover:text-slate-100">Cookie-uri</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="font-semibold text-slate-100">Asistență</h4>
+        <ul class="mt-3 space-y-2 text-slate-400">
+          <li><a href="mailto:hello@gatevion.ro" class="hover:text-slate-100">hello@gatevion.ro</a></li>
+          <li><a href="tel:+40" class="hover:text-slate-100">+40 ...</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="font-semibold text-slate-100">Preferințe</h4>
+        <button class="mt-3 text-sm rounded-full border border-slate-500/70 px-3 py-2 bg-slate-900/40 hover:bg-slate-900/70" id="langBtn2">Schimbă limba (RO/EN)</button>
+      </div>
+    </div>
+    <div class="border-t border-slate-700/60 py-4 text-center text-xs text-slate-500">
+      © <span id="y" class="year"></span> Gatevion. Toate drepturile rezervate.
+    </div>
+  </footer>
+
+
+  <script src="./app.js" defer></script>
+</body>
+</html>
