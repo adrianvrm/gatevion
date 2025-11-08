@@ -397,6 +397,21 @@ document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('.picker[data-type="time"]').forEach(initTimePicker);
   initFAQ();
 
+  // Footer account button: reflectează starea contului
+  const footerAccountBtn = document.getElementById('footerAccountBtn');
+  if(footerAccountBtn){
+    const isAccountPage = window.location.pathname && window.location.pathname.indexOf('contul-meu') !== -1;
+    if(isAccountPage){
+      footerAccountBtn.classList.add('footer-account-btn--active');
+      footerAccountBtn.textContent = 'Contul meu (conectat)';
+      footerAccountBtn.setAttribute('href','/contul-meu.html');
+    }else{
+      footerAccountBtn.classList.remove('footer-account-btn--active');
+      footerAccountBtn.textContent = 'Contul meu';
+      footerAccountBtn.setAttribute('href','/login.html');
+    }
+  }
+
   // Account page: toggling detaliilor din istoricul rezervărilor
   if(window.location.pathname && window.location.pathname.indexOf('contul-meu') !== -1){
     const detailButtons = document.querySelectorAll('.account-details-toggle');
