@@ -5484,13 +5484,6 @@ body{
   line-height:1.6;
 }
 
-.auth-error{
-  margin-top:.4rem;
-  font-size:.8rem;
-  color:#b91c1c;
-}
-
-
 .auth-link{
   color:#0369a1;
   font-weight:500;

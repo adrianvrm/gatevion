@@ -6,3 +6,29 @@ Cerințe implementate:
 - Header stilizat + link **Întrebări frecvente**.
 
 Testează local deschizând `index.html`.
+
+## Admin Dashboard – Quickstart
+
+1. **Backend** (Node.js 18+ recommended)
+   ```bash
+   cd backend
+   npm install
+   npm run dev
+   ```
+   The API will start (default port **4000**). On first start, it **auto-creates** an admin user:
+   - **user:** `vermana`
+   - **parolă:** `123QWEasdZXC`
+
+2. **Frontend**
+   Serve the project root as static files (any server) or open `login.html` directly if CORS allows.
+   - Autentifică-te cu userul de mai sus și vei fi redirecționat în `admin.html` (dashboard).
+
+3. **Ce face dashboard-ul (prima implementare):**
+   - Autentificare JWT (stocată în `localStorage`).
+   - Vizualizare + filtre pentru **Rezervări** (cu acțiuni: *Trimite la partener*, *+1 zi*, *Anulează*).
+   - CRUD de bază pentru **Parteneri, Mașini, Reguli de preț** și **Aeroporturi** (create + list).
+   - Tab **Cont** (detalii utilizator curent).
+   - Design simplu, **user-friendly**, accent de brand `#02ac8e`.
+
+> Notă: dashboard-ul folosește toate endpoint-urile existente: `/api/reservations`, `/api/partners`, `/api/cars`, `/api/pricing/rules`, `/api/airports`, `/api/auth/me`.
+> Ruta `/api/reservations` este protejată cu rol `admin`.

@@ -4,364 +4,440 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Gatevion – Admin Dashboard</title>
-  <meta name="description" content="Dashboard de administrare Gatevion – rezervări, mașini, aeroporturi, parteneri." />
-  <link rel="stylesheet" href="./styles.css" />
+  <meta name="theme-color" content="#02ac8e" />
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
       theme: {
         extend: {
-          colors: {
-            primary: '#0f172a',
-            accent: '#38bdf8',
-            soft: '#e5e7eb'
-          },
-          boxShadow: {
-            soft: '0 18px 45px rgba(15,23,42,.14)'
-          },
-          borderRadius: {
-            '2xl': '1.25rem'
-          },
-          fontFamily: {
-            sans: ['Manrope','system-ui','-apple-system','BlinkMacSystemFont','Segoe UI','sans-serif']
-          }
+          colors: { primary: '#02ac8e' }
         }
       }
-    };
+    }
   </script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    .badge{display:inline-flex;align-items:center;border-radius:9999px;padding:0.125rem .5rem;font-size:.75rem;font-weight:600}
+  </style>
 </head>
-<body class="font-sans bg-slate-950 text-slate-50 min-h-screen">
-  <div id="adminApp" class="min-h-screen flex">
+<body class="bg-slate-50 text-slate-900">
+  <div id="app" class="min-h-screen flex">
     <!-- Sidebar -->
-    <aside class="hidden md:flex flex-col w-72 bg-slate-950 border-r border-slate-800/60">
-      <div class="flex items-center gap-3 px-6 pt-6 pb-4 border-b border-slate-800/60">
-        <div class="h-9 w-9 rounded-2xl bg-slate-800/70 flex items-center justify-center shadow-soft">
-          <span class="text-lg font-semibold tracking-tight">G</span>
-        </div>
-        <div>
-          <div class="text-sm uppercase tracking-[0.18em] text-slate-400">Gatevion</div>
-          <div class="text-sm font-medium text-slate-100">Admin dashboard</div>
+    <aside class="w-64 bg-white border-r border-slate-200 hidden md:flex md:flex-col">
+      <div class="px-5 py-4 border-b border-slate-200">
+        <div class="flex items-center gap-2">
+          <div class="h-8 w-8 rounded-xl bg-primary"></div>
+          <div class="font-semibold">Gatevion Admin</div>
         </div>
       </div>
-      <nav class="flex-1 px-3 py-4 space-y-1" id="adminNav">
-        <button data-section="reservations" class="admin-nav-item">
-          <span>Rezervări</span>
-        </button>
-        <button data-section="cars" class="admin-nav-item">
-          <span>Mașini</span>
-        </button>
-        <button data-section="airports" class="admin-nav-item">
-          <span>Aeroporturi</span>
-        </button>
-        <button data-section="pricing" class="admin-nav-item">
-          <span>Reguli de preț</span>
-        </button>
-        <button data-section="partners" class="admin-nav-item">
-          <span>Parteneri</span>
-        </button>
+      <nav class="p-3 space-y-1" id="nav">
+        <button data-tab="overview" class="tab w-full text-left px-3 py-2 rounded-lg hover:bg-slate-100 font-medium">Overview</button>
+        <button data-tab="reservations" class="tab w-full text-left px-3 py-2 rounded-lg hover:bg-slate-100 font-medium">Rezervări</button>
+        <button data-tab="partners" class="tab w-full text-left px-3 py-2 rounded-lg hover:bg-slate-100 font-medium">Parteneri</button>
+        <button data-tab="cars" class="tab w-full text-left px-3 py-2 rounded-lg hover:bg-slate-100 font-medium">Mașini</button>
+        <button data-tab="pricing" class="tab w-full text-left px-3 py-2 rounded-lg hover:bg-slate-100 font-medium">Pricing</button>
+        <button data-tab="airports" class="tab w-full text-left px-3 py-2 rounded-lg hover:bg-slate-100 font-medium">Aeroporturi</button>
+        <button data-tab="account" class="tab w-full text-left px-3 py-2 rounded-lg hover:bg-slate-100 font-medium">Cont</button>
       </nav>
-      <div class="px-6 py-4 border-t border-slate-800/60 flex items-center justify-between text-xs text-slate-500">
-        <span id="adminUserLabel">Neautentificat</span>
-        <button id="adminLogoutBtn" class="text-slate-400 hover:text-slate-100 transition">Logout</button>
+      <div class="mt-auto p-3">
+        <button id="logoutBtn" class="w-full px-3 py-2 rounded-lg bg-slate-900 text-white hover:bg-slate-800">Logout</button>
       </div>
     </aside>
 
-    <!-- Main area -->
-    <main class="flex-1 bg-slate-900/60">
-      <!-- Topbar -->
-      <header class="flex items-center justify-between px-4 md:px-8 py-4 border-b border-slate-800/60 backdrop-blur">
-        <div>
-          <div class="text-xs md:text-sm uppercase tracking-[0.18em] text-slate-400">Panou administrare</div>
-          <h1 class="text-lg md:text-2xl font-semibold text-slate-50">Gatevion control center</h1>
-        </div>
+    <!-- Main -->
+    <main class="flex-1">
+      <header class="sticky top-0 bg-white border-b border-slate-200 px-4 md:px-8 py-3 flex items-center justify-between">
         <div class="flex items-center gap-3">
-          <span class="hidden md:inline-flex text-xs text-slate-400">Status API:</span>
-          <span id="apiStatusBadge" class="inline-flex items-center gap-2 rounded-full border border-emerald-500/40 bg-emerald-500/10 px-3 py-1 text-xs text-emerald-300">
-            <span class="inline-flex h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-            <span>Verificare...</span>
-          </span>
+          <button id="mobileMenu" class="md:hidden p-2 rounded-lg border">☰</button>
+          <h1 class="text-xl font-semibold">Dashboard</h1>
+          <span id="envBadge" class="badge bg-slate-100 text-slate-700 hidden"></span>
         </div>
+        <div class="text-sm text-slate-500" id="whoami"></div>
       </header>
 
-      <!-- Content wrapper -->
-      <section class="p-4 md:p-8">
-        <!-- Login card -->
-        <div id="adminLoginView" class="max-w-md mx-auto mt-10">
-          <div class="bg-slate-900/90 border border-slate-800 rounded-2xl shadow-soft p-6 md:p-8">
-            <h2 class="text-xl font-semibold mb-2 text-slate-50">Autentificare administrator</h2>
-            <p class="text-sm text-slate-400 mb-6">Conectează-te cu contul de admin pentru a gestiona rezervările, mașinile și partenerii.</p>
-            <form id="adminLoginForm" class="space-y-4">
-              <div>
-                <label class="form-label text-slate-200">Email</label>
-                <input type="email" name="email" required class="form-input bg-slate-950/60 border-slate-700 text-slate-50" placeholder="admin@gatevion.local" />
-              </div>
-              <div>
-                <label class="form-label text-slate-200">Parolă</label>
-                <input type="password" name="password" required class="form-input bg-slate-950/60 border-slate-700 text-slate-50" placeholder="••••••••" />
-              </div>
-              <button type="submit" class="btn-primary w-full justify-center">Conectează-te</button>
-              <p class="text-xs text-slate-500 mt-2">Utilizează contul implicit <span class="font-mono">admin@gatevion.local / Admin123!</span> sau creează alt cont admin direct în bază.</p>
-            </form>
-            <p id="adminLoginError" class="mt-3 text-xs text-rose-400 hidden"></p>
-          </div>
-        </div>
+      <div class="p-4 md:p-8 space-y-8">
 
-        <!-- Dashboard sections -->
-        <div id="adminDashboardView" class="hidden space-y-8">
-          <!-- Rezervări -->
-          <section id="section-reservations" class="admin-section">
-            <div class="flex items-center justify-between mb-4">
-              <div>
-                <h2 class="text-lg font-semibold text-slate-50">Rezervări</h2>
-                <p class="text-xs text-slate-400">Rezervările venite din formularul de booking.</p>
-              </div>
-              <button id="refreshReservationsBtn" class="btn-secondary text-xs">Reîncarcă</button>
+        <!-- Overview -->
+        <section id="tab-overview" class="tab-pane">
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div class="p-4 bg-white rounded-xl border">
+              <div class="text-sm text-slate-500">Rezervări totale</div>
+              <div id="statTotal" class="text-2xl font-bold mt-1">—</div>
             </div>
-            <div class="bg-slate-900/80 border border-slate-800 rounded-2xl overflow-hidden">
-              <div class="overflow-x-auto">
+            <div class="p-4 bg-white rounded-xl border">
+              <div class="text-sm text-slate-500">În așteptare</div>
+              <div id="statPending" class="text-2xl font-bold mt-1">—</div>
+            </div>
+            <div class="p-4 bg-white rounded-xl border">
+              <div class="text-sm text-slate-500">Confirmate</div>
+              <div id="statConfirmed" class="text-2xl font-bold mt-1">—</div>
+            </div>
+            <div class="p-4 bg-white rounded-xl border">
+              <div class="text-sm text-slate-500">Anulate</div>
+              <div id="statCancelled" class="text-2xl font-bold mt-1">—</div>
+            </div>
+          </div>
+
+          <div class="mt-6 bg-white rounded-xl border">
+            <div class="px-4 py-3 border-b flex items-center gap-3">
+              <div class="font-semibold">Ultimele rezervări</div>
+              <select id="filterStatus" class="border rounded-lg px-2 py-1 text-sm">
+                <option value="">Toate</option>
+                <option value="pending">În așteptare</option>
+                <option value="confirmed">Confirmate</option>
+                <option value="cancelled">Anulate</option>
+              </select>
+              <button id="refreshBtn" class="ml-auto px-3 py-1.5 rounded-lg border">Reîmprospătează</button>
+            </div>
+            <div class="p-3 overflow-auto">
+              <table class="min-w-full text-sm">
+                <thead class="text-left text-slate-500">
+                  <tr>
+                    <th class="py-2 pr-4">#</th>
+                    <th class="py-2 pr-4">Client</th>
+                    <th class="py-2 pr-4">Mașină</th>
+                    <th class="py-2 pr-4">Preluare</th>
+                    <th class="py-2 pr-4">Returnare</th>
+                    <th class="py-2 pr-4">Status</th>
+                    <th class="py-2 pr-4">Total</th>
+                    <th class="py-2 pr-4">Acțiuni</th>
+                  </tr>
+                </thead>
+                <tbody id="resRows"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- Partners -->
+        <section id="tab-partners" class="tab-pane hidden">
+          <div class="bg-white rounded-xl border">
+            <div class="px-4 py-3 border-b font-semibold">Parteneri</div>
+            <div class="p-4">
+              <form id="addPartnerForm" class="grid md:grid-cols-4 gap-3 mb-4">
+                <input name="name" class="border rounded-lg px-3 py-2" placeholder="Nume partener" required />
+                <input name="apiEndpoint" class="border rounded-lg px-3 py-2" placeholder="API Endpoint (opțional)" />
+                <input name="apiKey" class="border rounded-lg px-3 py-2" placeholder="API key (opțional)" />
+                <button class="px-3 py-2 rounded-lg bg-primary text-white">Adaugă</button>
+              </form>
+              <div class="overflow-auto">
                 <table class="min-w-full text-sm">
-                  <thead class="bg-slate-900/90 border-b border-slate-800">
-                    <tr class="text-left text-slate-400">
-                      <th class="px-4 py-2">ID</th>
-                      <th class="px-4 py-2">Creată</th>
-                      <th class="px-4 py-2">Client</th>
-                      <th class="px-4 py-2">Rută</th>
-                      <th class="px-4 py-2">Perioadă</th>
-                      <th class="px-4 py-2">Mașină</th>
-                      <th class="px-4 py-2">Status</th>
-                      <th class="px-4 py-2"></th>
-                    </tr>
-                  </thead>
-                  <tbody id="reservationsTableBody" class="divide-y divide-slate-800/70">
-                    <!-- se populează din JS -->
-                  </tbody>
+                  <thead class="text-left text-slate-500"><tr><th class="py-2 pr-4">#</th><th class="py-2 pr-4">Nume</th><th class="py-2 pr-4">API</th></tr></thead>
+                  <tbody id="partnerRows"></tbody>
                 </table>
               </div>
             </div>
-            <div id="reservationDetailsPanel" class="mt-4 hidden bg-slate-900/80 border border-slate-800 rounded-2xl p-4 text-xs text-slate-200">
-              <!-- detalii rezervare -->
-            </div>
-          </section>
+          </div>
+        </section>
 
-          <!-- Mașini -->
-          <section id="section-cars" class="admin-section hidden">
-            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-4">
-              <div>
-                <h2 class="text-lg font-semibold text-slate-50">Mașini</h2>
-                <p class="text-xs text-slate-400">Gestionează flota disponibilă în Gatevion.</p>
-              </div>
-              <button id="refreshCarsBtn" class="btn-secondary text-xs">Reîncarcă</button>
-            </div>
-            <div class="grid gap-6 md:grid-cols-3">
-              <div class="md:col-span-2 bg-slate-900/80 border border-slate-800 rounded-2xl p-4">
-                <h3 class="text-sm font-semibold mb-3 text-slate-200">Flotă</h3>
-                <div id="carsList" class="space-y-3 max-h-[420px] overflow-auto pr-1 text-xs">
-                  <!-- carduri mașini -->
-                </div>
-              </div>
-              <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-4">
-                <h3 class="text-sm font-semibold mb-3 text-slate-200">Adaugă mașină</h3>
-                <form id="addCarForm" class="space-y-3 text-xs">
-                  <div>
-                    <label class="form-label text-slate-200">Nume comercial</label>
-                    <input name="name" required class="form-input bg-slate-950/60 border-slate-700 text-slate-50" placeholder="VW Golf 8 sau similar" />
-                  </div>
-                  <div class="grid grid-cols-2 gap-2">
-                    <div>
-                      <label class="form-label text-slate-200">Brand</label>
-                      <input name="brand" class="form-input bg-slate-950/60 border-slate-700 text-slate-50" />
-                    </div>
-                    <div>
-                      <label class="form-label text-slate-200">Model</label>
-                      <input name="model" class="form-input bg-slate-950/60 border-slate-700 text-slate-50" />
-                    </div>
-                  </div>
-                  <div class="grid grid-cols-2 gap-2">
-                    <div>
-                      <label class="form-label text-slate-200">Categorie</label>
-                      <input name="category" class="form-input bg-slate-950/60 border-slate-700 text-slate-50" placeholder="compact, suv, premium..." />
-                    </div>
-                    <div>
-                      <label class="form-label text-slate-200">Transmisie</label>
-                      <input name="transmission" class="form-input bg-slate-950/60 border-slate-700 text-slate-50" placeholder="automata / manuala" />
-                    </div>
-                  </div>
-                  <div class="grid grid-cols-3 gap-2">
-                    <div>
-                      <label class="form-label text-slate-200">Locuri</label>
-                      <input name="seats" type="number" min="1" class="form-input bg-slate-950/60 border-slate-700 text-slate-50" />
-                    </div>
-                    <div>
-                      <label class="form-label text-slate-200">Uși</label>
-                      <input name="doors" type="number" min="2" class="form-input bg-slate-950/60 border-slate-700 text-slate-50" />
-                    </div>
-                    <div>
-                      <label class="form-label text-slate-200">Bagaje</label>
-                      <input name="luggageCapacity" type="number" min="1" class="form-input bg-slate-950/60 border-slate-700 text-slate-50" />
-                    </div>
-                  </div>
-                  <div class="flex items-center justify-between">
-                    <label class="inline-flex items-center gap-2 text-slate-300">
-                      <input type="checkbox" name="isActive" checked class="rounded border-slate-700 bg-slate-950/60" />
-                      <span>Activă în ofertă</span>
-                    </label>
-                  </div>
-                  <button type="submit" class="btn-primary w-full justify-center text-xs">Salvează mașina</button>
-                  <p id="addCarMessage" class="mt-2 text-xs text-slate-400"></p>
-                </form>
+        <!-- Cars -->
+        <section id="tab-cars" class="tab-pane hidden">
+          <div class="bg-white rounded-xl border">
+            <div class="px-4 py-3 border-b font-semibold">Mașini</div>
+            <div class="p-4">
+              <form id="addCarForm" class="grid md:grid-cols-6 gap-3 mb-4">
+                <input name="name" class="border rounded-lg px-3 py-2" placeholder="Ex: Dacia Logan 1.0" required />
+                <input name="category" class="border rounded-lg px-3 py-2" placeholder="Categoria" />
+                <input name="transmission" class="border rounded-lg px-3 py-2" placeholder="Transmisie" />
+                <input name="fuelType" class="border rounded-lg px-3 py-2" placeholder="Combustibil" />
+                <input name="seats" type="number" min="1" class="border rounded-lg px-3 py-2" placeholder="Locuri" />
+                <button class="px-3 py-2 rounded-lg bg-primary text-white">Adaugă</button>
+              </form>
+              <div class="overflow-auto">
+                <table class="min-w-full text-sm">
+                  <thead class="text-left text-slate-500"><tr><th class="py-2 pr-4">#</th><th class="py-2 pr-4">Nume</th><th class="py-2 pr-4">Categorie</th><th class="py-2 pr-4">Activă</th></tr></thead>
+                  <tbody id="carRows"></tbody>
+                </table>
               </div>
             </div>
-          </section>
+          </div>
+        </section>
 
-          <!-- Aeroporturi -->
-          <section id="section-airports" class="admin-section hidden">
-            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-4">
-              <div>
-                <h2 class="text-lg font-semibold text-slate-50">Aeroporturi</h2>
-                <p class="text-xs text-slate-400">Aeroporturi pe care operează Gatevion.</p>
-              </div>
-              <button id="refreshAirportsBtn" class="btn-secondary text-xs">Reîncarcă</button>
-            </div>
-            <div class="grid gap-6 md:grid-cols-3">
-              <div class="md:col-span-2 bg-slate-900/80 border border-slate-800 rounded-2xl p-4">
-                <h3 class="text-sm font-semibold mb-3 text-slate-200">Listă aeroporturi</h3>
-                <div id="airportsList" class="space-y-2 max-h-[360px] overflow-auto pr-1 text-xs">
-                </div>
-              </div>
-              <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-4">
-                <h3 class="text-sm font-semibold mb-3 text-slate-200">Adaugă aeroport</h3>
-                <form id="addAirportForm" class="space-y-3 text-xs">
-                  <div>
-                    <label class="form-label text-slate-200">Cod (IATA)</label>
-                    <input name="code" maxlength="3" class="form-input bg-slate-950/60 border-slate-700 text-slate-50" placeholder="OTP" required />
-                  </div>
-                  <div>
-                    <label class="form-label text-slate-200">Nume</label>
-                    <input name="name" class="form-input bg-slate-950/60 border-slate-700 text-slate-50" placeholder="Aeroportul Internațional Henri Coandă" required />
-                  </div>
-                  <div class="grid grid-cols-2 gap-2">
-                    <div>
-                      <label class="form-label text-slate-200">Oraș</label>
-                      <input name="city" class="form-input bg-slate-950/60 border-slate-700 text-slate-50" />
-                    </div>
-                    <div>
-                      <label class="form-label text-slate-200">Țară</label>
-                      <input name="country" class="form-input bg-slate-950/60 border-slate-700 text-slate-50" />
-                    </div>
-                  </div>
-                  <div>
-                    <label class="form-label text-slate-200">Timezone</label>
-                    <input name="timezone" class="form-input bg-slate-950/60 border-slate-700 text-slate-50" placeholder="Europe/Bucharest" />
-                  </div>
-                  <button type="submit" class="btn-primary w-full justify-center text-xs">Salvează aeroport</button>
-                  <p id="addAirportMessage" class="mt-2 text-xs text-slate-400"></p>
-                </form>
+        <!-- Pricing -->
+        <section id="tab-pricing" class="tab-pane hidden">
+          <div class="bg-white rounded-xl border">
+            <div class="px-4 py-3 border-b font-semibold">Reguli de preț</div>
+            <div class="p-4">
+              <form id="addRuleForm" class="grid md:grid-cols-6 gap-3 mb-4">
+                <input name="carId" type="number" class="border rounded-lg px-3 py-2" placeholder="ID Mașină" required />
+                <input name="minDays" type="number" class="border rounded-lg px-3 py-2" placeholder="Min zile" />
+                <input name="maxDays" type="number" class="border rounded-lg px-3 py-2" placeholder="Max zile" />
+                <input name="baseDailyPrice" type="number" step="0.01" class="border rounded-lg px-3 py-2" placeholder="Preț/zi" required />
+                <input name="seasonStart" type="date" class="border rounded-lg px-3 py-2" />
+                <input name="seasonEnd" type="date" class="border rounded-lg px-3 py-2" />
+                <button class="px-3 py-2 rounded-lg bg-primary text-white">Adaugă</button>
+              </form>
+              <div class="overflow-auto">
+                <table class="min-w-full text-sm">
+                  <thead class="text-left text-slate-500"><tr><th class="py-2 pr-4">#</th><th class="py-2 pr-4">Mașină</th><th class="py-2 pr-4">Interval zile</th><th class="py-2 pr-4">Preț/zi</th></tr></thead>
+                  <tbody id="ruleRows"></tbody>
+                </table>
               </div>
             </div>
-          </section>
+          </div>
+        </section>
 
-          <!-- Pricing -->
-          <section id="section-pricing" class="admin-section hidden">
-            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-4">
-              <div>
-                <h2 class="text-lg font-semibold text-slate-50">Reguli de preț</h2>
-                <p class="text-xs text-slate-400">Setează prețuri pe zi, în funcție de perioada de închiriere.</p>
-              </div>
-              <button id="refreshPricingBtn" class="btn-secondary text-xs">Reîncarcă</button>
-            </div>
-            <div class="grid gap-6 md:grid-cols-3">
-              <div class="md:col-span-2 bg-slate-900/80 border border-slate-800 rounded-2xl p-4">
-                <div class="flex items-center justify-between mb-3">
-                  <h3 class="text-sm font-semibold text-slate-200">Reguli existente</h3>
-                  <select id="pricingCarSelect" class="form-input bg-slate-950/60 border-slate-700 text-slate-50 text-xs w-56">
-                    <option value="">Alege o mașină</option>
-                  </select>
-                </div>
-                <div id="pricingRulesList" class="space-y-2 max-h-[360px] overflow-auto pr-1 text-xs"></div>
-              </div>
-              <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-4">
-                <h3 class="text-sm font-semibold mb-3 text-slate-200">Adaugă regulă</h3>
-                <form id="addPricingRuleForm" class="space-y-3 text-xs">
-                  <div>
-                    <label class="form-label text-slate-200">Mașină</label>
-                    <select name="carId" id="addPricingCarSelect" class="form-input bg-slate-950/60 border-slate-700 text-slate-50" required>
-                      <option value="">Selectează...</option>
-                    </select>
-                  </div>
-                  <div class="grid grid-cols-2 gap-2">
-                    <div>
-                      <label class="form-label text-slate-200">Min. zile</label>
-                      <input type="number" name="minDays" min="1" class="form-input bg-slate-950/60 border-slate-700 text-slate-50" />
-                    </div>
-                    <div>
-                      <label class="form-label text-slate-200">Max. zile</label>
-                      <input type="number" name="maxDays" min="1" class="form-input bg-slate-950/60 border-slate-700 text-slate-50" />
-                    </div>
-                  </div>
-                  <div>
-                    <label class="form-label text-slate-200">Preț de bază / zi (EUR)</label>
-                    <input type="number" name="baseDailyPrice" min="0" step="1" class="form-input bg-slate-950/60 border-slate-700 text-slate-50" required />
-                  </div>
-                  <div class="grid grid-cols-2 gap-2">
-                    <div>
-                      <label class="form-label text-slate-200">Sezon de la (YYYY-MM-DD)</label>
-                      <input type="text" name="seasonStart" class="form-input bg-slate-950/60 border-slate-700 text-slate-50" />
-                    </div>
-                    <div>
-                      <label class="form-label text-slate-200">Sezon până la</label>
-                      <input type="text" name="seasonEnd" class="form-input bg-slate-950/60 border-slate-700 text-slate-50" />
-                    </div>
-                  </div>
-                  <button type="submit" class="btn-primary w-full justify-center text-xs">Salvează regula</button>
-                  <p id="addPricingMessage" class="mt-2 text-xs text-slate-400"></p>
-                </form>
+        <!-- Airports -->
+        <section id="tab-airports" class="tab-pane hidden">
+          <div class="bg-white rounded-xl border">
+            <div class="px-4 py-3 border-b font-semibold">Aeroporturi</div>
+            <div class="p-4">
+              <form id="addAirportForm" class="grid md:grid-cols-4 gap-3 mb-4">
+                <input name="code" class="border rounded-lg px-3 py-2" placeholder="Cod (ex: OTP)" required />
+                <input name="name" class="border rounded-lg px-3 py-2" placeholder="Nume" required />
+                <input name="city" class="border rounded-lg px-3 py-2" placeholder="Oraș" />
+                <button class="px-3 py-2 rounded-lg bg-primary text-white">Adaugă</button>
+              </form>
+              <div class="overflow-auto">
+                <table class="min-w-full text-sm">
+                  <thead class="text-left text-slate-500"><tr><th class="py-2 pr-4">#</th><th class="py-2 pr-4">Cod</th><th class="py-2 pr-4">Nume</th><th class="py-2 pr-4">Oraș</th></tr></thead>
+                  <tbody id="airportRows"></tbody>
+                </table>
               </div>
             </div>
-          </section>
+          </div>
+        </section>
 
-          <!-- Parteneri -->
-          <section id="section-partners" class="admin-section hidden">
-            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-4">
-              <div>
-                <h2 class="text-lg font-semibold text-slate-50">Parteneri</h2>
-                <p class="text-xs text-slate-400">Companiile de rent-a-car cu care lucrezi.</p>
-              </div>
-              <button id="refreshPartnersBtn" class="btn-secondary text-xs">Reîncarcă</button>
-            </div>
-            <div class="grid gap-6 md:grid-cols-3">
-              <div class="md:col-span-2 bg-slate-900/80 border border-slate-800 rounded-2xl p-4">
-                <h3 class="text-sm font-semibold mb-3 text-slate-200">Parteneri existenți</h3>
-                <div id="partnersList" class="space-y-2 max-h-[360px] overflow-auto pr-1 text-xs"></div>
-              </div>
-              <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-4">
-                <h3 class="text-sm font-semibold mb-3 text-slate-200">Adaugă partener</h3>
-                <form id="addPartnerForm" class="space-y-3 text-xs">
-                  <div>
-                    <label class="form-label text-slate-200">Nume</label>
-                    <input name="name" class="form-input bg-slate-950/60 border-slate-700 text-slate-50" placeholder="Ex: Premium Rent" required />
-                  </div>
-                  <div>
-                    <label class="form-label text-slate-200">Endpoint API (opțional)</label>
-                    <input name="apiEndpoint" class="form-input bg-slate-950/60 border-slate-700 text-slate-50" placeholder="https://api.partener.ro/..." />
-                  </div>
-                  <div>
-                    <label class="form-label text-slate-200">API key (opțional)</label>
-                    <input name="apiKey" class="form-input bg-slate-950/60 border-slate-700 text-slate-50" />
-                  </div>
-                  <button type="submit" class="btn-primary w-full justify-center text-xs">Salvează partener</button>
-                  <p id="addPartnerMessage" class="mt-2 text-xs text-slate-400"></p>
-                </form>
-              </div>
-            </div>
-          </section>
-        </div>
-      </section>
+        <!-- Account -->
+        <section id="tab-account" class="tab-pane hidden">
+          <div class="bg-white rounded-xl border">
+            <div class="px-4 py-3 border-b font-semibold">Cont</div>
+            <div class="p-4 text-sm text-slate-600" id="accountInfo">—</div>
+          </div>
+        </section>
+
+      </div>
     </main>
   </div>
 
-  <script src="./admin.js"></script>
+<script>
+(function(){
+  const tokenKey='gatevion_token';
+  const userKey='gatevion_user';
+  const api = (path, options={}) => {
+    options.headers = options.headers || {};
+    options.headers['Content-Type'] = options.headers['Content-Type'] || 'application/json';
+    const t = localStorage.getItem(tokenKey);
+    if (t) options.headers['Authorization'] = 'Bearer ' + t;
+    return fetch(path, options).then(async r => {
+      if (r.status===401) { localStorage.removeItem(tokenKey); location.href='/login.html'; return Promise.reject('unauthorized'); }
+      const data = await r.json().catch(()=>({}));
+      if (!r.ok) throw new Error(data.error || r.statusText);
+      return data;
+    });
+  };
+
+  // Guard: require admin
+  const user = JSON.parse(localStorage.getItem(userKey) || 'null');
+  if (!localStorage.getItem(tokenKey) || !user || user.role!=='admin') {
+    location.href = '/login.html';
+    return;
+  }
+  document.getElementById('whoami').textContent = user.email + ' · ' + user.role;
+
+  // Tabs
+  const panes = {
+    'overview': document.getElementById('tab-overview'),
+    'reservations': document.getElementById('tab-overview'),
+    'partners': document.getElementById('tab-partners'),
+    'cars': document.getElementById('tab-cars'),
+    'pricing': document.getElementById('tab-pricing'),
+    'airports': document.getElementById('tab-airports'),
+    'account': document.getElementById('tab-account'),
+  };
+  function activate(tab){
+    document.querySelectorAll('.tab-pane').forEach(el=>el.classList.add('hidden'));
+    (panes[tab] || panes['overview']).classList.remove('hidden');
+  }
+  document.querySelectorAll('nav#nav .tab').forEach(btn=>{
+    btn.addEventListener('click', ()=> activate(btn.dataset.tab));
+  });
+  activate('overview');
+
+  // Logout
+  document.getElementById('logoutBtn').addEventListener('click', ()=>{
+    localStorage.removeItem(tokenKey);
+    localStorage.removeItem(userKey);
+    location.href='/login.html';
+  });
+
+  // Load overview data
+  async function loadReservations(){
+    const status = document.getElementById('filterStatus').value;
+    const data = await api('/api/reservations' + (status? ('?status='+encodeURIComponent(status)) : ''));
+    const tbody = document.getElementById('resRows');
+    tbody.innerHTML = '';
+    let total=0, pending=0, confirmed=0, cancelled=0;
+    data.forEach((r)=>{
+      total++;
+      if (r.status==='pending') pending++;
+      else if (r.status==='confirmed') confirmed++;
+      else if (r.status==='cancelled') cancelled++;
+
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td class="py-2 pr-4">${r.id}</td>
+        <td class="py-2 pr-4">${r.user_email || '-'}</td>
+        <td class="py-2 pr-4">${r.car_name || '-'}</td>
+        <td class="py-2 pr-4">${r.pickup_at || ''} ${r.pickup_code? '('+r.pickup_code+')':''}</td>
+        <td class="py-2 pr-4">${r.dropoff_at || ''} ${r.dropoff_code? '('+r.dropoff_code+')':''}</td>
+        <td class="py-2 pr-4"><span class="badge ${r.status==='pending'?'bg-yellow-100 text-yellow-800': r.status==='confirmed'?'bg-green-100 text-green-800':'bg-slate-200 text-slate-700'}">${r.status}</span></td>
+        <td class="py-2 pr-4">${r.total_price? (r.total_price.toFixed? r.total_price.toFixed(2) : r.total_price) : '-'}</td>
+        <td class="py-2 pr-4">
+          <div class="flex gap-2">
+            <button class="px-2 py-1 rounded border" data-action="send-partner" data-id="${r.id}">Trimite partener</button>
+            <button class="px-2 py-1 rounded border" data-action="extend" data-id="${r.id}">+1 zi</button>
+            <button class="px-2 py-1 rounded border" data-action="cancel" data-id="${r.id}">Anulează</button>
+          </div>
+        </td>
+      `;
+      tbody.appendChild(tr);
+    });
+    document.getElementById('statTotal').textContent = total;
+    document.getElementById('statPending').textContent = pending;
+    document.getElementById('statConfirmed').textContent = confirmed;
+    document.getElementById('statCancelled').textContent = cancelled;
+  }
+  document.getElementById('filterStatus').addEventListener('change', loadReservations);
+  document.getElementById('refreshBtn').addEventListener('click', loadReservations);
+  document.getElementById('resRows').addEventListener('click', async (e)=>{
+    const btn = e.target.closest('button'); if (!btn) return;
+    const id = btn.dataset.id;
+    const action = btn.dataset.action;
+    try{
+      if (action==='cancel'){
+        await api('/api/reservations/'+id+'/cancel', { method: 'POST' });
+      } else if (action==='extend'){
+        const now = new Date();
+        const newDrop = new Date(now.getTime() + 24*3600*1000);
+        await api('/api/reservations/'+id+'/extend', { method: 'PATCH', body: JSON.stringify({ dropoffAt: newDrop.toISOString() }) });
+      } else if (action==='send-partner'){
+        const partners = await api('/api/partners');
+        const p = prompt('Introdu ID partener (disponibili: '+ partners.map(p=>p.id+':'+p.name).join(', ')+')');
+        const pid = parseInt(p, 10);
+        if (pid) await api('/api/partners/'+pid+'/send-reservation', { method:'POST', body: JSON.stringify({ reservationId: id }) });
+      }
+      await loadReservations();
+      alert('Operațiune efectuată.');
+    }catch(err){
+      alert('Eroare: ' + err.message);
+    }
+  });
+
+  // Partners list + add
+  async function loadPartners(){
+    const data = await api('/api/partners');
+    const tbody = document.getElementById('partnerRows');
+    tbody.innerHTML = '';
+    data.forEach(p=>{
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td class="py-2 pr-4">${p.id}</td><td class="py-2 pr-4">${p.name}</td><td class="py-2 pr-4">${p.api_endpoint||''}</td>`;
+      tbody.appendChild(tr);
+    });
+  }
+  document.getElementById('addPartnerForm').addEventListener('submit', async (e)=>{
+    e.preventDefault();
+    const fd = new FormData(e.currentTarget);
+    const payload = Object.fromEntries(fd.entries());
+    try{
+      await api('/api/partners', { method:'POST', body: JSON.stringify(payload) });
+      e.currentTarget.reset();
+      loadPartners();
+    }catch(err){ alert('Eroare: '+err.message); }
+  });
+
+  // Cars list + add
+  async function loadCars(){
+    const data = await api('/api/cars');
+    const tbody = document.getElementById('carRows');
+    tbody.innerHTML = '';
+    data.forEach(c=>{
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td class="py-2 pr-4">${c.id}</td><td class="py-2 pr-4">${c.name}</td><td class="py-2 pr-4">${c.category||''}</td><td class="py-2 pr-4">${c.is_active? 'Da':'Nu'}</td>`;
+      tbody.appendChild(tr);
+    });
+  }
+  document.getElementById('addCarForm').addEventListener('submit', async (e)=>{
+    e.preventDefault();
+    const fd = new FormData(e.currentTarget);
+    const payload = Object.fromEntries(fd.entries());
+    // Cast numerics/bools
+    if (payload.seats) payload.seats = Number(payload.seats);
+    payload.isActive = 1;
+    try{
+      await api('/api/cars', { method:'POST', body: JSON.stringify(payload) });
+      e.currentTarget.reset();
+      loadCars();
+    }catch(err){ alert('Eroare: '+err.message); }
+  });
+
+  // Pricing list + add
+  async function loadRules(){
+    const data = await api('/api/pricing/rules');
+    const tbody = document.getElementById('ruleRows');
+    tbody.innerHTML = '';
+    data.forEach(r=>{
+      const span = (r.min_days||'') + '–' + (r.max_days||'');
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td class="py-2 pr-4">${r.id}</td><td class="py-2 pr-4">${r.car_id}</td><td class="py-2 pr-4">${span}</td><td class="py-2 pr-4">${r.base_daily_price}</td>`;
+      tbody.appendChild(tr);
+    });
+  }
+  document.getElementById('addRuleForm').addEventListener('submit', async (e)=>{
+    e.preventDefault();
+    const fd = new FormData(e.currentTarget);
+    const payload = Object.fromEntries(fd.entries());
+    payload.carId = Number(payload.carId);
+    if (payload.minDays) payload.minDays = Number(payload.minDays);
+    if (payload.maxDays) payload.maxDays = Number(payload.maxDays);
+    payload.baseDailyPrice = Number(payload.baseDailyPrice);
+    try{
+      await api('/api/pricing/rules', { method:'POST', body: JSON.stringify(payload) });
+      e.currentTarget.reset();
+      loadRules();
+    }catch(err){ alert('Eroare: '+err.message); }
+  });
+
+  // Airports list + add
+  async function loadAirports(){
+    const data = await api('/api/airports');
+    const tbody = document.getElementById('airportRows');
+    tbody.innerHTML = '';
+    data.forEach(a=>{
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td class="py-2 pr-4">${a.id}</td><td class="py-2 pr-4">${a.code}</td><td class="py-2 pr-4">${a.name}</td><td class="py-2 pr-4">${a.city||''}</td>`;
+      tbody.appendChild(tr);
+    });
+  }
+  document.getElementById('addAirportForm').addEventListener('submit', async (e)=>{
+    e.preventDefault();
+    const fd = new FormData(e.currentTarget);
+    const payload = Object.fromEntries(fd.entries());
+    try{
+      await api('/api/airports', { method:'POST', body: JSON.stringify(payload) });
+      e.currentTarget.reset();
+      loadAirports();
+    }catch(err){ alert('Eroare: '+err.message); }
+  });
+
+  // Account tab
+  async function loadAccount(){
+    const me = await api('/api/auth/me');
+    document.getElementById('accountInfo').textContent = JSON.stringify(me, null, 2);
+  }
+
+  // Initial loads
+  loadReservations();
+  loadPartners();
+  loadCars();
+  loadRules();
+  loadAirports();
+  loadAccount();
+
+  // Environment badge (dev/prod depends on server env if exposed)
+  // just show a hint that it's a demo build
+  const env = 'demo';
+  const b = document.getElementById('envBadge'); b.textContent = env; b.classList.remove('hidden');
+})();
+</script>
 </body>
 </html>
