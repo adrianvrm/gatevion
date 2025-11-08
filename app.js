@@ -590,6 +590,45 @@ document.addEventListener('DOMContentLoaded', () => {
     window.location.href = url;
   });
 
+  // Nav "Caută mașini disponibile" – activ doar când formularul este complet
+  const navSearchBtn = document.getElementById('navSearchBtn');
+  if(navSearchBtn && formEl){
+    const updateNavSearchState = ()=>{
+      const arr = formEl.arr_airport?.value || '';
+      const dep = formEl.dep_airport?.value || '';
+      const sd  = formEl.start_date?.value || '';
+      const st  = formEl.start_time?.value || '';
+      const ed  = formEl.end_date?.value || '';
+      const et  = formEl.end_time?.value || '';
+      const isComplete = !!(arr && dep && sd && st && ed && et);
+
+      if(isComplete){
+        navSearchBtn.disabled = false;
+        navSearchBtn.classList.remove('btn-primary--disabled');
+        navSearchBtn.setAttribute('aria-disabled','false');
+      }else{
+        navSearchBtn.disabled = true;
+        navSearchBtn.classList.add('btn-primary--disabled');
+        navSearchBtn.setAttribute('aria-disabled','true');
+      }
+    };
+
+    updateNavSearchState();
+
+    // Recalculează starea butonului când se schimbă datele picker-elor
+    document.addEventListener('picker:changed', updateNavSearchState);
+
+    // Trimite formularul atunci când butonul devine activ și este apăsat
+    navSearchBtn.addEventListener('click', ()=>{
+      if(navSearchBtn.disabled) return;
+      if(formEl){
+        if(typeof formEl.requestSubmit === 'function') formEl.requestSubmit();
+        else formEl.submit();
+      }
+    });
+  }
+
+
   
   // Hero CTA -> focus form card with glow & adjusted scroll
   const startBtn = document.getElementById('startBookingBtn');
