@@ -1923,8 +1923,8 @@ body{
   inset:-12px;
   border-radius:inherit;
   background:
-    radial-gradient(140% 180% at 50% 0%, rgba(2,172,142,0.30), transparent 65%),
-    radial-gradient(120% 160% at 0% 100%, rgba(15,23,42,0.26), transparent 70%);
+    radial-gradient(140% 180% at 50% 0%, rgba(2,172,142,0.42), transparent 65%),
+    radial-gradient(120% 160% at 0% 100%, rgba(15,23,42,0.34), transparent 72%);
   opacity:0;
   pointer-events:none;
   transform:scale(.96);
@@ -1933,7 +1933,7 @@ body{
 
 .hero-form-card.hero-form-highlight::before{
   opacity:1;
-  transform:scale(1);
+  transform:scale(1.03);
 }
 
 

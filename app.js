@@ -646,7 +646,7 @@ document.addEventListener('DOMContentLoaded', () => {
           }
         }catch(_e){}
         e.preventDefault();
-        window.location.href = '/index.html#searchForm';
+        window.location.href = '/index.html';
       });
     });
   })();
@@ -663,7 +663,7 @@ document.addEventListener('DOMContentLoaded', () => {
     formCard.classList.add('hero-form-highlight');
     setTimeout(()=>{
       formCard.classList.remove('hero-form-highlight');
-    }, 900);
+    }, 1700);
     return true;
   };
 
