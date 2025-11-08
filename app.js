@@ -622,28 +622,56 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
 
+
+
+  // Header "Caută mașini disponibile" de pe alte pagini -> pregătește focus pe formularul din index (desktop only)
+  (()=>{
+    const path = window.location.pathname || '';
+    const isIndex = path.endsWith('/index.html') || path === '/' || path === '';
+    if(isIndex) return;
+
+    const headerLinks = document.querySelectorAll('a[aria-label="Caută mașini disponibile"][href="/index.html#searchForm"]');
+    if(!headerLinks.length) return;
+
+    headerLinks.forEach((link)=>{
+      link.addEventListener('click', (e)=>{
+        const isDesktop = window.innerWidth > 768;
+        if(!isDesktop){
+          // pe mobil lăsăm browserul să se ocupe de ancoră
+          return;
+        }
+        try{
+          if(window.sessionStorage){
+            sessionStorage.setItem('gvTriggerSearchFocus','1');
+          }
+        }catch(_e){}
+        e.preventDefault();
+        window.location.href = '/index.html#searchForm';
+      });
+    });
+  })();
 // Hero CTA + header CTA -> evidențiază formularul; scroll lin doar pe desktop/web (până sus de tot)
   const startBtn = document.getElementById('startBookingBtn');
   const headerSearchBtn = document.getElementById('headerSearchBtn');
   const formCard = document.querySelector('.hero-form-card');
 
-  const triggerSearchFocus = (e)=>{
+  const runSearchHighlight = ()=>{
     const isDesktop = window.innerWidth > 768;
+    if(!isDesktop) return false;
 
-    if(!isDesktop){
-      // pe mobil lăsăm ancora să funcționeze normal (se folosește #searchForm)
-      return;
-    }
-
-    // pe desktop prevenim comportamentul implicit și facem scroll lin până sus + highlight pe formular
-    e.preventDefault();
     window.scrollTo({ top: 0, behavior: 'smooth' });
-
-    // trigger highlight glow pe cardul formularului
     formCard.classList.add('hero-form-highlight');
     setTimeout(()=>{
       formCard.classList.remove('hero-form-highlight');
     }, 900);
+    return true;
+  };
+
+  const triggerSearchFocus = (e)=>{
+    const ran = runSearchHighlight();
+    if(ran && e && typeof e.preventDefault === 'function'){
+      e.preventDefault();
+    }
   };
 
   if(formCard){
@@ -653,6 +681,14 @@ document.addEventListener('DOMContentLoaded', () => {
     if(headerSearchBtn){
       headerSearchBtn.addEventListener('click', triggerSearchFocus);
     }
+
+    // Dacă am venit din alte pagini și avem un flag în sessionStorage, rulăm același efect o singură dată
+    try{
+      if(window.sessionStorage && sessionStorage.getItem('gvTriggerSearchFocus') === '1'){
+        sessionStorage.removeItem('gvTriggerSearchFocus');
+        runSearchHighlight();
+      }
+    }catch(_e){}
   }
 
 
