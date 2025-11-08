@@ -624,16 +624,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-  // Header "Caută mașini disponibile" de pe alte pagini -> pregătește focus pe formularul din index (desktop only)
+  // Header "Caută mașini disponibile" de pe alte pagini + CTA "Caută o mașină" din cont -> pregătesc focus pe formularul din index (desktop only)
   (()=>{
     const path = window.location.pathname || '';
     const isIndex = path.endsWith('/index.html') || path === '/' || path === '';
     if(isIndex) return;
 
-    const headerLinks = document.querySelectorAll('a[aria-label="Caută mașini disponibile"][href="/index.html#searchForm"]');
-    if(!headerLinks.length) return;
+    const headerLinks = Array.from(document.querySelectorAll('a[aria-label="Caută mașini disponibile"][href="/index.html#searchForm"]'));
+    const accountSearchBtn = document.getElementById('accountSearchBtn');
 
-    headerLinks.forEach((link)=>{
+    const triggers = headerLinks.slice();
+    if(accountSearchBtn) triggers.push(accountSearchBtn);
+
+    if(!triggers.length) return;
+
+    triggers.forEach((link)=>{
       link.addEventListener('click', (e)=>{
         const isDesktop = window.innerWidth > 768;
         if(!isDesktop){
@@ -1472,4 +1477,45 @@ document.addEventListener('DOMContentLoaded', () => {
     if(email) setText('tyEmail', email);
     if(phoneDisplay) setText('tyPhone', phoneDisplay);
   }
+
+
+  // Contul meu – navigare între secțiuni (tab-like) prin scroll lin
+  (()=>{
+    const path = window.location.pathname || window.location.href || '';
+    const isAccount = path.includes('contul-meu.html');
+    if(!isAccount) return;
+
+    const menuItems = document.querySelectorAll('.account-menu-item');
+    if(!menuItems.length) return;
+
+    const reservationsSection = document.getElementById('accountReservationsSection');
+    const detailsSection = document.getElementById('accountDetailsSection');
+    const documentsSection = document.getElementById('accountDocumentsSection');
+
+    const scrollToSection = (el)=>{
+      if(!el) return;
+      const rect = el.getBoundingClientRect();
+      const offset = 96; // aproximativ înălțimea topbar-ului
+      const targetY = rect.top + window.scrollY - offset;
+      window.scrollTo({ top: targetY < 0 ? 0 : targetY, behavior: 'smooth' });
+    };
+
+    menuItems.forEach((btn)=>{
+      btn.addEventListener('click', ()=>{
+        menuItems.forEach(b=> b.classList.remove('account-menu-item--active'));
+        btn.classList.add('account-menu-item--active');
+
+        const label = btn.textContent.trim();
+        if(label === 'Rezervările mele'){
+          scrollToSection(reservationsSection);
+        }else if(label === 'Detalii personale'){
+          scrollToSection(detailsSection);
+        }else if(label === 'Documente încărcate'){
+          scrollToSection(documentsSection || detailsSection);
+        }else if(label.indexOf('Preferințe') !== -1){
+          scrollToSection(documentsSection || detailsSection);
+        }
+      });
+    });
+  })();
 });
