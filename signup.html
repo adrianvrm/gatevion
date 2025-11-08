@@ -3,9 +3,9 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Autentificare cont – Gatevion</title>
-  <meta name="description" content="Autentifică-te în contul tău Gatevion pentru a vedea rezervările, datele de contact și documentele încărcate.">
-  <link rel="canonical" href="https://gatevion.ro/login" />
+  <title>Creare cont – Gatevion</title>
+  <meta name="description" content="Autentifică-te Gatevion pentru a gestiona rezervările, datele de contact și documentele încărcate.">
+  <link rel="canonical" href="https://gatevion.ro/signup" />
   <link rel="alternate" href="https://gatevion.ro/" hreflang="ro" />
   <link rel="alternate" href="https://gatevion.ro/en" hreflang="en" />
   <meta name="theme-color" content="#0f172a" />
@@ -37,7 +37,7 @@
   </a>
   <div class="util-spacer"></div>
   <a class="util-item" href="#faq">Întrebări frecvente</a>
-  <button class="util-item lang-switch" type="button" aria-label="Schimbă limba">RO <span class="muted">/ EN</span></button>
+  <button class="util-item lang-switch" type="button" aria-label="Schimbă limba">RO <span class="muted">/ EN</span></a>
 </div>
 
     <div class="wrap h-16 flex items-center justify-between">
@@ -53,7 +53,7 @@
       </a>
       <button id="mobileToggle" class="md:hidden inline-flex items-center justify-center w-10 h-10 rounded-lg border border-slate-200 mr-2" aria-label="Deschide meniul">
   <svg viewBox="0 0 24 24" width="20" height="20"><path d="M4 7h16M4 12h16M4 17h16" stroke="#0f172a" stroke-width="2" stroke-linecap="round"/></svg>
-</button>
+</a>
 <nav class="main-nav hidden md:flex items-center gap-6">
         <a href="#cum-functioneaza" class="nav-link">Cum funcționează</a>
         <a href="#aeroporturi" class="nav-link">Aeroporturi</a>
@@ -80,62 +80,59 @@
         <section class="auth-card" aria-labelledby="auth-title">
           <p class="auth-eyebrow">Acces cont</p>
           <h1 id="auth-title" class="auth-title">
-            Autentifică-te în contul tău <span class="text-emerald-600">Gatevion</span>
+            Autentifică-te <span class="text-emerald-600">Gatevion</span>
           </h1>
           <p class="auth-subtitle">
-            Folosește adresa de email și parola setată pentru a accesa rezervările tale și datele de contact.
+            Completează câteva detalii de bază pentru a avea acces rapid la rezervările și documentele tale.
           </p>
 
           
-          <div class="auth-social">
-            <button type="button" class="auth-social-btn auth-social-btn-apple">
-              <span class="auth-social-icon" aria-hidden="true"></span>
-              <span>Continuă cu Apple</span>
-            </button>
-            <button type="button" class="auth-social-btn auth-social-btn-google">
-              <span class="auth-social-icon" aria-hidden="true">G</span>
-              <span>Continuă cu Google</span>
-            </button>
-          </div>
-          <div class="auth-divider">
-            <span>sau continuă cu emailul</span>
-          </div>
-<form class="auth-form" action="/contul-meu.html" method="get" novalidate>
+          <form class="auth-form" action="/contul-meu.html" method="get" novalidate>
             <div class="auth-field-group">
-              <label for="authEmail" class="auth-label">Adresă de email</label>
-              <input id="authEmail" name="email" type="email" autocomplete="email" required
+              <label for="signupName" class="auth-label">Nume complet</label>
+              <input id="signupName" name="fullName" type="text" autocomplete="name" required
+                     class="auth-input" placeholder="Nume și prenume" />
+            </div>
+
+            <div class="auth-field-group">
+              <label for="signupEmail" class="auth-label">Adresă de email</label>
+              <input id="signupEmail" name="email" type="email" autocomplete="email" required
                      class="auth-input" placeholder="nume.prenume@email.com" />
             </div>
 
             <div class="auth-field-group">
-              <div class="flex items-center justify-between gap-2 mb-1.5">
-                <label for="authPassword" class="auth-label mb-0">Parolă</label>
-                <button type="button" class="auth-link-small">Ai uitat parola?</button>
-              </div>
-              <input id="authPassword" name="password" type="password" autocomplete="current-password" required
-                     class="auth-input" placeholder="••••••••" />
+              <label for="signupPassword" class="auth-label">Parolă</label>
+              <input id="signupPassword" name="password" type="password" autocomplete="new-password" required
+                     class="auth-input" placeholder="Alege o parolă sigură" />
+            </div>
+
+            <div class="auth-field-group">
+              <label for="signupPasswordConfirm" class="auth-label">Confirmare parolă</label>
+              <input id="signupPasswordConfirm" name="passwordConfirm" type="password" autocomplete="new-password" required
+                     class="auth-input" placeholder="Reintrodu parola aleasă" />
             </div>
 
             <div class="auth-form-footer">
               <label class="auth-checkbox">
-                <input type="checkbox" name="remember" />
-                <span>Ține-mă minte pe acest dispozitiv</span>
+                <input type="checkbox" name="acceptTerms" required />
+                <span>Sunt de acord cu Termenii &amp; Condițiile Gatevion</span>
               </label>
-              <button type="submit" class="btn btn-primary auth-submit">Intră în cont</button>
+              <button type="submit" class="btn btn-primary auth-submit">Creează cont</a>
             </div>
           </form>
 
+
           <p class="auth-meta">
-            Prin accesarea contului confirmi că ai citit și ești de acord cu
+            Prin crearea contului confirmi că ai citit și ești de acord cu
             <a href="#!" class="auth-link">Termenii &amp; Condițiile</a> și <a href="#!" class="auth-link">Politica de confidențialitate</a>.
           </p>
           <div class="auth-signup">
-            <p class="auth-signup-title">Nu ai încă un cont?</p>
+            <p class="auth-signup-title">Ai deja un cont?</p>
             <p class="auth-signup-text">
-              Îți poți crea rapid un cont Gatevion folosind aceeași adresă de email pe care o folosești pentru rezervări.
+              Autentifică-te cu contul tău existent pentru a accesa rezervările tale.
             </p>
-            <a href="/signup.html" class="btn-ghost auth-signup-btn">
-              Creează-ți un cont
+            <a href="/login.html" class="btn-ghost auth-signup-btn">
+              Autentifică-te
             </a>
           </div>
         </section>
@@ -199,7 +196,7 @@ late-200 site-footer">
       </div>
       <div>
         <h4 class="font-semibold text-slate-100">Preferințe</h4>
-        <button class="mt-3 text-sm rounded-full border border-slate-500/70 px-3 py-2 bg-slate-900/40 hover:bg-slate-900/70" id="langBtn2">Schimbă limba (RO/EN)</button>
+        <button class="mt-3 text-sm rounded-full border border-slate-500/70 px-3 py-2 bg-slate-900/40 hover:bg-slate-900/70" id="langBtn2">Schimbă limba (RO/EN)</a>
       </div>
     </div>
     <div class="border-t border-slate-700/60 py-4 text-center text-xs text-slate-500">
@@ -239,7 +236,7 @@ late-200 site-footer">
       </div>
       <div>
         <h4 class="font-semibold text-slate-100">Preferințe</h4>
-        <button class="mt-3 text-sm rounded-full border border-slate-500/70 px-3 py-2 bg-slate-900/40 hover:bg-slate-900/70" id="langBtn2">Schimbă limba (RO/EN)</button>
+        <button class="mt-3 text-sm rounded-full border border-slate-500/70 px-3 py-2 bg-slate-900/40 hover:bg-slate-900/70" id="langBtn2">Schimbă limba (RO/EN)</a>
         <div class="mt-3">
           <a href="/login.html" id="footerAccountBtn" class="footer-account-btn">
             Contul meu
