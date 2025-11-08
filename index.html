@@ -60,8 +60,8 @@
         <a href="#faq" class="nav-link">Întrebări frecvente</a>
       </nav>
       <div class="flex items-center gap-3">
-        <a href="/contul-meu.html" class="btn-account" aria-label="Contul meu">Contul meu</a>
-        <a href="/rezultate.html" class="btn btn-primary" aria-label="Caută mașini disponibile">Caută mașini disponibile</a>
+        <a href="/login.html" class="btn-account" aria-label="Contul meu">Contul meu</a>
+        <a href="/index.html" class="btn btn-primary" id="headerSearchBtn" aria-label="Caută mașini disponibile">Caută mașini disponibile</a>
       </div>
     </div>
   <div id="mobileNav" class="mobile-nav" hidden>
@@ -149,7 +149,7 @@
         </ul>
 
         <div class="hero-cta-row hero-animate delay-3">
-          <a href="#searchForm" class="btn btn-primary" id="startBookingBtn">
+          <a href="/index.html" class="btn btn-primary" id="startBookingBtn">
             Începe rezervarea
           </a>
           <a href="#cum-functioneaza" class="btn btn-outline">
@@ -293,7 +293,7 @@
                           </div>
                         </div>
           
-                        <button class="btn btn-primary" type="submit">Caută mașini disponibile</button>
+                        <button class="btn btn-primary btn-primary--disabled" type="submit" id="searchSubmitBtn" disabled aria-disabled="true">Caută mașini disponibile</button>
                         <p class="text-xs text-slate-500 mt-1">Nu percepem plata online. Solicitarea intră în status <strong>PENDING</strong> până la confirmarea partenerilor.</p>
                       </form>
           <div id="liveSummary" class="summary mt-4 hidden" aria-live="polite"></div>
@@ -457,6 +457,11 @@
       <div>
         <h4 class="font-semibold text-slate-100">Preferințe</h4>
         <button class="mt-3 text-sm rounded-full border border-slate-500/70 px-3 py-2 bg-slate-900/40 hover:bg-slate-900/70" id="langBtn2">Schimbă limba (RO/EN)</button>
+        <div class="mt-3">
+          <a href="/login.html" id="footerAccountBtn" class="footer-account-btn">
+            Contul meu
+          </a>
+        </div>
       </div>
     </div>
     <div class="border-t border-slate-700/60 py-4 text-center text-xs text-slate-500">
