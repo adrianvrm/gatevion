@@ -6,3 +6,4 @@ Cerințe implementate:
 - Header stilizat + link **Întrebări frecvente**.
 
 Testează local deschizând `index.html`.
+\n\n## Backend API\n\nA fost adăugat un backend Node.js/Express în folderul `backend/`:\n\n- pornești API-ul cu:\n  ```bash\n  cd backend\n  npm install\n  npm run dev\n  ```\n- endpoint health: `http://localhost:4000/api/health`\n- rezervările din formularul de booking se salvează automat în `POST /api/reservations`\n- dashboard de admin: deschizi `admin.html` în browser și te loghezi cu `admin@gatevion.local / Admin123!`\n\nVezi și `backend/README-backend.md` pentru detalii.\n

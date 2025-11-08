@@ -397,221 +397,6 @@ document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('.picker[data-type="time"]').forEach(initTimePicker);
   initFAQ();
 
-  // Footer account button: reflectează starea contului
-  const footerAccountBtn = document.getElementById('footerAccountBtn');
-  if(footerAccountBtn){
-    const isAccountPage = window.location.pathname && window.location.pathname.indexOf('contul-meu') !== -1;
-    if(isAccountPage){
-      footerAccountBtn.classList.add('footer-account-btn--active');
-      footerAccountBtn.textContent = 'Contul meu (conectat)';
-      footerAccountBtn.setAttribute('href','/contul-meu.html');
-    }else{
-      footerAccountBtn.classList.remove('footer-account-btn--active');
-      footerAccountBtn.textContent = 'Contul meu';
-      footerAccountBtn.setAttribute('href','/login.html');
-    }
-  }
-
-  // Account page: comportamente pentru istoricul rezervărilor, rezervarea activă și detaliile personale
-  if(window.location.pathname && window.location.pathname.indexOf('contul-meu') !== -1){
-    // Istoric rezervări: expand/collapse detalii
-    const detailButtons = document.querySelectorAll('.account-details-toggle');
-    detailButtons.forEach((btn)=>{
-      btn.addEventListener('click', ()=>{
-        const table = btn.closest('.account-table');
-        if(!table) return;
-        const panel = table.querySelector('.account-details-panel');
-        if(!panel) return;
-        const isOpen = panel.classList.toggle('account-details-panel--open');
-        btn.textContent = isOpen ? 'Ascunde detalii' : 'Vezi detalii';
-      });
-    });
-
-    // Rezervarea activă: acțiuni principale (modificare, prelungire, anulare)
-    const modifyBtn = document.getElementById('accountModifyReservationBtn');
-    const extendBtn = document.getElementById('accountExtendReservationBtn');
-    const cancelBtn = document.getElementById('accountCancelReservationBtn');
-
-    const goToIndexForChange = (action)=>{
-      try{
-        if(window.sessionStorage){
-          sessionStorage.setItem('gvTriggerSearchFocus','1');
-          if(action){
-            sessionStorage.setItem('gvReservationAction', action);
-          }
-        }
-      }catch(_e){}
-      window.location.href = '/index.html';
-    };
-
-    const canCancelReservation = ()=>{
-      // TODO: în versiunea completă, aici se va verifica data/ora reală de preluare
-      // și se va permite anularea doar dacă mai sunt >24h până la preluare.
-      // Momentan, în prototip, permitem doar un mesaj informativ.
-      return false;
-    };
-
-    if(modifyBtn){
-      modifyBtn.addEventListener('click', (e)=>{
-        e.preventDefault();
-        goToIndexForChange('modify');
-      });
-    }
-
-    if(extendBtn){
-      extendBtn.addEventListener('click', (e)=>{
-        e.preventDefault();
-        goToIndexForChange('extend');
-      });
-    }
-
-    if(cancelBtn){
-      cancelBtn.addEventListener('click', (e)=>{
-        e.preventDefault();
-        if(!canCancelReservation()){
-          window.alert('Anularea rezervării este permisă doar dacă se face cu cel puțin 24 de ore înainte de ora de preluare a mașinii. În această versiune demo nu avem încă o rezervare activă reală pentru a verifica această regulă.');
-          return;
-        }
-        // În versiunea completă, aici se va trimite cererea de anulare către sistem / partener.
-        window.alert('Cererea ta de anulare a rezervării a fost înregistrată. În varianta finală a aplicației, aici vor apărea detaliile privind rambursarea și confirmarea anulării.');
-      });
-    }
-
-
-// Detalii personale: Editează datele -> mod edit in-card, cu salvare locală
-    const detailsSection = document.getElementById('accountDetailsSection');
-    if(detailsSection){
-      const contactCard = detailsSection.querySelector('.account-card');
-      if(contactCard){
-        const editBtn = contactCard.querySelector('.btn-ghost');
-        const detailsList = contactCard.querySelector('.account-details');
-        if(editBtn && detailsList){
-          const rows = Array.from(detailsList.querySelectorAll('.account-details-row'));
-          const fields = rows.map((row)=>{
-            const labelEl = row.querySelector('dt');
-            const valueEl = row.querySelector('dd');
-            return {
-              row,
-              label: labelEl ? labelEl.textContent.trim() : '',
-              valueEl,
-              value: valueEl ? valueEl.textContent.trim() : ''
-            };
-          });
-
-          // Aplică valori din localStorage, dacă există
-          try{
-            if(window.localStorage){
-              const saved = localStorage.getItem('gvAccountContact');
-              if(saved){
-                const parsed = JSON.parse(saved);
-                fields.forEach((f)=>{
-                  if(!f.valueEl || !f.label) return;
-                  const key = f.label;
-                  if(Object.prototype.hasOwnProperty.call(parsed, key)){
-                    const val = parsed[key] || '—';
-                    f.value = val;
-                    f.valueEl.textContent = val;
-                  }
-                });
-              }
-            }
-          }catch(_e){}
-
-          const buildInputForLabel = (label, value)=>{
-            const input = document.createElement('input');
-            input.type = 'text';
-            input.className = 'account-input';
-            input.value = value && value !== '—' ? value : '';
-            input.placeholder = label;
-            if(label === 'Adresă email') input.type = 'email';
-            if(label === 'Telefon') input.type = 'tel';
-            return input;
-          };
-
-          let isEditing = false;
-
-          const enterEditMode = ()=>{
-            if(isEditing) return;
-            isEditing = true;
-            contactCard.classList.add('account-card--editing');
-            editBtn.textContent = 'Salvează datele';
-
-            let cancelBtn = contactCard.querySelector('.account-cancel-edit');
-            if(!cancelBtn){
-              cancelBtn = document.createElement('button');
-              cancelBtn.type = 'button';
-              cancelBtn.className = 'btn-text account-cancel-edit';
-              cancelBtn.textContent = 'Renunță';
-              const header = contactCard.querySelector('.account-card-header');
-              if(header){
-                header.appendChild(cancelBtn);
-              }
-              cancelBtn.addEventListener('click', (e)=>{
-                e.preventDefault();
-                // Revine la valorile dinainte de editare
-                fields.forEach((f)=>{
-                  if(!f.valueEl) return;
-                  f.valueEl.textContent = f.value || '—';
-                  if(f.input){
-                    f.input = null;
-                  }
-                });
-                contactCard.classList.remove('account-card--editing');
-                editBtn.textContent = 'Editează datele';
-                cancelBtn.remove();
-                isEditing = false;
-              });
-            }
-
-            // Transformăm dd-urile în inputuri
-            fields.forEach((f)=>{
-              if(!f.valueEl) return;
-              const currentVal = f.valueEl.textContent.trim();
-              const input = buildInputForLabel(f.label, currentVal);
-              f.valueEl.textContent = '';
-              f.valueEl.appendChild(input);
-              f.input = input;
-            });
-          };
-
-          const exitEditModeAndSave = ()=>{
-            if(!isEditing) return;
-            isEditing = false;
-            contactCard.classList.remove('account-card--editing');
-            const payload = {};
-            fields.forEach((f)=>{
-              if(!f.valueEl) return;
-              const newVal = (f.input && f.input.value ? f.input.value.trim() : '') || '—';
-              f.value = newVal;
-              f.valueEl.textContent = newVal;
-              payload[f.label] = newVal;
-              f.input = null;
-            });
-            // Persistă în localStorage pentru sesiuni viitoare
-            try{
-              if(window.localStorage){
-                localStorage.setItem('gvAccountContact', JSON.stringify(payload));
-              }
-            }catch(_e){}
-            editBtn.textContent = 'Editează datele';
-            const cancelBtn = contactCard.querySelector('.account-cancel-edit');
-            if(cancelBtn) cancelBtn.remove();
-          };
-
-          editBtn.addEventListener('click', (e)=>{
-            e.preventDefault();
-            if(!isEditing){
-              enterEditMode();
-            }else{
-              exitEditModeAndSave();
-            }
-          });
-        }
-      }
-    }
-  }
-
-
 
   // Mobile nav
   const mToggle = document.getElementById('mobileToggle');
@@ -775,117 +560,23 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   
-  // Buton principal "Caută mașini disponibile" – activ doar când formularul este complet
-  const searchSubmitBtn = document.getElementById('searchSubmitBtn');
-  if(searchSubmitBtn && formEl){
-    const updateSearchSubmitState = ()=>{
-      const arr = formEl.arr_airport?.value || '';
-      const dep = formEl.dep_airport?.value || '';
-      const sd  = formEl.start_date?.value || '';
-      const st  = formEl.start_time?.value || '';
-      const ed  = formEl.end_date?.value || '';
-      const et  = formEl.end_time?.value || '';
-      const isComplete = !!(arr && dep && sd && st && ed && et);
-
-      if(isComplete){
-        searchSubmitBtn.disabled = false;
-        searchSubmitBtn.classList.remove('btn-primary--disabled');
-        searchSubmitBtn.setAttribute('aria-disabled','false');
-      }else{
-        searchSubmitBtn.disabled = true;
-        searchSubmitBtn.classList.add('btn-primary--disabled');
-        searchSubmitBtn.setAttribute('aria-disabled','true');
-      }
-    };
-
-    updateSearchSubmitState();
-
-    // Recalculează starea butonului când se schimbă datele sau input-ul formularului
-    formEl.addEventListener('input', updateSearchSubmitState);
-    document.addEventListener('picker:changed', updateSearchSubmitState);
-  }
-
-
-
-
-  // Header "Caută mașini disponibile" de pe alte pagini + CTA "Caută o mașină" din cont -> pregătesc focus pe formularul din index (toate device-urile)
-  (()=>{
-    const path = window.location.pathname || '';
-    const isIndex = path.endsWith('/index.html') || path === '/' || path === '';
-    if(isIndex) return;
-
-    const headerLinks = Array.from(document.querySelectorAll('a[aria-label="Caută mașini disponibile"][href="/index.html"]'));
-    const accountSearchBtn = document.getElementById('accountSearchBtn');
-
-    const triggers = headerLinks.slice();
-    if(accountSearchBtn) triggers.push(accountSearchBtn);
-
-    if(!triggers.length) return;
-
-    triggers.forEach((link)=>{
-      link.addEventListener('click', (e)=>{
-        try{
-          if(window.sessionStorage){
-            sessionStorage.setItem('gvTriggerSearchFocus','1');
-          }
-        }catch(_e){}
-        e.preventDefault();
-        window.location.href = '/index.html';
-      });
-    });
-  })();
-// Hero CTA + header CTA -> evidențiază formularul; scroll lin doar pe desktop/web (până sus de tot)
+  // Hero CTA -> focus form card with glow & adjusted scroll
   const startBtn = document.getElementById('startBookingBtn');
-  const headerSearchBtn = document.getElementById('headerSearchBtn');
   const formCard = document.querySelector('.hero-form-card');
-
-  const runSearchHighlight = (opts = {})=>{
-    if(!formCard) return false;
-
-    const isDesktop = window.innerWidth > 768;
-    let targetTop = 0;
-
-    if(isDesktop){
-      targetTop = 0;
-    }else{
-      const rect = formCard.getBoundingClientRect();
-      const offset = 96; // compensăm topbar-ul pe mobil
-      targetTop = rect.top + window.scrollY - offset;
-      if(targetTop < 0) targetTop = 0;
-    }
-
-    const behavior = opts.instant ? 'auto' : 'smooth';
-
-    window.scrollTo({ top: targetTop, behavior });
-    formCard.classList.add('hero-form-highlight');
-    setTimeout(()=>{
-      formCard.classList.remove('hero-form-highlight');
-    }, 1700);
-    return true;
-  };
-
-  const triggerSearchFocus = (e)=>{
-    const ran = runSearchHighlight();
-    if(ran && e && typeof e.preventDefault === 'function'){
+  if(startBtn && formCard){
+    startBtn.addEventListener('click', (e)=>{
       e.preventDefault();
-    }
-  };
+      const rect = formCard.getBoundingClientRect();
+      const offset = 110;
+      const targetY = rect.top + window.scrollY - offset;
+      window.scrollTo({ top: targetY < 0 ? 0 : targetY, behavior: 'smooth' });
 
-  if(formCard){
-    if(startBtn){
-      startBtn.addEventListener('click', triggerSearchFocus);
-    }
-    if(headerSearchBtn){
-      headerSearchBtn.addEventListener('click', triggerSearchFocus);
-    }
-
-    // Dacă am venit din alte pagini și avem un flag în sessionStorage, rulăm același efect o singură dată
-    try{
-      if(window.sessionStorage && sessionStorage.getItem('gvTriggerSearchFocus') === '1'){
-        sessionStorage.removeItem('gvTriggerSearchFocus');
-        runSearchHighlight({ instant: true });
-      }
-    }catch(_e){}
+      // trigger highlight glow
+      formCard.classList.add('hero-form-highlight');
+      setTimeout(()=>{
+        formCard.classList.remove('hero-form-highlight');
+      }, 900);
+    });
   }
 
 
@@ -1198,42 +889,9 @@ const y = document.getElementById('y');
     if(step1Mobile && step1Mobile.tagName === 'A'){ step1Mobile.href = backUrl; }
 
     // Final submit: trimite datele spre pagina de mulțumire (backend-ul se va lega ulterior aici)
-    
-const bookingForm = document.getElementById('bookingForm');
+    const bookingForm = document.getElementById('bookingForm');
     if(bookingForm){
-
-      // Marcare vizuală pentru fișiere încărcate (CI, permis, bilet avion)
-      const uploadInputs = bookingForm.querySelectorAll('.upload-drop input[type="file"]');
-      uploadInputs.forEach((input)=>{
-        const drop = input.closest('.upload-drop');
-        if(!drop) return;
-        const main = drop.querySelector('.upload-main');
-        const hint = drop.querySelector('.upload-hint');
-        const defaultMain = main ? main.textContent : '';
-        const defaultHint = hint ? hint.textContent : '';
-
-        const syncUploadState = ()=>{
-          const hasFile = input.files && input.files.length > 0;
-          if(hasFile){
-            drop.classList.add('upload-drop--filled');
-            const fileName = input.files[0].name;
-            if(main) main.textContent = 'Fișier încărcat';
-            if(hint) hint.textContent = fileName;
-          }else{
-            drop.classList.remove('upload-drop--filled');
-            if(main) main.textContent = defaultMain || 'Alege fișier sau trage aici';
-            if(hint) hint.textContent = defaultHint || 'JPG, PNG sau PDF';
-          }
-        };
-
-        // Inițializare (în cazul în care browserul reține fișierele)
-        syncUploadState();
-
-        input.addEventListener('change', syncUploadState);
-      });
-
       bookingForm.addEventListener('submit', (e)=>{
-
         e.preventDefault();
 
         // Validează toate câmpurile obligatorii, inclusiv fișierele și checkbox-ul de consimțământ
@@ -1263,31 +921,7 @@ const bookingForm = document.getElementById('bookingForm');
         const phoneCountryEl = document.getElementById('phoneCountry');
         const phoneNumberEl = document.getElementById('phoneNumber');
         const phoneCountryVal = phoneCountryEl && phoneCountryEl.value ? phoneCountryEl.value : '';
-        let phoneNumberVal = phoneNumberEl && phoneNumberEl.value ? phoneNumberEl.value.trim() : '';
-
-        // Normalizăm numărul de telefon astfel încât în query param să ajungă doar numărul național (fără prefix)
-        if(phoneNumberVal){
-          let digits = phoneNumberVal.replace(/\D/g,'');
-          const cc = phoneCountryVal || '+40';
-          const ccDigits = cc.replace('+','');
-
-          // Accept forme de tip 00 + prefix + număr
-          while(digits.startsWith('00')){
-            digits = digits.slice(2);
-          }
-
-          // Dacă utilizatorul a introdus deja prefixul țării, îl eliminăm din zona de număr
-          if(ccDigits && digits.startsWith(ccDigits)){
-            digits = digits.slice(ccDigits.length);
-          }
-
-          // Eliminăm un 0 inițial de tip prefix național (ex: 07xx -> 7xx)
-          if(digits.startsWith('0')){
-            digits = digits.slice(1);
-          }
-
-          phoneNumberVal = digits;
-        }
+        const phoneNumberVal = phoneNumberEl && phoneNumberEl.value ? phoneNumberEl.value.trim() : '';
 
         if(fullName) submitParams.set('fullName', fullName);
         if(email) submitParams.set('email', email);
@@ -1297,8 +931,86 @@ const bookingForm = document.getElementById('bookingForm');
         if(phoneNumberVal) submitParams.set('phoneNumber', phoneNumberVal);
 
         const qs = submitParams.toString();
-        // TODO: aici vom trimite datele către backend / API când baza de date este implementată
-        window.location.href = './multumire.html' + (qs ? `?${qs}` : '');
+
+// Trimite rezervarea în backend (fire-and-forget, fără să blocăm UX-ul)
+(async ()=>{
+  try{
+    const baseParamsObj = {};
+    baseParams.forEach((v,k)=>{ baseParamsObj[k] = v; });
+
+    const sd = baseParams.get('sd') || '';
+    const st = baseParams.get('st') || '';
+    const ed = baseParams.get('ed') || '';
+    const et = baseParams.get('et') || '';
+
+    let rentalDays = null;
+    let priceTotal = null;
+    let pricePerDay = null;
+
+    if(sd && st && ed && et){
+      const startDateTime = new Date(`${sd}T${st}:00`);
+      const endDateTime   = new Date(`${ed}T${et}:00`);
+      const diffMs = endDateTime - startDateTime;
+      const rawHours = diffMs / 36e5;
+      if(!isNaN(rawHours) && rawHours > 0){
+        const minHours = 24;
+        const effectiveHours = rawHours < minHours ? minHours : rawHours;
+        const fullDays = Math.floor(effectiveHours / 24);
+        rentalDays = fullDays >= 1 ? fullDays : 1;
+      }
+    }
+
+    const carPriceRaw = baseParams.get('carPrice') || '';
+    if(carPriceRaw){
+      const parsed = parseFloat(String(carPriceRaw).replace(',', '.'));
+      if(!isNaN(parsed)){
+        priceTotal = parsed;
+        if(rentalDays && rentalDays > 0){
+          pricePerDay = Math.round((parsed / rentalDays) * 100) / 100;
+        }
+      }
+    }
+
+    const payload = {
+      status: 'pending',
+      source: 'website',
+      fullName,
+      email,
+      travelCountry,
+      flightNumber,
+      phone: phoneCountryVal && phoneNumberVal ? `${phoneCountryVal} ${phoneNumberVal}` : (phoneNumberVal || null),
+      pickupAirport: baseParams.get('arr') || null,
+      pickupAirportLabel: baseParams.get('arrLabel') || null,
+      pickupDate: sd || null,
+      pickupTime: st || null,
+      dropoffAirport: baseParams.get('dep') || null,
+      dropoffAirportLabel: baseParams.get('depLabel') || null,
+      dropoffDate: ed || null,
+      dropoffTime: et || null,
+      carName: baseParams.get('carName') || null,
+      carAlt: baseParams.get('carAlt') || null,
+      carSegment: baseParams.get('segment') || null,
+      carGear: baseParams.get('gear') || null,
+      priceTotal: priceTotal,
+      pricePerDay: pricePerDay,
+      rentalDays: rentalDays,
+      rawQuery: qs
+    };
+
+    const API_BASE = (window.GV_API_BASE) || 'http://localhost:4000/api';
+    await fetch(API_BASE + '/reservations', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(payload)
+    }).catch(()=>{});
+  }catch(err){
+    console.warn('Nu s-a putut trimite rezervarea către backend:', err);
+  }finally{
+    window.location.href = './multumire.html' + (qs ? `?${qs}` : '');
+  }
+})();
       });
     }
 const phoneCountry = document.getElementById('phoneCountry');
@@ -1593,152 +1305,4 @@ const phoneCountry = document.getElementById('phoneCountry');
 
   }
   }
-});
-
-document.addEventListener('DOMContentLoaded', () => {
-  if(window.location.pathname && window.location.pathname.indexOf('multumire') !== -1){
-    const params = new URLSearchParams(window.location.search || '');
-
-    const arrLabel = params.get('arrLabel') || params.get('arr') || '';
-    const depLabel = params.get('depLabel') || params.get('dep') || '';
-    const sd = params.get('sd') || '';
-    const st = params.get('st') || '';
-    const ed = params.get('ed') || '';
-    const et = params.get('et') || '';
-
-    const carName = params.get('carName') || '';
-    const carAlt = params.get('carAlt') || '';
-    const carPrice = params.get('carPrice') || '';
-    const segment = params.get('segment') || '';
-    const gear = params.get('gear') || '';
-
-    const travelCountry = params.get('travelCountry') || '';
-    const flightNumber = params.get('flightNumber') || '';
-    const fullName = params.get('fullName') || '';
-    const email = params.get('email') || '';
-    const phoneCountry = params.get('phoneCountry') || '';
-    const phoneNumber = params.get('phoneNumber') || '';
-
-    const fmtDate = (iso)=>{
-      if(!iso) return '';
-      const parts = iso.split('-');
-      if(parts.length!==3) return iso;
-      const [y,m,d] = parts;
-      return `${d}.${m}.${y}`;
-    };
-
-    const routeText = (arrLabel || '—') + (depLabel ? ` → ${depLabel}` : '');
-    const pickupText = (sd ? fmtDate(sd) : '—') + (st ? ` • ${st}` : '');
-    const returnText = (ed ? fmtDate(ed) : '—') + (et ? ` • ${et}` : '');
-    const periodText = (pickupText && returnText) ? `${pickupText}  →  ${returnText}` : (pickupText || returnText || '—');
-
-    // Reconstruim numărul pentru afișare din prefix și numărul național
-    let phoneDisplay = '';
-    if(phoneCountry || phoneNumber){
-      let normalizedNumber = (phoneNumber || '').toString().trim();
-      if(normalizedNumber){
-        if(normalizedNumber.startsWith('+')){
-          phoneDisplay = normalizedNumber;
-        }else{
-          phoneDisplay = (phoneCountry || '') + (phoneCountry && normalizedNumber ? ' ' : '') + normalizedNumber;
-        }
-      }else{
-        phoneDisplay = phoneCountry || '';
-      }
-    }
-
-    const setText = (id, value)=>{
-      const el = document.getElementById(id);
-      if(el && value) el.textContent = value;
-    };
-
-    if(carName) setText('tyCarName', carName);
-    if(carAlt) setText('tyCarAlt', carAlt);
-    if(segment) setText('tyCarSegment', segment);
-    if(gear){
-      const gearLabel = (gear === 'automata' ? 'Automată' : 'Manuală');
-      setText('tyCarGear', gearLabel);
-    }
-    if(carPrice) setText('tyCarPrice', `€${carPrice}`);
-
-    setText('tyRoute', routeText);
-    setText('tyPeriod', periodText);
-    if(travelCountry) setText('tyTravelCountry', travelCountry);
-    if(flightNumber) setText('tyFlightNumber', flightNumber);
-    if(fullName) setText('tyName', fullName);
-    if(email) setText('tyEmail', email);
-    if(phoneDisplay) setText('tyPhone', phoneDisplay);
-  }
-
-
-  // Contul meu – navigare între secțiuni (tab-like) prin scroll lin
-  (()=>{
-    const path = window.location.pathname || window.location.href || '';
-    const isAccount = path.includes('contul-meu.html');
-    if(!isAccount) return;
-
-    const menuItems = document.querySelectorAll('.account-menu-item');
-    if(!menuItems.length) return;
-
-    const reservationsSection = document.getElementById('accountReservationsSection');
-    const detailsSection = document.getElementById('accountDetailsSection');
-    const documentsSection = document.getElementById('accountDocumentsSection');
-
-    const scrollToSection = (el)=>{
-      if(!el) return;
-      const rect = el.getBoundingClientRect();
-      const offset = 96; // aproximativ înălțimea topbar-ului
-      const targetY = rect.top + window.scrollY - offset;
-      window.scrollTo({ top: targetY < 0 ? 0 : targetY, behavior: 'smooth' });
-    };
-
-    menuItems.forEach((btn)=>{
-      btn.addEventListener('click', ()=>{
-        menuItems.forEach(b=> b.classList.remove('account-menu-item--active'));
-        btn.classList.add('account-menu-item--active');
-
-        const label = btn.textContent.trim();
-        if(label === 'Rezervările mele'){
-          scrollToSection(reservationsSection);
-        }else if(label === 'Detalii personale'){
-          scrollToSection(detailsSection);
-        }else if(label === 'Documente încărcate'){
-          scrollToSection(documentsSection || detailsSection);
-        }else if(label.indexOf('Preferințe') !== -1){
-          scrollToSection(documentsSection || detailsSection);
-        }
-      });
-    });
-  })();
-
-
-  // Smooth scroll pentru ancore interne pe mobil (href="#...") pentru experiență fluidă
-  (()=>{
-    const isMobile = window.innerWidth <= 768;
-    if(!isMobile) return;
-
-    const anchorLinks = document.querySelectorAll('a[href^="#"]:not([href="#"]):not([href="#!"])');
-    if(!anchorLinks.length) return;
-
-    const getOffsetTop = (el)=>{
-      const rect = el.getBoundingClientRect();
-      const offset = 96; // compensăm topbar-ul
-      return rect.top + window.scrollY - offset;
-    };
-
-    anchorLinks.forEach((link)=>{
-      link.addEventListener('click', (e)=>{
-        const href = link.getAttribute('href');
-        if(!href || !href.startsWith('#')) return;
-
-        const targetId = href.slice(1);
-        const targetEl = document.getElementById(targetId);
-        if(!targetEl) return;
-
-        e.preventDefault();
-        const targetY = getOffsetTop(targetEl);
-        window.scrollTo({ top: targetY < 0 ? 0 : targetY, behavior: 'smooth' });
-      });
-    });
-  })();
 });
