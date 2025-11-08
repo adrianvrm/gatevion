@@ -622,7 +622,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
 
-// Hero CTA -> evidențiază formularul; scroll lin doar pe desktop/web
+// Hero CTA -> evidențiază formularul; scroll lin doar pe desktop/web (până sus de tot)
   const startBtn = document.getElementById('startBookingBtn');
   const formCard = document.querySelector('.hero-form-card');
   if(startBtn && formCard){
@@ -630,18 +630,15 @@ document.addEventListener('DOMContentLoaded', () => {
       const isDesktop = window.innerWidth > 768;
 
       if(!isDesktop){
-        // pe mobil lăsăm ancora să funcționeze normal
+        // pe mobil lăsăm ancora să funcționeze normal (se folosește #searchForm)
         return;
       }
 
-      // pe desktop prevenim comportamentul implicit și facem scroll lin + highlight
+      // pe desktop prevenim comportamentul implicit și facem scroll lin până sus + highlight pe formular
       e.preventDefault();
-      const rect = formCard.getBoundingClientRect();
-      const offset = 110;
-      const targetY = rect.top + window.scrollY - offset;
-      window.scrollTo({ top: targetY < 0 ? 0 : targetY, behavior: 'smooth' });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
 
-      // trigger highlight glow
+      // trigger highlight glow pe cardul formularului
       formCard.classList.add('hero-form-highlight');
       setTimeout(()=>{
         formCard.classList.remove('hero-form-highlight');
