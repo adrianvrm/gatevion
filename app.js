@@ -622,11 +622,20 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
 
-// Hero CTA -> focus form card with glow & adjusted scroll
+// Hero CTA -> evidențiază formularul; scroll lin doar pe mobil
   const startBtn = document.getElementById('startBookingBtn');
   const formCard = document.querySelector('.hero-form-card');
   if(startBtn && formCard){
     startBtn.addEventListener('click', (e)=>{
+      const isMobile = window.innerWidth <= 768;
+
+      if(!isMobile){
+        // pe desktop lăsăm browserul să trateze link-ul normal (ancora către formular),
+        // fără scroll animat suplimentar
+        return;
+      }
+
+      // pe mobil prevenim comportamentul implicit și facem scroll lin + highlight
       e.preventDefault();
       const rect = formCard.getBoundingClientRect();
       const offset = 110;
