@@ -590,10 +590,11 @@ document.addEventListener('DOMContentLoaded', () => {
     window.location.href = url;
   });
 
-  // Nav "Caută mașini disponibile" – activ doar când formularul este complet
-  const navSearchBtn = document.getElementById('navSearchBtn');
-  if(navSearchBtn && formEl){
-    const updateNavSearchState = ()=>{
+  
+  // Buton principal "Caută mașini disponibile" – activ doar când formularul este complet
+  const searchSubmitBtn = document.getElementById('searchSubmitBtn');
+  if(searchSubmitBtn && formEl){
+    const updateSearchSubmitState = ()=>{
       const arr = formEl.arr_airport?.value || '';
       const dep = formEl.dep_airport?.value || '';
       const sd  = formEl.start_date?.value || '';
@@ -603,34 +604,25 @@ document.addEventListener('DOMContentLoaded', () => {
       const isComplete = !!(arr && dep && sd && st && ed && et);
 
       if(isComplete){
-        navSearchBtn.disabled = false;
-        navSearchBtn.classList.remove('btn-primary--disabled');
-        navSearchBtn.setAttribute('aria-disabled','false');
+        searchSubmitBtn.disabled = false;
+        searchSubmitBtn.classList.remove('btn-primary--disabled');
+        searchSubmitBtn.setAttribute('aria-disabled','false');
       }else{
-        navSearchBtn.disabled = true;
-        navSearchBtn.classList.add('btn-primary--disabled');
-        navSearchBtn.setAttribute('aria-disabled','true');
+        searchSubmitBtn.disabled = true;
+        searchSubmitBtn.classList.add('btn-primary--disabled');
+        searchSubmitBtn.setAttribute('aria-disabled','true');
       }
     };
 
-    updateNavSearchState();
+    updateSearchSubmitState();
 
-    // Recalculează starea butonului când se schimbă datele picker-elor
-    document.addEventListener('picker:changed', updateNavSearchState);
-
-    // Trimite formularul atunci când butonul devine activ și este apăsat
-    navSearchBtn.addEventListener('click', ()=>{
-      if(navSearchBtn.disabled) return;
-      if(formEl){
-        if(typeof formEl.requestSubmit === 'function') formEl.requestSubmit();
-        else formEl.submit();
-      }
-    });
+    // Recalculează starea butonului când se schimbă datele sau input-ul formularului
+    formEl.addEventListener('input', updateSearchSubmitState);
+    document.addEventListener('picker:changed', updateSearchSubmitState);
   }
 
 
-  
-  // Hero CTA -> focus form card with glow & adjusted scroll
+// Hero CTA -> focus form card with glow & adjusted scroll
   const startBtn = document.getElementById('startBookingBtn');
   const formCard = document.querySelector('.hero-form-card');
   if(startBtn && formCard){
