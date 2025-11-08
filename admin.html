@@ -20,6 +20,28 @@
   </style>
 </head>
 <body class="bg-slate-50 text-slate-900">
+  <div id="loginShell" class="min-h-screen flex items-center justify-center bg-slate-900 px-4">
+    <div class="w-full max-w-md bg-white/95 rounded-2xl shadow-lg p-6">
+      <h1 class="text-xl font-semibold mb-1">Gatevion Admin</h1>
+      <p class="text-sm text-slate-500 mb-4">Autentificare pentru dashboard-ul de administrare.</p>
+      <form id="adminLoginForm" class="space-y-3">
+        <div>
+          <label for="adminUser" class="block text-sm font-medium text-slate-700 mb-1">User</label>
+          <input id="adminUser" type="text" autocomplete="username" class="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/60" placeholder="vermana" required />
+        </div>
+        <div>
+          <label for="adminPassword" class="block text-sm font-medium text-slate-700 mb-1">Parolă</label>
+          <input id="adminPassword" type="password" autocomplete="current-password" class="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/60" placeholder="••••••••" required />
+        </div>
+        <p class="text-xs text-slate-500">User implicit: <code>vermana</code>, parolă: <code>123QWEasdZXC</code>.</p>
+        <button type="submit" class="w-full mt-2 px-3 py-2 rounded-lg bg-primary text-white text-sm font-medium hover:bg-emerald-600 transition">Autentificare</button>
+        <p id="adminLoginError" class="text-xs text-red-600 mt-1 hidden"></p>
+      </form>
+    </div>
+  </div>
+
+  <div id="adminShell" class="hidden">
+
   <div id="app" class="min-h-screen flex">
     <!-- Sidebar -->
     <aside class="w-64 bg-white border-r border-slate-200 hidden md:flex md:flex-col">
@@ -209,234 +231,337 @@
     </main>
   </div>
 
+</div>
 <script>
 (function(){
-  const tokenKey='gatevion_token';
-  const userKey='gatevion_user';
+  const tokenKey = 'gatevion_token';
+  const userKey = 'gatevion_user';
+
+  const loginShell = document.getElementById('loginShell');
+  const adminShell = document.getElementById('adminShell');
+  const whoEl = document.getElementById('whoami');
+  const loginForm = document.getElementById('adminLoginForm');
+  const loginError = document.getElementById('adminLoginError');
+
+  let adminInitialized = false;
+
+  function getUser() {
+    try { return JSON.parse(localStorage.getItem(userKey) || 'null'); }
+    catch(e) { return null; }
+  }
+
+  function setView(mode) {
+    if (mode === 'admin') {
+      loginShell.classList.add('hidden');
+      adminShell.classList.remove('hidden');
+    } else {
+      adminShell.classList.add('hidden');
+      loginShell.classList.remove('hidden');
+    }
+  }
+
   const api = (path, options={}) => {
     options.headers = options.headers || {};
     options.headers['Content-Type'] = options.headers['Content-Type'] || 'application/json';
     const t = localStorage.getItem(tokenKey);
     if (t) options.headers['Authorization'] = 'Bearer ' + t;
     return fetch(path, options).then(async r => {
-      if (r.status===401) { localStorage.removeItem(tokenKey); location.href='/login.html'; return Promise.reject('unauthorized'); }
       const data = await r.json().catch(()=>({}));
+      if (r.status === 401) {
+        localStorage.removeItem(tokenKey);
+        localStorage.removeItem(userKey);
+        setView('login');
+        throw new Error(data.error || 'Neautorizat');
+      }
       if (!r.ok) throw new Error(data.error || r.statusText);
       return data;
     });
   };
 
-  // Guard: require admin
-  const user = JSON.parse(localStorage.getItem(userKey) || 'null');
-  if (!localStorage.getItem(tokenKey) || !user || user.role!=='admin') {
-    location.href = '/login.html';
-    return;
-  }
-  document.getElementById('whoami').textContent = user.email + ' · ' + user.role;
+  async function initAdmin(){
+    if (adminInitialized) return;
+    adminInitialized = true;
 
-  // Tabs
-  const panes = {
-    'overview': document.getElementById('tab-overview'),
-    'reservations': document.getElementById('tab-overview'),
-    'partners': document.getElementById('tab-partners'),
-    'cars': document.getElementById('tab-cars'),
-    'pricing': document.getElementById('tab-pricing'),
-    'airports': document.getElementById('tab-airports'),
-    'account': document.getElementById('tab-account'),
-  };
-  function activate(tab){
-    document.querySelectorAll('.tab-pane').forEach(el=>el.classList.add('hidden'));
-    (panes[tab] || panes['overview']).classList.remove('hidden');
-  }
-  document.querySelectorAll('nav#nav .tab').forEach(btn=>{
-    btn.addEventListener('click', ()=> activate(btn.dataset.tab));
-  });
-  activate('overview');
-
-  // Logout
-  document.getElementById('logoutBtn').addEventListener('click', ()=>{
-    localStorage.removeItem(tokenKey);
-    localStorage.removeItem(userKey);
-    location.href='/login.html';
-  });
-
-  // Load overview data
-  async function loadReservations(){
-    const status = document.getElementById('filterStatus').value;
-    const data = await api('/api/reservations' + (status? ('?status='+encodeURIComponent(status)) : ''));
-    const tbody = document.getElementById('resRows');
-    tbody.innerHTML = '';
-    let total=0, pending=0, confirmed=0, cancelled=0;
-    data.forEach((r)=>{
-      total++;
-      if (r.status==='pending') pending++;
-      else if (r.status==='confirmed') confirmed++;
-      else if (r.status==='cancelled') cancelled++;
-
-      const tr = document.createElement('tr');
-      tr.innerHTML = `
-        <td class="py-2 pr-4">${r.id}</td>
-        <td class="py-2 pr-4">${r.user_email || '-'}</td>
-        <td class="py-2 pr-4">${r.car_name || '-'}</td>
-        <td class="py-2 pr-4">${r.pickup_at || ''} ${r.pickup_code? '('+r.pickup_code+')':''}</td>
-        <td class="py-2 pr-4">${r.dropoff_at || ''} ${r.dropoff_code? '('+r.dropoff_code+')':''}</td>
-        <td class="py-2 pr-4"><span class="badge ${r.status==='pending'?'bg-yellow-100 text-yellow-800': r.status==='confirmed'?'bg-green-100 text-green-800':'bg-slate-200 text-slate-700'}">${r.status}</span></td>
-        <td class="py-2 pr-4">${r.total_price? (r.total_price.toFixed? r.total_price.toFixed(2) : r.total_price) : '-'}</td>
-        <td class="py-2 pr-4">
-          <div class="flex gap-2">
-            <button class="px-2 py-1 rounded border" data-action="send-partner" data-id="${r.id}">Trimite partener</button>
-            <button class="px-2 py-1 rounded border" data-action="extend" data-id="${r.id}">+1 zi</button>
-            <button class="px-2 py-1 rounded border" data-action="cancel" data-id="${r.id}">Anulează</button>
-          </div>
-        </td>
-      `;
-      tbody.appendChild(tr);
-    });
-    document.getElementById('statTotal').textContent = total;
-    document.getElementById('statPending').textContent = pending;
-    document.getElementById('statConfirmed').textContent = confirmed;
-    document.getElementById('statCancelled').textContent = cancelled;
-  }
-  document.getElementById('filterStatus').addEventListener('change', loadReservations);
-  document.getElementById('refreshBtn').addEventListener('click', loadReservations);
-  document.getElementById('resRows').addEventListener('click', async (e)=>{
-    const btn = e.target.closest('button'); if (!btn) return;
-    const id = btn.dataset.id;
-    const action = btn.dataset.action;
-    try{
-      if (action==='cancel'){
-        await api('/api/reservations/'+id+'/cancel', { method: 'POST' });
-      } else if (action==='extend'){
-        const now = new Date();
-        const newDrop = new Date(now.getTime() + 24*3600*1000);
-        await api('/api/reservations/'+id+'/extend', { method: 'PATCH', body: JSON.stringify({ dropoffAt: newDrop.toISOString() }) });
-      } else if (action==='send-partner'){
-        const partners = await api('/api/partners');
-        const p = prompt('Introdu ID partener (disponibili: '+ partners.map(p=>p.id+':'+p.name).join(', ')+')');
-        const pid = parseInt(p, 10);
-        if (pid) await api('/api/partners/'+pid+'/send-reservation', { method:'POST', body: JSON.stringify({ reservationId: id }) });
-      }
-      await loadReservations();
-      alert('Operațiune efectuată.');
-    }catch(err){
-      alert('Eroare: ' + err.message);
+    const user = getUser();
+    if (user && whoEl) {
+      whoEl.textContent = (user.email || '') + ' · ' + (user.role || '');
     }
-  });
 
-  // Partners list + add
-  async function loadPartners(){
-    const data = await api('/api/partners');
-    const tbody = document.getElementById('partnerRows');
-    tbody.innerHTML = '';
-    data.forEach(p=>{
-      const tr = document.createElement('tr');
-      tr.innerHTML = `<td class="py-2 pr-4">${p.id}</td><td class="py-2 pr-4">${p.name}</td><td class="py-2 pr-4">${p.api_endpoint||''}</td>`;
-      tbody.appendChild(tr);
+    // Tabs
+    const panes = {
+      'overview': document.getElementById('tab-overview'),
+      'reservations': document.getElementById('tab-overview'),
+      'partners': document.getElementById('tab-partners'),
+      'cars': document.getElementById('tab-cars'),
+      'pricing': document.getElementById('tab-pricing'),
+      'airports': document.getElementById('tab-airports'),
+      'account': document.getElementById('tab-account'),
+    };
+    function activate(tab){
+      document.querySelectorAll('.tab-pane').forEach(el=>el.classList.add('hidden'));
+      (panes[tab] || panes['overview']).classList.remove('hidden');
+    }
+    document.querySelectorAll('nav#nav .tab').forEach(btn=>{
+      btn.addEventListener('click', ()=> activate(btn.dataset.tab));
+    });
+    activate('overview');
+
+    // Logout
+    const logoutBtn = document.getElementById('logoutBtn');
+    if (logoutBtn) {
+      logoutBtn.addEventListener('click', ()=>{
+        localStorage.removeItem(tokenKey);
+        localStorage.removeItem(userKey);
+        adminInitialized = false;
+        setView('login');
+      });
+    }
+
+    // Reservations
+    async function loadReservations(){
+      const statusSel = document.getElementById('filterStatus');
+      const status = statusSel ? statusSel.value : '';
+      const data = await api('/api/reservations' + (status? ('?status='+encodeURIComponent(status)) : ''));
+      const tbody = document.getElementById('resRows');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+      let total=0, pending=0, confirmed=0, cancelled=0;
+      data.forEach((r)=>{
+        total++;
+        if (r.status==='pending') pending++;
+        else if (r.status==='confirmed') confirmed++;
+        else if (r.status==='cancelled') cancelled++;
+
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td class="py-2 pr-4">${r.id}</td>
+          <td class="py-2 pr-4">${r.user_email || '-'}</td>
+          <td class="py-2 pr-4">${r.car_name || '-'}</td>
+          <td class="py-2 pr-4">${r.pickup_at || ''} ${r.pickup_code? '('+r.pickup_code+')':''}</td>
+          <td class="py-2 pr-4">${r.dropoff_at || ''} ${r.dropoff_code? '('+r.dropoff_code+')':''}</td>
+          <td class="py-2 pr-4"><span class="badge ${r.status==='pending'?'bg-yellow-100 text-yellow-800': r.status==='confirmed'?'bg-green-100 text-green-800':'bg-slate-200 text-slate-700'}">${r.status}</span></td>
+          <td class="py-2 pr-4">${r.total_price? (r.total_price.toFixed? r.total_price.toFixed(2) : r.total_price) : '-'}</td>
+          <td class="py-2 pr-4">
+            <div class="flex gap-2">
+              <button class="px-2 py-1 rounded border" data-action="send-partner" data-id="${r.id}">Trimite partener</button>
+              <button class="px-2 py-1 rounded border" data-action="extend" data-id="${r.id}">+1 zi</button>
+              <button class="px-2 py-1 rounded border" data-action="cancel" data-id="${r.id}">Anulează</button>
+            </div>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+      const setText = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+      setText('statTotal', total);
+      setText('statPending', pending);
+      setText('statConfirmed', confirmed);
+      setText('statCancelled', cancelled);
+    }
+    const filterStatus = document.getElementById('filterStatus');
+    if (filterStatus) filterStatus.addEventListener('change', loadReservations);
+    const refreshBtn = document.getElementById('refreshBtn');
+    if (refreshBtn) refreshBtn.addEventListener('click', loadReservations);
+    const resRows = document.getElementById('resRows');
+    if (resRows) {
+      resRows.addEventListener('click', async (e)=>{
+        const btn = e.target.closest('button'); if (!btn) return;
+        const id = btn.dataset.id;
+        const action = btn.dataset.action;
+        try{
+          if (action==='cancel'){
+            await api('/api/reservations/'+id+'/cancel', { method: 'POST' });
+          } else if (action==='extend'){
+            const now = new Date();
+            const newDrop = new Date(now.getTime() + 24*3600*1000);
+            await api('/api/reservations/'+id+'/extend', { method: 'PATCH', body: JSON.stringify({ dropoffAt: newDrop.toISOString() }) });
+          } else if (action==='send-partner'){
+            const partners = await api('/api/partners');
+            const p = prompt('Introdu ID partener (disponibili: '+ partners.map(p=>p.id+':'+p.name).join(', ')+')');
+            const pid = parseInt(p, 10);
+            if (pid) await api('/api/partners/'+pid+'/send-reservation', { method:'POST', body: JSON.stringify({ reservationId: id }) });
+          }
+          await loadReservations();
+          alert('Operațiune efectuată.');
+        }catch(err){
+          alert('Eroare: ' + err.message);
+        }
+      });
+    }
+
+    // Partners
+    async function loadPartners(){
+      const data = await api('/api/partners');
+      const tbody = document.getElementById('partnerRows');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+      data.forEach(p=>{
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td class="py-2 pr-4">${p.id}</td><td class="py-2 pr-4">${p.name}</td><td class="py-2 pr-4">${p.api_endpoint||''}</td>`;
+        tbody.appendChild(tr);
+      });
+    }
+    const addPartnerForm = document.getElementById('addPartnerForm');
+    if (addPartnerForm) {
+      addPartnerForm.addEventListener('submit', async (e)=>{
+        e.preventDefault();
+        const fd = new FormData(e.currentTarget);
+        const payload = Object.fromEntries(fd.entries());
+        try{
+          await api('/api/partners', { method:'POST', body: JSON.stringify(payload) });
+          e.currentTarget.reset();
+          loadPartners();
+        }catch(err){ alert('Eroare: '+err.message); }
+      });
+    }
+
+    // Cars
+    async function loadCars(){
+      const data = await api('/api/cars');
+      const tbody = document.getElementById('carRows');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+      data.forEach(c=>{
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td class="py-2 pr-4">${c.id}</td><td class="py-2 pr-4">${c.name}</td><td class="py-2 pr-4">${c.category||''}</td><td class="py-2 pr-4">${c.is_active? 'Da':'Nu'}</td>`;
+        tbody.appendChild(tr);
+      });
+    }
+    const addCarForm = document.getElementById('addCarForm');
+    if (addCarForm) {
+      addCarForm.addEventListener('submit', async (e)=>{
+        e.preventDefault();
+        const fd = new FormData(e.currentTarget);
+        const payload = Object.fromEntries(fd.entries());
+        if (payload.seats) payload.seats = Number(payload.seats);
+        payload.isActive = 1;
+        try{
+          await api('/api/cars', { method:'POST', body: JSON.stringify(payload) });
+          e.currentTarget.reset();
+          loadCars();
+        }catch(err){ alert('Eroare: '+err.message); }
+      });
+    }
+
+    // Pricing
+    async function loadRules(){
+      const data = await api('/api/pricing/rules');
+      const tbody = document.getElementById('ruleRows');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+      data.forEach(r=>{
+        const span = (r.min_days||'') + '–' + (r.max_days||'');
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td class="py-2 pr-4">${r.id}</td><td class="py-2 pr-4">${r.car_id}</td><td class="py-2 pr-4">${span}</td><td class="py-2 pr-4">${r.base_daily_price}</td>`;
+        tbody.appendChild(tr);
+      });
+    }
+    const addRuleForm = document.getElementById('addRuleForm');
+    if (addRuleForm) {
+      addRuleForm.addEventListener('submit', async (e)=>{
+        e.preventDefault();
+        const fd = new FormData(e.currentTarget);
+        const payload = Object.fromEntries(fd.entries());
+        payload.carId = Number(payload.carId);
+        if (payload.minDays) payload.minDays = Number(payload.minDays);
+        if (payload.maxDays) payload.maxDays = Number(payload.maxDays);
+        payload.baseDailyPrice = Number(payload.baseDailyPrice);
+        try{
+          await api('/api/pricing/rules', { method:'POST', body: JSON.stringify(payload) });
+          e.currentTarget.reset();
+          loadRules();
+        }catch(err){ alert('Eroare: '+err.message); }
+      });
+    }
+
+    // Airports
+    async function loadAirports(){
+      const data = await api('/api/airports');
+      const tbody = document.getElementById('airportRows');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+      data.forEach(a=>{
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td class="py-2 pr-4">${a.id}</td><td class="py-2 pr-4">${a.code}</td><td class="py-2 pr-4">${a.name}</td><td class="py-2 pr-4">${a.city||''}</td>`;
+        tbody.appendChild(tr);
+      });
+    }
+    const addAirportForm = document.getElementById('addAirportForm');
+    if (addAirportForm) {
+      addAirportForm.addEventListener('submit', async (e)=>{
+        e.preventDefault();
+        const fd = new FormData(e.currentTarget);
+        const payload = Object.fromEntries(fd.entries());
+        try{
+          await api('/api/airports', { method:'POST', body: JSON.stringify(payload) });
+          e.currentTarget.reset();
+          loadAirports();
+        }catch(err){ alert('Eroare: '+err.message); }
+      });
+    }
+
+    // Account
+    async function loadAccount(){
+      const me = await api('/api/auth/me');
+      const acc = document.getElementById('accountInfo');
+      if (acc) acc.textContent = JSON.stringify(me, null, 2);
+    }
+
+    // Initial loads
+    loadReservations();
+    loadPartners();
+    loadCars();
+    loadRules();
+    loadAirports();
+    loadAccount();
+
+    // Env badge
+    const env = 'demo';
+    const b = document.getElementById('envBadge');
+    if (b) { b.textContent = env; b.classList.remove('hidden'); }
+  }
+
+  // Login form handler
+  if (loginForm) {
+    loginForm.addEventListener('submit', async (e)=>{
+      e.preventDefault();
+      if (loginError) loginError.classList.add('hidden');
+      const email = (document.getElementById('adminUser').value || '').trim();
+      const password = (document.getElementById('adminPassword').value || '').trim();
+      if (!email || !password) {
+        if (loginError) { loginError.textContent = 'Completează user și parolă.'; loginError.classList.remove('hidden'); }
+        return;
+      }
+      try{
+        const res = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+        const data = await res.json().catch(()=>({}));
+        if (!res.ok) throw new Error(data.error || res.statusText);
+        if (!data.user || data.user.role !== 'admin') {
+          throw new Error('Acest utilizator nu are rol de admin.');
+        }
+        localStorage.setItem(tokenKey, data.token);
+        localStorage.setItem(userKey, JSON.stringify(data.user || {}));
+        setView('admin');
+        await initAdmin();
+      } catch(err){
+        if (loginError) { loginError.textContent = 'Autentificare eșuată: ' + err.message; loginError.classList.remove('hidden'); }
+      }
     });
   }
-  document.getElementById('addPartnerForm').addEventListener('submit', async (e)=>{
-    e.preventDefault();
-    const fd = new FormData(e.currentTarget);
-    const payload = Object.fromEntries(fd.entries());
-    try{
-      await api('/api/partners', { method:'POST', body: JSON.stringify(payload) });
-      e.currentTarget.reset();
-      loadPartners();
-    }catch(err){ alert('Eroare: '+err.message); }
-  });
 
-  // Cars list + add
-  async function loadCars(){
-    const data = await api('/api/cars');
-    const tbody = document.getElementById('carRows');
-    tbody.innerHTML = '';
-    data.forEach(c=>{
-      const tr = document.createElement('tr');
-      tr.innerHTML = `<td class="py-2 pr-4">${c.id}</td><td class="py-2 pr-4">${c.name}</td><td class="py-2 pr-4">${c.category||''}</td><td class="py-2 pr-4">${c.is_active? 'Da':'Nu'}</td>`;
-      tbody.appendChild(tr);
-    });
-  }
-  document.getElementById('addCarForm').addEventListener('submit', async (e)=>{
-    e.preventDefault();
-    const fd = new FormData(e.currentTarget);
-    const payload = Object.fromEntries(fd.entries());
-    // Cast numerics/bools
-    if (payload.seats) payload.seats = Number(payload.seats);
-    payload.isActive = 1;
-    try{
-      await api('/api/cars', { method:'POST', body: JSON.stringify(payload) });
-      e.currentTarget.reset();
-      loadCars();
-    }catch(err){ alert('Eroare: '+err.message); }
-  });
-
-  // Pricing list + add
-  async function loadRules(){
-    const data = await api('/api/pricing/rules');
-    const tbody = document.getElementById('ruleRows');
-    tbody.innerHTML = '';
-    data.forEach(r=>{
-      const span = (r.min_days||'') + '–' + (r.max_days||'');
-      const tr = document.createElement('tr');
-      tr.innerHTML = `<td class="py-2 pr-4">${r.id}</td><td class="py-2 pr-4">${r.car_id}</td><td class="py-2 pr-4">${span}</td><td class="py-2 pr-4">${r.base_daily_price}</td>`;
-      tbody.appendChild(tr);
-    });
-  }
-  document.getElementById('addRuleForm').addEventListener('submit', async (e)=>{
-    e.preventDefault();
-    const fd = new FormData(e.currentTarget);
-    const payload = Object.fromEntries(fd.entries());
-    payload.carId = Number(payload.carId);
-    if (payload.minDays) payload.minDays = Number(payload.minDays);
-    if (payload.maxDays) payload.maxDays = Number(payload.maxDays);
-    payload.baseDailyPrice = Number(payload.baseDailyPrice);
-    try{
-      await api('/api/pricing/rules', { method:'POST', body: JSON.stringify(payload) });
-      e.currentTarget.reset();
-      loadRules();
-    }catch(err){ alert('Eroare: '+err.message); }
-  });
-
-  // Airports list + add
-  async function loadAirports(){
-    const data = await api('/api/airports');
-    const tbody = document.getElementById('airportRows');
-    tbody.innerHTML = '';
-    data.forEach(a=>{
-      const tr = document.createElement('tr');
-      tr.innerHTML = `<td class="py-2 pr-4">${a.id}</td><td class="py-2 pr-4">${a.code}</td><td class="py-2 pr-4">${a.name}</td><td class="py-2 pr-4">${a.city||''}</td>`;
-      tbody.appendChild(tr);
-    });
-  }
-  document.getElementById('addAirportForm').addEventListener('submit', async (e)=>{
-    e.preventDefault();
-    const fd = new FormData(e.currentTarget);
-    const payload = Object.fromEntries(fd.entries());
-    try{
-      await api('/api/airports', { method:'POST', body: JSON.stringify(payload) });
-      e.currentTarget.reset();
-      loadAirports();
-    }catch(err){ alert('Eroare: '+err.message); }
-  });
-
-  // Account tab
-  async function loadAccount(){
-    const me = await api('/api/auth/me');
-    document.getElementById('accountInfo').textContent = JSON.stringify(me, null, 2);
-  }
-
-  // Initial loads
-  loadReservations();
-  loadPartners();
-  loadCars();
-  loadRules();
-  loadAirports();
-  loadAccount();
-
-  // Environment badge (dev/prod depends on server env if exposed)
-  // just show a hint that it's a demo build
-  const env = 'demo';
-  const b = document.getElementById('envBadge'); b.textContent = env; b.classList.remove('hidden');
+  // Auto-login dacă există deja token admin
+  (function autoStart(){
+    const user = getUser();
+    if (localStorage.getItem(tokenKey) && user && user.role === 'admin') {
+      setView('admin');
+      initAdmin();
+    } else {
+      setView('login');
+    }
+  })();
 })();
 </script>
 </body>
