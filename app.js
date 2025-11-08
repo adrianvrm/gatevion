@@ -622,28 +622,37 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
 
-// Hero CTA -> evidențiază formularul; scroll lin doar pe desktop/web (până sus de tot)
+// Hero CTA + header CTA -> evidențiază formularul; scroll lin doar pe desktop/web (până sus de tot)
   const startBtn = document.getElementById('startBookingBtn');
+  const headerSearchBtn = document.getElementById('headerSearchBtn');
   const formCard = document.querySelector('.hero-form-card');
-  if(startBtn && formCard){
-    startBtn.addEventListener('click', (e)=>{
-      const isDesktop = window.innerWidth > 768;
 
-      if(!isDesktop){
-        // pe mobil lăsăm ancora să funcționeze normal (se folosește #searchForm)
-        return;
-      }
+  const triggerSearchFocus = (e)=>{
+    const isDesktop = window.innerWidth > 768;
 
-      // pe desktop prevenim comportamentul implicit și facem scroll lin până sus + highlight pe formular
-      e.preventDefault();
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+    if(!isDesktop){
+      // pe mobil lăsăm ancora să funcționeze normal (se folosește #searchForm)
+      return;
+    }
 
-      // trigger highlight glow pe cardul formularului
-      formCard.classList.add('hero-form-highlight');
-      setTimeout(()=>{
-        formCard.classList.remove('hero-form-highlight');
-      }, 900);
-    });
+    // pe desktop prevenim comportamentul implicit și facem scroll lin până sus + highlight pe formular
+    e.preventDefault();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    // trigger highlight glow pe cardul formularului
+    formCard.classList.add('hero-form-highlight');
+    setTimeout(()=>{
+      formCard.classList.remove('hero-form-highlight');
+    }, 900);
+  };
+
+  if(formCard){
+    if(startBtn){
+      startBtn.addEventListener('click', triggerSearchFocus);
+    }
+    if(headerSearchBtn){
+      headerSearchBtn.addEventListener('click', triggerSearchFocus);
+    }
   }
 
 
