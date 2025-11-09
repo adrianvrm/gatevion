@@ -14,262 +14,8 @@
         }
       }
     }
-  </script>
-  <style>
-    .badge{display:inline-flex;align-items:center;border-radius:9999px;padding:0.125rem .5rem;font-size:.75rem;font-weight:600}
-  </style>
-</head>
-<body class="bg-slate-50 text-slate-900">
-  <div id="loginShell" class="min-h-screen flex items-center justify-center bg-slate-900 px-4">
-    <div class="w-full max-w-md bg-white/95 rounded-2xl shadow-lg p-6">
-      <h1 class="text-xl font-semibold mb-1">Gatevion Admin</h1>
-      <p class="text-sm text-slate-500 mb-4">Autentificare pentru dashboard-ul de administrare.</p>
-      <form id="adminLoginForm" class="space-y-3">
-        <div>
-          <label for="adminUser" class="block text-sm font-medium text-slate-700 mb-1">User</label>
-          <input id="adminUser" type="text" autocomplete="username" class="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/60" placeholder="vermana" required />
-        </div>
-        <div>
-          <label for="adminPassword" class="block text-sm font-medium text-slate-700 mb-1">Parolă</label>
-          <input id="adminPassword" type="password" autocomplete="current-password" class="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/60" placeholder="••••••••" required />
-        </div>
-        <p class="text-xs text-slate-500">User implicit: <code>vermana</code>, parolă: <code>123QWEasdZXC</code>.</p>
-        <button type="submit" class="w-full mt-2 px-3 py-2 rounded-lg bg-primary text-white text-sm font-medium hover:bg-emerald-600 transition">Autentificare</button>
-        <p id="adminLoginError" class="text-xs text-red-600 mt-1 hidden"></p>
-      </form>
-    </div>
-  </div>
-
-  <div id="adminShell" class="hidden">
-
-  <div id="app" class="min-h-screen flex">
-    <!-- Sidebar -->
-    <aside class="w-64 bg-white border-r border-slate-200 hidden md:flex md:flex-col">
-      <div class="px-5 py-4 border-b border-slate-200">
-        <div class="flex items-center gap-2">
-          <div class="h-8 w-8 rounded-xl bg-primary"></div>
-          <div class="font-semibold">Gatevion Admin</div>
-        </div>
-      </div>
-      <nav class="p-3 space-y-1" id="nav">
-        <button data-tab="overview" class="tab w-full text-left px-3 py-2 rounded-lg hover:bg-slate-100 font-medium">Overview</button>
-        <button data-tab="reservations" class="tab w-full text-left px-3 py-2 rounded-lg hover:bg-slate-100 font-medium">Rezervări</button>
-        <button data-tab="partners" class="tab w-full text-left px-3 py-2 rounded-lg hover:bg-slate-100 font-medium">Parteneri</button>
-        <button data-tab="cars" class="tab w-full text-left px-3 py-2 rounded-lg hover:bg-slate-100 font-medium">Mașini</button>
-        <button data-tab="pricing" class="tab w-full text-left px-3 py-2 rounded-lg hover:bg-slate-100 font-medium">Pricing</button>
-        <button data-tab="airports" class="tab w-full text-left px-3 py-2 rounded-lg hover:bg-slate-100 font-medium">Aeroporturi</button>
-        <button data-tab="account" class="tab w-full text-left px-3 py-2 rounded-lg hover:bg-slate-100 font-medium">Cont</button>
-      </nav>
-      <div class="mt-auto p-3">
-        <button id="logoutBtn" class="w-full px-3 py-2 rounded-lg bg-slate-900 text-white hover:bg-slate-800">Logout</button>
-      </div>
-    </aside>
-
-    <!-- Main -->
-    <main class="flex-1">
-      <header class="sticky top-0 bg-white border-b border-slate-200 px-4 md:px-8 py-3 flex items-center justify-between">
-        <div class="flex items-center gap-3">
-          <button id="mobileMenu" class="md:hidden p-2 rounded-lg border">☰</button>
-          <h1 class="text-xl font-semibold">Dashboard</h1>
-          <span id="envBadge" class="badge bg-slate-100 text-slate-700 hidden"></span>
-        </div>
-        <div class="text-sm text-slate-500" id="whoami"></div>
-      </header>
-
-      <div class="p-4 md:p-8 space-y-8">
-
-        <!-- Overview -->
-        <section id="tab-overview" class="tab-pane">
-          <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <div class="p-4 bg-white rounded-xl border">
-              <div class="text-sm text-slate-500">Rezervări totale</div>
-              <div id="statTotal" class="text-2xl font-bold mt-1">—</div>
-            </div>
-            <div class="p-4 bg-white rounded-xl border">
-              <div class="text-sm text-slate-500">În așteptare</div>
-              <div id="statPending" class="text-2xl font-bold mt-1">—</div>
-            </div>
-            <div class="p-4 bg-white rounded-xl border">
-              <div class="text-sm text-slate-500">Confirmate</div>
-              <div id="statConfirmed" class="text-2xl font-bold mt-1">—</div>
-            </div>
-            <div class="p-4 bg-white rounded-xl border">
-              <div class="text-sm text-slate-500">Anulate</div>
-              <div id="statCancelled" class="text-2xl font-bold mt-1">—</div>
-            </div>
-          </div>
-
-          <div class="mt-6 bg-white rounded-xl border">
-            <div class="px-4 py-3 border-b">
-              <h2 class="text-base font-semibold">Statistici pe aeroport (preluare)</h2>
-            </div>
-            <div class="p-3 overflow-auto">
-              <table class="min-w-full text-sm">
-                <thead class="text-left text-slate-500">
-                  <tr>
-                    <th class="py-2 pr-4">Aeroport</th>
-                    <th class="py-2 pr-4">Total</th>
-                    <th class="py-2 pr-4">În așteptare</th>
-                    <th class="py-2 pr-4">Confirmate</th>
-                    <th class="py-2 pr-4">Anulate</th>
-                  </tr>
-                </thead>
-                <tbody id="airportStatsRows" class="divide-y divide-slate-100"></tbody>
-              </table>
-            </div>
-          </div>
-
-
-          <div class="mt-6 bg-white rounded-xl border">
-            <div class="px-4 py-3 border-b flex items-center gap-3">
-              <div class="font-semibold">Ultimele rezervări</div>
-              <select id="filterStatus" class="border rounded-lg px-2 py-1 text-sm">
-                <option value="">Toate</option>
-                <option value="pending">În așteptare</option>
-                <option value="confirmed">Confirmate</option>
-                <option value="cancelled">Anulate</option>
-              </select>
-              <button id="refreshBtn" class="ml-auto px-3 py-1.5 rounded-lg border">Reîmprospătează</button>
-            </div>
-            <div class="p-3 overflow-auto">
-              <table class="min-w-full text-sm">
-                <thead class="text-left text-slate-500">
-                  <tr>
-                    <th class="py-2 pr-4">ID</th>
-                    <th class="py-2 pr-4">Client</th>
-                    <th class="py-2 pr-4">Mașină</th>
-                    <th class="py-2 pr-4">Preluare</th>
-                    <th class="py-2 pr-4">Returnare</th>
-                    <th class="py-2 pr-4">Total</th>
-                    <th class="py-2 pr-4">Status</th>
-                    <th class="py-2 pr-4">Detalii</th>
-                  </tr>
-                </thead>
-                <tbody id="resRows"></tbody>
-              </table>
-            </div>
-          </div>
-        </section>
-
-        
-        <!-- Reservation details modal -->
-        <div id="reservationModal" class="fixed inset-0 bg-black/40 flex items-center justify-center z-50 hidden">
-          <div class="bg-white rounded-2xl shadow-xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-auto">
-            <div class="px-4 py-3 border-b flex items-center justify-between">
-              <h2 class="text-base font-semibold">Detalii rezervare</h2>
-              <button id="reservationModalClose" class="text-slate-500 hover:text-slate-700 text-xl">&times;</button>
-            </div>
-            <div id="reservationModalBody" class="p-4 space-y-4 text-sm">
-              <!-- Populat din JS -->
-              <div class="text-center text-slate-500">Se încarcă...</div>
-            </div>
-          </div>
-        </div>
-
-<!-- Partners -->
-        <section id="tab-partners" class="tab-pane hidden">
-          <div class="bg-white rounded-xl border">
-            <div class="px-4 py-3 border-b font-semibold">Parteneri</div>
-            <div class="p-4">
-              <form id="addPartnerForm" class="grid md:grid-cols-4 gap-3 mb-4">
-                <input name="name" class="border rounded-lg px-3 py-2" placeholder="Nume partener" required />
-                <input name="apiEndpoint" class="border rounded-lg px-3 py-2" placeholder="API Endpoint (opțional)" />
-                <input name="apiKey" class="border rounded-lg px-3 py-2" placeholder="API key (opțional)" />
-                <button class="px-3 py-2 rounded-lg bg-primary text-white">Adaugă</button>
-              </form>
-              <div class="overflow-auto">
-                <table class="min-w-full text-sm">
-                  <thead class="text-left text-slate-500"><tr><th class="py-2 pr-4">#</th><th class="py-2 pr-4">Nume</th><th class="py-2 pr-4">API</th></tr></thead>
-                  <tbody id="partnerRows"></tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <!-- Cars -->
-        <section id="tab-cars" class="tab-pane hidden">
-          <div class="bg-white rounded-xl border">
-            <div class="px-4 py-3 border-b font-semibold">Mașini</div>
-            <div class="p-4">
-              <form id="addCarForm" class="grid md:grid-cols-6 gap-3 mb-4">
-                <input name="name" class="border rounded-lg px-3 py-2" placeholder="Ex: Dacia Logan 1.0" required />
-                <input name="category" class="border rounded-lg px-3 py-2" placeholder="Categoria" />
-                <input name="transmission" class="border rounded-lg px-3 py-2" placeholder="Transmisie" />
-                <input name="fuelType" class="border rounded-lg px-3 py-2" placeholder="Combustibil" />
-                <input name="seats" type="number" min="1" class="border rounded-lg px-3 py-2" placeholder="Locuri" />
-                <button class="px-3 py-2 rounded-lg bg-primary text-white">Adaugă</button>
-              </form>
-              <div class="overflow-auto">
-                <table class="min-w-full text-sm">
-                  <thead class="text-left text-slate-500"><tr><th class="py-2 pr-4">#</th><th class="py-2 pr-4">Nume</th><th class="py-2 pr-4">Categorie</th><th class="py-2 pr-4">Activă</th></tr></thead>
-                  <tbody id="carRows"></tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <!-- Pricing -->
-        <section id="tab-pricing" class="tab-pane hidden">
-          <div class="bg-white rounded-xl border">
-            <div class="px-4 py-3 border-b font-semibold">Reguli de preț</div>
-            <div class="p-4">
-              <form id="addRuleForm" class="grid md:grid-cols-6 gap-3 mb-4">
-                <input name="carId" type="number" class="border rounded-lg px-3 py-2" placeholder="ID Mașină" required />
-                <input name="minDays" type="number" class="border rounded-lg px-3 py-2" placeholder="Min zile" />
-                <input name="maxDays" type="number" class="border rounded-lg px-3 py-2" placeholder="Max zile" />
-                <input name="baseDailyPrice" type="number" step="0.01" class="border rounded-lg px-3 py-2" placeholder="Preț/zi" required />
-                <input name="seasonStart" type="date" class="border rounded-lg px-3 py-2" />
-                <input name="seasonEnd" type="date" class="border rounded-lg px-3 py-2" />
-                <button class="px-3 py-2 rounded-lg bg-primary text-white">Adaugă</button>
-              </form>
-              <div class="overflow-auto">
-                <table class="min-w-full text-sm">
-                  <thead class="text-left text-slate-500"><tr><th class="py-2 pr-4">#</th><th class="py-2 pr-4">Mașină</th><th class="py-2 pr-4">Interval zile</th><th class="py-2 pr-4">Preț/zi</th></tr></thead>
-                  <tbody id="ruleRows"></tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <!-- Airports -->
-        <section id="tab-airports" class="tab-pane hidden">
-          <div class="bg-white rounded-xl border">
-            <div class="px-4 py-3 border-b font-semibold">Aeroporturi</div>
-            <div class="p-4">
-              <form id="addAirportForm" class="grid md:grid-cols-4 gap-3 mb-4">
-                <input name="code" class="border rounded-lg px-3 py-2" placeholder="Cod (ex: OTP)" required />
-                <input name="name" class="border rounded-lg px-3 py-2" placeholder="Nume" required />
-                <input name="city" class="border rounded-lg px-3 py-2" placeholder="Oraș" />
-                <button class="px-3 py-2 rounded-lg bg-primary text-white">Adaugă</button>
-              </form>
-              <div class="overflow-auto">
-                <table class="min-w-full text-sm">
-                  <thead class="text-left text-slate-500"><tr><th class="py-2 pr-4">#</th><th class="py-2 pr-4">Cod</th><th class="py-2 pr-4">Nume</th><th class="py-2 pr-4">Oraș</th></tr></thead>
-                  <tbody id="airportRows"></tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <!-- Account -->
-        <section id="tab-account" class="tab-pane hidden">
-          <div class="bg-white rounded-xl border">
-            <div class="px-4 py-3 border-b font-semibold">Cont</div>
-            <div class="p-4 text-sm text-slate-600" id="accountInfo">—</div>
-          </div>
-        </section>
-
-      </div>
-    </main>
-  </div>
-
-</div>
-<script>
-(function(){
+  <script>
+(function () {
   const API_BASE = (window.GATEVION_API_BASE || 'http://localhost:4000');
   const tokenKey = 'gatevion_token';
   const userKey = 'gatevion_user';
@@ -280,15 +26,21 @@
   const loginForm = document.getElementById('adminLoginForm');
   const loginError = document.getElementById('adminLoginError');
 
-  let adminInitialized = false;
+  const panes = {
+    overview: document.getElementById('tab-overview'),
+    reservations: document.getElementById('tab-overview'), // același pane pentru Overview/Rezervări
+    partners: document.getElementById('tab-partners'),
+    cars: document.getElementById('tab-cars'),
+    rules: document.getElementById('tab-rules'),
+    airports: document.getElementById('tab-airports'),
+    account: document.getElementById('tab-account')
+  };
 
-  function getUser() {
-    try { return JSON.parse(localStorage.getItem(userKey) || 'null'); }
-    catch(e) { return null; }
-  }
+  const navButtons = Array.prototype.slice.call(document.querySelectorAll('[data-tab]'));
+  let currentTab = 'overview';
 
-  function setView(mode) {
-    if (mode === 'admin') {
+  function setView(view) {
+    if (view === 'admin') {
       if (loginShell) loginShell.classList.add('hidden');
       if (adminShell) adminShell.classList.remove('hidden');
     } else {
@@ -297,354 +49,454 @@
     }
   }
 
-  const api = (path, options={}) => {
-    options.headers = options.headers || {};
-    options.headers['Content-Type'] = options.headers['Content-Type'] || 'application/json';
-    const t = localStorage.getItem(tokenKey);
-    if (t) options.headers['Authorization'] = 'Bearer ' + t;
-    return fetch(API_BASE + path, options).then(async r => {
-      const data = await r.json().catch(()=>({}));
-      if (r.status === 401) {
-        localStorage.removeItem(tokenKey);
-        localStorage.removeItem(userKey);
-        setView('login');
-        throw new Error(data.error || 'Neautorizat');
+  async function api(path, options) {
+    options = options || {};
+    const token = localStorage.getItem(tokenKey);
+    const headers = options.headers ? Object.assign({}, options.headers) : {};
+
+    // Nu impunem Content-Type dacă trimitem FormData
+    if (!headers['Content-Type'] && !(options.body instanceof FormData)) {
+      headers['Content-Type'] = 'application/json';
+    }
+    if (token) {
+      headers['Authorization'] = 'Bearer ' + token;
+    }
+
+    const res = await fetch(API_BASE + path, Object.assign({}, options, { headers: headers }));
+    let data = {};
+    try {
+      data = await res.json();
+    } catch (e) {
+      data = {};
+    }
+
+    if (res.status === 401) {
+      localStorage.removeItem(tokenKey);
+      localStorage.removeItem(userKey);
+      setView('login');
+      throw new Error(data.error || 'Neautorizat');
+    }
+    if (!res.ok) {
+      throw new Error(data.error || res.statusText || 'Eroare API');
+    }
+    return data;
+  }
+
+  function activate(tab) {
+    currentTab = tab;
+
+    // butoane de navigare
+    navButtons.forEach(function (btn) {
+      const name = btn.getAttribute('data-tab');
+      if (!name) return;
+      if (name === tab) {
+        btn.classList.add('bg-slate-900', 'text-white');
+        btn.classList.remove('text-slate-600');
+      } else {
+        btn.classList.remove('bg-slate-900', 'text-white');
+        btn.classList.add('text-slate-600');
       }
-      if (!r.ok) throw new Error(data.error || r.statusText);
-      return data;
     });
-  };
 
-  async function initAdmin(){
-    if (adminInitialized) return;
-    adminInitialized = true;
-
-    const user = getUser();
-    if (user && whoEl) {
-      whoEl.textContent = (user.email || '') + ' · ' + (user.role || '');
-    }
-
-    const panes = {
-      'overview': document.getElementById('tab-overview'),
-      'reservations': document.getElementById('tab-overview'),
-      'partners': document.getElementById('tab-partners'),
-      'cars': document.getElementById('tab-cars'),
-      'pricing': document.getElementById('tab-pricing'),
-      'airports': document.getElementById('tab-airports'),
-      'account': document.getElementById('tab-account'),
-    };
-    function activate(tab){
-      document.querySelectorAll('.tab-pane').forEach(el=>el.classList.add('hidden'));
-      (panes[tab] || panes['overview']).classList.remove('hidden');
-    }
-    document.querySelectorAll('nav#nav .tab').forEach(btn=>{
-      btn.addEventListener('click', ()=> activate(btn.dataset.tab));
+    // panouri
+    Object.keys(panes).forEach(function (name) {
+      const pane = panes[name];
+      if (!pane) return;
+      if (name === tab || (name === 'overview' && tab === 'reservations')) {
+        pane.classList.remove('hidden');
+      } else {
+        pane.classList.add('hidden');
+      }
     });
-    activate('overview');
 
-    loadOverviewStats();
-    loadReservations();
-
-    const logoutBtn = document.getElementById('logoutBtn');
-    if (logoutBtn) {
-      logoutBtn.addEventListener('click', ()=>{
-        localStorage.removeItem(tokenKey);
-        localStorage.removeItem(userKey);
-        adminInitialized = false;
-        setView('login');
-      });
+    if (tab === 'overview' || tab === 'reservations') {
+      loadOverviewStats();
+      loadReservations();
     }
+  }
 
-    
-    async function loadOverviewStats(){
-      try {
-        const data = await api('/api/reservations/stats/overview');
-        const totals = data.totals || {};
-        const byAirport = data.byAirport || [];
+  async function loadOverviewStats() {
+    try {
+      const data = await api('/api/reservations/stats/overview');
+      const totals = data.totals || {};
+      const byAirport = data.byAirport || [];
 
-        const setText = (id, val) => {
-          const el = document.getElementById(id);
-          if (el) el.textContent = val;
-        };
-
-        setText('statTotal', totals.total || 0);
-        setText('statPending', totals.pending || 0);
-        setText('statConfirmed', totals.confirmed || 0);
-        setText('statCancelled', totals.cancelled || 0);
-
-        const tbody = document.getElementById('airportStatsRows');
-        if (tbody) {
-          tbody.innerHTML = '';
-          byAirport.forEach(row => {
-            const tr = document.createElement('tr');
-            const name = (row.code || '-') + (row.name ? (' – ' + row.name) : '');
-            tr.innerHTML = `
-              <td class="py-2 pr-4">${name}</td>
-              <td class="py-2 pr-4">${row.total || 0}</td>
-              <td class="py-2 pr-4">${row.pending || 0}</td>
-              <td class="py-2 pr-4">${row.confirmed || 0}</td>
-              <td class="py-2 pr-4">${row.cancelled || 0}</td>
-            `;
-            tbody.appendChild(tr);
-          });
-        }
-      } catch (err) {
-        console.error('Eroare la încărcarea statisticilor overview', err);
-      }
-    }
-
-    async function openReservationDetails(id){
-      const modal = document.getElementById('reservationModal');
-      const body = document.getElementById('reservationModalBody');
-      if (!modal || !body) return;
-      modal.classList.remove('hidden');
-      body.innerHTML = '<div class="text-center text-slate-500">Se încarcă...</div>';
-
-      try{
-        const [reservation, docs, partners] = await Promise.all([
-          api('/api/reservations/'+id),
-          api('/api/reservations/'+id+'/documents'),
-          api('/api/partners')
-        ]);
-
-        const pickupInfo = (reservation.pickup_at ? new Date(reservation.pickup_at).toLocaleString() : '-') + (reservation.pickup_name ? ' – '+reservation.pickup_name : '') + (reservation.pickup_code ? ' ('+reservation.pickup_code+')' : '');
-        const dropoffInfo = (reservation.dropoff_at ? new Date(reservation.dropoff_at).toLocaleString() : '-') + (reservation.dropoff_name ? ' – '+reservation.dropoff_name : '') + (reservation.dropoff_code ? ' ('+reservation.dropoff_code+')' : '');
-
-        const docsHtml = (docs && docs.length)
-          ? '<ul class="list-disc pl-5 space-y-1">' + docs.map(d=>`<li><a href="/uploads/${d.file_path}" target="_blank" class="text-primary underline">${d.doc_type || d.file_name}</a></li>`).join('') + '</ul>'
-          : '<div class="text-slate-500 text-sm">Nu există documente atașate.</div>';
-
-        const partnersOptions = partners.map(p=>`<option value="${p.id}">${p.name}</option>`).join('');
-
-        body.innerHTML = `
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div class="space-y-1">
-              <div class="text-xs font-semibold text-slate-500">ID rezervare</div>
-              <div class="font-mono text-sm">${reservation.id}</div>
-
-              <div class="text-xs font-semibold text-slate-500 mt-3">Client</div>
-              <div>${reservation.customer_name || '-'}</div>
-              <div class="text-slate-500">${reservation.customer_email || ''}</div>
-              <div class="text-slate-500">${reservation.customer_phone || ''}</div>
-
-              <div class="text-xs font-semibold text-slate-500 mt-3">Număr zbor</div>
-              <div>${reservation.flight_number || '-'}</div>
-
-              <div class="text-xs font-semibold text-slate-500 mt-3">Status</div>
-              <div>${reservation.status}</div>
-            </div>
-            <div class="space-y-2">
-              <div>
-                <div class="text-xs font-semibold text-slate-500">Mașină</div>
-                <div>${reservation.car_name || '-'}</div>
-              </div>
-              <div>
-                <div class="text-xs font-semibold text-slate-500">Preluare</div>
-                <div>${pickupInfo}</div>
-              </div>
-              <div>
-                <div class="text-xs font-semibold text-slate-500">Returnare</div>
-                <div>${dropoffInfo}</div>
-              </div>
-              <div>
-                <div class="text-xs font-semibold text-slate-500">Total</div>
-                <div>${reservation.total_price != null ? (Number(reservation.total_price).toFixed(2) + ' €') : '-'}</div>
-              </div>
-            </div>
-          </div>
-
-          <div class="mt-4">
-            <div class="text-xs font-semibold text-slate-500 mb-1">Documente client</div>
-            ${docsHtml}
-          </div>
-
-          <div class="mt-4 border-t pt-4 space-y-3">
-            <div class="flex flex-wrap gap-2">
-              <button id="btnEditReservation" class="px-3 py-1.5 rounded-lg border text-sm">Modifică rezervarea</button>
-              <button id="btnExtendReservation" class="px-3 py-1.5 rounded-lg border text-sm">Prelungește returul</button>
-            </div>
-            <div class="flex items-center gap-2">
-              <select id="partnerSelect" class="border rounded-lg px-2 py-1 text-sm">
-                <option value="">Alege partener...</option>
-                ${partnersOptions}
-              </select>
-              <button id="btnAssignPartner" class="px-3 py-1.5 rounded-lg border text-sm">Alocă partener</button>
-            </div>
-          </div>
-        `;
-
-        // Hook buttons
-        const editBtn = document.getElementById('btnEditReservation');
-        if (editBtn) {
-          editBtn.onclick = async ()=>{
-            const newName = prompt('Nume client', reservation.customer_name || '');
-            const newEmail = prompt('Email', reservation.customer_email || '');
-            const newPhone = prompt('Telefon', reservation.customer_phone || '');
-            const newFlight = prompt('Număr zbor', reservation.flight_number || '');
-            const newPickupAt = prompt('Pickup (ISO datetime)', reservation.pickup_at || '');
-            const newDropoffAt = prompt('Dropoff (ISO datetime)', reservation.dropoff_at || '');
-            const newStatus = prompt('Status (pending/confirmed/cancelled)', reservation.status || 'pending');
-            await api('/api/reservations/'+id, {
-              method: 'PATCH',
-              body: JSON.stringify({
-                customerName: newName,
-                customerEmail: newEmail,
-                customerPhone: newPhone,
-                flightNumber: newFlight,
-                pickupAt: newPickupAt,
-                dropoffAt: newDropoffAt,
-                status: newStatus
-              })
-            });
-            await loadReservations();
-            await openReservationDetails(id);
-          };
-        }
-
-        const extendBtn = document.getElementById('btnExtendReservation');
-        if (extendBtn) {
-          extendBtn.onclick = async ()=>{
-            const newDropoffAt = prompt('Noua dată/ora de retur (ISO datetime)', reservation.dropoff_at || '');
-            const newDropAirportIdStr = prompt('ID nou aeroport retur (gol pentru a păstra actualul)', reservation.airport_dropoff_id || '');
-            const payload = { dropoffAt: newDropoffAt };
-            if (newDropAirportIdStr) payload.airportDropoffId = Number(newDropAirportIdStr);
-            await api('/api/reservations/'+id, {
-              method: 'PATCH',
-              body: JSON.stringify(payload)
-            });
-            await loadReservations();
-            await openReservationDetails(id);
-          };
-        }
-
-        const assignBtn = document.getElementById('btnAssignPartner');
-        const partnerSelect = document.getElementById('partnerSelect');
-        if (assignBtn && partnerSelect) {
-          assignBtn.onclick = async ()=>{
-            const pid = partnerSelect.value ? Number(partnerSelect.value) : null;
-            if (!pid) {
-              alert('Te rugăm să alegi un partener.');
-              return;
-            }
-            await api('/api/partners/'+pid+'/send-reservation', {
-              method: 'POST',
-              body: JSON.stringify({ reservationId: id })
-            });
-            alert('Rezervarea a fost trimisă partenerului selectat.');
-          };
-        }
-
-      }catch(err){
-        console.error(err);
-        body.innerHTML = '<div class="text-red-600 text-sm">Eroare la încărcarea detaliilor rezervării.</div>';
+      function setText(id, val) {
+        const el = document.getElementById(id);
+        if (el) el.textContent = val;
       }
 
-      const closeBtn = document.getElementById('reservationModalClose');
-      if (closeBtn) {
-        closeBtn.onclick = ()=> modal.classList.add('hidden');
-      }
-      modal.addEventListener('click', (e)=>{
-        if (e.target === modal) modal.classList.add('hidden');
-      });
-    }
+      setText('statTotal', totals.total || 0);
+      setText('statPending', totals.pending || 0);
+      setText('statConfirmed', totals.confirmed || 0);
+      setText('statCancelled', totals.cancelled || 0);
 
-async function loadReservations(){
-      const statusSel = document.getElementById('filterStatus');
-      const status = statusSel ? statusSel.value : '';
-      const data = await api('/api/reservations' + (status? ('?status='+encodeURIComponent(status)) : ''));
+      const tbody = document.getElementById('airportStatsRows');
+      if (tbody) {
+        tbody.innerHTML = '';
+        byAirport.forEach(function (row) {
+          const tr = document.createElement('tr');
+          const name = (row.code || '-') + (row.name ? (' – ' + row.name) : '');
+          tr.innerHTML = [
+            '<td class="py-2 pr-4">', name, '</td>',
+            '<td class="py-2 pr-4">', row.total || 0, '</td>',
+            '<td class="py-2 pr-4">', row.pending || 0, '</td>',
+            '<td class="py-2 pr-4">', row.confirmed || 0, '</td>',
+            '<td class="py-2 pr-4">', row.cancelled || 0, '</td>'
+          ].join('');
+          tbody.appendChild(tr);
+        });
+      }
+    } catch (err) {
+      console.error('Eroare la încărcarea statisticilor overview', err);
+    }
+  }
+
+  async function loadReservations() {
+    try {
       const tbody = document.getElementById('resRows');
       if (!tbody) return;
       tbody.innerHTML = '';
-      let total=0, pending=0, confirmed=0, cancelled=0;
-      data.forEach((r)=>{
-        total++;
-        if (r.status==='pending') pending++;
-        else if (r.status==='confirmed') confirmed++;
-        else if (r.status==='cancelled') cancelled++;
 
+      const list = await api('/api/reservations');
+      list.forEach(function (r) {
         const tr = document.createElement('tr');
-        const pickupText = (r.pickup_at ? new Date(r.pickup_at).toLocaleString() : '-') + (r.pickup_code ? ' ('+r.pickup_code+')' : '');
-        const dropoffText = (r.dropoff_at ? new Date(r.dropoff_at).toLocaleString() : '-') + (r.dropoff_code ? ' ('+r.dropoff_code+')' : '');
-        tr.innerHTML = `
-          <td class="py-2 pr-4">${r.id}</td>
-          <td class="py-2 pr-4">${r.customer_name || r.user_email || '-'}</td>
-          <td class="py-2 pr-4">${r.car_name || '-'}</td>
-          <td class="py-2 pr-4">${pickupText}</td>
-          <td class="py-2 pr-4">${dropoffText}</td>
-          <td class="py-2 pr-4">${r.total_price != null ? (Number(r.total_price).toFixed(2) + ' €') : '-'}</td>
-          <td class="py-2 pr-4"><span class="badge ${r.status==='confirmed'?'bg-emerald-100 text-emerald-800':r.status==='pending'?'bg-amber-100 text-amber-800':r.status==='cancelled'?'bg-rose-100 text-rose-800':'bg-slate-200 text-slate-700'}">${r.status}</span></td>
-          <td class="py-2 pr-4">
-            <button class="px-2 py-1 rounded border" data-action="view" data-id="${r.id}">Vezi detalii</button>
-          </td>
-        `;
+        const pickupText =
+          (r.pickup_at ? new Date(r.pickup_at).toLocaleString() : '-') +
+          (r.pickup_code ? ' (' + r.pickup_code + ')' : '');
+        const dropoffText =
+          (r.dropoff_at ? new Date(r.dropoff_at).toLocaleString() : '-') +
+          (r.dropoff_code ? ' (' + r.dropoff_code + ')' : '');
+        const totalText =
+          r.total_price != null ? (Number(r.total_price).toFixed(2) + ' €') : '-';
+        const statusClass =
+          r.status === 'confirmed'
+            ? 'bg-emerald-100 text-emerald-800'
+            : r.status === 'pending'
+            ? 'bg-amber-100 text-amber-800'
+            : r.status === 'cancelled'
+            ? 'bg-rose-100 text-rose-800'
+            : 'bg-slate-200 text-slate-700';
+
+        tr.innerHTML = [
+          '<td class="py-2 pr-4">', r.id, '</td>',
+          '<td class="py-2 pr-4">', (r.customer_name || r.user_email || '-'), '</td>',
+          '<td class="py-2 pr-4">', (r.car_name || '-'), '</td>',
+          '<td class="py-2 pr-4">', pickupText, '</td>',
+          '<td class="py-2 pr-4">', dropoffText, '</td>',
+          '<td class="py-2 pr-4">', totalText, '</td>',
+          '<td class="py-2 pr-4"><span class="badge ', statusClass, '">', r.status, '</span></td>',
+          '<td class="py-2 pr-4">',
+            '<button class="px-2 py-1 rounded border" data-action="view" data-id="', r.id, '">Vezi detalii</button>',
+          '</td>'
+        ].join('');
         tbody.appendChild(tr);
       });
-      const setText = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
-      setText('statTotal', total);
-      setText('statPending', pending);
-      setText('statConfirmed', confirmed);
-      setText('statCancelled', cancelled);
+    } catch (err) {
+      console.error('Eroare la încărcarea rezervărilor', err);
     }
-    const filterStatus = document.getElementById('filterStatus');
-    if (filterStatus) filterStatus.addEventListener('change', loadReservations);
-    const refreshBtn = document.getElementById('refreshBtn');
-    if (refreshBtn) refreshBtn.addEventListener('click', loadReservations);
+  }
+
+  async function openReservationDetails(id) {
+    const modal = document.getElementById('reservationModal');
+    const body = document.getElementById('reservationModalBody');
+    const closeBtn = document.getElementById('reservationModalClose');
+    if (!modal || !body) return;
+
+    modal.classList.remove('hidden');
+    body.innerHTML = '<div class="text-center text-slate-500">Se încarcă...</div>';
+
+    try {
+      const results = await Promise.all([
+        api('/api/reservations/' + id),
+        api('/api/reservations/' + id + '/documents'),
+        api('/api/partners')
+      ]);
+      const reservation = results[0];
+      const docs = results[1] || [];
+      const partners = results[2] || [];
+
+      const pickupInfo =
+        (reservation.pickup_at ? new Date(reservation.pickup_at).toLocaleString() : '-') +
+        (reservation.pickup_name ? ' – ' + reservation.pickup_name : '') +
+        (reservation.pickup_code ? ' (' + reservation.pickup_code + ')' : '');
+
+      const dropoffInfo =
+        (reservation.dropoff_at ? new Date(reservation.dropoff_at).toLocaleString() : '-') +
+        (reservation.dropoff_name ? ' – ' + reservation.dropoff_name : '') +
+        (reservation.dropoff_code ? ' (' + reservation.dropoff_code + ')' : '');
+
+      const docsHtml = docs.length
+        ? '<ul class="list-disc pl-5 space-y-1">' +
+            docs.map(function (d) {
+              const label = d.doc_type || d.file_name;
+              const href = '/uploads/' + d.file_path;
+              return '<li><a href="' + href + '" target="_blank" class="text-primary underline">' +
+                     label + '</a></li>';
+            }).join('') +
+          '</ul>'
+        : '<div class="text-slate-500 text-sm">Nu există documente atașate.</div>';
+
+      const partnersOptions = partners.map(function (p) {
+        return '<option value="' + p.id + '">' + p.name + '</option>';
+      }).join('');
+
+      body.innerHTML =
+        '<div class="grid grid-cols-1 md:grid-cols-2 gap-4">' +
+          '<div class="space-y-1">' +
+            '<div class="text-xs font-semibold text-slate-500">ID rezervare</div>' +
+            '<div class="font-mono text-sm">' + reservation.id + '</div>' +
+
+            '<div class="text-xs font-semibold text-slate-500 mt-3">Client</div>' +
+            '<div>' + (reservation.customer_name || '-') + '</div>' +
+            '<div class="text-slate-500">' + (reservation.customer_email || '') + '</div>' +
+            '<div class="text-slate-500">' + (reservation.customer_phone || '') + '</div>' +
+
+            '<div class="text-xs font-semibold text-slate-500 mt-3">Număr zbor</div>' +
+            '<div>' + (reservation.flight_number || '-') + '</div>' +
+
+            '<div class="text-xs font-semibold text-slate-500 mt-3">Status</div>' +
+            '<div>' + reservation.status + '</div>' +
+          '</div>' +
+          '<div class="space-y-2">' +
+            '<div>' +
+              '<div class="text-xs font-semibold text-slate-500">Mașină</div>' +
+              '<div>' + (reservation.car_name || '-') + '</div>' +
+            '</div>' +
+            '<div>' +
+              '<div class="text-xs font-semibold text-slate-500">Preluare</div>' +
+              '<div>' + pickupInfo + '</div>' +
+            '</div>' +
+            '<div>' +
+              '<div class="text-xs font-semibold text-slate-500">Returnare</div>' +
+              '<div>' + dropoffInfo + '</div>' +
+            '</div>' +
+            '<div>' +
+              '<div class="text-xs font-semibold text-slate-500">Total</div>' +
+              '<div>' +
+                (reservation.total_price != null
+                  ? (Number(reservation.total_price).toFixed(2) + ' €')
+                  : '-') +
+              '</div>' +
+            '</div>' +
+          '</div>' +
+        '</div>' +
+
+        '<div class="mt-4">' +
+          '<div class="text-xs font-semibold text-slate-500 mb-1">Documente client</div>' +
+          docsHtml +
+        '</div>' +
+
+        '<div class="mt-4 border-t pt-4 space-y-3">' +
+          '<div class="flex flex-wrap gap-2">' +
+            '<button id="btnEditReservation" class="px-3 py-1.5 rounded-lg border text-sm">Modifică rezervarea</button>' +
+            '<button id="btnExtendReservation" class="px-3 py-1.5 rounded-lg border text-sm">Prelungește returul</button>' +
+          '</div>' +
+          '<div class="flex items-center gap-2">' +
+            '<select id="partnerSelect" class="border rounded-lg px-2 py-1 text-sm">' +
+              '<option value="">Alege partener...</option>' +
+              partnersOptions +
+            '</select>' +
+            '<button id="btnAssignPartner" class="px-3 py-1.5 rounded-lg border text-sm">Alocă partener</button>' +
+          '</div>' +
+        '</div>';
+
+      const editBtn = document.getElementById('btnEditReservation');
+      if (editBtn) {
+        editBtn.onclick = function () {
+          const newName = window.prompt('Nume client', reservation.customer_name || '');
+          const newEmail = window.prompt('Email', reservation.customer_email || '');
+          const newPhone = window.prompt('Telefon', reservation.customer_phone || '');
+          const newFlight = window.prompt('Număr zbor', reservation.flight_number || '');
+          const newPickupAt = window.prompt('Pickup (ISO datetime)', reservation.pickup_at || '');
+          const newDropoffAt = window.prompt('Dropoff (ISO datetime)', reservation.dropoff_at || '');
+          const newStatus = window.prompt('Status (pending/confirmed/cancelled)', reservation.status || 'pending');
+
+          api('/api/reservations/' + id, {
+            method: 'PATCH',
+            body: JSON.stringify({
+              customerName: newName,
+              customerEmail: newEmail,
+              customerPhone: newPhone,
+              flightNumber: newFlight,
+              pickupAt: newPickupAt,
+              dropoffAt: newDropoffAt,
+              status: newStatus
+            })
+          }).then(function () {
+            return loadReservations();
+          }).then(function () {
+            return openReservationDetails(id);
+          }).catch(function (err) {
+            window.alert('Eroare: ' + err.message);
+          });
+        };
+      }
+
+      const extendBtn = document.getElementById('btnExtendReservation');
+      if (extendBtn) {
+        extendBtn.onclick = function () {
+          const newDropoffAt = window.prompt(
+            'Noua dată/ora de retur (ISO datetime)',
+            reservation.dropoff_at || ''
+          );
+          const newDropAirportIdStr = window.prompt(
+            'ID nou aeroport retur (gol pentru a păstra actualul)',
+            reservation.airport_dropoff_id || ''
+          );
+          const payload = { dropoffAt: newDropoffAt };
+          if (newDropAirportIdStr) {
+            payload.airportDropoffId = Number(newDropAirportIdStr);
+          }
+
+          api('/api/reservations/' + id, {
+            method: 'PATCH',
+            body: JSON.stringify(payload)
+          }).then(function () {
+            return loadReservations();
+          }).then(function () {
+            return openReservationDetails(id);
+          }).catch(function (err) {
+            window.alert('Eroare: ' + err.message);
+          });
+        };
+      }
+
+      const assignBtn = document.getElementById('btnAssignPartner');
+      const partnerSelect = document.getElementById('partnerSelect');
+      if (assignBtn && partnerSelect) {
+        assignBtn.onclick = function () {
+          const pidStr = partnerSelect.value;
+          if (!pidStr) {
+            window.alert('Te rugăm să alegi un partener.');
+            return;
+          }
+          const pid = Number(pidStr);
+          api('/api/partners/' + pid + '/send-reservation', {
+            method: 'POST',
+            body: JSON.stringify({ reservationId: id })
+          }).then(function () {
+            window.alert('Rezervarea a fost trimisă partenerului selectat.');
+          }).catch(function (err) {
+            window.alert('Eroare: ' + err.message);
+          });
+        };
+      }
+
+    } catch (err) {
+      console.error('Eroare la încărcarea detaliilor rezervării', err);
+      body.innerHTML = '<div class="text-red-600 text-sm">Eroare la încărcarea detaliilor rezervării.</div>';
+    }
+
+    if (closeBtn) {
+      closeBtn.onclick = function () {
+        modal.classList.add('hidden');
+      };
+    }
+    modal.addEventListener('click', function (e) {
+      if (e.target === modal) {
+        modal.classList.add('hidden');
+      }
+    });
+  }
+
+  async function initAdmin() {
+    // hook butoane tab-uri
+    navButtons.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        const tab = btn.getAttribute('data-tab');
+        if (tab) {
+          activate(tab);
+        }
+      });
+    });
+
+    // click pe rânduri Rezervări (Vezi detalii)
     const resRows = document.getElementById('resRows');
     if (resRows) {
-      resRows.addEventListener('click', async (e)=>{
-        const btn = e.target.closest('button'); if (!btn) return;
-        const id = btn.dataset.id;
-        const action = btn.dataset.action;
-        if (action !== 'view') return;
-        try{
-          await openReservationDetails(id);
-        }catch(err){
-          alert('Eroare: ' + err.message);
+      resRows.addEventListener('click', function (e) {
+        const btn = e.target.closest('button');
+        if (!btn) return;
+        const action = btn.getAttribute('data-action');
+        const id = btn.getAttribute('data-id');
+        if (action === 'view' && id) {
+          openReservationDetails(id).catch(function (err) {
+            window.alert('Eroare: ' + err.message);
+          });
         }
       });
     }
 
+    const storedUser = localStorage.getItem(userKey);
+    if (storedUser && whoEl) {
+      try {
+        const u = JSON.parse(storedUser);
+        whoEl.textContent = u.email || '';
+      } catch (e) {
+        // ignoră
+      }
+    }
+
+    activate('overview');
+  }
+
+  // Login admin
   if (loginForm) {
-    loginForm.addEventListener('submit', async (e)=>{
+    loginForm.addEventListener('submit', function (e) {
       e.preventDefault();
-      if (loginError) loginError.classList.add('hidden');
-      const email = (document.getElementById('adminUser').value || '').trim();
-      const password = (document.getElementById('adminPassword').value || '').trim();
+      if (loginError) {
+        loginError.classList.add('hidden');
+        loginError.textContent = '';
+      }
+      const emailInput = document.getElementById('adminUser');
+      const passwordInput = document.getElementById('adminPassword');
+      const email = emailInput ? (emailInput.value || '').trim() : '';
+      const password = passwordInput ? (passwordInput.value || '').trim() : '';
+
       if (!email || !password) {
-        if (loginError) { loginError.textContent = 'Completează user și parolă.'; loginError.classList.remove('hidden'); }
+        if (loginError) {
+          loginError.textContent = 'Completează user și parolă.';
+          loginError.classList.remove('hidden');
+        }
         return;
       }
-      try{
-        const res = await fetch(API_BASE + '/api/auth/login', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, password })
-        });
-        const data = await res.json().catch(()=>({}));
-        if (!res.ok) throw new Error(data.error || res.statusText);
+
+      api('/api/auth/login', {
+        method: 'POST',
+        body: JSON.stringify({ email: email, password: password })
+      }).then(function (data) {
         if (!data.user || data.user.role !== 'admin') {
           throw new Error('Acest utilizator nu are rol de admin.');
         }
         localStorage.setItem(tokenKey, data.token);
         localStorage.setItem(userKey, JSON.stringify(data.user || {}));
         setView('admin');
-        await initAdmin();
-      } catch(err){
-        if (loginError) { loginError.textContent = 'Autentificare eșuată: ' + err.message; loginError.classList.remove('hidden'); }
-      }
+        return initAdmin();
+      }).catch(function (err) {
+        if (loginError) {
+          loginError.textContent = 'Autentificare eșuată: ' + err.message;
+          loginError.classList.remove('hidden');
+        }
+      });
     });
   }
 
-  (function autoStart(){
-    const user = getUser();
-    if (localStorage.getItem(tokenKey) && user && user.role === 'admin') {
+  // Auto-login dacă avem deja token
+  (function autoStart() {
+    const storedToken = localStorage.getItem(tokenKey);
+    const storedUser = localStorage.getItem(userKey);
+    if (storedToken && storedUser) {
       setView('admin');
-      initAdmin();
+      initAdmin().catch(function (err) {
+        console.error(err);
+        setView('login');
+      });
     } else {
       setView('login');
     }
   })();
 })();
 </script>
+
 </body>
 </html>
