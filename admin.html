@@ -1,651 +1,792 @@
 <!DOCTYPE html>
 <html lang="ro">
 <head>
-  <meta charset="utf-8" />
+  <meta charset="UTF-8" />
+  <title>Gatevion – Admin</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Gatevion – Admin Dashboard</title>
-  <meta name="theme-color" content="#02ac8e" />
+  <!-- Tailwind CDN doar pentru prototip / admin static -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: { primary: '#02ac8e' }
-        }
-      }
-    }
-  </script>
   <style>
-    .badge{display:inline-flex;align-items:center;border-radius:9999px;padding:0.125rem .5rem;font-size:.75rem;font-weight:600}
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(148, 163, 184, 0.7);
+      border-radius: 999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(100, 116, 139, 0.9);
+    }
   </style>
 </head>
-<body class="bg-slate-50 text-slate-900">
-  <div id="loginShell" class="min-h-screen flex items-center justify-center bg-slate-900 px-4">
-    <div class="w-full max-w-md bg-white/95 rounded-2xl shadow-lg p-6">
-      <h1 class="text-xl font-semibold mb-1">Gatevion Admin</h1>
-      <p class="text-sm text-slate-500 mb-4">Autentificare pentru dashboard-ul de administrare.</p>
-      <form id="adminLoginForm" class="space-y-3">
-        <div>
-          <label for="adminUser" class="block text-sm font-medium text-slate-700 mb-1">User</label>
-          <input id="adminUser" type="text" autocomplete="username" class="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/60" placeholder="vermana" required />
-        </div>
-        <div>
-          <label for="adminPassword" class="block text-sm font-medium text-slate-700 mb-1">Parolă</label>
-          <input id="adminPassword" type="password" autocomplete="current-password" class="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/60" placeholder="••••••••" required />
-        </div>
-        <p class="text-xs text-slate-500">User implicit: <code>vermana</code>, parolă: <code>123QWEasdZXC</code>.</p>
-        <button type="submit" class="w-full mt-2 px-3 py-2 rounded-lg bg-primary text-white text-sm font-medium hover:bg-emerald-600 transition">Autentificare</button>
-        <p id="adminLoginError" class="text-xs text-red-600 mt-1 hidden"></p>
-      </form>
-    </div>
-  </div>
-
-  <div id="adminShell" class="hidden">
-
-  <div id="app" class="min-h-screen flex">
-    <!-- Sidebar -->
-    <aside class="w-64 bg-white border-r border-slate-200 hidden md:flex md:flex-col">
-      <div class="px-5 py-4 border-b border-slate-200">
+<body class="min-h-screen bg-gradient-to-b from-slate-100 via-slate-50 to-slate-100 text-slate-900">
+  <div class="min-h-screen flex flex-col">
+    <!-- Top nav simplu -->
+    <header class="w-full border-b border-slate-200 bg-white/80 backdrop-blur">
+      <div class="max-w-7xl mx-auto flex items-center justify-between px-4 lg:px-8 py-3">
         <div class="flex items-center gap-2">
-          <div class="h-8 w-8 rounded-xl bg-primary"></div>
-          <div class="font-semibold">Gatevion Admin</div>
+          <div class="h-8 w-8 rounded-xl bg-slate-900 flex items-center justify-center text-xs font-semibold text-white shadow-sm">
+            GV
+          </div>
+          <div>
+            <div class="text-sm font-semibold text-slate-900">Gatevion Admin</div>
+            <div class="text-[0.7rem] text-slate-500">Panou de administrare</div>
+          </div>
+        </div>
+        <div class="flex items-center gap-3 text-[0.75rem]">
+          <span class="hidden sm:inline-flex items-center gap-1 px-2 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+            <span>logat ca admin (demo)</span>
+          </span>
         </div>
       </div>
-      <nav class="p-3 space-y-1" id="nav">
-        <button data-tab="overview" class="tab w-full text-left px-3 py-2 rounded-lg hover:bg-slate-100 font-medium">Overview</button>
-        <button data-tab="reservations" class="tab w-full text-left px-3 py-2 rounded-lg hover:bg-slate-100 font-medium">Rezervări</button>
-        <button data-tab="partners" class="tab w-full text-left px-3 py-2 rounded-lg hover:bg-slate-100 font-medium">Parteneri</button>
-        <button data-tab="cars" class="tab w-full text-left px-3 py-2 rounded-lg hover:bg-slate-100 font-medium">Mașini</button>
-        <button data-tab="pricing" class="tab w-full text-left px-3 py-2 rounded-lg hover:bg-slate-100 font-medium">Pricing</button>
-        <button data-tab="airports" class="tab w-full text-left px-3 py-2 rounded-lg hover:bg-slate-100 font-medium">Aeroporturi</button>
-        <button data-tab="account" class="tab w-full text-left px-3 py-2 rounded-lg hover:bg-slate-100 font-medium">Cont</button>
-      </nav>
-      <div class="mt-auto p-3">
-        <button id="logoutBtn" class="w-full px-3 py-2 rounded-lg bg-slate-900 text-white hover:bg-slate-800">Logout</button>
+      <!-- Tabs -->
+      <div class="border-t border-slate-200 bg-slate-50/80">
+        <div class="max-w-7xl mx-auto px-4 lg:px-8 flex gap-4 text-sm">
+          <button class="px-3 py-2 text-slate-400 hover:text-slate-600 transition-colors cursor-default" disabled>Overview</button>
+          <button class="px-3 py-2 border-b-2 border-slate-900 text-slate-900 font-medium">Rezervări</button>
+          <button class="px-3 py-2 text-slate-400 hover:text-slate-600 transition-colors cursor-default" disabled>Parteneri</button>
+        </div>
       </div>
-    </aside>
+    </header>
 
-    <!-- Main -->
     <main class="flex-1">
-      <header class="sticky top-0 bg-white border-b border-slate-200 px-4 md:px-8 py-3 flex items-center justify-between">
-        <div class="flex items-center gap-3">
-          <button id="mobileMenu" class="md:hidden p-2 rounded-lg border">☰</button>
-          <h1 class="text-xl font-semibold">Dashboard</h1>
-          <span id="envBadge" class="badge bg-slate-100 text-slate-700 hidden"></span>
-        </div>
-        <div class="text-sm text-slate-500" id="whoami"></div>
-      </header>
-
-      <div class="p-4 md:p-8 space-y-8">
-
-        <!-- Overview -->
-        <section id="tab-overview" class="tab-pane">
-          <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <div class="p-4 bg-white rounded-xl border">
-              <div class="text-sm text-slate-500">Rezervări totale</div>
-              <div id="statTotal" class="text-2xl font-bold mt-1">—</div>
-            </div>
-            <div class="p-4 bg-white rounded-xl border">
-              <div class="text-sm text-slate-500">În așteptare</div>
-              <div id="statPending" class="text-2xl font-bold mt-1">—</div>
-            </div>
-            <div class="p-4 bg-white rounded-xl border">
-              <div class="text-sm text-slate-500">Confirmate</div>
-              <div id="statConfirmed" class="text-2xl font-bold mt-1">—</div>
-            </div>
-            <div class="p-4 bg-white rounded-xl border">
-              <div class="text-sm text-slate-500">Anulate</div>
-              <div id="statCancelled" class="text-2xl font-bold mt-1">—</div>
-            </div>
+      <div class="max-w-7xl mx-auto py-8 px-4 lg:px-8 space-y-6">
+        <!-- Header Rezervări -->
+        <header class="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+          <div>
+            <h1 class="text-3xl font-semibold tracking-tight text-slate-900">Rezervări</h1>
+            <p class="text-sm text-slate-500 mt-1">
+              Vizualizezi și gestionezi rezervările, detaliile clienților și alocările către parteneri.
+            </p>
           </div>
-
-          <div class="mt-6 bg-white rounded-xl border">
-            <div class="px-4 py-3 border-b">
-              <h2 class="text-base font-semibold">Statistici pe aeroport (preluare)</h2>
-            </div>
-            <div class="p-3 overflow-auto">
-              <table class="min-w-full text-sm">
-                <thead class="text-left text-slate-500">
-                  <tr>
-                    <th class="py-2 pr-4">Aeroport</th>
-                    <th class="py-2 pr-4">Total</th>
-                    <th class="py-2 pr-4">În așteptare</th>
-                    <th class="py-2 pr-4">Confirmate</th>
-                    <th class="py-2 pr-4">Anulate</th>
-                  </tr>
-                </thead>
-                <tbody id="airportStatsRows" class="divide-y divide-slate-100"></tbody>
-              </table>
-            </div>
+          <div class="inline-flex items-center gap-2 bg-white/80 backdrop-blur rounded-full border border-slate-200 px-4 py-2 shadow-sm">
+            <span class="inline-flex h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></span>
+            <span class="text-xs font-medium text-slate-600">Interfață demo – date mock</span>
           </div>
+        </header>
 
-
-          <div class="mt-6 bg-white rounded-xl border">
-            <div class="px-4 py-3 border-b flex items-center gap-3">
-              <div class="font-semibold">Ultimele rezervări</div>
-              <select id="filterStatus" class="border rounded-lg px-2 py-1 text-sm">
-                <option value="">Toate</option>
-                <option value="pending">În așteptare</option>
-                <option value="confirmed">Confirmate</option>
-                <option value="cancelled">Anulate</option>
-              </select>
-              <button id="refreshBtn" class="ml-auto px-3 py-1.5 rounded-lg border">Reîmprospătează</button>
-            </div>
-            <div class="p-3 overflow-auto">
-              <table class="min-w-full text-sm">
-                <thead class="text-left text-slate-500">
-                  <tr>
-                    <th class="py-2 pr-4">ID</th>
-                    <th class="py-2 pr-4">Client</th>
-                    <th class="py-2 pr-4">Mașină</th>
-                    <th class="py-2 pr-4">Preluare</th>
-                    <th class="py-2 pr-4">Returnare</th>
-                    <th class="py-2 pr-4">Total</th>
-                    <th class="py-2 pr-4">Status</th>
-                    <th class="py-2 pr-4">Detalii</th>
-                  </tr>
-                </thead>
-                <tbody id="resRows"></tbody>
-              </table>
-            </div>
+        <!-- Carduri statistici -->
+        <section class="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div class="bg-white/90 backdrop-blur rounded-2xl border border-slate-200 shadow-sm p-4 flex flex-col gap-1">
+            <div class="text-[0.65rem] font-semibold text-slate-500 uppercase tracking-wide">Total rezervări</div>
+            <div id="statTotal" class="text-2xl font-semibold text-slate-900">0</div>
+            <div class="text-[0.7rem] text-slate-400">Toate înregistrările din sistem</div>
+          </div>
+          <div class="bg-white/90 backdrop-blur rounded-2xl border border-slate-200 shadow-sm p-4 flex flex-col gap-1">
+            <div class="text-[0.65rem] font-semibold text-slate-500 uppercase tracking-wide">În așteptare</div>
+            <div id="statPending" class="text-2xl font-semibold text-amber-600">0</div>
+            <div class="text-[0.7rem] text-slate-400">Nu au fost confirmate încă</div>
+          </div>
+          <div class="bg-white/90 backdrop-blur rounded-2xl border border-slate-200 shadow-sm p-4 flex flex-col gap-1">
+            <div class="text-[0.65rem] font-semibold text-slate-500 uppercase tracking-wide">Confirmate</div>
+            <div id="statConfirmed" class="text-2xl font-semibold text-emerald-600">0</div>
+            <div class="text-[0.7rem] text-slate-400">Rezervări active, pregătite</div>
+          </div>
+          <div class="bg-white/90 backdrop-blur rounded-2xl border border-slate-200 shadow-sm p-4 flex flex-col gap-1">
+            <div class="text-[0.65rem] font-semibold text-slate-500 uppercase tracking-wide">Anulate</div>
+            <div id="statCancelled" class="text-2xl font-semibold text-rose-600">0</div>
+            <div class="text-[0.7rem] text-slate-400">Rezervări anulate sau expirate</div>
           </div>
         </section>
 
-        
-        <!-- Reservation details modal -->
-        <div id="reservationModal" class="fixed inset-0 bg-black/40 flex items-center justify-center z-50 hidden">
-          <div class="bg-white rounded-2xl shadow-xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-auto">
-            <div class="px-4 py-3 border-b flex items-center justify-between">
-              <h2 class="text-base font-semibold">Detalii rezervare</h2>
-              <button id="reservationModalClose" class="text-slate-500 hover:text-slate-700 text-xl">&times;</button>
+        <!-- Secțiune Rezervări -->
+        <section class="bg-white/90 backdrop-blur rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+          <div class="px-4 py-3 border-b border-slate-100 flex flex-col md:flex-row md:items-center md:justify-between gap-3 bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900">
+            <div>
+              <h2 class="text-base font-semibold text-white flex items-center gap-2">
+                <span class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-white/10">
+                  <span class="h-2 w-2 rounded-full bg-emerald-400"></span>
+                </span>
+                Rezervări active
+              </h2>
+              <p class="text-[0.7rem] text-slate-300 mt-0.5">
+                Listă cu rezervările recente și acces rapid la detalii.
+              </p>
             </div>
-            <div id="reservationModalBody" class="p-4 space-y-4 text-sm">
-              <!-- Populat din JS -->
-              <div class="text-center text-slate-500">Se încarcă...</div>
+            <div class="flex flex-wrap items-center gap-2 text-[0.7rem] text-slate-200">
+              <span class="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-white/10">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> confirmată
+              </span>
+              <span class="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-white/10">
+                <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span> în așteptare
+              </span>
+              <span class="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-white/10">
+                <span class="w-1.5 h-1.5 rounded-full bg-rose-400"></span> anulată
+              </span>
             </div>
           </div>
-        </div>
 
-<!-- Partners -->
-        <section id="tab-partners" class="tab-pane hidden">
-          <div class="bg-white rounded-xl border">
-            <div class="px-4 py-3 border-b font-semibold">Parteneri</div>
-            <div class="p-4">
-              <form id="addPartnerForm" class="grid md:grid-cols-4 gap-3 mb-4">
-                <input name="name" class="border rounded-lg px-3 py-2" placeholder="Nume partener" required />
-                <input name="apiEndpoint" class="border rounded-lg px-3 py-2" placeholder="API Endpoint (opțional)" />
-                <input name="apiKey" class="border rounded-lg px-3 py-2" placeholder="API key (opțional)" />
-                <button class="px-3 py-2 rounded-lg bg-primary text-white">Adaugă</button>
-              </form>
-              <div class="overflow-auto">
-                <table class="min-w-full text-sm">
-                  <thead class="text-left text-slate-500"><tr><th class="py-2 pr-4">#</th><th class="py-2 pr-4">Nume</th><th class="py-2 pr-4">API</th></tr></thead>
-                  <tbody id="partnerRows"></tbody>
-                </table>
+          <!-- Toolbar search + sort + search field selector -->
+          <div class="px-4 py-3 border-b border-slate-100 bg-slate-50/80 flex flex-col xl:flex-row gap-3 xl:items-center xl:justify-between">
+            <div class="flex-1 flex flex-col md:flex-row md:items-center gap-2">
+              <div class="flex items-center gap-2 w-full md:w-auto">
+                <span class="text-[0.7rem] text-slate-500 whitespace-nowrap">Caută după</span>
+                <select
+                  id="searchField"
+                  class="border border-slate-200 bg-white rounded-full px-2 py-1 text-xs text-slate-700 focus:outline-none focus:ring-1 focus:ring-sky-500"
+                >
+                  <option value="all">Toate câmpurile</option>
+                  <option value="id">ID</option>
+                  <option value="customer_name">Nume client</option>
+                  <option value="car_name">Mașină</option>
+                  <option value="customer_email">Email</option>
+                  <option value="customer_phone">Telefon</option>
+                  <option value="created_at">Data solicitării</option>
+                  <option value="pickup_at">Data preluării</option>
+                  <option value="dropoff_at">Data returnării</option>
+                  <option value="status">Status</option>
+                </select>
+              </div>
+              <div class="relative flex-1 max-w-xl">
+                <span class="pointer-events-none absolute inset-y-0 left-3 flex items-center text-slate-400 text-xs">🔍</span>
+                <input
+                  id="searchInput"
+                  type="text"
+                  class="w-full pl-8 pr-3 py-1.5 rounded-full border border-slate-200 bg-white text-xs text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-1 focus:ring-sky-500 focus:border-sky-500"
+                  placeholder="Introdu valoarea căutată..."
+                />
+              </div>
+            </div>
+            <div class="flex flex-wrap items-center gap-2 text-[0.7rem]">
+              <div class="flex items-center gap-1">
+                <span class="text-slate-500">Sortează după</span>
+                <select
+                  id="sortField"
+                  class="border border-slate-200 bg-white rounded-full px-2 py-1 text-xs text-slate-700 focus:outline-none focus:ring-1 focus:ring-sky-500"
+                >
+                  <option value="created_at">Data solicitării</option>
+                  <option value="pickup_at">Data preluării</option>
+                  <option value="dropoff_at">Data returnării</option>
+                  <option value="customer_name">Nume client</option>
+                  <option value="car_name">Mașină</option>
+                  <option value="status">Status</option>
+                  <option value="id">ID</option>
+                </select>
+              </div>
+              <div class="flex items-center gap-1">
+                <span class="text-slate-500">Ordine</span>
+                <select
+                  id="sortDir"
+                  class="border border-slate-200 bg-white rounded-full px-2 py-1 text-xs text-slate-700 focus:outline-none focus:ring-1 focus:ring-sky-500"
+                >
+                  <option value="desc">Descrescător</option>
+                  <option value="asc">Crescător</option>
+                </select>
               </div>
             </div>
           </div>
-        </section>
 
-        <!-- Cars -->
-        <section id="tab-cars" class="tab-pane hidden">
-          <div class="bg-white rounded-xl border">
-            <div class="px-4 py-3 border-b font-semibold">Mașini</div>
-            <div class="p-4">
-              <form id="addCarForm" class="grid md:grid-cols-6 gap-3 mb-4">
-                <input name="name" class="border rounded-lg px-3 py-2" placeholder="Ex: Dacia Logan 1.0" required />
-                <input name="category" class="border rounded-lg px-3 py-2" placeholder="Categoria" />
-                <input name="transmission" class="border rounded-lg px-3 py-2" placeholder="Transmisie" />
-                <input name="fuelType" class="border rounded-lg px-3 py-2" placeholder="Combustibil" />
-                <input name="seats" type="number" min="1" class="border rounded-lg px-3 py-2" placeholder="Locuri" />
-                <button class="px-3 py-2 rounded-lg bg-primary text-white">Adaugă</button>
-              </form>
-              <div class="overflow-auto">
-                <table class="min-w-full text-sm">
-                  <thead class="text-left text-slate-500"><tr><th class="py-2 pr-4">#</th><th class="py-2 pr-4">Nume</th><th class="py-2 pr-4">Categorie</th><th class="py-2 pr-4">Activă</th></tr></thead>
-                  <tbody id="carRows"></tbody>
-                </table>
-              </div>
-            </div>
+          <div class="p-3 overflow-auto">
+            <table class="min-w-full text-sm">
+              <thead class="text-left text-slate-500 border-b border-slate-100 bg-slate-50/80">
+                <tr>
+                  <th class="py-2 pr-4 font-medium text-[0.7rem] uppercase tracking-wide">ID</th>
+                  <th class="py-2 pr-4 font-medium text-[0.7rem] uppercase tracking-wide">Client</th>
+                  <th class="py-2 pr-4 font-medium text-[0.7rem] uppercase tracking-wide">Mașină</th>
+                  <th class="py-2 pr-4 font-medium text-[0.7rem] uppercase tracking-wide">Preluare</th>
+                  <th class="py-2 pr-4 font-medium text-[0.7rem] uppercase tracking-wide">Returnare</th>
+                  <th class="py-2 pr-4 font-medium text-[0.7rem] uppercase tracking-wide">Total</th>
+                  <th class="py-2 pr-4 font-medium text-[0.7rem] uppercase tracking-wide">Status</th>
+                  <th class="py-2 pr-4 font-medium text-[0.7rem] uppercase tracking-wide">Detalii</th>
+                </tr>
+              </thead>
+              <tbody id="resRows" class="divide-y divide-slate-100"></tbody>
+            </table>
           </div>
         </section>
-
-        <!-- Pricing -->
-        <section id="tab-pricing" class="tab-pane hidden">
-          <div class="bg-white rounded-xl border">
-            <div class="px-4 py-3 border-b font-semibold">Reguli de preț</div>
-            <div class="p-4">
-              <form id="addRuleForm" class="grid md:grid-cols-6 gap-3 mb-4">
-                <input name="carId" type="number" class="border rounded-lg px-3 py-2" placeholder="ID Mașină" required />
-                <input name="minDays" type="number" class="border rounded-lg px-3 py-2" placeholder="Min zile" />
-                <input name="maxDays" type="number" class="border rounded-lg px-3 py-2" placeholder="Max zile" />
-                <input name="baseDailyPrice" type="number" step="0.01" class="border rounded-lg px-3 py-2" placeholder="Preț/zi" required />
-                <input name="seasonStart" type="date" class="border rounded-lg px-3 py-2" />
-                <input name="seasonEnd" type="date" class="border rounded-lg px-3 py-2" />
-                <button class="px-3 py-2 rounded-lg bg-primary text-white">Adaugă</button>
-              </form>
-              <div class="overflow-auto">
-                <table class="min-w-full text-sm">
-                  <thead class="text-left text-slate-500"><tr><th class="py-2 pr-4">#</th><th class="py-2 pr-4">Mașină</th><th class="py-2 pr-4">Interval zile</th><th class="py-2 pr-4">Preț/zi</th></tr></thead>
-                  <tbody id="ruleRows"></tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <!-- Airports -->
-        <section id="tab-airports" class="tab-pane hidden">
-          <div class="bg-white rounded-xl border">
-            <div class="px-4 py-3 border-b font-semibold">Aeroporturi</div>
-            <div class="p-4">
-              <form id="addAirportForm" class="grid md:grid-cols-4 gap-3 mb-4">
-                <input name="code" class="border rounded-lg px-3 py-2" placeholder="Cod (ex: OTP)" required />
-                <input name="name" class="border rounded-lg px-3 py-2" placeholder="Nume" required />
-                <input name="city" class="border rounded-lg px-3 py-2" placeholder="Oraș" />
-                <button class="px-3 py-2 rounded-lg bg-primary text-white">Adaugă</button>
-              </form>
-              <div class="overflow-auto">
-                <table class="min-w-full text-sm">
-                  <thead class="text-left text-slate-500"><tr><th class="py-2 pr-4">#</th><th class="py-2 pr-4">Cod</th><th class="py-2 pr-4">Nume</th><th class="py-2 pr-4">Oraș</th></tr></thead>
-                  <tbody id="airportRows"></tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <!-- Account -->
-        <section id="tab-account" class="tab-pane hidden">
-          <div class="bg-white rounded-xl border">
-            <div class="px-4 py-3 border-b font-semibold">Cont</div>
-            <div class="p-4 text-sm text-slate-600" id="accountInfo">—</div>
-          </div>
-        </section>
-
       </div>
     </main>
   </div>
 
-</div>
-<script>
-(function () {
-  var API_BASE = (window.GATEVION_API_BASE || 'http://localhost:4000');
-  var tokenKey = 'gatevion_token';
-  var userKey = 'gatevion_user';
+  <!-- Modal detalii rezervare -->
+  <div id="reservationModal" class="fixed inset-0 bg-black/45 backdrop-blur-sm flex items-center justify-center z-50 hidden">
+    <div class="bg-slate-950 text-slate-50 rounded-2xl shadow-2xl shadow-slate-900/40 max-w-5xl w-full mx-4 max-h-[90vh] overflow-auto border border-slate-800">
+      <div class="px-4 py-3 border-b border-slate-800 flex items-center justify-between bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 sticky top-0 z-10">
+        <div class="flex items-center gap-3">
+          <div class="h-8 w-8 rounded-xl bg-slate-800 flex items-center justify-center shadow-inner shadow-slate-900/60">
+            <span class="text-xs font-semibold text-slate-200">RZV</span>
+          </div>
+          <div>
+            <h2 class="text-sm font-semibold tracking-wide text-slate-50">Detalii rezervare</h2>
+            <p class="text-[0.7rem] text-slate-400">Vizualizezi toate detaliile clientului și ale rezervării.</p>
+          </div>
+        </div>
+        <button id="reservationModalClose" class="text-slate-400 hover:text-slate-100 text-xl leading-none px-2 py-1 rounded-full hover:bg-slate-800">
+          &times;
+        </button>
+      </div>
+      <div id="reservationModalBody" class="p-5 space-y-4 text-sm">
+        <div class="text-center text-slate-400">Se încarcă...</div>
+      </div>
+    </div>
+  </div>
 
-  var loginShell = document.getElementById('loginShell');
-  var adminShell = document.getElementById('adminShell');
-  var whoEl = document.getElementById('whoami');
-  var loginForm = document.getElementById('adminLoginForm');
-  var loginError = document.getElementById('adminLoginError');
+  <script>
+    // ======= DATE MOCK (până le legăm de backend) =======
+    var allReservations = [
+      {
+        id: 101,
+        customer_name: "Popescu Ion",
+        customer_email: "ion.popescu@example.com",
+        customer_phone: "+40 712 345 678",
+        flight_number: "RO1234",
+        car_name: "Dacia Logan 1.0",
+        pickup_at: "2025-11-10T10:30:00Z",
+        dropoff_at: "2025-11-15T18:00:00Z",
+        created_at: "2025-11-01T09:15:00Z",
+        pickup_code: "OTP",
+        pickup_name: "Henri Coandă",
+        dropoff_code: "OTP",
+        dropoff_name: "Henri Coandă",
+        status: "pending",
+        total_price: 250,
+        license_series: "B",
+        license_number: "123456",
+        id_series: "RX",
+        id_number: "987654",
+        birth_date: "1988-05-20",
+        cnp: "1880520123456",
+        address: "Str. Exemplu nr. 10, București",
+        travel_country: "Italia",
+        notes: "Clientul a menționat că are bagaje voluminoase.",
+        partner_id: null
+      },
+      {
+        id: 102,
+        customer_name: "Ionescu Maria",
+        customer_email: "maria.ionescu@example.com",
+        customer_phone: "+40 723 111 222",
+        flight_number: "FR5678",
+        car_name: "VW Golf 1.5 TSI",
+        pickup_at: "2025-12-01T09:00:00Z",
+        dropoff_at: "2025-12-07T20:00:00Z",
+        created_at: "2025-10-28T14:22:00Z",
+        pickup_code: "OTP",
+        pickup_name: "Henri Coandă",
+        dropoff_code: "CLJ",
+        dropoff_name: "Cluj-Napoca",
+        status: "confirmed",
+        total_price: 480,
+        license_series: "B",
+        license_number: "445566",
+        id_series: "KX",
+        id_number: "223344",
+        birth_date: "1990-09-12",
+        cnp: "2900912123456",
+        address: "Bd. Eroilor nr. 5, Cluj-Napoca",
+        travel_country: "Spania",
+        notes: "Client fidel, preferă predare rapidă la sosire.",
+        partner_id: 1
+      },
+      {
+        id: 103,
+        customer_name: "Vasile Andrei",
+        customer_email: "andrei.vasile@example.com",
+        customer_phone: "+40 744 999 000",
+        flight_number: "WZ9999",
+        car_name: "Renault Megane",
+        pickup_at: "2025-10-01T13:00:00Z",
+        dropoff_at: "2025-10-03T08:00:00Z",
+        created_at: "2025-09-20T18:40:00Z",
+        pickup_code: "CLJ",
+        pickup_name: "Cluj-Napoca",
+        dropoff_code: "CLJ",
+        dropoff_name: "Cluj-Napoca",
+        status: "cancelled",
+        total_price: 120,
+        license_series: "B",
+        license_number: "777888",
+        id_series: "AB",
+        id_number: "111222",
+        birth_date: "1985-02-02",
+        cnp: "1850202123456",
+        address: "Str. Libertății nr. 3, Oradea",
+        travel_country: "Germania",
+        notes: "Rezervarea a fost anulată de client.",
+        partner_id: 2
+      }
+    ];
 
-  var panes = {
-    overview: document.getElementById('tab-overview'),
-    reservations: document.getElementById('tab-overview'),
-    partners: document.getElementById('tab-partners'),
-    cars: document.getElementById('tab-cars'),
-    rules: document.getElementById('tab-rules'),
-    airports: document.getElementById('tab-airports'),
-    account: document.getElementById('tab-account')
-  };
+    var demoDocsByReservation = {
+      101: [
+        { doc_type: "CI față", file_name: "ci_fata_101.jpg", file_path: "ci_fata_101.jpg" },
+        { doc_type: "CI verso", file_name: "ci_verso_101.jpg", file_path: "ci_verso_101.jpg" },
+        { doc_type: "Permis", file_name: "permis_101.jpg", file_path: "permis_101.jpg" }
+      ],
+      102: [
+        { doc_type: "CI față", file_name: "ci_fata_102.jpg", file_path: "ci_fata_102.jpg" }
+      ],
+      103: []
+    };
 
-  var navButtons = Array.prototype.slice.call(document.querySelectorAll('[data-tab]'));
-  var currentTab = 'overview';
+    var demoPartners = [
+      { id: 1, name: "Partener București" },
+      { id: 2, name: "Partener Cluj" }
+    ];
 
-  function setView(view) {
-    if (view === 'admin') {
-      if (loginShell) loginShell.classList.add('hidden');
-      if (adminShell) adminShell.classList.remove('hidden');
-    } else {
-      if (adminShell) adminShell.classList.add('hidden');
-      if (loginShell) loginShell.classList.remove('hidden');
+    var currentReservations = allReservations.slice();
+
+    // ======= UI HELPERS =======
+
+    function formatDateTime(iso) {
+      if (!iso) return "-";
+      try {
+        return new Date(iso).toLocaleString();
+      } catch (e) {
+        return iso;
+      }
     }
-  }
 
-  function api(path, options) {
-    options = options || {};
-    var token = localStorage.getItem(tokenKey);
-    var headers = options.headers ? Object.assign({}, options.headers) : {};
-    if (!headers['Content-Type'] && !(options.body instanceof FormData)) {
-      headers['Content-Type'] = 'application/json';
+    function formatDateOnly(iso) {
+      if (!iso) return "-";
+      try {
+        var d = new Date(iso);
+        return d.toLocaleDateString();
+      } catch (e) {
+        return iso;
+      }
     }
-    if (token) {
-      headers['Authorization'] = 'Bearer ' + token;
+
+    function statusBadgeClass(status) {
+      if (status === "confirmed") return "bg-emerald-500/15 text-emerald-200 ring-1 ring-emerald-500/40";
+      if (status === "pending") return "bg-amber-500/15 text-amber-200 ring-1 ring-amber-500/40";
+      if (status === "cancelled") return "bg-rose-500/15 text-rose-200 ring-1 ring-rose-500/40";
+      return "bg-slate-500/20 text-slate-200 ring-1 ring-slate-500/40";
     }
-    return fetch(API_BASE + path, Object.assign({}, options, { headers: headers }))
-      .then(function (res) {
-        return res.json().catch(function(){ return {}; }).then(function (data) {
-          if (res.status === 401) {
-            localStorage.removeItem(tokenKey);
-            localStorage.removeItem(userKey);
-            setView('login');
-            throw new Error(data.error || 'Neautorizat');
-          }
-          if (!res.ok) {
-            throw new Error(data.error || res.statusText || 'Eroare API');
-          }
-          return data;
-        });
+
+    function listStatusBadgeClass(status) {
+      if (status === "confirmed") return "bg-emerald-100 text-emerald-800";
+      if (status === "pending") return "bg-amber-100 text-amber-800";
+      if (status === "cancelled") return "bg-rose-100 text-rose-800";
+      return "bg-slate-200 text-slate-700";
+    }
+
+    function sectionLabel(text) {
+      return '<div class="text-[0.65rem] font-semibold text-slate-400 uppercase tracking-[0.14em]">' + text + "</div>";
+    }
+
+    function fieldRow(label, value) {
+      return (
+        '<div class="space-y-1">' +
+          sectionLabel(label) +
+          '<div class="text-sm text-slate-50">' + (value || "-") + "</div>" +
+        "</div>"
+      );
+    }
+
+    function normalizePhone(str) {
+      // scoate spații, plus, paranteze, liniuțe etc. -> rămân doar cifrele
+      return (str || "").replace(/[^0-9]/g, "");
+    }
+
+    // ======= FILTRARE + SORTARE =======
+    function applyFiltersAndSort() {
+      var searchInput = document.getElementById("searchInput");
+      var searchField = document.getElementById("searchField");
+      var sortField = document.getElementById("sortField");
+      var sortDir = document.getElementById("sortDir");
+
+      var term = (searchInput && searchInput.value || "").trim().toLowerCase();
+      var sField = searchField ? searchField.value : "all";
+      var field = sortField ? sortField.value : "created_at";
+      var dir = sortDir ? sortDir.value : "desc";
+
+      var filtered = allReservations.filter(function(r) {
+        if (!term) return true;
+
+        if (sField === "all") {
+          var haystack = [
+            String(r.id || ""),
+            r.customer_name || "",
+            r.customer_email || "",
+            r.customer_phone || "",
+            r.car_name || "",
+            r.status || "",
+            formatDateTime(r.created_at),
+            formatDateTime(r.pickup_at),
+            formatDateTime(r.dropoff_at)
+          ].join(" ").toLowerCase();
+          return haystack.indexOf(term) !== -1;
+        }
+
+        if (sField === "id") {
+          return String(r.id || "").toLowerCase().indexOf(term) !== -1;
+        }
+        if (sField === "customer_name") {
+          return (r.customer_name || "").toLowerCase().indexOf(term) !== -1;
+        }
+        if (sField === "customer_email") {
+          return (r.customer_email || "").toLowerCase().indexOf(term) !== -1;
+        }
+        if (sField === "customer_phone") {
+          var phoneNorm = normalizePhone(r.customer_phone);
+          var termNorm = normalizePhone(term);
+          if (!termNorm) return true;
+          return phoneNorm.indexOf(termNorm) !== -1;
+        }
+        if (sField === "car_name") {
+          return (r.car_name || "").toLowerCase().indexOf(term) !== -1;
+        }
+        if (sField === "status") {
+          return (r.status || "").toLowerCase().indexOf(term) !== -1;
+        }
+        if (sField === "created_at" || sField === "pickup_at" || sField === "dropoff_at") {
+          return formatDateTime(r[sField]).toLowerCase().indexOf(term) !== -1;
+        }
+        return true;
       });
-  }
 
-  function activate(tab) {
-    currentTab = tab;
-    navButtons.forEach(function (btn) {
-      var name = btn.getAttribute('data-tab');
-      if (!name) return;
-      if (name === tab) {
-        btn.classList.add('bg-slate-900', 'text-white');
-        btn.classList.remove('text-slate-600');
-      } else {
-        btn.classList.remove('bg-slate-900', 'text-white');
-        btn.classList.add('text-slate-600');
-      }
-    });
-    Object.keys(panes).forEach(function (name) {
-      var pane = panes[name];
-      if (!pane) return;
-      if (name === tab || (name === 'overview' && tab === 'reservations')) {
-        pane.classList.remove('hidden');
-      } else {
-        pane.classList.add('hidden');
-      }
-    });
-    if (tab === 'overview' || tab === 'reservations') {
-      loadOverviewStats();
-      loadReservations();
+      filtered.sort(function(a, b) {
+        var av, bv;
+
+        if (field === "id") {
+          av = a.id;
+          bv = b.id;
+        } else if (field === "customer_name") {
+          av = (a.customer_name || "").toLowerCase();
+          bv = (b.customer_name || "").toLowerCase();
+        } else if (field === "car_name") {
+          av = (a.car_name || "").toLowerCase();
+          bv = (b.car_name || "").toLowerCase();
+        } else if (field === "status") {
+          av = (a.status || "").toLowerCase();
+          bv = (b.status || "").toLowerCase();
+        } else {
+          av = a[field] ? new Date(a[field]).getTime() : 0;
+          bv = b[field] ? new Date(b[field]).getTime() : 0;
+        }
+
+        if (av < bv) return dir === "asc" ? -1 : 1;
+        if (av > bv) return dir === "asc" ? 1 : -1;
+        return 0;
+      });
+
+      currentReservations = filtered;
+      renderReservationsTable(currentReservations);
     }
-  }
 
-  function loadOverviewStats() {
-    return api('/api/reservations/stats/overview').then(function (data) {
-      var totals = data.totals || {};
-      var byAirport = data.byAirport || [];
-      function setText(id, val) {
-        var el = document.getElementById(id);
-        if (el) el.textContent = val;
-      }
-      setText('statTotal', totals.total || 0);
-      setText('statPending', totals.pending || 0);
-      setText('statConfirmed', totals.confirmed || 0);
-      setText('statCancelled', totals.cancelled || 0);
-      var tbody = document.getElementById('airportStatsRows');
-      if (tbody) {
-        tbody.innerHTML = '';
-        byAirport.forEach(function (row) {
-          var tr = document.createElement('tr');
-          var name = (row.code || '-') + (row.name ? (' \u2013 ' + row.name) : '');
-          tr.innerHTML = ''
-            + '<td class="py-2 pr-4">' + name + '</td>'
-            + '<td class="py-2 pr-4">' + (row.total || 0) + '</td>'
-            + '<td class="py-2 pr-4">' + (row.pending || 0) + '</td>'
-            + '<td class="py-2 pr-4">' + (row.confirmed || 0) + '</td>'
-            + '<td class="py-2 pr-4">' + (row.cancelled || 0) + '</td>';
-          tbody.appendChild(tr);
-        });
-      }
-    }).catch(function (err) {
-      console.error('Eroare la încărcarea statisticilor overview', err);
-    });
-  }
+    // ======= RENDER STATISTICI =======
+    function renderStats(reservations) {
+      var total = reservations.length;
+      var pending = reservations.filter(function (r) { return r.status === "pending"; }).length;
+      var confirmed = reservations.filter(function (r) { return r.status === "confirmed"; }).length;
+      var cancelled = reservations.filter(function (r) { return r.status === "cancelled"; }).length;
 
-  function loadReservations() {
-    var tbody = document.getElementById('resRows');
-    if (!tbody) return Promise.resolve();
-    tbody.innerHTML = '';
-    return api('/api/reservations').then(function (list) {
-      list.forEach(function (r) {
-        var tr = document.createElement('tr');
-        var pickupText = (r.pickup_at ? new Date(r.pickup_at).toLocaleString() : '-')
-          + (r.pickup_code ? ' (' + r.pickup_code + ')' : '');
-        var dropoffText = (r.dropoff_at ? new Date(r.dropoff_at).toLocaleString() : '-')
-          + (r.dropoff_code ? ' (' + r.dropoff_code + ')' : '');
-        var totalText = r.total_price != null ? (Number(r.total_price).toFixed(2) + ' \u20AC') : '-';
-        var statusClass = (r.status === 'confirmed')
-          ? 'bg-emerald-100 text-emerald-800'
-          : (r.status === 'pending')
-          ? 'bg-amber-100 text-amber-800'
-          : (r.status === 'cancelled')
-          ? 'bg-rose-100 text-rose-800'
-          : 'bg-slate-200 text-slate-700';
-        tr.innerHTML = ''
-          + '<td class="py-2 pr-4">' + r.id + '</td>'
-          + '<td class="py-2 pr-4">' + (r.customer_name || r.user_email || '-') + '</td>'
-          + '<td class="py-2 pr-4">' + (r.car_name || '-') + '</td>'
-          + '<td class="py-2 pr-4">' + pickupText + '</td>'
-          + '<td class="py-2 pr-4">' + dropoffText + '</td>'
-          + '<td class="py-2 pr-4">' + totalText + '</td>'
-          + '<td class="py-2 pr-4"><span class="badge ' + statusClass + '">' + r.status + '</span></td>'
-          + '<td class="py-2 pr-4"><button class="px-2 py-1 rounded border" data-action="view" data-id="' + r.id + '">Vezi detalii</button></td>';
+      document.getElementById("statTotal").textContent = total;
+      document.getElementById("statPending").textContent = pending;
+      document.getElementById("statConfirmed").textContent = confirmed;
+      document.getElementById("statCancelled").textContent = cancelled;
+    }
+
+    // ======= RENDER TABEL REZERVĂRI =======
+    function renderReservationsTable(reservations) {
+      var tbody = document.getElementById("resRows");
+      if (!tbody) return;
+      tbody.innerHTML = "";
+
+      reservations.forEach(function (r, idx) {
+        var tr = document.createElement("tr");
+        tr.className = (idx % 2 === 0 ? "bg-white" : "bg-slate-50/60") + " hover:bg-sky-50/90 transition-colors";
+
+        var pickupText = formatDateTime(r.pickup_at) + (r.pickup_code ? " (" + r.pickup_code + ")" : "");
+        var dropoffText = formatDateTime(r.dropoff_at) + (r.dropoff_code ? " (" + r.dropoff_code + ")" : "");
+        var totalText = r.total_price != null ? (Number(r.total_price).toFixed(2) + " €") : "-";
+        var badgeClass = listStatusBadgeClass(r.status);
+
+        tr.innerHTML =
+          '<td class="py-3 pr-4 align-top text-xs font-mono text-slate-500">' + r.id + "</td>" +
+          '<td class="py-3 pr-4 align-top">' +
+            '<div class="text-sm font-medium text-slate-900">' + (r.customer_name || "-") + "</div>" +
+            '<div class="text-xs text-slate-400">' + (r.customer_email || "") + "</div>" +
+          "</td>" +
+          '<td class="py-3 pr-4 align-top">' +
+            '<div class="text-sm text-slate-900">' + (r.car_name || "-") + "</div>" +
+          "</td>" +
+          '<td class="py-3 pr-4 align-top">' +
+            '<div class="text-xs text-slate-500">' + pickupText + "</div>" +
+          "</td>" +
+          '<td class="py-3 pr-4 align-top">' +
+            '<div class="text-xs text-slate-500">' + dropoffText + "</div>" +
+          "</td>" +
+          '<td class="py-3 pr-4 align-top">' +
+            '<div class="text-sm font-semibold text-slate-900">' + totalText + "</div>" +
+          "</td>" +
+          '<td class="py-3 pr-4 align-top">' +
+            '<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ' +
+              badgeClass + '">' +
+              r.status +
+            "</span>" +
+          "</td>" +
+          '<td class="py-3 pr-4 align-top">' +
+            '<button class="px-2.5 py-1.5 rounded-full border border-slate-200 text-xs font-medium text-slate-700 hover:bg-slate-900 hover:text-white transition-colors" data-action="view" data-id="' + r.id + '">' +
+              "Vezi detalii" +
+            "</button>" +
+          "</td>";
+
         tbody.appendChild(tr);
       });
-    }).catch(function (err) {
-      console.error('Eroare la încărcarea rezervărilor', err);
-    });
-  }
+    }
 
-  function openReservationDetails(id) {
-    var modal = document.getElementById('reservationModal');
-    var body = document.getElementById('reservationModalBody');
-    var closeBtn = document.getElementById('reservationModalClose');
-    if (!modal || !body) return Promise.resolve();
+    // ======= MODAL DETALII =======
+    function openReservationDetails(id) {
+      var modal = document.getElementById("reservationModal");
+      var body = document.getElementById("reservationModalBody");
+      if (!modal || !body) return;
 
-    modal.classList.remove('hidden');
-    body.innerHTML = '<div class="text-center text-slate-500">Se încarcă...</div>';
+      var r = allReservations.find(function (x) { return x.id === id; });
+      var docs = demoDocsByReservation[id] || [];
+      var partners = demoPartners;
 
-    return Promise.all([
-      api('/api/reservations/' + id),
-      api('/api/reservations/' + id + '/documents'),
-      api('/api/partners')
-    ]).then(function (results) {
-      var reservation = results[0];
-      var docs = results[1] || [];
-      var partners = results[2] || [];
+      if (!r) return;
 
-      var pickupInfo = (reservation.pickup_at ? new Date(reservation.pickup_at).toLocaleString() : '-')
-        + (reservation.pickup_name ? ' \u2013 ' + reservation.pickup_name : '')
-        + (reservation.pickup_code ? ' (' + reservation.pickup_code + ')' : '');
-      var dropoffInfo = (reservation.dropoff_at ? new Date(reservation.dropoff_at).toLocaleString() : '-')
-        + (reservation.dropoff_name ? ' \u2013 ' + reservation.dropoff_name : '')
-        + (reservation.dropoff_code ? ' (' + reservation.dropoff_code + ')' : '');
+      var pickupInfo = formatDateTime(r.pickup_at) +
+        (r.pickup_name ? " – " + r.pickup_name : "") +
+        (r.pickup_code ? " (" + r.pickup_code + ")" : "");
 
-      var docsHtml = docs.length
-        ? ('<ul class="list-disc pl-5 space-y-1">' + docs.map(function (d) {
+      var dropoffInfo = formatDateTime(r.dropoff_at) +
+        (r.dropoff_name ? " – " + r.dropoff_name : "") +
+        (r.dropoff_code ? " (" + r.dropoff_code + ")" : "");
+
+      var docsHtml = "";
+      if (docs.length) {
+        docsHtml =
+          '<ul class="list-disc pl-5 space-y-1 text-sm text-slate-100">' +
+          docs.map(function (d) {
             var label = d.doc_type || d.file_name;
-            var href = '/uploads/' + d.file_path;
-            return '<li><a href="' + href + '" target="_blank" class="text-primary underline">' + label + '</a></li>';
-          }).join('') + '</ul>')
-        : '<div class="text-slate-500 text-sm">Nu există documente atașate.</div>';
+            return "<li>" + label + " (" + d.file_name + ")</li>";
+          }).join("") +
+          "</ul>";
+      } else {
+        docsHtml = '<div class="text-slate-500 text-sm">Nu există documente atașate.</div>';
+      }
 
       var partnersOptions = partners.map(function (p) {
-        return '<option value="' + p.id + '">' + p.name + '</option>';
-      }).join('');
+        return '<option value="' + p.id + '">' + p.name + "</option>";
+      }).join("");
 
-      body.innerHTML = ''
-        + '<div class="grid grid-cols-1 md:grid-cols-2 gap-4">'
-          + '<div class="space-y-1">'
-            + '<div class="text-xs font-semibold text-slate-500">ID rezervare</div>'
-            + '<div class="font-mono text-sm">' + reservation.id + '</div>'
+      var assignedPartner = null;
+      if (r.partner_id) {
+        assignedPartner = partners.find(function (p) { return p.id === r.partner_id; }) || null;
+      }
 
-            + '<div class="text-xs font-semibold text-slate-500 mt-3">Client</div>'
-            + '<div>' + (reservation.customer_name || '-') + '</div>'
-            + '<div class="text-slate-500">' + (reservation.customer_email || '') + '</div>'
-            + '<div class="text-slate-500">' + (reservation.customer_phone || '') + '</div>'
+      var partnerPill = "";
+      if (assignedPartner) {
+        partnerPill =
+          '<div class="inline-flex items-center gap-2 rounded-full bg-emerald-500/10 text-emerald-300 px-3 py-1 text-xs font-medium ring-1 ring-emerald-500/40">' +
+            '<span class="w-2 h-2 rounded-full bg-emerald-400"></span>' +
+            '<span>Partener alocat: ' + assignedPartner.name + "</span>" +
+          "</div>";
+      } else {
+        partnerPill =
+          '<div class="inline-flex items-center gap-2 rounded-full bg-slate-800 text-slate-300 px-3 py-1 text-xs font-medium ring-1 ring-slate-600">' +
+            '<span class="w-2 h-2 rounded-full bg-slate-500"></span>' +
+            '<span>Partener nealocat</span>' +
+          "</div>";
+      }
 
-            + '<div class="text-xs font-semibold text-slate-500 mt-3">Număr zbor</div>'
-            + '<div>' + (reservation.flight_number || '-') + '</div>'
+      var idCombined = ((r.id_series || "") + (r.id_number ? " " + r.id_number : "")).trim();
+      var licenseCombined = ((r.license_series || "") + (r.license_number ? " " + r.license_number : "")).trim();
 
-            + '<div class="text-xs font-semibold text-slate-500 mt-3">Status</div>'
-            + '<div>' + reservation.status + '</div>'
-          + '</div>'
-          + '<div class="space-y-2">'
-            + '<div><div class="text-xs font-semibold text-slate-500">Mașină</div><div>' + (reservation.car_name || '-') + '</div></div>'
-            + '<div><div class="text-xs font-semibold text-slate-500">Preluare</div><div>' + pickupInfo + '</div></div>'
-            + '<div><div class="text-xs font-semibold text-slate-500">Returnare</div><div>' + dropoffInfo + '</div></div>'
-            + '<div><div class="text-xs font-semibold text-slate-500">Total</div><div>'
-              + (reservation.total_price != null ? (Number(reservation.total_price).toFixed(2) + ' \u20AC') : '-')
-            + '</div></div>'
-          + '</div>'
-        + '</div>'
+      var actionsHtml = "";
+      if (r.status !== "cancelled") {
+        actionsHtml =
+          '<div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3 pt-3 border-t border-slate-800">' +
+            '<div class="flex flex-wrap gap-2">' +
+              '<button id="btnEditReservation" class="px-3 py-1.5 rounded-full border border-slate-600 text-xs font-medium text-slate-100 hover:bg-slate-50 hover:text-slate-900 transition-colors">' +
+                "Modifică rezervarea" +
+              "</button>" +
+              '<button id="btnExtendReservation" class="px-3 py-1.5 rounded-full border border-slate-600 text-xs font-medium text-slate-100 hover:bg-slate-50 hover:text-slate-900 transition-colors">' +
+                "Prelungește returul" +
+              "</button>" +
+              '<button id="btnCancelReservation" class="px-3 py-1.5 rounded-full border border-rose-500/70 text-xs font-medium text-rose-200 bg-rose-500/10 hover:bg-rose-500 hover:text-white hover:border-rose-400 transition-colors">' +
+                "Anulează rezervarea" +
+              "</button>" +
+            "</div>" +
+            '<div class="flex flex-col sm:flex-row sm:items-center gap-2">' +
+              '<select id="partnerSelect" class="border border-slate-700 bg-slate-900/60 text-slate-100 rounded-full px-3 py-1.5 text-xs min-w-[220px] focus:outline-none focus:ring-1 focus:ring-sky-500">' +
+                '<option value="">Alege partener...</option>' +
+                partnersOptions +
+              "</select>" +
+              '<button id="btnAssignPartner" class="px-3 py-1.5 rounded-full border border-sky-500 text-xs font-medium text-sky-100 bg-sky-600 hover:bg-sky-500 hover:border-sky-400 transition-colors">' +
+                "Alocă / schimbă partenerul" +
+              "</button>" +
+            "</div>" +
+          "</div>";
+      }
 
-        + '<div class="mt-4"><div class="text-xs font-semibold text-slate-500 mb-1">Documente client</div>'
-          + docsHtml
-        + '</div>'
+      document.getElementById("reservationModalBody").innerHTML =
+        '<div class="space-y-6">' +
 
-        + '<div class="mt-4 border-t pt-4 space-y-3">'
-          + '<div class="flex flex-wrap gap-2">'
-            + '<button id="btnEditReservation" class="px-3 py-1.5 rounded-lg border text-sm">Modifică rezervarea</button>'
-            + '<button id="btnExtendReservation" class="px-3 py-1.5 rounded-lg border text-sm">Prelungește returul</button>'
-          + '</div>'
-          + '<div class="flex items-center gap-2">'
-            + '<select id="partnerSelect" class="border rounded-lg px-2 py-1 text-sm">'
-              + '<option value="">Alege partener...</option>' + partnersOptions +
-            '</select>'
-            + '<button id="btnAssignPartner" class="px-3 py-1.5 rounded-lg border text-sm">Alocă partener</button>'
-          + '</div>'
-        + '</div>';
+          '<div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3">' +
+            '<div class="space-y-1">' +
+              sectionLabel("Rezervare") +
+              '<div class="flex items-center gap-3">' +
+                '<div class="font-mono text-xs text-slate-400">ID #' + r.id + "</div>" +
+                '<span class="inline-flex items-center px-3 py-0.5 rounded-full text-[0.7rem] font-medium ' +
+                  statusBadgeClass(r.status) + '">' +
+                  r.status +
+                "</span>" +
+              "</div>" +
+              '<div class="text-[0.7rem] text-slate-400 mt-1">Creată la ' + formatDateTime(r.created_at) + "</div>" +
+            "</div>" +
+            '<div class="flex items-center gap-2">' + partnerPill + "</div>" +
+          "</div>" +
 
-      var editBtn = document.getElementById('btnEditReservation');
+          '<div class="grid grid-cols-1 md:grid-cols-2 gap-5">' +
+            '<div class="space-y-4 bg-slate-900/60 rounded-2xl border border-slate-800 p-4 shadow-inner shadow-slate-900/60">' +
+              sectionLabel("Date client") +
+              fieldRow("Nume client", r.customer_name) +
+              fieldRow("Email", r.customer_email) +
+              fieldRow("Telefon", r.customer_phone) +
+              '<div class="grid grid-cols-2 gap-4 mt-2">' +
+                fieldRow("Data nașterii", formatDateOnly(r.birth_date)) +
+                fieldRow("CNP", r.cnp) +
+              "</div>" +
+              '<div class="mt-2">' +
+                fieldRow("Adresa de domiciliu", r.address) +
+              "</div>" +
+              '<div class="grid grid-cols-2 gap-4 mt-2">' +
+                fieldRow("Țara din care călătorește", r.travel_country) +
+                fieldRow("Număr zbor", r.flight_number) +
+              "</div>" +
+            "</div>" +
+
+            '<div class="space-y-4 bg-slate-900/60 rounded-2xl border border-slate-800 p-4 shadow-inner shadow-slate-900/60">' +
+              sectionLabel("Documente identitate & permis") +
+              fieldRow("Serie și număr CI / Pașaport", idCombined) +
+              fieldRow("Serie și număr permis", licenseCombined) +
+              '<div class="mt-3 space-y-2">' +
+                sectionLabel("Documente încărcate") +
+                '<div class="mt-1">' + docsHtml + "</div>" +
+              "</div>" +
+            "</div>" +
+          "</div>" +
+
+          '<div class="grid grid-cols-1 md:grid-cols-2 gap-5">' +
+            '<div class="space-y-3 bg-slate-900/40 rounded-2xl border border-slate-800 p-4">' +
+              sectionLabel("Rezervare mașină") +
+              fieldRow("Mașină", r.car_name) +
+              fieldRow("Preluare", pickupInfo) +
+              fieldRow("Returnare", dropoffInfo) +
+            "</div>" +
+            '<div class="space-y-3 bg-slate-900/40 rounded-2xl border border-slate-800 p-4">' +
+              sectionLabel("Detalii financiare & observații") +
+              fieldRow("Total", r.total_price != null ? (Number(r.total_price).toFixed(2) + " €") : "-") +
+              '<div class="mt-2 space-y-1">' +
+                sectionLabel("Observații") +
+                '<div class="mt-1 text-sm text-slate-100 whitespace-pre-line">' + (r.notes || "—") + "</div>" +
+              "</div>" +
+            "</div>" +
+          "</div>" +
+
+          actionsHtml +
+
+        "</div>";
+
+      var editBtn = document.getElementById("btnEditReservation");
       if (editBtn) {
         editBtn.onclick = function () {
-          var newName = window.prompt('Nume client', reservation.customer_name || '');
-          var newEmail = window.prompt('Email', reservation.customer_email || '');
-          var newPhone = window.prompt('Telefon', reservation.customer_phone || '');
-          var newFlight = window.prompt('Număr zbor', reservation.flight_number || '');
-          var newPickupAt = window.prompt('Pickup (ISO datetime)', reservation.pickup_at || '');
-          var newDropoffAt = window.prompt('Dropoff (ISO datetime)', reservation.dropoff_at || '');
-          var newStatus = window.prompt('Status (pending/confirmed/cancelled)', reservation.status || 'pending');
-          api('/api/reservations/' + id, {
-            method: 'PATCH',
-            body: JSON.stringify({
-              customerName: newName,
-              customerEmail: newEmail,
-              customerPhone: newPhone,
-              flightNumber: newFlight,
-              pickupAt: newPickupAt,
-              dropoffAt: newDropoffAt,
-              status: newStatus
-            })
-          }).then(function(){ return loadReservations(); })
-            .then(function(){ return openReservationDetails(id); })
-            .catch(function (err) { window.alert('Eroare: ' + err.message); });
+          alert("Aici, în versiunea finală, vei putea modifica toate câmpurile rezervării și trimite PATCH la backend.");
         };
       }
 
-      var extendBtn = document.getElementById('btnExtendReservation');
+      var extendBtn = document.getElementById("btnExtendReservation");
       if (extendBtn) {
         extendBtn.onclick = function () {
-          var newDropoffAt = window.prompt('Noua dată/ora de retur (ISO datetime)', reservation.dropoff_at || '');
-          var newDropAirportIdStr = window.prompt('ID nou aeroport retur (gol pentru a păstra actualul)', reservation.airport_dropoff_id || '');
-          var payload = { dropoffAt: newDropoffAt };
-          if (newDropAirportIdStr) payload.airportDropoffId = Number(newDropAirportIdStr);
-          api('/api/reservations/' + id, { method: 'PATCH', body: JSON.stringify(payload) })
-            .then(function(){ return loadReservations(); })
-            .then(function(){ return openReservationDetails(id); })
-            .catch(function (err) { window.alert('Eroare: ' + err.message); });
+          alert("Aici vei putea modifica data/ora/aeroportul de returnare și recalcula prețul.");
         };
       }
 
-      var assignBtn = document.getElementById('btnAssignPartner');
-      var partnerSelect = document.getElementById('partnerSelect');
+      var cancelBtn = document.getElementById("btnCancelReservation");
+      if (cancelBtn) {
+        cancelBtn.onclick = function () {
+          alert("Aici vei putea apela endpoint-ul de anulare a rezervării și actualiza statusul în 'cancelled'.");
+        };
+      }
+
+      var assignBtn = document.getElementById("btnAssignPartner");
+      var partnerSelect = document.getElementById("partnerSelect");
       if (assignBtn && partnerSelect) {
         assignBtn.onclick = function () {
-          var pidStr = partnerSelect.value;
-          if (!pidStr) { window.alert('Te rugăm să alegi un partener.'); return; }
-          var pid = Number(pidStr);
-          api('/api/partners/' + pid + '/send-reservation', {
-            method: 'POST',
-            body: JSON.stringify({ reservationId: id })
-          }).then(function () {
-            window.alert('Rezervarea a fost trimisă partenerului selectat.');
-          }).catch(function (err) {
-            window.alert('Eroare: ' + err.message);
-          });
+          var pid = partnerSelect.value;
+          if (!pid) {
+            alert("Te rugăm să alegi un partener.");
+            return;
+          }
+          alert("Aici vei trimite rezervarea către partenerul cu ID " + pid + " prin backend.");
         };
       }
 
-    }).catch(function (err) {
-      console.error('Eroare la încărcarea detaliilor rezervării', err);
-      body.innerHTML = '<div class="text-red-600 text-sm">Eroare la încărcarea detaliilor rezervării.</div>';
-    });
-
-    if (closeBtn) {
-      closeBtn.onclick = function () { modal.classList.add('hidden'); };
-    }
-    modal.addEventListener('click', function (e) {
-      if (e.target === modal) modal.classList.add('hidden');
-    });
-  }
-
-  function initAdmin() {
-    navButtons.forEach(function (btn) {
-      btn.addEventListener('click', function () {
-        var tab = btn.getAttribute('data-tab');
-        if (tab) activate(tab);
-      });
-    });
-
-    var resRows = document.getElementById('resRows');
-    if (resRows) {
-      resRows.addEventListener('click', function (e) {
-        var btn = e.target.closest('button');
-        if (!btn) return;
-        var action = btn.getAttribute('data-action');
-        var id = btn.getAttribute('data-id');
-        if (action === 'view' && id) {
-          openReservationDetails(id).catch(function (err) { window.alert('Eroare: ' + err.message); });
-        }
-      });
+      modal.classList.remove("hidden");
     }
 
-    var storedUser = localStorage.getItem(userKey);
-    if (storedUser && whoEl) {
-      try { var u = JSON.parse(storedUser); whoEl.textContent = u.email || ''; } catch (e) {}
+    function closeReservationModal() {
+      var modal = document.getElementById("reservationModal");
+      if (modal) modal.classList.add("hidden");
     }
 
-    activate('overview');
-    return Promise.resolve();
-  }
+    // ======= INIT =======
+    function init() {
+      renderStats(allReservations);
+      applyFiltersAndSort();
 
-  if (loginForm) {
-    loginForm.addEventListener('submit', function (e) {
-      e.preventDefault();
-      if (loginError) { loginError.classList.add('hidden'); loginError.textContent = ''; }
-      var emailInput = document.getElementById('adminUser');
-      var passwordInput = document.getElementById('adminPassword');
-      var email = emailInput ? (emailInput.value || '').trim() : '';
-      var password = passwordInput ? (passwordInput.value || '').trim() : '';
-      if (!email || !password) {
-        if (loginError) { loginError.textContent = 'Completează user și parolă.'; loginError.classList.remove('hidden'); }
-        return;
+      var tbody = document.getElementById("resRows");
+      if (tbody) {
+        tbody.addEventListener("click", function (e) {
+          var btn = e.target.closest("button");
+          if (!btn) return;
+          var action = btn.getAttribute("data-action");
+          var id = parseInt(btn.getAttribute("data-id"), 10);
+          if (action === "view" && id) {
+            openReservationDetails(id);
+          }
+        });
       }
-      api('/api/auth/login', {
-        method: 'POST',
-        body: JSON.stringify({ email: email, password: password })
-      }).then(function (data) {
-        if (!data.user || data.user.role !== 'admin') throw new Error('Acest utilizator nu are rol de admin.');
-        localStorage.setItem(tokenKey, data.token);
-        localStorage.setItem(userKey, JSON.stringify(data.user || {}));
-        setView('admin');
-        return initAdmin();
-      }).catch(function (err) {
-        if (loginError) { loginError.textContent = 'Autentificare eșuată: ' + err.message; loginError.classList.remove('hidden'); }
-      });
-    });
-  }
 
-  (function autoStart() {
-    var storedToken = localStorage.getItem(tokenKey);
-    var storedUser = localStorage.getItem(userKey);
-    if (storedToken && storedUser) {
-      setView('admin');
-      initAdmin().catch(function (err) { console.error(err); setView('login'); });
-    } else {
-      setView('login');
+      var closeBtn = document.getElementById("reservationModalClose");
+      if (closeBtn) {
+        closeBtn.addEventListener("click", closeReservationModal);
+      }
+      var modal = document.getElementById("reservationModal");
+      if (modal) {
+        modal.addEventListener("click", function (e) {
+          if (e.target === modal) closeReservationModal();
+        });
+      }
+
+      var searchInput = document.getElementById("searchInput");
+      var searchField = document.getElementById("searchField");
+      var sortField = document.getElementById("sortField");
+      var sortDir = document.getElementById("sortDir");
+
+      if (searchInput) {
+        searchInput.addEventListener("input", function () {
+          applyFiltersAndSort();
+        });
+      }
+      if (searchField) {
+        searchField.addEventListener("change", function () {
+          applyFiltersAndSort();
+        });
+      }
+      if (sortField) {
+        sortField.addEventListener("change", function () {
+          applyFiltersAndSort();
+        });
+      }
+      if (sortDir) {
+        sortDir.addEventListener("change", function () {
+          applyFiltersAndSort();
+        });
+      }
     }
-  })();
-})();
-</script>
+
+    document.addEventListener("DOMContentLoaded", init);
+  </script>
 </body>
 </html>
