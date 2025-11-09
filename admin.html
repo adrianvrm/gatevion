@@ -100,6 +100,27 @@
           </div>
 
           <div class="mt-6 bg-white rounded-xl border">
+            <div class="px-4 py-3 border-b">
+              <h2 class="text-base font-semibold">Statistici pe aeroport (preluare)</h2>
+            </div>
+            <div class="p-3 overflow-auto">
+              <table class="min-w-full text-sm">
+                <thead class="text-left text-slate-500">
+                  <tr>
+                    <th class="py-2 pr-4">Aeroport</th>
+                    <th class="py-2 pr-4">Total</th>
+                    <th class="py-2 pr-4">În așteptare</th>
+                    <th class="py-2 pr-4">Confirmate</th>
+                    <th class="py-2 pr-4">Anulate</th>
+                  </tr>
+                </thead>
+                <tbody id="airportStatsRows" class="divide-y divide-slate-100"></tbody>
+              </table>
+            </div>
+          </div>
+
+
+          <div class="mt-6 bg-white rounded-xl border">
             <div class="px-4 py-3 border-b flex items-center gap-3">
               <div class="font-semibold">Ultimele rezervări</div>
               <select id="filterStatus" class="border rounded-lg px-2 py-1 text-sm">
@@ -114,14 +135,14 @@
               <table class="min-w-full text-sm">
                 <thead class="text-left text-slate-500">
                   <tr>
-                    <th class="py-2 pr-4">#</th>
+                    <th class="py-2 pr-4">ID</th>
                     <th class="py-2 pr-4">Client</th>
                     <th class="py-2 pr-4">Mașină</th>
                     <th class="py-2 pr-4">Preluare</th>
                     <th class="py-2 pr-4">Returnare</th>
-                    <th class="py-2 pr-4">Status</th>
                     <th class="py-2 pr-4">Total</th>
-                    <th class="py-2 pr-4">Acțiuni</th>
+                    <th class="py-2 pr-4">Status</th>
+                    <th class="py-2 pr-4">Detalii</th>
                   </tr>
                 </thead>
                 <tbody id="resRows"></tbody>
@@ -130,7 +151,22 @@
           </div>
         </section>
 
-        <!-- Partners -->
+        
+        <!-- Reservation details modal -->
+        <div id="reservationModal" class="fixed inset-0 bg-black/40 flex items-center justify-center z-50 hidden">
+          <div class="bg-white rounded-2xl shadow-xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-auto">
+            <div class="px-4 py-3 border-b flex items-center justify-between">
+              <h2 class="text-base font-semibold">Detalii rezervare</h2>
+              <button id="reservationModalClose" class="text-slate-500 hover:text-slate-700 text-xl">&times;</button>
+            </div>
+            <div id="reservationModalBody" class="p-4 space-y-4 text-sm">
+              <!-- Populat din JS -->
+              <div class="text-center text-slate-500">Se încarcă...</div>
+            </div>
+          </div>
+        </div>
+
+<!-- Partners -->
         <section id="tab-partners" class="tab-pane hidden">
           <div class="bg-white rounded-xl border">
             <div class="px-4 py-3 border-b font-semibold">Parteneri</div>
@@ -253,11 +289,11 @@
 
   function setView(mode) {
     if (mode === 'admin') {
-      loginShell.classList.add('hidden');
-      adminShell.classList.remove('hidden');
+      if (loginShell) loginShell.classList.add('hidden');
+      if (adminShell) adminShell.classList.remove('hidden');
     } else {
-      adminShell.classList.add('hidden');
-      loginShell.classList.remove('hidden');
+      if (adminShell) adminShell.classList.add('hidden');
+      if (loginShell) loginShell.classList.remove('hidden');
     }
   }
 
@@ -266,7 +302,7 @@
     options.headers['Content-Type'] = options.headers['Content-Type'] || 'application/json';
     const t = localStorage.getItem(tokenKey);
     if (t) options.headers['Authorization'] = 'Bearer ' + t;
-    return fetch(path, options).then(async r => {
+    return fetch(API_BASE + path, options).then(async r => {
       const data = await r.json().catch(()=>({}));
       if (r.status === 401) {
         localStorage.removeItem(tokenKey);
@@ -288,7 +324,6 @@
       whoEl.textContent = (user.email || '') + ' · ' + (user.role || '');
     }
 
-    // Tabs
     const panes = {
       'overview': document.getElementById('tab-overview'),
       'reservations': document.getElementById('tab-overview'),
@@ -307,7 +342,9 @@
     });
     activate('overview');
 
-    // Logout
+    loadOverviewStats();
+    loadReservations();
+
     const logoutBtn = document.getElementById('logoutBtn');
     if (logoutBtn) {
       logoutBtn.addEventListener('click', ()=>{
@@ -318,8 +355,200 @@
       });
     }
 
-    // Reservations
-    async function loadReservations(){
+    
+    async function loadOverviewStats(){
+      try {
+        const data = await api('/api/reservations/stats/overview');
+        const totals = data.totals || {};
+        const byAirport = data.byAirport || [];
+
+        const setText = (id, val) => {
+          const el = document.getElementById(id);
+          if (el) el.textContent = val;
+        };
+
+        setText('statTotal', totals.total || 0);
+        setText('statPending', totals.pending || 0);
+        setText('statConfirmed', totals.confirmed || 0);
+        setText('statCancelled', totals.cancelled || 0);
+
+        const tbody = document.getElementById('airportStatsRows');
+        if (tbody) {
+          tbody.innerHTML = '';
+          byAirport.forEach(row => {
+            const tr = document.createElement('tr');
+            const name = (row.code || '-') + (row.name ? (' – ' + row.name) : '');
+            tr.innerHTML = `
+              <td class="py-2 pr-4">${name}</td>
+              <td class="py-2 pr-4">${row.total || 0}</td>
+              <td class="py-2 pr-4">${row.pending || 0}</td>
+              <td class="py-2 pr-4">${row.confirmed || 0}</td>
+              <td class="py-2 pr-4">${row.cancelled || 0}</td>
+            `;
+            tbody.appendChild(tr);
+          });
+        }
+      } catch (err) {
+        console.error('Eroare la încărcarea statisticilor overview', err);
+      }
+    }
+
+    async function openReservationDetails(id){
+      const modal = document.getElementById('reservationModal');
+      const body = document.getElementById('reservationModalBody');
+      if (!modal || !body) return;
+      modal.classList.remove('hidden');
+      body.innerHTML = '<div class="text-center text-slate-500">Se încarcă...</div>';
+
+      try{
+        const [reservation, docs, partners] = await Promise.all([
+          api('/api/reservations/'+id),
+          api('/api/reservations/'+id+'/documents'),
+          api('/api/partners')
+        ]);
+
+        const pickupInfo = (reservation.pickup_at ? new Date(reservation.pickup_at).toLocaleString() : '-') + (reservation.pickup_name ? ' – '+reservation.pickup_name : '') + (reservation.pickup_code ? ' ('+reservation.pickup_code+')' : '');
+        const dropoffInfo = (reservation.dropoff_at ? new Date(reservation.dropoff_at).toLocaleString() : '-') + (reservation.dropoff_name ? ' – '+reservation.dropoff_name : '') + (reservation.dropoff_code ? ' ('+reservation.dropoff_code+')' : '');
+
+        const docsHtml = (docs && docs.length)
+          ? '<ul class="list-disc pl-5 space-y-1">' + docs.map(d=>`<li><a href="/uploads/${d.file_path}" target="_blank" class="text-primary underline">${d.doc_type || d.file_name}</a></li>`).join('') + '</ul>'
+          : '<div class="text-slate-500 text-sm">Nu există documente atașate.</div>';
+
+        const partnersOptions = partners.map(p=>`<option value="${p.id}">${p.name}</option>`).join('');
+
+        body.innerHTML = `
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="space-y-1">
+              <div class="text-xs font-semibold text-slate-500">ID rezervare</div>
+              <div class="font-mono text-sm">${reservation.id}</div>
+
+              <div class="text-xs font-semibold text-slate-500 mt-3">Client</div>
+              <div>${reservation.customer_name || '-'}</div>
+              <div class="text-slate-500">${reservation.customer_email || ''}</div>
+              <div class="text-slate-500">${reservation.customer_phone || ''}</div>
+
+              <div class="text-xs font-semibold text-slate-500 mt-3">Număr zbor</div>
+              <div>${reservation.flight_number || '-'}</div>
+
+              <div class="text-xs font-semibold text-slate-500 mt-3">Status</div>
+              <div>${reservation.status}</div>
+            </div>
+            <div class="space-y-2">
+              <div>
+                <div class="text-xs font-semibold text-slate-500">Mașină</div>
+                <div>${reservation.car_name || '-'}</div>
+              </div>
+              <div>
+                <div class="text-xs font-semibold text-slate-500">Preluare</div>
+                <div>${pickupInfo}</div>
+              </div>
+              <div>
+                <div class="text-xs font-semibold text-slate-500">Returnare</div>
+                <div>${dropoffInfo}</div>
+              </div>
+              <div>
+                <div class="text-xs font-semibold text-slate-500">Total</div>
+                <div>${reservation.total_price != null ? (Number(reservation.total_price).toFixed(2) + ' €') : '-'}</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-4">
+            <div class="text-xs font-semibold text-slate-500 mb-1">Documente client</div>
+            ${docsHtml}
+          </div>
+
+          <div class="mt-4 border-t pt-4 space-y-3">
+            <div class="flex flex-wrap gap-2">
+              <button id="btnEditReservation" class="px-3 py-1.5 rounded-lg border text-sm">Modifică rezervarea</button>
+              <button id="btnExtendReservation" class="px-3 py-1.5 rounded-lg border text-sm">Prelungește returul</button>
+            </div>
+            <div class="flex items-center gap-2">
+              <select id="partnerSelect" class="border rounded-lg px-2 py-1 text-sm">
+                <option value="">Alege partener...</option>
+                ${partnersOptions}
+              </select>
+              <button id="btnAssignPartner" class="px-3 py-1.5 rounded-lg border text-sm">Alocă partener</button>
+            </div>
+          </div>
+        `;
+
+        // Hook buttons
+        const editBtn = document.getElementById('btnEditReservation');
+        if (editBtn) {
+          editBtn.onclick = async ()=>{
+            const newName = prompt('Nume client', reservation.customer_name || '');
+            const newEmail = prompt('Email', reservation.customer_email || '');
+            const newPhone = prompt('Telefon', reservation.customer_phone || '');
+            const newFlight = prompt('Număr zbor', reservation.flight_number || '');
+            const newPickupAt = prompt('Pickup (ISO datetime)', reservation.pickup_at || '');
+            const newDropoffAt = prompt('Dropoff (ISO datetime)', reservation.dropoff_at || '');
+            const newStatus = prompt('Status (pending/confirmed/cancelled)', reservation.status || 'pending');
+            await api('/api/reservations/'+id, {
+              method: 'PATCH',
+              body: JSON.stringify({
+                customerName: newName,
+                customerEmail: newEmail,
+                customerPhone: newPhone,
+                flightNumber: newFlight,
+                pickupAt: newPickupAt,
+                dropoffAt: newDropoffAt,
+                status: newStatus
+              })
+            });
+            await loadReservations();
+            await openReservationDetails(id);
+          };
+        }
+
+        const extendBtn = document.getElementById('btnExtendReservation');
+        if (extendBtn) {
+          extendBtn.onclick = async ()=>{
+            const newDropoffAt = prompt('Noua dată/ora de retur (ISO datetime)', reservation.dropoff_at || '');
+            const newDropAirportIdStr = prompt('ID nou aeroport retur (gol pentru a păstra actualul)', reservation.airport_dropoff_id || '');
+            const payload = { dropoffAt: newDropoffAt };
+            if (newDropAirportIdStr) payload.airportDropoffId = Number(newDropAirportIdStr);
+            await api('/api/reservations/'+id, {
+              method: 'PATCH',
+              body: JSON.stringify(payload)
+            });
+            await loadReservations();
+            await openReservationDetails(id);
+          };
+        }
+
+        const assignBtn = document.getElementById('btnAssignPartner');
+        const partnerSelect = document.getElementById('partnerSelect');
+        if (assignBtn && partnerSelect) {
+          assignBtn.onclick = async ()=>{
+            const pid = partnerSelect.value ? Number(partnerSelect.value) : null;
+            if (!pid) {
+              alert('Te rugăm să alegi un partener.');
+              return;
+            }
+            await api('/api/partners/'+pid+'/send-reservation', {
+              method: 'POST',
+              body: JSON.stringify({ reservationId: id })
+            });
+            alert('Rezervarea a fost trimisă partenerului selectat.');
+          };
+        }
+
+      }catch(err){
+        console.error(err);
+        body.innerHTML = '<div class="text-red-600 text-sm">Eroare la încărcarea detaliilor rezervării.</div>';
+      }
+
+      const closeBtn = document.getElementById('reservationModalClose');
+      if (closeBtn) {
+        closeBtn.onclick = ()=> modal.classList.add('hidden');
+      }
+      modal.addEventListener('click', (e)=>{
+        if (e.target === modal) modal.classList.add('hidden');
+      });
+    }
+
+async function loadReservations(){
       const statusSel = document.getElementById('filterStatus');
       const status = statusSel ? statusSel.value : '';
       const data = await api('/api/reservations' + (status? ('?status='+encodeURIComponent(status)) : ''));
@@ -334,20 +563,18 @@
         else if (r.status==='cancelled') cancelled++;
 
         const tr = document.createElement('tr');
+        const pickupText = (r.pickup_at ? new Date(r.pickup_at).toLocaleString() : '-') + (r.pickup_code ? ' ('+r.pickup_code+')' : '');
+        const dropoffText = (r.dropoff_at ? new Date(r.dropoff_at).toLocaleString() : '-') + (r.dropoff_code ? ' ('+r.dropoff_code+')' : '');
         tr.innerHTML = `
           <td class="py-2 pr-4">${r.id}</td>
-          <td class="py-2 pr-4">${r.user_email || '-'}</td>
+          <td class="py-2 pr-4">${r.customer_name || r.user_email || '-'}</td>
           <td class="py-2 pr-4">${r.car_name || '-'}</td>
-          <td class="py-2 pr-4">${r.pickup_at || ''} ${r.pickup_code? '('+r.pickup_code+')':''}</td>
-          <td class="py-2 pr-4">${r.dropoff_at || ''} ${r.dropoff_code? '('+r.dropoff_code+')':''}</td>
-          <td class="py-2 pr-4"><span class="badge ${r.status==='pending'?'bg-yellow-100 text-yellow-800': r.status==='confirmed'?'bg-green-100 text-green-800':'bg-slate-200 text-slate-700'}">${r.status}</span></td>
-          <td class="py-2 pr-4">${r.total_price? (r.total_price.toFixed? r.total_price.toFixed(2) : r.total_price) : '-'}</td>
+          <td class="py-2 pr-4">${pickupText}</td>
+          <td class="py-2 pr-4">${dropoffText}</td>
+          <td class="py-2 pr-4">${r.total_price != null ? (Number(r.total_price).toFixed(2) + ' €') : '-'}</td>
+          <td class="py-2 pr-4"><span class="badge ${r.status==='confirmed'?'bg-emerald-100 text-emerald-800':r.status==='pending'?'bg-amber-100 text-amber-800':r.status==='cancelled'?'bg-rose-100 text-rose-800':'bg-slate-200 text-slate-700'}">${r.status}</span></td>
           <td class="py-2 pr-4">
-            <div class="flex gap-2">
-              <button class="px-2 py-1 rounded border" data-action="send-partner" data-id="${r.id}">Trimite partener</button>
-              <button class="px-2 py-1 rounded border" data-action="extend" data-id="${r.id}">+1 zi</button>
-              <button class="px-2 py-1 rounded border" data-action="cancel" data-id="${r.id}">Anulează</button>
-            </div>
+            <button class="px-2 py-1 rounded border" data-action="view" data-id="${r.id}">Vezi detalii</button>
           </td>
         `;
         tbody.appendChild(tr);
@@ -368,160 +595,15 @@
         const btn = e.target.closest('button'); if (!btn) return;
         const id = btn.dataset.id;
         const action = btn.dataset.action;
+        if (action !== 'view') return;
         try{
-          if (action==='cancel'){
-            await api('/api/reservations/'+id+'/cancel', { method: 'POST' });
-          } else if (action==='extend'){
-            const now = new Date();
-            const newDrop = new Date(now.getTime() + 24*3600*1000);
-            await api('/api/reservations/'+id+'/extend', { method: 'PATCH', body: JSON.stringify({ dropoffAt: newDrop.toISOString() }) });
-          } else if (action==='send-partner'){
-            const partners = await api('/api/partners');
-            const p = prompt('Introdu ID partener (disponibili: '+ partners.map(p=>p.id+':'+p.name).join(', ')+')');
-            const pid = parseInt(p, 10);
-            if (pid) await api('/api/partners/'+pid+'/send-reservation', { method:'POST', body: JSON.stringify({ reservationId: id }) });
-          }
-          await loadReservations();
-          alert('Operațiune efectuată.');
+          await openReservationDetails(id);
         }catch(err){
           alert('Eroare: ' + err.message);
         }
       });
     }
 
-    // Partners
-    async function loadPartners(){
-      const data = await api('/api/partners');
-      const tbody = document.getElementById('partnerRows');
-      if (!tbody) return;
-      tbody.innerHTML = '';
-      data.forEach(p=>{
-        const tr = document.createElement('tr');
-        tr.innerHTML = `<td class="py-2 pr-4">${p.id}</td><td class="py-2 pr-4">${p.name}</td><td class="py-2 pr-4">${p.api_endpoint||''}</td>`;
-        tbody.appendChild(tr);
-      });
-    }
-    const addPartnerForm = document.getElementById('addPartnerForm');
-    if (addPartnerForm) {
-      addPartnerForm.addEventListener('submit', async (e)=>{
-        e.preventDefault();
-        const fd = new FormData(e.currentTarget);
-        const payload = Object.fromEntries(fd.entries());
-        try{
-          await api('/api/partners', { method:'POST', body: JSON.stringify(payload) });
-          e.currentTarget.reset();
-          loadPartners();
-        }catch(err){ alert('Eroare: '+err.message); }
-      });
-    }
-
-    // Cars
-    async function loadCars(){
-      const data = await api('/api/cars');
-      const tbody = document.getElementById('carRows');
-      if (!tbody) return;
-      tbody.innerHTML = '';
-      data.forEach(c=>{
-        const tr = document.createElement('tr');
-        tr.innerHTML = `<td class="py-2 pr-4">${c.id}</td><td class="py-2 pr-4">${c.name}</td><td class="py-2 pr-4">${c.category||''}</td><td class="py-2 pr-4">${c.is_active? 'Da':'Nu'}</td>`;
-        tbody.appendChild(tr);
-      });
-    }
-    const addCarForm = document.getElementById('addCarForm');
-    if (addCarForm) {
-      addCarForm.addEventListener('submit', async (e)=>{
-        e.preventDefault();
-        const fd = new FormData(e.currentTarget);
-        const payload = Object.fromEntries(fd.entries());
-        if (payload.seats) payload.seats = Number(payload.seats);
-        payload.isActive = 1;
-        try{
-          await api('/api/cars', { method:'POST', body: JSON.stringify(payload) });
-          e.currentTarget.reset();
-          loadCars();
-        }catch(err){ alert('Eroare: '+err.message); }
-      });
-    }
-
-    // Pricing
-    async function loadRules(){
-      const data = await api('/api/pricing/rules');
-      const tbody = document.getElementById('ruleRows');
-      if (!tbody) return;
-      tbody.innerHTML = '';
-      data.forEach(r=>{
-        const span = (r.min_days||'') + '–' + (r.max_days||'');
-        const tr = document.createElement('tr');
-        tr.innerHTML = `<td class="py-2 pr-4">${r.id}</td><td class="py-2 pr-4">${r.car_id}</td><td class="py-2 pr-4">${span}</td><td class="py-2 pr-4">${r.base_daily_price}</td>`;
-        tbody.appendChild(tr);
-      });
-    }
-    const addRuleForm = document.getElementById('addRuleForm');
-    if (addRuleForm) {
-      addRuleForm.addEventListener('submit', async (e)=>{
-        e.preventDefault();
-        const fd = new FormData(e.currentTarget);
-        const payload = Object.fromEntries(fd.entries());
-        payload.carId = Number(payload.carId);
-        if (payload.minDays) payload.minDays = Number(payload.minDays);
-        if (payload.maxDays) payload.maxDays = Number(payload.maxDays);
-        payload.baseDailyPrice = Number(payload.baseDailyPrice);
-        try{
-          await api('/api/pricing/rules', { method:'POST', body: JSON.stringify(payload) });
-          e.currentTarget.reset();
-          loadRules();
-        }catch(err){ alert('Eroare: '+err.message); }
-      });
-    }
-
-    // Airports
-    async function loadAirports(){
-      const data = await api('/api/airports');
-      const tbody = document.getElementById('airportRows');
-      if (!tbody) return;
-      tbody.innerHTML = '';
-      data.forEach(a=>{
-        const tr = document.createElement('tr');
-        tr.innerHTML = `<td class="py-2 pr-4">${a.id}</td><td class="py-2 pr-4">${a.code}</td><td class="py-2 pr-4">${a.name}</td><td class="py-2 pr-4">${a.city||''}</td>`;
-        tbody.appendChild(tr);
-      });
-    }
-    const addAirportForm = document.getElementById('addAirportForm');
-    if (addAirportForm) {
-      addAirportForm.addEventListener('submit', async (e)=>{
-        e.preventDefault();
-        const fd = new FormData(e.currentTarget);
-        const payload = Object.fromEntries(fd.entries());
-        try{
-          await api('/api/airports', { method:'POST', body: JSON.stringify(payload) });
-          e.currentTarget.reset();
-          loadAirports();
-        }catch(err){ alert('Eroare: '+err.message); }
-      });
-    }
-
-    // Account
-    async function loadAccount(){
-      const me = await api('/api/auth/me');
-      const acc = document.getElementById('accountInfo');
-      if (acc) acc.textContent = JSON.stringify(me, null, 2);
-    }
-
-    // Initial loads
-    loadReservations();
-    loadPartners();
-    loadCars();
-    loadRules();
-    loadAirports();
-    loadAccount();
-
-    // Env badge
-    const env = 'demo';
-    const b = document.getElementById('envBadge');
-    if (b) { b.textContent = env; b.classList.remove('hidden'); }
-  }
-
-  // Login form handler
   if (loginForm) {
     loginForm.addEventListener('submit', async (e)=>{
       e.preventDefault();
@@ -553,7 +635,6 @@
     });
   }
 
-  // Auto-login dacă există deja token admin
   (function autoStart(){
     const user = getUser();
     if (localStorage.getItem(tokenKey) && user && user.role === 'admin') {
