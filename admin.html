@@ -2,791 +2,3434 @@
 <html lang="ro">
 <head>
   <meta charset="UTF-8" />
-  <title>Gatevion – Admin</title>
+  <title>Gatevion Admin</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <!-- Tailwind CDN doar pentru prototip / admin static -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Manrope','Inter','system-ui','Segoe UI','Roboto','Helvetica','Arial','sans-serif'],
+          },
+          colors: {
+            primary: '#0f172a',
+          },
+          boxShadow: {
+            soft: '0 12px 30px rgba(15,23,42,.18)',
+          }
+        }
+      }
+    }
+  </script>
   <style>
-    ::-webkit-scrollbar {
-      width: 8px;
-      height: 8px;
+    body {
+      background: radial-gradient(ellipse at top, #0f172a 0, #020617 40%, #020617 100%);
     }
-    ::-webkit-scrollbar-track {
-      background: transparent;
-    }
-    ::-webkit-scrollbar-thumb {
-      background: rgba(148, 163, 184, 0.7);
-      border-radius: 999px;
-    }
-    ::-webkit-scrollbar-thumb:hover {
-      background: rgba(100, 116, 139, 0.9);
-    }
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(148,163,184,.7); border-radius: 999px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(100,116,139,.95); }
   </style>
 </head>
-<body class="min-h-screen bg-gradient-to-b from-slate-100 via-slate-50 to-slate-100 text-slate-900">
+<body class="min-h-screen font-sans text-slate-50">
   <div class="min-h-screen flex flex-col">
-    <!-- Top nav simplu -->
-    <header class="w-full border-b border-slate-200 bg-white/80 backdrop-blur">
-      <div class="max-w-7xl mx-auto flex items-center justify-between px-4 lg:px-8 py-3">
-        <div class="flex items-center gap-2">
-          <div class="h-8 w-8 rounded-xl bg-slate-900 flex items-center justify-center text-xs font-semibold text-white shadow-sm">
-            GV
+    <!-- Top Header + Nav -->
+    <header class="border-b border-slate-800/80 bg-slate-950/80 backdrop-blur">
+      <div class="max-w-7xl mx-auto px-4 lg:px-8 py-3 flex flex-col gap-3">
+        <div class="flex items-center justify-between gap-4">
+          <div class="flex items-center gap-3">
+            <div class="h-9 w-9 rounded-2xl bg-slate-100 text-slate-900 flex items-center justify-center text-xs font-semibold shadow-soft">
+              GV
+            </div>
+            <div class="leading-tight">
+              <div class="text-sm font-semibold tracking-tight">Gatevion Admin</div>
+              <div class="text-[0.7rem] text-slate-400">Rezervări · Parteneri · Mașini · Pricing</div>
+            </div>
           </div>
-          <div>
-            <div class="text-sm font-semibold text-slate-900">Gatevion Admin</div>
-            <div class="text-[0.7rem] text-slate-500">Panou de administrare</div>
+          <div class="flex items-center gap-3 text-[0.7rem]">
+            <span class="hidden sm:inline-flex items-center gap-1 rounded-full border border-emerald-500/40 bg-emerald-500/10 px-2 py-1 text-emerald-200">
+              <span class="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+              <span>logat ca admin (demo)</span>
+            </span>
           </div>
         </div>
-        <div class="flex items-center gap-3 text-[0.75rem]">
-          <span class="hidden sm:inline-flex items-center gap-1 px-2 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100">
-            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-            <span>logat ca admin (demo)</span>
-          </span>
-        </div>
-      </div>
-      <!-- Tabs -->
-      <div class="border-t border-slate-200 bg-slate-50/80">
-        <div class="max-w-7xl mx-auto px-4 lg:px-8 flex gap-4 text-sm">
-          <button class="px-3 py-2 text-slate-400 hover:text-slate-600 transition-colors cursor-default" disabled>Overview</button>
-          <button class="px-3 py-2 border-b-2 border-slate-900 text-slate-900 font-medium">Rezervări</button>
-          <button class="px-3 py-2 text-slate-400 hover:text-slate-600 transition-colors cursor-default" disabled>Parteneri</button>
-        </div>
+        
+<nav class="flex items-center justify-between gap-3 text-xs">
+          <div class="inline-flex items-center gap-1 rounded-full border border-slate-700/80 bg-slate-900/80 px-1 py-1 shadow-soft">
+            <button data-tab-target="tab-reservations"
+                    class="tab-btn inline-flex items-center gap-1 rounded-full border border-slate-700 bg-slate-50 text-slate-900 px-3 py-1.5 text-[0.75rem] font-semibold shadow-soft">
+              <span class="h-1.5 w-1.5 rounded-full bg-emerald-400"></span>
+              <span>Rezervări</span>
+            </button>
+            <button data-tab-target="tab-partners"
+                    class="tab-btn inline-flex items-center gap-1 rounded-full border border-slate-800 bg-slate-950/80 text-slate-200 px-3 py-1.5 text-[0.75rem] font-medium hover:border-slate-600 hover:bg-slate-900/80">
+              <span class="h-1 w-1 rounded-full bg-slate-500"></span>
+              <span>Parteneri</span>
+            </button>
+            <button data-tab-target="tab-cars"
+                    class="tab-btn inline-flex items-center gap-1 rounded-full border border-slate-800 bg-slate-950/80 text-slate-200 px-3 py-1.5 text-[0.75rem] font-medium hover:border-slate-600 hover:bg-slate-900/80">
+              <span class="h-1 w-1 rounded-full bg-slate-500"></span>
+              <span>Mașini</span>
+            </button>
+            <button data-tab-target="tab-pricing"
+                    class="tab-btn inline-flex items-center gap-1 rounded-full border border-slate-800 bg-slate-950/80 text-slate-200 px-3 py-1.5 text-[0.75rem] font-medium hover:border-slate-600 hover:bg-slate-900/80">
+              <span class="h-1 w-1 rounded-full bg-slate-500"></span>
+              <span>Pricing</span>
+            </button>
+          </div>
+        </nav>
+
       </div>
     </header>
 
     <main class="flex-1">
-      <div class="max-w-7xl mx-auto py-8 px-4 lg:px-8 space-y-6">
-        <!-- Header Rezervări -->
-        <header class="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
-          <div>
-            <h1 class="text-3xl font-semibold tracking-tight text-slate-900">Rezervări</h1>
-            <p class="text-sm text-slate-500 mt-1">
-              Vizualizezi și gestionezi rezervările, detaliile clienților și alocările către parteneri.
+      <div class="max-w-7xl mx-auto px-4 lg:px-8 py-6 space-y-6">
+        <!-- TAB: Rezervări -->
+        <section id="tab-reservations" class="tab-section space-y-4">
+          <header>
+            <h1 class="text-2xl md:text-3xl font-semibold tracking-tight">Rezervări</h1>
+            <p class="mt-2 text-sm text-slate-300 max-w-3xl">
+              Vezi toate rezervările, filtrează după câmpuri și accesează detaliile pentru modificare, prelungire sau anulare.
+            </p>
+          </header>
+
+          <div class="rounded-3xl border border-slate-800 bg-slate-950/80 shadow-soft p-4 space-y-3">
+            <div class="grid grid-cols-1 md:grid-cols-[minmax(0,0.65fr)_minmax(0,1.35fr)_auto] gap-3 items-end">
+              <div class="space-y-1.5">
+                <label class="block text-[0.7rem] font-medium text-slate-300">Caută după câmp</label>
+                <select id="resFilterField"
+                        class="w-full rounded-full border border-slate-700 bg-slate-950/80 px-3 py-1.5 text-[0.8rem] text-slate-50 focus:outline-none focus:ring-1 focus:ring-sky-500">
+                  <option value="all">Toate câmpurile</option>
+                  <option value="id">ID rezervare</option>
+                  <option value="client">Nume client</value>
+                  <option value="car">Mașină</option>
+                  <option value="phone">Telefon</option>
+                  <option value="email">Email</option>
+                  <option value="pickupDate">Data preluare</option>
+                  <option value="returnDate">Data returnare</option>
+                  <option value="status">Status</option>
+                </select>
+              </div>
+              <div class="space-y-1.5">
+                <label class="block text-[0.7rem] font-medium text-slate-300">Valoare căutare</label>
+                <input id="resFilterValue" type="text"
+                       class="w-full rounded-xl border border-slate-700 bg-slate-950/80 px-3 py-1.5 text-sm text-slate-50 focus:outline-none focus:ring-1 focus:ring-sky-500"
+                       placeholder="Introdu valoarea (ex: nume, telefon, email, dată...)" />
+              </div>
+              <div class="flex gap-2">
+                <button id="resApplyFilter"
+                        class="flex-1 rounded-full bg-slate-50 px-3 py-1.5 text-[0.8rem] font-semibold text-slate-900 shadow-soft hover:bg-white/90">
+                  Caută
+                </button>
+                <button id="resResetFilter"
+                        class="flex-1 rounded-full border border-slate-600 bg-slate-950/80 px-3 py-1.5 text-[0.8rem] font-medium text-slate-100 hover:bg-slate-900">
+                  Resetează
+                </button>
+              </div>
+            </div>
+            <p class="text-[0.7rem] text-slate-500">
+              La căutarea după număr de telefon nu contează spațiile sau formatul (+40 / 0040 / 07...).
             </p>
           </div>
-          <div class="inline-flex items-center gap-2 bg-white/80 backdrop-blur rounded-full border border-slate-200 px-4 py-2 shadow-sm">
-            <span class="inline-flex h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></span>
-            <span class="text-xs font-medium text-slate-600">Interfață demo – date mock</span>
-          </div>
-        </header>
 
-        <!-- Carduri statistici -->
-        <section class="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <div class="bg-white/90 backdrop-blur rounded-2xl border border-slate-200 shadow-sm p-4 flex flex-col gap-1">
-            <div class="text-[0.65rem] font-semibold text-slate-500 uppercase tracking-wide">Total rezervări</div>
-            <div id="statTotal" class="text-2xl font-semibold text-slate-900">0</div>
-            <div class="text-[0.7rem] text-slate-400">Toate înregistrările din sistem</div>
-          </div>
-          <div class="bg-white/90 backdrop-blur rounded-2xl border border-slate-200 shadow-sm p-4 flex flex-col gap-1">
-            <div class="text-[0.65rem] font-semibold text-slate-500 uppercase tracking-wide">În așteptare</div>
-            <div id="statPending" class="text-2xl font-semibold text-amber-600">0</div>
-            <div class="text-[0.7rem] text-slate-400">Nu au fost confirmate încă</div>
-          </div>
-          <div class="bg-white/90 backdrop-blur rounded-2xl border border-slate-200 shadow-sm p-4 flex flex-col gap-1">
-            <div class="text-[0.65rem] font-semibold text-slate-500 uppercase tracking-wide">Confirmate</div>
-            <div id="statConfirmed" class="text-2xl font-semibold text-emerald-600">0</div>
-            <div class="text-[0.7rem] text-slate-400">Rezervări active, pregătite</div>
-          </div>
-          <div class="bg-white/90 backdrop-blur rounded-2xl border border-slate-200 shadow-sm p-4 flex flex-col gap-1">
-            <div class="text-[0.65rem] font-semibold text-slate-500 uppercase tracking-wide">Anulate</div>
-            <div id="statCancelled" class="text-2xl font-semibold text-rose-600">0</div>
-            <div class="text-[0.7rem] text-slate-400">Rezervări anulate sau expirate</div>
+          <div class="rounded-3xl border border-slate-800 bg-slate-950/80 shadow-soft overflow-hidden">
+            <table class="min-w-full text-sm">
+              <thead class="bg-slate-900/80 text-slate-400 text-left">
+                <tr>
+                  <th class="py-2 px-3 text-[0.7rem] font-semibold uppercase tracking-[0.16em]">ID</th>
+                  <th class="py-2 px-3 text-[0.7rem] font-semibold uppercase tracking-[0.16em]">Client</th>
+                  <th class="py-2 px-3 text-[0.7rem] font-semibold uppercase tracking-[0.16em]">Mașină</th>
+                  <th class="py-2 px-3 text-[0.7rem] font-semibold uppercase tracking-[0.16em]">Preluare</th>
+                  <th class="py-2 px-3 text-[0.7rem] font-semibold uppercase tracking-[0.16em]">Returnare</th>
+                  <th class="py-2 px-3 text-[0.7rem] font-semibold uppercase tracking-[0.16em]">Total</th>
+                  <th class="py-2 px-3 text-[0.7rem] font-semibold uppercase tracking-[0.16em]">Status</th>
+                  <th class="py-2 px-3 text-[0.7rem] font-semibold uppercase tracking-[0.16em]">Acțiuni</th>
+                </tr>
+              </thead>
+              <tbody id="reservationsTableBody" class="divide-y divide-slate-800"></tbody>
+            </table>
           </div>
         </section>
 
-        <!-- Secțiune Rezervări -->
-        <section class="bg-white/90 backdrop-blur rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-          <div class="px-4 py-3 border-b border-slate-100 flex flex-col md:flex-row md:items-center md:justify-between gap-3 bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900">
-            <div>
-              <h2 class="text-base font-semibold text-white flex items-center gap-2">
-                <span class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-white/10">
-                  <span class="h-2 w-2 rounded-full bg-emerald-400"></span>
-                </span>
-                Rezervări active
-              </h2>
-              <p class="text-[0.7rem] text-slate-300 mt-0.5">
-                Listă cu rezervările recente și acces rapid la detalii.
-              </p>
-            </div>
-            <div class="flex flex-wrap items-center gap-2 text-[0.7rem] text-slate-200">
-              <span class="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-white/10">
-                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> confirmată
-              </span>
-              <span class="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-white/10">
-                <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span> în așteptare
-              </span>
-              <span class="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-white/10">
-                <span class="w-1.5 h-1.5 rounded-full bg-rose-400"></span> anulată
-              </span>
-            </div>
-          </div>
+        <!-- TAB: Parteneri -->
+        <section id="tab-partners" class="tab-section hidden space-y-4">
+          <header>
+            <h1 class="text-2xl md:text-3xl font-semibold tracking-tight">Parteneri</h1>
+            <p class="mt-2 text-sm text-slate-300 max-w-3xl">
+              Gestionezi partenerii, comisioanele, și vezi rezervările alocate fiecăruia.
+            </p>
+          </header>
 
-          <!-- Toolbar search + sort + search field selector -->
-          <div class="px-4 py-3 border-b border-slate-100 bg-slate-50/80 flex flex-col xl:flex-row gap-3 xl:items-center xl:justify-between">
-            <div class="flex-1 flex flex-col md:flex-row md:items-center gap-2">
-              <div class="flex items-center gap-2 w-full md:w-auto">
-                <span class="text-[0.7rem] text-slate-500 whitespace-nowrap">Caută după</span>
-                <select
-                  id="searchField"
-                  class="border border-slate-200 bg-white rounded-full px-2 py-1 text-xs text-slate-700 focus:outline-none focus:ring-1 focus:ring-sky-500"
-                >
-                  <option value="all">Toate câmpurile</option>
-                  <option value="id">ID</option>
-                  <option value="customer_name">Nume client</option>
-                  <option value="car_name">Mașină</option>
-                  <option value="customer_email">Email</option>
-                  <option value="customer_phone">Telefon</option>
-                  <option value="created_at">Data solicitării</option>
-                  <option value="pickup_at">Data preluării</option>
-                  <option value="dropoff_at">Data returnării</option>
-                  <option value="status">Status</option>
+          <div class="rounded-3xl border border-slate-800 bg-slate-950/80 shadow-soft p-4 space-y-3">
+            <div class="grid grid-cols-1 md:grid-cols-[minmax(0,0.7fr)_minmax(0,0.7fr)_minmax(0,0.6fr)] gap-3 items-end">
+              <div class="space-y-1.5">
+                <label class="block text-[0.7rem] font-medium text-slate-300">Sortează după</label>
+                <select id="partnerSortField"
+                        class="w-full rounded-full border border-slate-700 bg-slate-950/80 px-3 py-1.5 text-[0.8rem] text-slate-50 focus:outline-none focus:ring-1 focus:ring-sky-500">
+                  <option value="name">Nume A–Z</option>
+                  <option value="city">Oraș A–Z</option>
+                  <option value="status">Status Activ/Inactiv</option>
                 </select>
               </div>
-              <div class="relative flex-1 max-w-xl">
-                <span class="pointer-events-none absolute inset-y-0 left-3 flex items-center text-slate-400 text-xs">🔍</span>
-                <input
-                  id="searchInput"
-                  type="text"
-                  class="w-full pl-8 pr-3 py-1.5 rounded-full border border-slate-200 bg-white text-xs text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-1 focus:ring-sky-500 focus:border-sky-500"
-                  placeholder="Introdu valoarea căutată..."
-                />
+              <div class="space-y-1.5">
+                <label class="block text-[0.7rem] font-medium text-slate-300">Caută partener</label>
+                <input id="partnerSearch" type="text"
+                       class="w-full rounded-xl border border-slate-700 bg-slate-950/80 px-3 py-1.5 text-sm text-slate-50 focus:outline-none focus:ring-1 focus:ring-sky-500"
+                       placeholder="Nume, oraș, email, telefon..." />
               </div>
-            </div>
-            <div class="flex flex-wrap items-center gap-2 text-[0.7rem]">
-              <div class="flex items-center gap-1">
-                <span class="text-slate-500">Sortează după</span>
-                <select
-                  id="sortField"
-                  class="border border-slate-200 bg-white rounded-full px-2 py-1 text-xs text-slate-700 focus:outline-none focus:ring-1 focus:ring-sky-500"
-                >
-                  <option value="created_at">Data solicitării</option>
-                  <option value="pickup_at">Data preluării</option>
-                  <option value="dropoff_at">Data returnării</option>
-                  <option value="customer_name">Nume client</option>
-                  <option value="car_name">Mașină</option>
-                  <option value="status">Status</option>
-                  <option value="id">ID</option>
-                </select>
-              </div>
-              <div class="flex items-center gap-1">
-                <span class="text-slate-500">Ordine</span>
-                <select
-                  id="sortDir"
-                  class="border border-slate-200 bg-white rounded-full px-2 py-1 text-xs text-slate-700 focus:outline-none focus:ring-1 focus:ring-sky-500"
-                >
-                  <option value="desc">Descrescător</option>
-                  <option value="asc">Crescător</option>
-                </select>
+              <div class="flex justify-end">
+                <button id="btnAddPartner"
+                        class="rounded-full bg-slate-50 px-3 py-1.5 text-[0.8rem] font-semibold text-slate-900 shadow-soft hover:bg-white/90">
+                  Adaugă partener
+                </button>
               </div>
             </div>
           </div>
 
-          <div class="p-3 overflow-auto">
+          <div class="rounded-3xl border border-slate-800 bg-slate-950/80 shadow-soft overflow-hidden">
             <table class="min-w-full text-sm">
-              <thead class="text-left text-slate-500 border-b border-slate-100 bg-slate-50/80">
+              <thead class="bg-slate-900/80 text-slate-400 text-left">
                 <tr>
-                  <th class="py-2 pr-4 font-medium text-[0.7rem] uppercase tracking-wide">ID</th>
-                  <th class="py-2 pr-4 font-medium text-[0.7rem] uppercase tracking-wide">Client</th>
-                  <th class="py-2 pr-4 font-medium text-[0.7rem] uppercase tracking-wide">Mașină</th>
-                  <th class="py-2 pr-4 font-medium text-[0.7rem] uppercase tracking-wide">Preluare</th>
-                  <th class="py-2 pr-4 font-medium text-[0.7rem] uppercase tracking-wide">Returnare</th>
-                  <th class="py-2 pr-4 font-medium text-[0.7rem] uppercase tracking-wide">Total</th>
-                  <th class="py-2 pr-4 font-medium text-[0.7rem] uppercase tracking-wide">Status</th>
-                  <th class="py-2 pr-4 font-medium text-[0.7rem] uppercase tracking-wide">Detalii</th>
+                  <th class="py-2 px-3 text-[0.7rem] font-semibold uppercase tracking-[0.16em]">Partener</th>
+                  <th class="py-2 px-3 text-[0.7rem] font-semibold uppercase tracking-[0.16em]">Oraș</th>
+                  <th class="py-2 px-3 text-[0.7rem] font-semibold uppercase tracking-[0.16em]">Telefon / Email</th>
+                  <th class="py-2 px-3 text-[0.7rem] font-semibold uppercase tracking-[0.16em]">% Comision</th>
+                  <th class="py-2 px-3 text-[0.7rem] font-semibold uppercase tracking-[0.16em]">Status</th>
+                  <th class="py-2 px-3 text-[0.7rem] font-semibold uppercase tracking-[0.16em]">Acțiuni</th>
                 </tr>
               </thead>
-              <tbody id="resRows" class="divide-y divide-slate-100"></tbody>
+              <tbody id="partnersTableBody" class="divide-y divide-slate-800"></tbody>
             </table>
           </div>
+        </section>
+
+        <!-- TAB: Mașini -->
+        <section id="tab-cars" class="tab-section hidden space-y-4">
+          <header>
+            <h1 class="text-2xl md:text-3xl font-semibold tracking-tight">Mașini</h1>
+            <p class="mt-2 text-sm text-slate-300 max-w-3xl">
+              Adaugi și editezi mașinile din flotă. Prețurile de bază de aici sunt baza pentru calculele din „Pricing”.
+            </p>
+          </header>
+
+          <div class="grid grid-cols-1 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1.1fr)] gap-6">
+            <div class="space-y-4">
+              <div class="rounded-3xl border border-slate-800 bg-slate-950/80 shadow-soft p-4">
+                <div class="flex items-center justify-between mb-3">
+                  <div>
+                    <h2 class="text-sm font-semibold tracking-tight text-slate-100">Lista mașinilor</h2>
+                    <p class="text-[0.75rem] text-slate-400">Selectează o mașină pentru a o edita.</p>
+                  </div>
+                  <button id="btnNewCar"
+                          class="rounded-full bg-slate-50 px-3 py-1.5 text-[0.8rem] font-semibold text-slate-900 shadow-soft hover:bg-white/90">
+                    Mașină nouă
+                  </button>
+                </div>
+                <div class="rounded-2xl border border-slate-800 bg-slate-950/80 overflow-hidden max-h-[420px] overflow-auto">
+                  <table class="min-w-full text-xs">
+                    <thead class="bg-slate-900/80 text-slate-400">
+                      <tr>
+                        <th class="px-3 py-2 text-left text-[0.7rem] font-semibold uppercase tracking-[0.16em]">Mașină</th>
+                        <th class="px-3 py-2 text-left text-[0.7rem] font-semibold uppercase tracking-[0.16em]">Segment</th>
+                        <th class="px-3 py-2 text-left text-[0.7rem] font-semibold uppercase tracking-[0.16em]">Transmisie</th>
+                        <th class="px-3 py-2 text-left text-[0.7rem] font-semibold uppercase tracking-[0.16em]">Status</th>
+                      </tr>
+                    </thead>
+                    <tbody id="carsTableBody" class="divide-y divide-slate-800"></tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <div id="carFormWrapper" class="space-y-4 hidden">
+              <div class="rounded-3xl border border-slate-800 bg-slate-950/80 shadow-soft p-4 space-y-4">
+                <div>
+                  <h2 class="text-sm font-semibold tracking-tight text-slate-100">Detalii mașină</h2>
+                  <p class="text-[0.75rem] text-slate-400">Completează informațiile principale și tarifele pe intervale.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div class="space-y-2">
+                    <label class="block text-[0.7rem] font-medium text-slate-300">Marcă</label>
+                    <input id="carBrand" type="text"
+                           class="w-full rounded-xl border border-slate-700 bg-slate-950/80 px-3 py-1.5 text-sm text-slate-50 focus:outline-none focus:ring-1 focus:ring-sky-500" />
+                  </div>
+                  <div class="space-y-2">
+                    <label class="block text-[0.7rem] font-medium text-slate-300">Model</label>
+                    <input id="carModel" type="text"
+                           class="w-full rounded-xl border border-slate-700 bg-slate-950/80 px-3 py-1.5 text-sm text-slate-50 focus:outline-none focus:ring-1 focus:ring-sky-500" />
+                  </div>
+                  <div class="space-y-2">
+                    <label class="block text-[0.7rem] font-medium text-slate-300">Segment</label>
+                    <select id="carSegment"
+                            class="w-full rounded-full border border-slate-700 bg-slate-950/80 px-3 py-1.5 text-sm text-slate-50 focus:outline-none focus:ring-1 focus:ring-sky-500">
+                      <option value="">Selectează segment</option>
+                      <option value="economy">Economy</option>
+                      <option value="compact">Compact</option>
+                      <option value="sedan">Sedan</option>
+                      <option value="suv">SUV</option>
+                      <option value="crossover">Crossover</option>
+                      <option value="7locuri">7 locuri</option>
+                      <option value="premium">Premium</option>
+                      <option value="luxury">Luxury</option>
+                      <option value="van">Van</option>
+                      <option value="electric">Electric</option>
+                    </select>
+                  </div>
+                  <div class="space-y-2">
+                    <label class="block text-[0.7rem] font-medium text-slate-300">Număr locuri</label>
+                    <input id="carSeats" type="number"
+                           class="w-full rounded-xl border border-slate-700 bg-slate-950/80 px-3 py-1.5 text-sm text-slate-50 focus:outline-none focus:ring-1 focus:ring-sky-500" />
+                  </div>
+                  <div class="space-y-2">
+                    <label class="block text-[0.7rem] font-medium text-slate-300">Transmisie</label>
+                    <select id="carTransmission"
+                            class="w-full rounded-full border border-slate-700 bg-slate-950/80 px-3 py-1.5 text-[0.8rem] text-slate-50 focus:outline-none focus:ring-1 focus:ring-sky-500">
+                      <option value="automata">Automată</option>
+                      <option value="manuala">Manuală</option>
+                    </select>
+                  </div>
+                  <div class="space-y-2">
+                    <label class="block text-[0.7rem] font-medium text-slate-300">Combustibil</label>
+                    <select id="carFuel"
+                            class="w-full rounded-full border border-slate-700 bg-slate-950/80 px-3 py-1.5 text-[0.8rem] text-slate-50 focus:outline-none focus:ring-1 focus:ring-sky-500">
+                      <option value="benzina">Benzină</option>
+                      <option value="diesel">Diesel</option>
+                      <option value="hibrid">Hibrid</option>
+                      <option value="electric">Electric</option>
+                    </select>
+                  </div>
+                  <div class="space-y-2">
+                    <label class="block text-[0.7rem] font-medium text-slate-300">Status</label>
+                    <select id="carStatus"
+                            class="w-full rounded-full border border-slate-700 bg-slate-950/80 px-3 py-1.5 text-[0.8rem] text-slate-50 focus:outline-none focus:ring-1 focus:ring-sky-500">
+                      <option value="activ">Activă</option>
+                      <option value="inactiv">Inactivă</option>
+                    </select>
+                  </div>
+                  <div class="space-y-2">
+                    <label class="block text-[0.7rem] font-medium text-slate-300">Fotografie</label>
+                    <input id="carImage" type="file"
+                           class="block w-full text-[0.75rem] text-slate-300 file:mr-3 file:rounded-full file:border-0 file:bg-slate-100 file:px-3 file:py-1.5 file:text-[0.75rem] file:font-semibold file:text-slate-900 hover:file:bg-white/90" />
+                  </div>
+                </div>
+
+                <div class="space-y-2">
+                  <div class="flex items-center justify-between">
+                    <h3 class="text-xs font-semibold tracking-[0.16em] uppercase text-slate-400">
+                      Tarife pe intervale (€/zi)
+                    </h3>
+                  </div>
+                  <div class="overflow-auto rounded-2xl border border-slate-800 bg-slate-950/80">
+                    <table class="min-w-full text-xs">
+                      <thead class="bg-slate-900/80 text-slate-400">
+                        <tr>
+                          <th class="px-3 py-2 text-left text-[0.7rem] font-semibold uppercase tracking-[0.16em]">Interval</th>
+                          <th class="px-3 py-2 text-left text-[0.7rem] font-semibold uppercase tracking-[0.16em]">Preț / zi</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td class="px-3 py-2 text-[0.75rem] text-slate-200">1 zi</td>
+                          <td class="px-3 py-2"><input id="price_1_day" type="number" step="1"
+                            class="w-28 rounded-xl border border-slate-700 bg-slate-950/80 px-2 py-1 text-[0.8rem] text-slate-50 focus:outline-none focus:ring-1 focus:ring-sky-500" /></td>
+                        </tr>
+                        <tr>
+                          <td class="px-3 py-2 text-[0.75rem] text-slate-200">2 zile</td>
+                          <td class="px-3 py-2"><input id="price_2_days" type="number" step="1"
+                            class="w-28 rounded-xl border border-slate-700 bg-slate-950/80 px-2 py-1 text-[0.8rem] text-slate-50 focus:outline-none focus:ring-1 focus:ring-sky-500" /></td>
+                        </tr>
+                        <tr>
+                          <td class="px-3 py-2 text-[0.75rem] text-slate-200">3 zile</td>
+                          <td class="px-3 py-2"><input id="price_3_days" type="number" step="1"
+                            class="w-28 rounded-xl border border-slate-700 bg-slate-950/80 px-2 py-1 text-[0.8rem] text-slate-50 focus:outline-none focus:ring-1 focus:ring-sky-500" /></td>
+                        </tr>
+                        <tr>
+                          <td class="px-3 py-2 text-[0.75rem] text-slate-200">4–6 zile</td>
+                          <td class="px-3 py-2"><input id="price_4_6_days" type="number" step="1"
+                            class="w-28 rounded-xl border border-slate-700 bg-slate-950/80 px-2 py-1 text-[0.8rem] text-slate-50 focus:outline-none focus:ring-1 focus:ring-sky-500" /></td>
+                        </tr>
+                        <tr>
+                          <td class="px-3 py-2 text-[0.75rem] text-slate-200">7–14 zile</td>
+                          <td class="px-3 py-2"><input id="price_7_14_days" type="number" step="1"
+                            class="w-28 rounded-xl border border-slate-700 bg-slate-950/80 px-2 py-1 text-[0.8rem] text-slate-50 focus:outline-none focus:ring-1 focus:ring-sky-500" /></td>
+                        </tr>
+                        <tr>
+                          <td class="px-3 py-2 text-[0.75rem] text-slate-200">15–23 zile</td>
+                          <td class="px-3 py-2"><input id="price_15_23_days" type="number" step="1"
+                            class="w-28 rounded-xl border border-slate-700 bg-slate-950/80 px-2 py-1 text-[0.8rem] text-slate-50 focus:outline-none focus:ring-1 focus:ring-sky-500" /></td>
+                        </tr>
+                        <tr>
+                          <td class="px-3 py-2 text-[0.75rem] text-slate-200">24+ zile</td>
+                          <td class="px-3 py-2"><input id="price_24_plus_days" type="number" step="1"
+                            class="w-28 rounded-xl border border-slate-700 bg-slate-950/80 px-2 py-1 text-[0.8rem] text-slate-50 focus:outline-none focus:ring-1 focus:ring-sky-500" /></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                <div class="flex justify-end gap-2">
+                  <button id="btnDeleteCar"
+                          class="rounded-full border border-rose-500/70 bg-rose-500/10 px-3 py-1.5 text-[0.8rem] font-medium text-rose-100 hover:bg-rose-500/80 hover:text-rose-950">
+                    Șterge mașina
+                  </button>
+                  
+                  <button id="btnSaveCar"
+                          class="rounded-full bg-slate-50 px-3 py-1.5 text-[0.8rem] font-semibold text-slate-900 shadow-soft hover:bg-white/90">
+                    Salvează mașina
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- TAB: Pricing -->
+        <section id="tab-pricing" class="tab-section hidden space-y-4">
+<div class="max-w-7xl mx-auto px-4 lg:px-8 py-6 space-y-6">
+        <header class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+          <div>
+            <h1 class="text-2xl md:text-3xl font-semibold tracking-tight">Pricing pe perioade</h1>
+            <p class="mt-2 text-sm text-slate-300 max-w-3xl">
+              Creezi <span class="font-semibold">perioade de timp</span> (ex: 01.12–20.12), pleci de la
+              <span class="font-semibold">prețurile de bază</span> din secțiunea „Mașini” și ajustezi:
+              global, pe intervale de zile sau pe o anumită mașină.
+            </p>
+          </div>
+          <div class="flex flex-col items-stretch sm:items-end gap-2 text-[0.7rem] text-slate-400">
+            <div class="inline-flex items-center gap-2 rounded-full border border-sky-500/40 bg-sky-500/10 px-3 py-1.5 text-sky-100">
+              <span class="text-xs">ℹ️</span>
+              <span>Preturile de bază rămân în „Mașini” – aici doar aplici ajustări pentru anumite perioade.</span>
+            </div>
+          </div>
+        </header>
+
+        <div class="grid grid-cols-1 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.5fr)] gap-6">
+          <!-- Lista perioade -->
+          <section id="pricingListSection" class="space-y-4">
+            <div class="flex items-center justify-between gap-2">
+              <div>
+                <h2 class="text-sm font-semibold tracking-tight text-slate-100">Perioade de pricing</h2>
+                <p class="text-[0.75rem] text-slate-400">
+                  Vezi denumirea perioadei, intervalul de timp și intri pe „Editează” pentru matricea de prețuri.
+                </p>
+              </div>
+              <button id="btnAddPeriod"
+                      class="inline-flex items-center gap-2 rounded-full bg-slate-50 text-slate-900 px-3 py-1.5 text-[0.75rem] font-semibold shadow-soft hover:bg-white/90">
+                <span class="text-base leading-none">＋</span>
+                <span>Adaugă perioadă</span>
+              </button>
+            </div>
+
+            <div class="rounded-3xl border border-slate-800 bg-slate-950/80 shadow-soft overflow-hidden">
+              <table class="min-w-full text-sm">
+                <thead class="bg-slate-900/80 text-slate-400 text-left">
+                  <tr>
+                    <th class="py-2 px-3 text-[0.7rem] font-semibold uppercase tracking-[0.16em]">Denumire perioadă</th>
+                    <th class="py-2 px-3 text-[0.7rem] font-semibold uppercase tracking-[0.16em]">Interval</th>
+                    <th class="py-2 px-3 text-[0.7rem] font-semibold uppercase tracking-[0.16em]">Status</th>
+                    <th class="py-2 px-3 text-[0.7rem] font-semibold uppercase tracking-[0.16em]">Acțiuni</th>
+                  </tr>
+                </thead>
+                <tbody id="periodsTableBody" class="divide-y divide-slate-800"></tbody>
+              </table>
+            </div>
+          </section>
+
+          <!-- Editare perioadă selectată -->
+          <section id="pricingEditSection" class="space-y-4 hidden">
+            <div class="rounded-3xl border border-slate-800 bg-slate-950/80 shadow-soft">
+              <div class="px-4 py-3 border-b border-slate-800 bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 flex items-center justify-between gap-3">
+                <div>
+                  <h2 id="periodEditTitle" class="text-sm font-semibold tracking-tight text-slate-100">
+                    Nicio perioadă selectată
+                  </h2>
+                  <p class="text-[0.75rem] text-slate-400">
+                    Alege „Editează” pe o perioadă ca să vezi matricea de prețuri și ajustările.
+                  </p>
+                </div>
+                <div class="flex items-center gap-2">
+                  <button id="btnSavePeriod"
+                          class="hidden rounded-full bg-slate-50 px-3 py-1.5 text-[0.7rem] font-semibold text-slate-900 shadow-soft hover:bg-white/90">
+                    Salvează perioada
+                  </button>
+                  <button id="btnDeletePeriod"
+                          class="hidden rounded-full border border-rose-500/60 bg-rose-500/10 px-3 py-1.5 text-[0.7rem] font-medium text-rose-100 hover:bg-rose-500/80 hover:text-rose-950">
+                    Șterge perioada
+                  </button>
+                </div>
+              </div>
+              <div id="periodEditBody" class="px-4 py-4 text-sm text-slate-100 space-y-4">
+                <div class="text-[0.8rem] text-slate-400">
+                  Nu este selectată nicio perioadă. Selectează o perioadă din tabelul din stânga.
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
         </section>
       </div>
     </main>
   </div>
 
-  <!-- Modal detalii rezervare -->
-  <div id="reservationModal" class="fixed inset-0 bg-black/45 backdrop-blur-sm flex items-center justify-center z-50 hidden">
-    <div class="bg-slate-950 text-slate-50 rounded-2xl shadow-2xl shadow-slate-900/40 max-w-5xl w-full mx-4 max-h-[90vh] overflow-auto border border-slate-800">
-      <div class="px-4 py-3 border-b border-slate-800 flex items-center justify-between bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 sticky top-0 z-10">
-        <div class="flex items-center gap-3">
-          <div class="h-8 w-8 rounded-xl bg-slate-800 flex items-center justify-center shadow-inner shadow-slate-900/60">
-            <span class="text-xs font-semibold text-slate-200">RZV</span>
-          </div>
-          <div>
-            <h2 class="text-sm font-semibold tracking-wide text-slate-50">Detalii rezervare</h2>
-            <p class="text-[0.7rem] text-slate-400">Vizualizezi toate detaliile clientului și ale rezervării.</p>
-          </div>
+<div id="previewModal" class="fixed inset-0 z-40 hidden items-center justify-center bg-black/60 backdrop-blur-sm">
+    <div class="max-w-5xl w-full mx-4 max-h-[90vh] overflow-auto rounded-3xl border border-slate-800 bg-slate-950 shadow-soft">
+      <div class="sticky top-0 z-10 flex items-center justify-between border-b border-slate-800 bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 px-5 py-3">
+        <div>
+          <h2 id="previewTitle" class="text-sm font-semibold tracking-tight text-slate-50">Previzualizare prețuri</h2>
+          <p class="text-[0.7rem] text-slate-400">
+            Prețurile finale pe intervale de zile pentru fiecare mașină, în perioada selectată.
+          </p>
         </div>
-        <button id="reservationModalClose" class="text-slate-400 hover:text-slate-100 text-xl leading-none px-2 py-1 rounded-full hover:bg-slate-800">
+        <button id="previewClose"
+                class="rounded-full bg-slate-900/70 px-2 py-1 text-xl leading-none text-slate-400 hover:bg-slate-800 hover:text-slate-100"
+                type="button">
           &times;
         </button>
       </div>
-      <div id="reservationModalBody" class="p-5 space-y-4 text-sm">
-        <div class="text-center text-slate-400">Se încarcă...</div>
-      </div>
+      <div id="previewBody" class="px-5 py-4 text-sm text-slate-100 space-y-4"></div>
     </div>
   </div>
 
-  <script>
-    // ======= DATE MOCK (până le legăm de backend) =======
-    var allReservations = [
+<script>
+// ==== TAB LOGIC ====
+document.addEventListener("DOMContentLoaded", function() {
+  var tabButtons = document.querySelectorAll(".tab-btn");
+  var tabSections = document.querySelectorAll(".tab-section");
+
+  function activateTab(id) {
+    tabSections.forEach(function(sec) {
+      if (sec.id === id) {
+        sec.classList.remove("hidden");
+      } else {
+        sec.classList.add("hidden");
+      }
+    });
+    tabButtons.forEach(function(btn) {
+      var target = btn.getAttribute("data-tab-target");
+      if (target === id) {
+        btn.classList.remove("bg-slate-950/80","text-slate-200","border-slate-800");
+        btn.classList.add("bg-slate-50","text-slate-900","border-slate-700","shadow-soft");
+      } else {
+        btn.classList.add("bg-slate-950/80","text-slate-200","border-slate-800");
+        btn.classList.remove("bg-slate-50","text-slate-900","border-slate-700","shadow-soft");
+      }
+    });
+  }
+
+  // default tab: Rezervări
+  activateTab("tab-reservations");
+
+  tabButtons.forEach(function(btn) {
+    btn.addEventListener("click", function() {
+      var target = btn.getAttribute("data-tab-target");
+      if (target) activateTab(target);
+    });
+  });
+});
+</script>
+
+<script>
+    // ====== DATE DEMO MAȘINI (aceleași intervale ca în "Mașini") ======
+    var allCars = [
       {
-        id: 101,
-        customer_name: "Popescu Ion",
-        customer_email: "ion.popescu@example.com",
-        customer_phone: "+40 712 345 678",
-        flight_number: "RO1234",
-        car_name: "Dacia Logan 1.0",
-        pickup_at: "2025-11-10T10:30:00Z",
-        dropoff_at: "2025-11-15T18:00:00Z",
-        created_at: "2025-11-01T09:15:00Z",
-        pickup_code: "OTP",
-        pickup_name: "Henri Coandă",
-        dropoff_code: "OTP",
-        dropoff_name: "Henri Coandă",
-        status: "pending",
-        total_price: 250,
-        license_series: "B",
-        license_number: "123456",
-        id_series: "RX",
-        id_number: "987654",
-        birth_date: "1988-05-20",
-        cnp: "1880520123456",
-        address: "Str. Exemplu nr. 10, București",
-        travel_country: "Italia",
-        notes: "Clientul a menționat că are bagaje voluminoase.",
-        partner_id: null
+        id: 1,
+        brand: "Dacia",
+        model: "Logan 1.0 TCe",
+        segment: "compact",
+        transmission: "automata",
+        seats: 5,
+        fuel: "benzina",
+        price_1_day: 60,
+        price_2_days: 55,
+        price_3_days: 50,
+        price_4_6_days: 45,
+        price_7_14_days: 40,
+        price_15_23_days: 35,
+        price_24_plus_days: 30
       },
       {
-        id: 102,
-        customer_name: "Ionescu Maria",
-        customer_email: "maria.ionescu@example.com",
-        customer_phone: "+40 723 111 222",
-        flight_number: "FR5678",
-        car_name: "VW Golf 1.5 TSI",
-        pickup_at: "2025-12-01T09:00:00Z",
-        dropoff_at: "2025-12-07T20:00:00Z",
-        created_at: "2025-10-28T14:22:00Z",
-        pickup_code: "OTP",
-        pickup_name: "Henri Coandă",
-        dropoff_code: "CLJ",
-        dropoff_name: "Cluj-Napoca",
-        status: "confirmed",
-        total_price: 480,
-        license_series: "B",
-        license_number: "445566",
-        id_series: "KX",
-        id_number: "223344",
-        birth_date: "1990-09-12",
-        cnp: "2900912123456",
-        address: "Bd. Eroilor nr. 5, Cluj-Napoca",
-        travel_country: "Spania",
-        notes: "Client fidel, preferă predare rapidă la sosire.",
-        partner_id: 1
+        id: 2,
+        brand: "Volkswagen",
+        model: "T-Roc 1.5 TSI",
+        segment: "suv",
+        transmission: "automata",
+        seats: 5,
+        fuel: "benzina",
+        price_1_day: 90,
+        price_2_days: 80,
+        price_3_days: 75,
+        price_4_6_days: 70,
+        price_7_14_days: 65,
+        price_15_23_days: 60,
+        price_24_plus_days: 55
       },
       {
-        id: 103,
-        customer_name: "Vasile Andrei",
-        customer_email: "andrei.vasile@example.com",
-        customer_phone: "+40 744 999 000",
-        flight_number: "WZ9999",
-        car_name: "Renault Megane",
-        pickup_at: "2025-10-01T13:00:00Z",
-        dropoff_at: "2025-10-03T08:00:00Z",
-        created_at: "2025-09-20T18:40:00Z",
-        pickup_code: "CLJ",
-        pickup_name: "Cluj-Napoca",
-        dropoff_code: "CLJ",
-        dropoff_name: "Cluj-Napoca",
-        status: "cancelled",
-        total_price: 120,
-        license_series: "B",
-        license_number: "777888",
-        id_series: "AB",
-        id_number: "111222",
-        birth_date: "1985-02-02",
-        cnp: "1850202123456",
-        address: "Str. Libertății nr. 3, Oradea",
-        travel_country: "Germania",
-        notes: "Rezervarea a fost anulată de client.",
-        partner_id: 2
+        id: 3,
+        brand: "Mercedes-Benz",
+        model: "E Class",
+        segment: "premium",
+        transmission: "automata",
+        seats: 5,
+        fuel: "diesel",
+        price_1_day: 150,
+        price_2_days: 140,
+        price_3_days: 135,
+        price_4_6_days: 130,
+        price_7_14_days: 120,
+        price_15_23_days: 110,
+        price_24_plus_days: 100
       }
     ];
 
-    var demoDocsByReservation = {
-      101: [
-        { doc_type: "CI față", file_name: "ci_fata_101.jpg", file_path: "ci_fata_101.jpg" },
-        { doc_type: "CI verso", file_name: "ci_verso_101.jpg", file_path: "ci_verso_101.jpg" },
-        { doc_type: "Permis", file_name: "permis_101.jpg", file_path: "permis_101.jpg" }
-      ],
-      102: [
-        { doc_type: "CI față", file_name: "ci_fata_102.jpg", file_path: "ci_fata_102.jpg" }
-      ],
-      103: []
-    };
-
-    var demoPartners = [
-      { id: 1, name: "Partener București" },
-      { id: 2, name: "Partener Cluj" }
+    var intervals = [
+      { key: "price_1_day", label: "1 zi" },
+      { key: "price_2_days", label: "2 zile" },
+      { key: "price_3_days", label: "3 zile" },
+      { key: "price_4_6_days", label: "4–6 zile" },
+      { key: "price_7_14_days", label: "7–14 zile" },
+      { key: "price_15_23_days", label: "15–23 zile" },
+      { key: "price_24_plus_days", label: "24+ zile" }
     ];
 
-    var currentReservations = allReservations.slice();
-
-    // ======= UI HELPERS =======
-
-    function formatDateTime(iso) {
-      if (!iso) return "-";
-      try {
-        return new Date(iso).toLocaleString();
-      } catch (e) {
-        return iso;
+    // ====== PERIOADE DEMO (cu exemplul tău) ======
+    var pricingPeriods = [
+      {
+        id: 1,
+        name: "Early December 2025",
+        startDate: "2025-12-01",
+        endDate: "2025-12-20",
+        adjustments: {
+          // ajustare globală pentru toate mașinile & intervalele (+5 EUR)
+          global: { mode: "fixed", value: 5 },
+          // ajustare pe intervale (ex: 4–6 zile +7 EUR pentru toate mașinile)
+          perInterval: {
+            price_4_6_days: { mode: "fixed", value: 7 }
+          },
+          // ajustare punctuală pe mașină (ex: Dacia Logan la 24+ zile -3 EUR)
+          perCar: {
+            "1": {
+              price_24_plus_days: { mode: "fixed", value: -3 }
+            }
+          }
+        }
       }
+    ];
+
+    var selectedPeriodId = null;
+
+    // ====== HELPERI ======
+    function formatDateHuman(str) {
+      if (!str) return "—";
+      var d = new Date(str);
+      if (isNaN(d.getTime())) return "—";
+      return d.toLocaleDateString("ro-RO", { day: "2-digit", month: "2-digit", year: "numeric" });
     }
 
-    function formatDateOnly(iso) {
-      if (!iso) return "-";
-      try {
-        var d = new Date(iso);
-        return d.toLocaleDateString();
-      } catch (e) {
-        return iso;
+    function formatDateISO(d) {
+      if (!(d instanceof Date)) return "";
+      var y = d.getFullYear();
+      var m = String(d.getMonth()+1).padStart(2, "0");
+      var day = String(d.getDate()).padStart(2, "0");
+      return y + "-" + m + "-" + day;
+    }
+
+    function formatMoney(v) {
+      var num = Number(v || 0);
+      return "€" + num.toFixed(0);
+    }
+
+    function getCarName(car) {
+      return [car.brand, car.model].filter(Boolean).join(" ");
+    }
+
+    function findPeriodById(id) {
+      return pricingPeriods.find(function(p){ return p.id === id; }) || null;
+    }
+
+    // delta helper: primește {mode, value} și baza, returnează delta numeric
+    function calcDelta(adj, base) {
+      if (!adj || adj.mode === "none") return 0;
+      var val = Number(adj.value);
+      if (!val || isNaN(val)) return 0;
+      if (adj.mode === "fixed") {
+        return val;
       }
+      if (adj.mode === "percent") {
+        return base * val / 100;
+      }
+      return 0;
     }
 
-    function statusBadgeClass(status) {
-      if (status === "confirmed") return "bg-emerald-500/15 text-emerald-200 ring-1 ring-emerald-500/40";
-      if (status === "pending") return "bg-amber-500/15 text-amber-200 ring-1 ring-amber-500/40";
-      if (status === "cancelled") return "bg-rose-500/15 text-rose-200 ring-1 ring-rose-500/40";
-      return "bg-slate-500/20 text-slate-200 ring-1 ring-slate-500/40";
+    // Preț final = baza + (global + perInterval + perCar)
+    function computeFinalPrice(car, period, intervalKey) {
+      var base = car[intervalKey];
+      if (base == null || isNaN(base)) return null;
+      base = Number(base);
+
+      var g = period.adjustments && period.adjustments.global;
+      var perInt = period.adjustments && period.adjustments.perInterval && period.adjustments.perInterval[intervalKey];
+      var perCarAll = period.adjustments && period.adjustments.perCar && period.adjustments.perCar[String(car.id)];
+      var perCar = perCarAll && perCarAll[intervalKey];
+
+      var delta = 0;
+      delta += calcDelta(g, base);
+      delta += calcDelta(perInt, base);
+      delta += calcDelta(perCar, base);
+
+      var finalPrice = Math.round(base + delta);
+      return { base: base, final: finalPrice, delta: delta };
     }
 
-    function listStatusBadgeClass(status) {
-      if (status === "confirmed") return "bg-emerald-100 text-emerald-800";
-      if (status === "pending") return "bg-amber-100 text-amber-800";
-      if (status === "cancelled") return "bg-rose-100 text-rose-800";
-      return "bg-slate-200 text-slate-700";
-    }
-
-    function sectionLabel(text) {
-      return '<div class="text-[0.65rem] font-semibold text-slate-400 uppercase tracking-[0.14em]">' + text + "</div>";
-    }
-
-    function fieldRow(label, value) {
-      return (
-        '<div class="space-y-1">' +
-          sectionLabel(label) +
-          '<div class="text-sm text-slate-50">' + (value || "-") + "</div>" +
-        "</div>"
-      );
-    }
-
-    function normalizePhone(str) {
-      // scoate spații, plus, paranteze, liniuțe etc. -> rămân doar cifrele
-      return (str || "").replace(/[^0-9]/g, "");
-    }
-
-    // ======= FILTRARE + SORTARE =======
-    function applyFiltersAndSort() {
-      var searchInput = document.getElementById("searchInput");
-      var searchField = document.getElementById("searchField");
-      var sortField = document.getElementById("sortField");
-      var sortDir = document.getElementById("sortDir");
-
-      var term = (searchInput && searchInput.value || "").trim().toLowerCase();
-      var sField = searchField ? searchField.value : "all";
-      var field = sortField ? sortField.value : "created_at";
-      var dir = sortDir ? sortDir.value : "desc";
-
-      var filtered = allReservations.filter(function(r) {
-        if (!term) return true;
-
-        if (sField === "all") {
-          var haystack = [
-            String(r.id || ""),
-            r.customer_name || "",
-            r.customer_email || "",
-            r.customer_phone || "",
-            r.car_name || "",
-            r.status || "",
-            formatDateTime(r.created_at),
-            formatDateTime(r.pickup_at),
-            formatDateTime(r.dropoff_at)
-          ].join(" ").toLowerCase();
-          return haystack.indexOf(term) !== -1;
-        }
-
-        if (sField === "id") {
-          return String(r.id || "").toLowerCase().indexOf(term) !== -1;
-        }
-        if (sField === "customer_name") {
-          return (r.customer_name || "").toLowerCase().indexOf(term) !== -1;
-        }
-        if (sField === "customer_email") {
-          return (r.customer_email || "").toLowerCase().indexOf(term) !== -1;
-        }
-        if (sField === "customer_phone") {
-          var phoneNorm = normalizePhone(r.customer_phone);
-          var termNorm = normalizePhone(term);
-          if (!termNorm) return true;
-          return phoneNorm.indexOf(termNorm) !== -1;
-        }
-        if (sField === "car_name") {
-          return (r.car_name || "").toLowerCase().indexOf(term) !== -1;
-        }
-        if (sField === "status") {
-          return (r.status || "").toLowerCase().indexOf(term) !== -1;
-        }
-        if (sField === "created_at" || sField === "pickup_at" || sField === "dropoff_at") {
-          return formatDateTime(r[sField]).toLowerCase().indexOf(term) !== -1;
-        }
-        return true;
-      });
-
-      filtered.sort(function(a, b) {
-        var av, bv;
-
-        if (field === "id") {
-          av = a.id;
-          bv = b.id;
-        } else if (field === "customer_name") {
-          av = (a.customer_name || "").toLowerCase();
-          bv = (b.customer_name || "").toLowerCase();
-        } else if (field === "car_name") {
-          av = (a.car_name || "").toLowerCase();
-          bv = (b.car_name || "").toLowerCase();
-        } else if (field === "status") {
-          av = (a.status || "").toLowerCase();
-          bv = (b.status || "").toLowerCase();
-        } else {
-          av = a[field] ? new Date(a[field]).getTime() : 0;
-          bv = b[field] ? new Date(b[field]).getTime() : 0;
-        }
-
-        if (av < bv) return dir === "asc" ? -1 : 1;
-        if (av > bv) return dir === "asc" ? 1 : -1;
-        return 0;
-      });
-
-      currentReservations = filtered;
-      renderReservationsTable(currentReservations);
-    }
-
-    // ======= RENDER STATISTICI =======
-    function renderStats(reservations) {
-      var total = reservations.length;
-      var pending = reservations.filter(function (r) { return r.status === "pending"; }).length;
-      var confirmed = reservations.filter(function (r) { return r.status === "confirmed"; }).length;
-      var cancelled = reservations.filter(function (r) { return r.status === "cancelled"; }).length;
-
-      document.getElementById("statTotal").textContent = total;
-      document.getElementById("statPending").textContent = pending;
-      document.getElementById("statConfirmed").textContent = confirmed;
-      document.getElementById("statCancelled").textContent = cancelled;
-    }
-
-    // ======= RENDER TABEL REZERVĂRI =======
-    function renderReservationsTable(reservations) {
-      var tbody = document.getElementById("resRows");
-      if (!tbody) return;
+    // ====== RENDER PERIOADE LISTĂ ======
+    function renderPeriodsTable() {
+      var tbody = document.getElementById("periodsTableBody");
       tbody.innerHTML = "";
 
-      reservations.forEach(function (r, idx) {
-        var tr = document.createElement("tr");
-        tr.className = (idx % 2 === 0 ? "bg-white" : "bg-slate-50/60") + " hover:bg-sky-50/90 transition-colors";
+      if (!pricingPeriods.length) {
+        var trEmpty = document.createElement("tr");
+        trEmpty.innerHTML = '<td colspan="4" class="py-6 px-3 text-center text-[0.8rem] text-slate-400">Nu există încă perioade de pricing. Adaugă prima perioadă.</td>';
+        tbody.appendChild(trEmpty);
+        return;
+      }
 
-        var pickupText = formatDateTime(r.pickup_at) + (r.pickup_code ? " (" + r.pickup_code + ")" : "");
-        var dropoffText = formatDateTime(r.dropoff_at) + (r.dropoff_code ? " (" + r.dropoff_code + ")" : "");
-        var totalText = r.total_price != null ? (Number(r.total_price).toFixed(2) + " €") : "-";
-        var badgeClass = listStatusBadgeClass(r.status);
+      var now = new Date();
+
+      pricingPeriods.forEach(function(p){
+        if (p.isNew) return; // nu afișăm perioadele încă nesalvate
+        var tr = document.createElement("tr");
+        tr.className = "hover:bg-slate-900/70 transition-colors";
+
+        var start = new Date(p.startDate);
+        var end = new Date(p.endDate);
+        var statusLabel = "perioadă";
+        var statusClass = "bg-slate-800 text-slate-300";
+        if (!isNaN(start.getTime()) && !isNaN(end.getTime())) {
+          if (end < now) {
+            statusLabel = "încheiată";
+            statusClass = "bg-slate-800 text-slate-300";
+          } else if (start > now) {
+            statusLabel = "viitoare";
+            statusClass = "bg-sky-500/15 text-sky-200 ring-1 ring-sky-500/40";
+          } else {
+            statusLabel = "activă";
+            statusClass = "bg-emerald-500/15 text-emerald-200 ring-1 ring-emerald-500/40";
+          }
+        }
 
         tr.innerHTML =
-          '<td class="py-3 pr-4 align-top text-xs font-mono text-slate-500">' + r.id + "</td>" +
-          '<td class="py-3 pr-4 align-top">' +
-            '<div class="text-sm font-medium text-slate-900">' + (r.customer_name || "-") + "</div>" +
-            '<div class="text-xs text-slate-400">' + (r.customer_email || "") + "</div>" +
-          "</td>" +
-          '<td class="py-3 pr-4 align-top">' +
-            '<div class="text-sm text-slate-900">' + (r.car_name || "-") + "</div>" +
-          "</td>" +
-          '<td class="py-3 pr-4 align-top">' +
-            '<div class="text-xs text-slate-500">' + pickupText + "</div>" +
-          "</td>" +
-          '<td class="py-3 pr-4 align-top">' +
-            '<div class="text-xs text-slate-500">' + dropoffText + "</div>" +
-          "</td>" +
-          '<td class="py-3 pr-4 align-top">' +
-            '<div class="text-sm font-semibold text-slate-900">' + totalText + "</div>" +
-          "</td>" +
-          '<td class="py-3 pr-4 align-top">' +
-            '<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ' +
-              badgeClass + '">' +
-              r.status +
-            "</span>" +
-          "</td>" +
-          '<td class="py-3 pr-4 align-top">' +
-            '<button class="px-2.5 py-1.5 rounded-full border border-slate-200 text-xs font-medium text-slate-700 hover:bg-slate-900 hover:text-white transition-colors" data-action="view" data-id="' + r.id + '">' +
-              "Vezi detalii" +
-            "</button>" +
-          "</td>";
+          '<td class="py-3 px-3 align-top">' +
+            '<div class="text-sm font-semibold text-slate-50">' + (p.name || ('Perioada #' + p.id)) + '</div>' +
+            '<div class="text-[0.7rem] text-slate-500">ID ' + p.id + '</div>' +
+          '</td>' +
+          '<td class="py-3 px-3 align-top text-[0.8rem] text-slate-200">' +
+            formatDateHuman(p.startDate) + ' – ' + formatDateHuman(p.endDate) +
+          '</td>' +
+          '<td class="py-3 px-3 align-top">' +
+            '<span class="inline-flex items-center rounded-full px-2.5 py-0.5 text-[0.7rem] font-medium ' + statusClass + '">' +
+              statusLabel +
+            '</span>' +
+          '</td>' +
+          '<td class="py-3 px-3 align-top">' +
+            '<div class="flex flex-wrap gap-2">' +
+              '<button type="button" data-id="' + p.id + '" class="btnEditPeriod rounded-full border border-slate-700 bg-slate-950/80 px-3 py-1.5 text-[0.7rem] font-medium text-slate-100 hover:bg-slate-50 hover:text-slate-900">Editează</button>' +
+              '<button type="button" data-id="' + p.id + '" class="btnPreviewPeriod rounded-full border border-slate-700 bg-slate-950/80 px-3 py-1.5 text-[0.7rem] font-medium text-slate-100 hover:bg-sky-500/90 hover:border-sky-400 hover:text-slate-950">Preview</button>' +
+            '</div>' +
+          '</td>';
 
         tbody.appendChild(tr);
       });
     }
 
-    // ======= MODAL DETALII =======
-    function openReservationDetails(id) {
-      var modal = document.getElementById("reservationModal");
-      var body = document.getElementById("reservationModalBody");
-      if (!modal || !body) return;
+    // ====== RENDER EDITARE PERIOADĂ ======
+    
+    function renderPeriodEdit() {
+      var body = document.getElementById("periodEditBody");
+      var title = document.getElementById("periodEditTitle");
+      var deleteBtn = document.getElementById("btnDeletePeriod");
+      var saveBtn = document.getElementById("btnSavePeriod");
+      var editSection = document.getElementById("pricingEditSection");
 
-      var r = allReservations.find(function (x) { return x.id === id; });
-      var docs = demoDocsByReservation[id] || [];
-      var partners = demoPartners;
-
-      if (!r) return;
-
-      var pickupInfo = formatDateTime(r.pickup_at) +
-        (r.pickup_name ? " – " + r.pickup_name : "") +
-        (r.pickup_code ? " (" + r.pickup_code + ")" : "");
-
-      var dropoffInfo = formatDateTime(r.dropoff_at) +
-        (r.dropoff_name ? " – " + r.dropoff_name : "") +
-        (r.dropoff_code ? " (" + r.dropoff_code + ")" : "");
-
-      var docsHtml = "";
-      if (docs.length) {
-        docsHtml =
-          '<ul class="list-disc pl-5 space-y-1 text-sm text-slate-100">' +
-          docs.map(function (d) {
-            var label = d.doc_type || d.file_name;
-            return "<li>" + label + " (" + d.file_name + ")</li>";
-          }).join("") +
-          "</ul>";
-      } else {
-        docsHtml = '<div class="text-slate-500 text-sm">Nu există documente atașate.</div>';
+      var period = findPeriodById(selectedPeriodId);
+      if (!period) {
+        if (editSection) editSection.classList.add("hidden");
+        if (title) title.textContent = "Nicio perioadă selectată";
+        if (deleteBtn) deleteBtn.classList.add("hidden");
+        if (saveBtn) saveBtn.classList.add("hidden");
+        if (body) {
+          body.innerHTML = '<div class="text-[0.8rem] text-slate-400">Nu este selectată nicio perioadă. Alege „Editează” sau „Adaugă perioadă” pentru a configura pricing-ul.</div>';
+        }
+        return;
       }
 
-      var partnersOptions = partners.map(function (p) {
-        return '<option value="' + p.id + '">' + p.name + "</option>";
+      if (editSection) editSection.classList.remove("hidden");
+
+      if (period.isNew) {
+        // la perioadă nouă: afișăm doar butonul de salvare, fără „Șterge perioada”
+        if (deleteBtn) deleteBtn.classList.add("hidden");
+        if (saveBtn) saveBtn.classList.remove("hidden");
+        if (title) title.textContent = "Perioadă nouă – în curs de creare";
+      } else {
+        // la perioadă existentă: afișăm și butonul de ștergere
+        if (deleteBtn) deleteBtn.classList.remove("hidden");
+        if (saveBtn) saveBtn.classList.remove("hidden");
+        if (title) title.textContent = "Editare perioadă – " + (period.name || ("Perioada #" + period.id));
+      }
+
+      if (!period.adjustments) period.adjustments = {};
+      if (!period.adjustments.global) period.adjustments.global = { mode: "none", value: 0 };
+      if (!period.adjustments.perInterval) period.adjustments.perInterval = {};
+      if (!period.adjustments.perCar) period.adjustments.perCar = {};
+
+      if (!period.adjustments.global) period.adjustments.global = { mode: "none", value: 0 };
+      if (!period.adjustments.perInterval) period.adjustments.perInterval = {};
+      if (!period.adjustments.perCar) period.adjustments.perCar = {};
+
+      var g = period.adjustments.global;
+      var gMode = g.mode || "none";
+      var gValue = g.value != null ? g.value : "";
+
+      // intervale globale
+      var intervalHead = intervals.map(function(i){
+        return '<th class="px-2 py-2 text-center text-[0.7rem] font-semibold uppercase tracking-[0.16em]">' + i.label + '</th>';
       }).join("");
 
-      var assignedPartner = null;
-      if (r.partner_id) {
-        assignedPartner = partners.find(function (p) { return p.id === r.partner_id; }) || null;
-      }
+      var perIntervalRow = intervals.map(function(i){
+        var r = period.adjustments.perInterval[i.key] || { mode: "none", value: "" };
+        var m = r.mode || "none";
+        var v = r.value != null ? r.value : "";
+        return '' +
+          '<td class="px-2 py-2 align-top">' +
+            '<div class="flex flex-col gap-1">' +
+              '<select data-role="interval-mode" data-interval="' + i.key + '" ' +
+                      'class="rounded-full border border-slate-700 bg-slate-950/80 px-2 py-1 text-[0.65rem] text-slate-50 focus:outline-none focus:ring-1 focus:ring-sky-500">' +
+                '<option value="none"' + (m === "none" ? " selected" : "") + '>Fără</option>' +
+                '<option value="fixed"' + (m === "fixed" ? " selected" : "") + '>Fix (EUR)</option>' +
+                '<option value="percent"' + (m === "percent" ? " selected" : "") + '>% din bază</option>' +
+              '</select>' +
+              '<input data-role="interval-value" data-interval="' + i.key + '" type="number" step="1" ' +
+                     'class="w-full rounded-xl border border-slate-700 bg-slate-950/80 px-2 py-1 text-[0.65rem] text-slate-50 focus:outline-none focus:ring-1 focus:ring-sky-500" ' +
+                     'placeholder="Ex: 7" value="' + (v !== "" ? v : "") + '" />' +
+            '</div>' +
+          '</td>';
+      }).join("");
 
-      var partnerPill = "";
-      if (assignedPartner) {
-        partnerPill =
-          '<div class="inline-flex items-center gap-2 rounded-full bg-emerald-500/10 text-emerald-300 px-3 py-1 text-xs font-medium ring-1 ring-emerald-500/40">' +
-            '<span class="w-2 h-2 rounded-full bg-emerald-400"></span>' +
-            '<span>Partener alocat: ' + assignedPartner.name + "</span>" +
-          "</div>";
+      // matrice mașini (două rânduri per mașină)
+      var carsRowsHtml = "";
+      allCars.forEach(function(car){
+        var hasAny = intervals.some(function(i){ return car[i.key] != null && !isNaN(car[i.key]); });
+        if (!hasAny) return;
+
+        var baseRowCells = intervals.map(function(i){
+          var base = car[i.key];
+          if (base == null || isNaN(base)) return '<td class="px-2 py-2 text-[0.7rem] text-slate-500 text-center">—</td>';
+          var info = computeFinalPrice(car, period, i.key);
+          var finalText = info ? formatMoney(info.final) : "—";
+          return '' +
+            '<td class="px-2 py-2 align-top text-center">' +
+              '<div class="text-[0.7rem] text-slate-300">Bază: ' + formatMoney(base) + '</div>' +
+              '<div class="text-[0.65rem] text-emerald-200 mt-0.5">Final: ' + finalText + '</div>' +
+            '</td>';
+        }).join("");
+
+        var adjRowCells = intervals.map(function(i){
+          var perCarAll = period.adjustments.perCar[String(car.id)] || {};
+          var cellAdj = perCarAll[i.key] || { mode: "none", value: "" };
+          var m = cellAdj.mode || "none";
+          var v = cellAdj.value != null ? cellAdj.value : "";
+          return '' +
+            '<td class="px-2 py-2 align-top">' +
+              '<div class="flex flex-col gap-1">' +
+                '<select data-role="cell-mode" data-car="' + car.id + '" data-interval="' + i.key + '" ' +
+                        'class="rounded-full border border-slate-700 bg-slate-950/80 px-2 py-1 text-[0.65rem] text-slate-50 focus:outline-none focus:ring-1 focus:ring-sky-500">' +
+                  '<option value="none"' + (m === "none" ? " selected" : "") + '>Fără</option>' +
+                  '<option value="fixed"' + (m === "fixed" ? " selected" : "") + '>Fix (EUR)</option>' +
+                  '<option value="percent"' + (m === "percent" ? " selected" : "") + '>% din bază</option>' +
+                '</select>' +
+                '<input data-role="cell-value" data-car="' + car.id + '" data-interval="' + i.key + '" type="number" step="1" ' +
+                       'class="w-full rounded-xl border border-slate-700 bg-slate-950/80 px-2 py-1 text-[0.65rem] text-slate-50 focus:outline-none focus:ring-1 focus:ring-sky-500" ' +
+                       'placeholder="Ex: -3" value="' + (v !== "" ? v : "") + '" />' +
+              '</div>' +
+            '</td>';
+        }).join("");
+
+        carsRowsHtml +=
+          '<tr class="bg-slate-950/50">' +
+            '<td class="px-3 py-2 align-top" rowspan="2">' +
+              '<div class="text-sm font-semibold text-slate-50">' + getCarName(car) + '</div>' +
+              '<div class="text-[0.7rem] text-slate-400">' +
+                (car.segment || "—") + " · " +
+                (car.transmission === "automata" ? "Automată" : "Manuală") +
+              '</div>' +
+            '</td>' +
+            baseRowCells +
+          '</tr>' +
+          '<tr class="border-b border-slate-800">' +
+            adjRowCells +
+          '</tr>';
+      });
+
+      body.innerHTML =
+        '<section class="space-y-4">' +
+          '<div class="grid grid-cols-1 md:grid-cols-[minmax(0,1.05fr)_minmax(0,1.05fr)] gap-4">' +
+            '<div class="space-y-2">' +
+              '<label class="block text-[0.7rem] font-medium text-slate-300" for="periodNameInput">Denumire perioadă</label>' +
+              '<input id="periodNameInput" type="text" ' +
+                     'class="w-full rounded-xl border border-slate-700 bg-slate-950/80 px-3 py-2 text-sm text-slate-50 focus:outline-none focus:ring-1 focus:ring-sky-500" ' +
+                     'placeholder="Ex: Early December 2025" value="' + (period.name || "") + '" />' +
+            '</div>' +
+            '<div class="grid grid-cols-2 gap-3">' +
+              '<div class="space-y-2">' +
+                '<label class="block text-[0.7rem] font-medium text-slate-300" for="periodStartInput">Data început</label>' +
+                '<input id="periodStartInput" type="date" ' +
+                       'class="w-full rounded-xl border border-slate-700 bg-slate-950/80 px-3 py-2 text-sm text-slate-50 focus:outline-none focus:ring-1 focus:ring-sky-500" ' +
+                       'value="' + (period.startDate || "") + '" />' +
+              '</div>' +
+              '<div class="space-y-2">' +
+                '<label class="block text-[0.7rem] font-medium text-slate-300" for="periodEndInput">Data sfârșit</label>' +
+                '<input id="periodEndInput" type="date" ' +
+                       'class="w-full rounded-xl border border-slate-700 bg-slate-950/80 px-3 py-2 text-sm text-slate-50 focus:outline-none focus:ring-1 focus:ring-sky-500" ' +
+                       'value="' + (period.endDate || "") + '" />' +
+              '</div>' +
+            '</div>' +
+          '</div>' +
+
+          '<div class="rounded-2xl border border-slate-800 bg-slate-950/80 p-3 space-y-3">' +
+            '<div class="text-[0.65rem] uppercase tracking-[0.16em] text-slate-400">Ajustare globală pentru perioada aceasta</div>' +
+            '<p class="text-[0.75rem] text-slate-400">' +
+              'Se aplică tuturor mașinilor și tuturor intervalelor, peste prețurile de bază, înainte de ajustările pe interval și pe mașină.' +
+            '</p>' +
+            '<div class="grid grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] gap-3 items-center">' +
+              '<div class="space-y-1.5">' +
+                '<label class="block text-[0.7rem] font-medium text-slate-300" for="globalAdjType">Tip ajustare</label>' +
+                '<select id="globalAdjType" ' +
+                        'class="w-full rounded-full border border-slate-700 bg-slate-950/80 px-3 py-1.5 text-[0.8rem] text-slate-50 focus:outline-none focus:ring-1 focus:ring-sky-500">' +
+                  '<option value="none"' + (gMode === "none" ? " selected" : "") + '>Fără</option>' +
+                  '<option value="fixed"' + (gMode === "fixed" ? " selected" : "") + '>Valoare fixă (EUR)</option>' +
+                  '<option value="percent"' + (gMode === "percent" ? " selected" : "") + '>% din prețul de bază</option>' +
+                '</select>' +
+              '</div>' +
+              '<div class="space-y-1.5">' +
+                '<label class="block text-[0.7rem] font-medium text-slate-300" for="globalAdjValue">Valoare</label>' +
+                '<input id="globalAdjValue" type="number" step="1" ' +
+                       'class="w-full rounded-xl border border-slate-700 bg-slate-950/80 px-3 py-1.5 text-[0.8rem] text-slate-50 focus:outline-none focus:ring-1 focus:ring-sky-500" ' +
+                       'placeholder="Ex: 5 (poate fi și negativă)" value="' + (gValue !== "" ? gValue : "") + '" />' +
+              '</div>' +
+            '</div>' +
+          '</div>' +
+
+          '<div class="rounded-2xl border border-slate-800 bg-slate-950/80 p-3 space-y-3">' +
+            '<div class="text-[0.65rem] uppercase tracking-[0.16em] text-slate-400">Ajustări globale pe intervale de zile</div>' +
+            '<p class="text-[0.75rem] text-slate-400">' +
+              'Acestea se aplică tuturor mașinilor, doar pentru intervalul de zile respectiv (peste ajustarea globală).' +
+            '</p>' +
+            '<div class="overflow-auto">' +
+              '<table class="min-w-full text-xs">' +
+                '<thead class="bg-slate-900/80 text-slate-400">' +
+                  '<tr>' +
+                    '<th class="px-3 py-2 text-[0.7rem] text-left font-semibold uppercase tracking-[0.16em]">Interval</th>' +
+                    intervalHead +
+                  '</tr>' +
+                '</thead>' +
+                '<tbody>' +
+                  '<tr>' +
+                    '<td class="px-3 py-2 text-[0.7rem] text-slate-300 align-top">Tip &amp; valoare</td>' +
+                    perIntervalRow +
+                  '</tr>' +
+                '</tbody>' +
+              '</table>' +
+            '</div>' +
+          '</div>' +
+
+          '<div class="rounded-2xl border border-slate-800 bg-slate-950/80 p-3 space-y-3">' +
+            '<div class="text-[0.65rem] uppercase tracking-[0.16em] text-slate-400">Matrice prețuri pe mașini</div>' +
+            '<p class="text-[0.75rem] text-slate-400">' +
+              'Pe fiecare celulă ai prețul de bază și prețul final. În rândul de dedesubt poți seta +/- valoare fixă sau procentuală pentru ' +
+              'o anumită mașină și un anumit interval de zile.' +
+            '</p>' +
+            '<div class="overflow-auto">' +
+              '<table class="min-w-full text-xs border border-slate-800 rounded-2xl overflow-hidden">' +
+                '<thead class="bg-slate-900/80 text-slate-400">' +
+                  '<tr>' +
+                    '<th class="px-3 py-2 text-left text-[0.7rem] font-semibold uppercase tracking-[0.16em]">Mașină</th>' +
+                    intervalHead +
+                  '</tr>' +
+                '</thead>' +
+                '<tbody>' + carsRowsHtml + '</tbody>' +
+              '</table>' +
+            '</div>' +
+            '<p class="text-[0.7rem] text-slate-500">' +
+              'Ordinea aplicării: ajustare globală → ajustare pe interval → ajustare specifică pe mașină. Toate sunt relative la prețul de bază.' +
+            '</p>' +
+          '</div>' +
+        '</section>';
+
+      // legăm evenimentele de input-uri
+      document.getElementById("periodNameInput").addEventListener("input", function(e){
+        period.name = e.target.value;
+        renderPeriodsTable();
+      });
+      document.getElementById("periodStartInput").addEventListener("change", function(e){
+        period.startDate = e.target.value;
+        renderPeriodsTable();
+      });
+      document.getElementById("periodEndInput").addEventListener("change", function(e){
+        period.endDate = e.target.value;
+        renderPeriodsTable();
+      });
+
+      document.getElementById("globalAdjType").addEventListener("change", function(e){
+        period.adjustments.global.mode = e.target.value;
+        renderPeriodEdit(); // re-redăm pentru a actualiza prețurile finale
+      });
+      document.getElementById("globalAdjValue").addEventListener("input", function(e){
+        var v = parseFloat(e.target.value);
+        period.adjustments.global.value = isNaN(v) ? 0 : v;
+        renderPeriodEdit();
+      });
+
+      Array.prototype.forEach.call(
+        body.querySelectorAll("select[data-role='interval-mode']"),
+        function(sel){
+          sel.addEventListener("change", function(e){
+            var key = e.target.getAttribute("data-interval");
+            var obj = period.adjustments.perInterval[key] || { mode: "none", value: 0 };
+            obj.mode = e.target.value;
+            period.adjustments.perInterval[key] = obj;
+            renderPeriodEdit();
+          });
+        }
+      );
+
+      Array.prototype.forEach.call(
+        body.querySelectorAll("input[data-role='interval-value']"),
+        function(inp){
+          inp.addEventListener("input", function(e){
+            var key = e.target.getAttribute("data-interval");
+            var obj = period.adjustments.perInterval[key] || { mode: "none", value: 0 };
+            var v = parseFloat(e.target.value);
+            obj.value = isNaN(v) ? 0 : v;
+            period.adjustments.perInterval[key] = obj;
+            renderPeriodEdit();
+          });
+        }
+      );
+
+      Array.prototype.forEach.call(
+        body.querySelectorAll("select[data-role='cell-mode']"),
+        function(sel){
+          sel.addEventListener("change", function(e){
+            var carId = sel.getAttribute("data-car");
+            var key = sel.getAttribute("data-interval");
+            if (!period.adjustments.perCar[carId]) period.adjustments.perCar[carId] = {};
+            var obj = period.adjustments.perCar[carId][key] || { mode: "none", value: 0 };
+            obj.mode = e.target.value;
+            period.adjustments.perCar[carId][key] = obj;
+            renderPeriodEdit();
+          });
+        }
+      );
+
+      Array.prototype.forEach.call(
+        body.querySelectorAll("input[data-role='cell-value']"),
+        function(inp){
+          inp.addEventListener("input", function(e){
+            var carId = inp.getAttribute("data-car");
+            var key = inp.getAttribute("data-interval");
+            if (!period.adjustments.perCar[carId]) period.adjustments.perCar[carId] = {};
+            var obj = period.adjustments.perCar[carId][key] || { mode: "none", value: 0 };
+            var v = parseFloat(e.target.value);
+            obj.value = isNaN(v) ? 0 : v;
+            period.adjustments.perCar[carId][key] = obj;
+            renderPeriodEdit();
+          });
+        }
+      );
+    }
+
+    // ====== PREVIEW MODAL ======
+    
+    function openPreview(periodId) {
+      var period = findPeriodById(periodId);
+      if (!period) return;
+
+      var modal = document.getElementById("previewModal");
+      var titleEl = document.getElementById("previewTitle");
+      var body = document.getElementById("previewBody");
+
+      titleEl.textContent = "Previzualizare prețuri – " + (period.name || ("Perioada #" + period.id));
+
+      // Construim tabelul mare: mașini pe rânduri, intervalele pe coloane
+      var headerCells = intervals.map(function(i){
+        return '<th class="px-3 py-2 text-center text-[0.7rem] font-semibold uppercase tracking-[0.16em]">' + i.label + '</th>';
+      }).join("");
+
+      var rowsHtml = "";
+      allCars.forEach(function(car){
+        var hasAny = intervals.some(function(intv){ return car[intv.key] != null && !isNaN(car[intv.key]); });
+        if (!hasAny) return;
+
+        var cells = intervals.map(function(intv){
+          var info = computeFinalPrice(car, period, intv.key);
+          if (!info) return '<td class="px-3 py-2 text-center text-[0.8rem] text-slate-500">—</td>';
+          return '<td class="px-3 py-2 text-center text-[0.8rem] text-slate-100">' + formatMoney(info.final) + '</td>';
+        }).join("");
+
+        rowsHtml += '' +
+          '<tr class="border-b border-slate-800">' +
+            '<td class="px-3 py-2 text-left align-top">' +
+              '<div class="text-sm font-semibold text-slate-50">' + getCarName(car) + '</div>' +
+              '<div class="text-[0.7rem] text-slate-400">' +
+                (car.segment || "—") + " · " +
+                (car.transmission === "automata" ? "Automată" : "Manuală") +
+              '</div>' +
+            '</td>' +
+            cells +
+          '</tr>';
+      });
+
+      if (!rowsHtml) {
+        body.innerHTML = '<div class="text-[0.8rem] text-slate-400">Nu există mașini cu prețuri definite pentru această previzualizare.</div>';
       } else {
-        partnerPill =
-          '<div class="inline-flex items-center gap-2 rounded-full bg-slate-800 text-slate-300 px-3 py-1 text-xs font-medium ring-1 ring-slate-600">' +
-            '<span class="w-2 h-2 rounded-full bg-slate-500"></span>' +
-            '<span>Partener nealocat</span>' +
-          "</div>";
-      }
-
-      var idCombined = ((r.id_series || "") + (r.id_number ? " " + r.id_number : "")).trim();
-      var licenseCombined = ((r.license_series || "") + (r.license_number ? " " + r.license_number : "")).trim();
-
-      var actionsHtml = "";
-      if (r.status !== "cancelled") {
-        actionsHtml =
-          '<div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3 pt-3 border-t border-slate-800">' +
-            '<div class="flex flex-wrap gap-2">' +
-              '<button id="btnEditReservation" class="px-3 py-1.5 rounded-full border border-slate-600 text-xs font-medium text-slate-100 hover:bg-slate-50 hover:text-slate-900 transition-colors">' +
-                "Modifică rezervarea" +
-              "</button>" +
-              '<button id="btnExtendReservation" class="px-3 py-1.5 rounded-full border border-slate-600 text-xs font-medium text-slate-100 hover:bg-slate-50 hover:text-slate-900 transition-colors">' +
-                "Prelungește returul" +
-              "</button>" +
-              '<button id="btnCancelReservation" class="px-3 py-1.5 rounded-full border border-rose-500/70 text-xs font-medium text-rose-200 bg-rose-500/10 hover:bg-rose-500 hover:text-white hover:border-rose-400 transition-colors">' +
-                "Anulează rezervarea" +
-              "</button>" +
-            "</div>" +
-            '<div class="flex flex-col sm:flex-row sm:items-center gap-2">' +
-              '<select id="partnerSelect" class="border border-slate-700 bg-slate-900/60 text-slate-100 rounded-full px-3 py-1.5 text-xs min-w-[220px] focus:outline-none focus:ring-1 focus:ring-sky-500">' +
-                '<option value="">Alege partener...</option>' +
-                partnersOptions +
-              "</select>" +
-              '<button id="btnAssignPartner" class="px-3 py-1.5 rounded-full border border-sky-500 text-xs font-medium text-sky-100 bg-sky-600 hover:bg-sky-500 hover:border-sky-400 transition-colors">' +
-                "Alocă / schimbă partenerul" +
-              "</button>" +
-            "</div>" +
-          "</div>";
-      }
-
-      document.getElementById("reservationModalBody").innerHTML =
-        '<div class="space-y-6">' +
-
-          '<div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3">' +
-            '<div class="space-y-1">' +
-              sectionLabel("Rezervare") +
-              '<div class="flex items-center gap-3">' +
-                '<div class="font-mono text-xs text-slate-400">ID #' + r.id + "</div>" +
-                '<span class="inline-flex items-center px-3 py-0.5 rounded-full text-[0.7rem] font-medium ' +
-                  statusBadgeClass(r.status) + '">' +
-                  r.status +
-                "</span>" +
-              "</div>" +
-              '<div class="text-[0.7rem] text-slate-400 mt-1">Creată la ' + formatDateTime(r.created_at) + "</div>" +
-            "</div>" +
-            '<div class="flex items-center gap-2">' + partnerPill + "</div>" +
-          "</div>" +
-
-          '<div class="grid grid-cols-1 md:grid-cols-2 gap-5">' +
-            '<div class="space-y-4 bg-slate-900/60 rounded-2xl border border-slate-800 p-4 shadow-inner shadow-slate-900/60">' +
-              sectionLabel("Date client") +
-              fieldRow("Nume client", r.customer_name) +
-              fieldRow("Email", r.customer_email) +
-              fieldRow("Telefon", r.customer_phone) +
-              '<div class="grid grid-cols-2 gap-4 mt-2">' +
-                fieldRow("Data nașterii", formatDateOnly(r.birth_date)) +
-                fieldRow("CNP", r.cnp) +
-              "</div>" +
-              '<div class="mt-2">' +
-                fieldRow("Adresa de domiciliu", r.address) +
-              "</div>" +
-              '<div class="grid grid-cols-2 gap-4 mt-2">' +
-                fieldRow("Țara din care călătorește", r.travel_country) +
-                fieldRow("Număr zbor", r.flight_number) +
-              "</div>" +
-            "</div>" +
-
-            '<div class="space-y-4 bg-slate-900/60 rounded-2xl border border-slate-800 p-4 shadow-inner shadow-slate-900/60">' +
-              sectionLabel("Documente identitate & permis") +
-              fieldRow("Serie și număr CI / Pașaport", idCombined) +
-              fieldRow("Serie și număr permis", licenseCombined) +
-              '<div class="mt-3 space-y-2">' +
-                sectionLabel("Documente încărcate") +
-                '<div class="mt-1">' + docsHtml + "</div>" +
-              "</div>" +
-            "</div>" +
-          "</div>" +
-
-          '<div class="grid grid-cols-1 md:grid-cols-2 gap-5">' +
-            '<div class="space-y-3 bg-slate-900/40 rounded-2xl border border-slate-800 p-4">' +
-              sectionLabel("Rezervare mașină") +
-              fieldRow("Mașină", r.car_name) +
-              fieldRow("Preluare", pickupInfo) +
-              fieldRow("Returnare", dropoffInfo) +
-            "</div>" +
-            '<div class="space-y-3 bg-slate-900/40 rounded-2xl border border-slate-800 p-4">' +
-              sectionLabel("Detalii financiare & observații") +
-              fieldRow("Total", r.total_price != null ? (Number(r.total_price).toFixed(2) + " €") : "-") +
-              '<div class="mt-2 space-y-1">' +
-                sectionLabel("Observații") +
-                '<div class="mt-1 text-sm text-slate-100 whitespace-pre-line">' + (r.notes || "—") + "</div>" +
-              "</div>" +
-            "</div>" +
-          "</div>" +
-
-          actionsHtml +
-
-        "</div>";
-
-      var editBtn = document.getElementById("btnEditReservation");
-      if (editBtn) {
-        editBtn.onclick = function () {
-          alert("Aici, în versiunea finală, vei putea modifica toate câmpurile rezervării și trimite PATCH la backend.");
-        };
-      }
-
-      var extendBtn = document.getElementById("btnExtendReservation");
-      if (extendBtn) {
-        extendBtn.onclick = function () {
-          alert("Aici vei putea modifica data/ora/aeroportul de returnare și recalcula prețul.");
-        };
-      }
-
-      var cancelBtn = document.getElementById("btnCancelReservation");
-      if (cancelBtn) {
-        cancelBtn.onclick = function () {
-          alert("Aici vei putea apela endpoint-ul de anulare a rezervării și actualiza statusul în 'cancelled'.");
-        };
-      }
-
-      var assignBtn = document.getElementById("btnAssignPartner");
-      var partnerSelect = document.getElementById("partnerSelect");
-      if (assignBtn && partnerSelect) {
-        assignBtn.onclick = function () {
-          var pid = partnerSelect.value;
-          if (!pid) {
-            alert("Te rugăm să alegi un partener.");
-            return;
-          }
-          alert("Aici vei trimite rezervarea către partenerul cu ID " + pid + " prin backend.");
-        };
+        body.innerHTML =
+          '<div class="overflow-auto">' +
+            '<table class="min-w-full text-xs border border-slate-800 rounded-2xl overflow-hidden">' +
+              '<thead class="bg-slate-900/80 text-slate-400">' +
+                '<tr>' +
+                  '<th class="px-3 py-2 text-left text-[0.7rem] font-semibold uppercase tracking-[0.16em]">Mașină</th>' +
+                  headerCells +
+                '</tr>' +
+              '</thead>' +
+              '<tbody>' + rowsHtml + '</tbody>' +
+            '</table>' +
+          '</div>';
       }
 
       modal.classList.remove("hidden");
+      modal.classList.add("flex");
     }
 
-    function closeReservationModal() {
-      var modal = document.getElementById("reservationModal");
-      if (modal) modal.classList.add("hidden");
+    function closePreview() {
+      var modal = document.getElementById("previewModal");
+      modal.classList.add("hidden");
+      modal.classList.remove("flex");
     }
 
-    // ======= INIT =======
-    function init() {
-      renderStats(allReservations);
-      applyFiltersAndSort();
 
-      var tbody = document.getElementById("resRows");
-      if (tbody) {
-        tbody.addEventListener("click", function (e) {
-          var btn = e.target.closest("button");
-          if (!btn) return;
-          var action = btn.getAttribute("data-action");
-          var id = parseInt(btn.getAttribute("data-id"), 10);
-          if (action === "view" && id) {
-            openReservationDetails(id);
+    function closePreview() {
+      var modal = document.getElementById("previewModal");
+      modal.classList.add("hidden");
+      modal.classList.remove("flex");
+    }
+
+    // ====== OPERĂRI PERIOADE ======
+    function addNewPeriod() {
+      var editSection = document.getElementById("pricingEditSection");
+
+      // dacă există deja o perioadă nouă selectată și formularul este vizibil,
+      // un nou click pe „Adaugă perioadă” va închide formularul și va renunța la perioada nouă
+      var existingNew = pricingPeriods.find(function(p){ return p.isNew; });
+      if (existingNew && selectedPeriodId === existingNew.id && editSection && !editSection.classList.contains("hidden")) {
+        pricingPeriods = pricingPeriods.filter(function(p){ return p.id !== existingNew.id; });
+        selectedPeriodId = null;
+        renderPeriodsTable();
+        renderPeriodEdit();
+        return;
+      }
+
+      // altfel, creăm o perioadă nouă și deschidem formularul (fără buton de ștergere)
+      var newId = pricingPeriods.reduce(function(max, p){ return Math.max(max, p.id); }, 0) + 1;
+      var now = new Date();
+      var start = formatDateISO(now);
+      var end = formatDateISO(new Date(now.getTime() + 7*24*60*60*1000));
+      pricingPeriods.push({
+        id: newId,
+        name: "Perioadă nouă",
+        startDate: start,
+        endDate: end,
+        adjustments: {
+          global: { mode: "none", value: 0 },
+          perInterval: {},
+          perCar: {}
+        },
+        isNew: true
+      });
+      selectedPeriodId = newId;
+      renderPeriodsTable();
+      renderPeriodEdit();
+
+    }
+
+    function deleteSelectedPeriod() {
+      if (!selectedPeriodId) return;
+      if (!confirm("Sigur vrei să ștergi această perioadă de pricing?")) return;
+      pricingPeriods = pricingPeriods.filter(function(p){ return p.id !== selectedPeriodId; });
+      selectedPeriodId = pricingPeriods.length ? pricingPeriods[0].id : null;
+      renderPeriodsTable();
+      renderPeriodEdit();
+    }
+
+
+    function saveSelectedPeriod() {
+      if (!selectedPeriodId) return;
+      var period = findPeriodById(selectedPeriodId);
+      if (!period) return;
+
+      // pentru demo: doar marcăm ca salvata; în producție aici trimiți către backend
+      period.isNew = false;
+      if (!period.name || !period.name.trim()) {
+        period.name = "Perioadă #" + period.id;
+      }
+
+      renderPeriodsTable();
+      renderPeriodEdit();
+    }
+
+    // ====== INIT ======
+    document.addEventListener("DOMContentLoaded", function(){
+      renderPeriodsTable();
+      renderPeriodEdit();
+
+      document.getElementById("btnAddPeriod").addEventListener("click", addNewPeriod);
+      document.getElementById("btnSavePeriod").addEventListener("click", saveSelectedPeriod);
+      document.getElementById("btnDeletePeriod").addEventListener("click", deleteSelectedPeriod);
+
+      document.getElementById("periodsTableBody").addEventListener("click", function(e){
+        var editBtn = e.target.closest(".btnEditPeriod");
+        var prevBtn = e.target.closest(".btnPreviewPeriod");
+        if (editBtn) {
+          var id = parseInt(editBtn.getAttribute("data-id"), 10);
+          if (!isNaN(id)) {
+            selectedPeriodId = id;
+            renderPeriodEdit();
           }
-        });
-      }
+        } else if (prevBtn) {
+          var pid = parseInt(prevBtn.getAttribute("data-id"), 10);
+          if (!isNaN(pid)) {
+            openPreview(pid);
+          }
+        }
+      });
 
-      var closeBtn = document.getElementById("reservationModalClose");
-      if (closeBtn) {
-        closeBtn.addEventListener("click", closeReservationModal);
-      }
-      var modal = document.getElementById("reservationModal");
-      if (modal) {
-        modal.addEventListener("click", function (e) {
-          if (e.target === modal) closeReservationModal();
-        });
-      }
+      document.getElementById("previewClose").addEventListener("click", closePreview);
+      document.getElementById("previewModal").addEventListener("click", function(e){
+        if (e.target === this) closePreview();
+      });
+    });
+  </script>
 
-      var searchInput = document.getElementById("searchInput");
-      var searchField = document.getElementById("searchField");
-      var sortField = document.getElementById("sortField");
-      var sortDir = document.getElementById("sortDir");
+<script>
+// ==== DEMO DATA & LOGIC REZERVĂRI / PARTENERI / MAȘINI ====
 
-      if (searchInput) {
-        searchInput.addEventListener("input", function () {
-          applyFiltersAndSort();
-        });
-      }
-      if (searchField) {
-        searchField.addEventListener("change", function () {
-          applyFiltersAndSort();
-        });
-      }
-      if (sortField) {
-        sortField.addEventListener("change", function () {
-          applyFiltersAndSort();
-        });
-      }
-      if (sortDir) {
-        sortDir.addEventListener("change", function () {
-          applyFiltersAndSort();
-        });
-      }
+// --- Rezervări demo ---
+
+// Utilizator curent demo (în producție va veni din sistemul de autentificare)
+var currentUserDemo = {
+  id: "admin-demo",
+  name: "Admin demo",
+  role: "admin"
+};
+
+
+var GV_RES_KEY = "gvReservations";
+
+/**
+ * Transformă un obiect de rezervare salvat de site (localStorage)
+ * în structura folosită de admin în `reservationsDemo`.
+ */
+function mapClientReservation(raw, index) {
+  raw = raw || {};
+
+  // ID rezervare
+  var id =
+    raw.id ||
+    raw.reservationId ||
+    ("R-" + (raw.createdAt || Date.now()) + "-" + (index + 1));
+
+  // Nume client
+  var client =
+    raw.client ||
+    raw.clientName ||
+    raw.fullName ||
+    [raw.firstName, raw.lastName].filter(Boolean).join(" ") ||
+    "Client fără nume";
+
+  // Contact
+  var phone = raw.phone || raw.customerPhone || raw.phoneNumber || "";
+  var email = raw.email || raw.customerEmail || raw.emailAddress || "";
+
+  // Mașină
+  var car =
+    raw.car ||
+    raw.carName ||
+    (raw.vehicle && (raw.vehicle.name || [raw.vehicle.brand, raw.vehicle.model].filter(Boolean).join(" "))) ||
+    "";
+
+  // Preluare
+  var pickupAirport =
+    raw.pickupAirport ||
+    raw.pickupAirportName ||
+    raw.pickupAirportCode ||
+    raw.airportPickup ||
+    "";
+  var pickupDate = raw.pickupDate || raw.startDate || raw.rentalStartDate || "";
+  var pickupTime = raw.pickupTime || raw.startTime || "";
+
+  // Returnare
+  var returnAirport =
+    raw.returnAirport ||
+    raw.dropoffAirportName ||
+    raw.dropoffAirportCode ||
+    raw.airportDropoff ||
+    "";
+  var returnDate = raw.returnDate || raw.endDate || raw.rentalEndDate || "";
+  var returnTime = raw.returnTime || raw.endTime || "";
+
+  // Total
+  var total =
+    raw.total != null
+      ? raw.total
+      : (raw.totalPrice != null
+          ? raw.totalPrice
+          : (raw.priceTotal != null ? raw.priceTotal : raw.finalPrice));
+
+  if (typeof total === "string") {
+    var cleaned = total.replace(/[^0-9.,]/g, "").replace(",", ".");
+    var parsed = parseFloat(cleaned);
+    if (!isNaN(parsed)) total = parsed;
+    else total = 0;
+  }
+  if (total == null) total = 0;
+
+  // Status + date meta
+  var status = raw.status || "Nouă";
+  var createdAt = raw.createdAt || raw.created_at || raw.created || "";
+
+  // Date de identificare / călătorie
+  var flightNumber = raw.flightNumber || raw.flight || "";
+  var travelCountry = raw.travelCountry || raw.country || "";
+  var birthDate = raw.birthDate || raw.dateOfBirth || raw.dob || "";
+  var cnp = raw.cnp || raw.personalNumber || "";
+  var licenseSeries = raw.licenseSeries || raw.licenseId || raw.drivingLicense || "";
+  var idDocument = raw.idDocument || raw.nationalId || "";
+  var address = raw.address || raw.fullAddress || "";
+  var notes = raw.notes || raw.observations || "";
+
+  // Documente încărcate – doar numele fișierelor/etichete
+  var documents = [];
+  if (Array.isArray(raw.documents)) {
+    documents = raw.documents.slice();
+  } else if (raw.files && typeof raw.files === "object") {
+    documents = Object.keys(raw.files)
+      .map(function (k) { return raw.files[k]; })
+      .filter(Boolean);
+  }
+
+  // Istoric – dacă nu există, adăugăm o intrare „creat de client”
+  var history = Array.isArray(raw.history) ? raw.history.slice() : [];
+  if (!history.length) {
+    history.push({
+      type: "create",
+      at: createdAt || new Date().toISOString(),
+      byId: null,
+      byName: "Client",
+      byRole: "client",
+      message: "Rezervare creată de client din site."
+    });
+  }
+
+  return {
+    id: id,
+    client: client,
+    phone: phone,
+    email: email,
+    car: car,
+    pickupAirport: pickupAirport,
+    pickupDate: pickupDate,
+    pickupTime: pickupTime,
+    returnAirport: returnAirport,
+    returnDate: returnDate,
+    returnTime: returnTime,
+    total: total,
+    status: status,
+    createdAt: createdAt,
+    flightNumber: flightNumber,
+    travelCountry: travelCountry,
+    birthDate: birthDate,
+    cnp: cnp,
+    licenseSeries: licenseSeries,
+    idDocument: idDocument,
+    address: address,
+    notes: notes,
+    documents: documents,
+    history: history,
+    partnerId: raw.partnerId || null
+  };
+}
+
+/**
+ * Citește rezervările salvate de site în localStorage sub cheia GV_RES_KEY
+ * și le transformă în formatul așteptat de admin (reservationsDemo).
+ */
+function loadReservationsFromStorage() {
+  try {
+    var raw = localStorage.getItem(GV_RES_KEY);
+    if (!raw) return [];
+    var list = JSON.parse(raw);
+    if (!Array.isArray(list)) return [];
+    return list.map(function (item, idx) { return mapClientReservation(item, idx); });
+  } catch (e) {
+    console.error("Nu pot citi rezervările reale din localStorage:", e);
+    return [];
+  }
+}
+
+// În loc de rezervări demo hardcodate, folosim rezervările reale salvate de site.
+var reservationsDemo = loadReservationsFromStorage();
+
+
+
+function normalizePhone(str) {
+  return String(str || "").replace(/[^0-9]/g, "");
+}
+
+function renderReservationsTable(list) {
+  var tbody = document.getElementById("reservationsTableBody");
+  if (!tbody) return;
+  tbody.innerHTML = "";
+  if (!list || !list.length) {
+    tbody.innerHTML = '<tr><td colspan="8" class="py-4 px-3 text-center text-[0.8rem] text-slate-400">Nu s-au găsit rezervări.</td></tr>';
+    return;
+  }
+  list.forEach(function(r) {
+    var statusClass = "bg-slate-800 text-slate-200";
+    if (r.status === "Confirmată") statusClass = "bg-emerald-500/15 text-emerald-200 ring-1 ring-emerald-500/40";
+    if (r.status === "Nouă") statusClass = "bg-sky-500/15 text-sky-200 ring-1 ring-sky-500/40";
+    if (r.status === "Anulată") statusClass = "bg-rose-500/15 text-rose-200 ring-1 ring-rose-500/40";
+
+    var tr = document.createElement("tr");
+    tr.className = "hover:bg-slate-900/70 transition-colors";
+    tr.innerHTML =
+      '<td class="py-3 px-3 text-[0.8rem] text-slate-200">' + r.id + '</td>' +
+      '<td class="py-3 px-3 text-[0.8rem] text-slate-200">' + r.client + '</td>' +
+      '<td class="py-3 px-3 text-[0.8rem] text-slate-200">' + r.car + '</td>' +
+      '<td class="py-3 px-3 text-[0.8rem] text-slate-200">' +
+        '<div>' + r.pickupAirport + '</div>' +
+        '<div class="text-[0.7rem] text-slate-400">' + r.pickupDate + " · " + r.pickupTime + '</div>' +
+      '</td>' +
+      '<td class="py-3 px-3 text-[0.8rem] text-slate-200">' +
+        '<div>' + r.returnAirport + '</div>' +
+        '<div class="text-[0.7rem] text-slate-400">' + r.returnDate + " · " + r.returnTime + '</div>' +
+      '</td>' +
+      '<td class="py-3 px-3 text-[0.8rem] text-slate-200">€' + r.total + '</td>' +
+      '<td class="py-3 px-3 text-[0.8rem]">' +
+        '<span class="inline-flex items-center rounded-full px-2.5 py-0.5 text-[0.7rem] font-medium ' + statusClass + '">' +
+          r.status +
+        '</span>' +
+      '</td>' +
+      '<td class="py-3 px-3 text-[0.8rem]">' +
+        '<button class="btnReservationDetails rounded-full border border-slate-700 bg-slate-950/80 px-3 py-1.5 text-[0.75rem] text-slate-100 hover:bg-slate-50 hover:text-slate-900" ' +
+                'data-id="' + r.id + '">Vezi detalii</button>' +
+      '</td>';
+    tbody.appendChild(tr);
+  });
+}
+
+function filterReservations() {
+  var fieldEl = document.getElementById("resFilterField");
+  var valueEl = document.getElementById("resFilterValue");
+  if (!fieldEl || !valueEl) return reservationsDemo;
+  var field = fieldEl.value;
+  var value = String(valueEl.value || "").toLowerCase().trim();
+  if (!value) return reservationsDemo.slice();
+
+  return reservationsDemo.filter(function(r) {
+    if (field === "all") {
+      var phoneMatch = normalizePhone(r.phone).indexOf(normalizePhone(value)) !== -1;
+      var anyText = (
+        (r.id || "").toLowerCase().includes(value) ||
+        (r.client || "").toLowerCase().includes(value) ||
+        (r.car || "").toLowerCase().includes(value) ||
+        (r.email || "").toLowerCase().includes(value) ||
+        (r.pickupAirport || "").toLowerCase().includes(value) ||
+        (r.returnAirport || "").toLowerCase().includes(value) ||
+        (r.pickupDate || "").toLowerCase().includes(value) ||
+        (r.returnDate || "").toLowerCase().includes(value) ||
+        (r.status || "").toLowerCase().includes(value)
+      );
+      return phoneMatch || anyText;
     }
 
-    document.addEventListener("DOMContentLoaded", init);
-  </script>
+    if (field === "phone") {
+      return normalizePhone(r.phone).indexOf(normalizePhone(value)) !== -1;
+    }
+
+    var mapField = {
+      id: "id",
+      client: "client",
+      car: "car",
+      email: "email",
+      pickupDate: "pickupDate",
+      returnDate: "returnDate",
+      status: "status"
+    };
+    var key = mapField[field];
+    if (!key) return false;
+    return String(r[key] || "").toLowerCase().includes(value);
+  });
+}
+
+
+
+
+// --- Helperi pentru calcul preț rezervare (zile, tarif pe zi, total) & preview ---
+
+function computeRentalDays(pickupDate, pickupTime, returnDate, returnTime) {
+  if (!pickupDate || !returnDate) return 0;
+
+  // fallback pentru ore lipsă
+  var pTime = pickupTime || "10:00";
+  var rTime = returnTime || "10:00";
+
+  var start = new Date(pickupDate + "T" + pTime + ":00");
+  var end = new Date(returnDate + "T" + rTime + ":00");
+
+  if (isNaN(start.getTime()) || isNaN(end.getTime())) return 0;
+
+  var diffMs = end.getTime() - start.getTime();
+  var diffHours = diffMs / (1000 * 60 * 60);
+  if (diffHours <= 0) return 0;
+
+  var fullDays = Math.floor(diffHours / 24);
+  var remainder = diffHours - fullDays * 24;
+
+  var days = fullDays;
+  if (remainder > 2) {
+    days += 1;
+  }
+  if (days <= 0) days = 1;
+
+  return days;
+}
+
+// setează o singură dată tariful pe zi, la momentul inițial al rezervării
+function ensureOriginalDailyRate(res) {
+  if (!res) return;
+  if (res.originalDailyRate != null) return;
+
+  var days = computeRentalDays(res.pickupDate, res.pickupTime, res.returnDate, res.returnTime);
+  if (days > 0 && res.total != null) {
+    res.originalDailyRate = res.total / days;
+  } else {
+    res.originalDailyRate = 0;
+  }
+}
+
+// recalculează totalul pe baza noilor date, păstrând tariful pe zi inițial
+function recalcReservationTotal(res) {
+  if (!res) return;
+  ensureOriginalDailyRate(res);
+
+  var days = computeRentalDays(res.pickupDate, res.pickupTime, res.returnDate, res.returnTime);
+  if (days <= 0) {
+    res.total = 0;
+    return;
+  }
+
+  var daily = res.originalDailyRate || 0;
+  var newTotal = Math.round(daily * days);
+
+  res.lastComputedDays = days;
+  res.total = newTotal;
+}
+
+// calculează un preview de total pe baza unor date/ore date (fără să atingă obiectul principal)
+function computeReservationPreviewTotal(res, pickupDate, pickupTime, returnDate, returnTime) {
+  if (!res) return { days: 0, total: 0 };
+  ensureOriginalDailyRate(res);
+
+  var days = computeRentalDays(pickupDate, pickupTime, returnDate, returnTime);
+  if (days <= 0) return { days: 0, total: 0 };
+
+  var daily = res.originalDailyRate || 0;
+  var total = Math.round(daily * days);
+  return { days: days, total: total };
+}
+
+// actualizează preview-ul de total în panelul „Modifică rezervarea”
+function updateFullEditPreview() {
+  if (!window.currentReservation) return;
+  var pDateEl = document.getElementById("editResPickupDate");
+  var pTimeEl = document.getElementById("editResPickupTime");
+  var rDateEl = document.getElementById("editResReturnDate");
+  var rTimeEl = document.getElementById("editResReturnTime");
+  var outEl = document.getElementById("editResTotalPreview");
+
+  if (!pDateEl || !rDateEl || !outEl) return;
+
+  var pDate = pDateEl.value;
+  var pTime = pTimeEl ? pTimeEl.value : "";
+  var rDate = rDateEl.value;
+  var rTime = rTimeEl ? rTimeEl.value : "";
+
+  var res = window.currentReservation;
+  var preview = computeReservationPreviewTotal(res, pDate, pTime, rDate, rTime);
+
+  if (!preview.days || !preview.total) {
+    outEl.textContent = "—";
+    return;
+  }
+  outEl.textContent = "€" + preview.total + " (" + preview.days + " zile)";
+}
+
+// actualizează preview-ul de extra-plată în panelul „Prelungește”
+function updateExtendPreview() {
+  if (!window.currentReservation) return;
+  var rDateEl = document.getElementById("extResReturnDate");
+  var rTimeEl = document.getElementById("extResReturnTime");
+  var extraEl = document.getElementById("extResExtraPreview");
+  var newTotalEl = document.getElementById("extResNewTotalPreview");
+
+  if (!rDateEl || !extraEl || !newTotalEl) return;
+
+  var rDate = rDateEl.value;
+  var rTime = rTimeEl ? rTimeEl.value : "";
+
+  var res = window.currentReservation;
+  ensureOriginalDailyRate(res);
+
+  var days = computeRentalDays(res.pickupDate, res.pickupTime, rDate || res.returnDate, rTime || res.returnTime);
+  if (!days) {
+    extraEl.textContent = "—";
+    newTotalEl.textContent = "—";
+    return;
+  }
+
+  var daily = res.originalDailyRate || 0;
+  var newTotal = Math.round(daily * days);
+  var baseTotal = res.baseTotalBeforeExtend != null ? res.baseTotalBeforeExtend : (res.total || 0);
+  var extra = newTotal - baseTotal;
+  if (extra < 0) extra = 0;
+
+  newTotalEl.textContent = "€" + newTotal + " (" + days + " zile)";
+  extraEl.textContent = extra > 0 ? ("€" + extra) : "—";
+}
+
+
+
+
+function ensureReservationHistory(res) {
+  if (!res) return;
+  if (!Array.isArray(res.history)) {
+    res.history = [];
+  }
+}
+
+function formatHistoryDateTime(dtStr) {
+  if (!dtStr) return "";
+  var d = new Date(dtStr);
+  if (isNaN(d.getTime())) {
+    // poate fi deja un text "YYYY-MM-DD HH:MM"
+    return String(dtStr);
+  }
+  var yyyy = d.getFullYear();
+  var mm = String(d.getMonth() + 1).padStart(2, "0");
+  var dd = String(d.getDate()).padStart(2, "0");
+  var hh = String(d.getHours()).padStart(2, "0");
+  var mi = String(d.getMinutes()).padStart(2, "0");
+  return dd + "." + mm + "." + yyyy + " " + hh + ":" + mi;
+}
+
+function addReservationHistoryEntry(res, type, message) {
+  if (!res) return;
+  ensureReservationHistory(res);
+  var now = new Date();
+  res.history.unshift({
+    type: type,               // "create" | "modify" | "extend" | "cancel"
+    at: now.toISOString(),
+    byId: currentUserDemo && currentUserDemo.id ? currentUserDemo.id : null,
+    byName: currentUserDemo && currentUserDemo.name ? currentUserDemo.name : "Operator",
+    byRole: currentUserDemo && currentUserDemo.role ? currentUserDemo.role : null,
+    message: message || ""
+  });
+}
+
+
+
+
+
+function formatDateDMY(value) {
+  if (!value) return "";
+  var str = String(value);
+  // dacă e deja în formatul dorit sau alt format, îl lăsăm așa
+  if (/^\d{2}\.\d{2}\.\d{4}$/.test(str)) return str;
+  // dacă e de forma YYYY-MM-DD, îl transformăm în ZZ.LL.AAAA
+  var m = str.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  if (m) {
+    var yyyy = m[1], mm = m[2], dd = m[3];
+    return dd + "." + mm + "." + yyyy;
+  }
+  return str;
+}
+
+function buildFieldDiffMessage(before, after, fieldMap) {
+  if (!before) before = {};
+  if (!after) after = {};
+  var parts = [];
+  Object.keys(fieldMap).forEach(function(key) {
+    var meta = fieldMap[key] || {};
+    var label = meta.label || key;
+    var fmt = meta.format || function(v) { return v; };
+
+    var oldVal = before[key];
+    var newVal = after[key];
+
+    // normalizăm undefined/null la string gol
+    var oldNorm = (oldVal == null ? "" : String(oldVal));
+    var newNorm = (newVal == null ? "" : String(newVal));
+
+    if (oldNorm === newNorm) return;
+
+    var oldText = oldNorm === "" ? "—" : fmt(oldNorm);
+    var newText = newNorm === "" ? "—" : fmt(newNorm);
+
+    parts.push(label + ": " + oldText + " → " + newText);
+  });
+
+  if (!parts.length) return "";
+  return parts.join("; ");
+}
+
+function renderReservationHistory(res) {
+  var container = document.getElementById("resModalHistory");
+  if (!container) return;
+  container.innerHTML = "";
+
+  if (!res) {
+    container.innerHTML = '<p class="text-[0.75rem] text-slate-500">Nu există date pentru această rezervare.</p>';
+    return;
+  }
+
+  ensureReservationHistory(res);
+
+  // dacă nu există niciun eveniment, creăm unul de tip "creare" pe baza createdAt
+  if (!res.history.length) {
+    var createdText = res.createdAt || "";
+    res.history.push({
+      type: "create",
+      at: res.createdAt || new Date().toISOString(),
+      byId: null,
+      byName: "Client",
+      byRole: "client",
+      message: "Rezervare creată de client."
+    });
+  }
+
+  res.history.forEach(function(h) {
+    var row = document.createElement("div");
+    row.className = "flex items-start justify-between gap-2 border-b border-slate-800/60 pb-1 last:border-b-0";
+    var badgeText = "";
+    if (h.type === "create") badgeText = "Creată";
+    else if (h.type === "modify") badgeText = "Modificare";
+    else if (h.type === "extend") badgeText = "Prelungire";
+    else if (h.type === "cancel") badgeText = "Anulare";
+    else badgeText = "Acțiune";
+
+    var actor = h.byName || "—";
+    var when = formatHistoryDateTime(h.at);
+    var msg = h.message || "";
+
+    row.innerHTML =
+      '<div class="flex flex-col">' +
+        '<span class="inline-flex items-center gap-1 text-[0.7rem]">' +
+          '<span class="rounded-full bg-slate-800/80 px-2 py-0.5 text-[0.65rem] uppercase tracking-[0.16em] text-slate-200">' + badgeText + '</span>' +
+          (msg ? '<span class="text-[0.7rem] text-slate-300">' + msg + '</span>' : "") +
+        '</span>' +
+        '<span class="text-[0.7rem] text-slate-500 mt-0.5">De: <span class="font-medium text-slate-200">' + actor + '</span></span>' +
+      '</div>' +
+      '<div class="text-[0.7rem] text-slate-400 whitespace-nowrap ml-2">' + when + "</div>";
+
+    container.appendChild(row);
+  });
+}
+
+// --- Rezervări detalii & alocare partener ---// --- Rezervări detalii & alocare partener ---
+var currentReservation = null;
+var currentReservationDocs = [];
+var currentDocIndex = 0;
+
+
+function openReservationModal(res) {
+  currentReservation = res;
+  var modal = document.getElementById("reservationModal");
+  if (!modal) return;
+
+  var setText = function(id, value) {
+    var el = document.getElementById(id);
+    if (el) el.textContent = value || "—";
+  };
+
+  setText("resModalId", res.id);
+  setText("resModalClient", res.client);
+  setText("resModalPhone", res.phone);
+  setText("resModalEmail", res.email);
+  setText("resModalCar", res.car);
+  setText("resModalPickup", (res.pickupAirport || "") + " · " + (res.pickupDate || "") + " " + (res.pickupTime || ""));
+  setText("resModalReturn", (res.returnAirport || "") + " · " + (res.returnDate || "") + " " + (res.returnTime || ""));
+  setText("resModalTotal", (res.total != null ? ("€" + res.total) : "—"));
+  setText("resModalStatus", res.status || "—");
+  setText("resModalCreatedAt", res.createdAt || "—");
+  setText("resModalLicense", res.licenseSeries);
+  setText("resModalIdDoc", res.idDocument);
+  setText("resModalCnp", res.cnp);
+  setText("resModalBirthDate", res.birthDate);
+  setText("resModalAddress", res.address);
+  setText("resModalFlightNumber", res.flightNumber);
+  setText("resModalTravelCountry", res.travelCountry);
+  setText("resModalNotes", res.notes);
+
+  // documente încărcate (click pentru preview)
+  currentReservationDocs = Array.isArray(res.documents) ? res.documents.slice() : [];
+  currentDocIndex = 0;
+  var docsContainer = document.getElementById("resModalDocuments");
+  if (docsContainer) {
+    docsContainer.innerHTML = "";
+    if (!currentReservationDocs.length) {
+      docsContainer.textContent = "Niciun document încărcat.";
+    } else {
+      currentReservationDocs.forEach(function(name, index) {
+        var btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "inline-flex items-center text-[0.8rem] text-sky-300 hover:text-sky-200 underline underline-offset-2 mr-2 mb-1";
+        btn.textContent = name;
+        btn.addEventListener("click", function() {
+          openDocumentPreview(index);
+        });
+        docsContainer.appendChild(btn);
+      });
+    }
+  }
+
+  // partener alocat
+  var partnerName = "—";
+  if (typeof partnersDemo !== "undefined" && res.partnerId) {
+    var p = partnersDemo.find(function(x){ return x.id === res.partnerId; });
+    if (p) partnerName = p.name;
+  }
+  setText("resModalPartnerName", partnerName);
+
+  // dropdown parteneri
+  var sel = document.getElementById("reservationPartnerSelect");
+  if (sel) {
+    sel.innerHTML = "";
+    var optEmpty = document.createElement("option");
+    optEmpty.value = "";
+    optEmpty.textContent = "Selectează partener";
+    sel.appendChild(optEmpty);
+    if (typeof partnersDemo !== "undefined") {
+      partnersDemo.forEach(function(p) {
+        var opt = document.createElement("option");
+        opt.value = String(p.id);
+        opt.textContent = p.name + " (" + (p.city || "") + ")";
+        sel.appendChild(opt);
+      });
+    }
+    if (res.partnerId) {
+      sel.value = String(res.partnerId);
+    } else {
+      sel.value = "";
+    }
+  }
+
+
+  // istoric modificări / acțiuni
+  renderReservationHistory(res);
+
+  // butoane active / inactive pentru rezervări anulate
+  var isCanceled = (res.status === "Anulată");
+  var actionBtns = modal.querySelectorAll(".reservation-action-btn");
+  actionBtns.forEach(function(btn) {
+    btn.disabled = isCanceled;
+    if (isCanceled) {
+      btn.classList.add("opacity-40", "cursor-not-allowed");
+    } else {
+      btn.classList.remove("opacity-40", "cursor-not-allowed");
+    }
+  });
+
+
+  var fullPanel = document.getElementById("reservationEditFull");
+  var extendPanel = document.getElementById("reservationExtend");
+  if (fullPanel) fullPanel.classList.add("hidden");
+  if (extendPanel) extendPanel.classList.add("hidden");
+
+  modal.classList.remove("hidden");
+  modal.classList.add("flex");
+}
+
+function closeReservationModal() {
+  var modal = document.getElementById("reservationModal");
+  if (!modal) return;
+  modal.classList.add("hidden");
+  modal.classList.remove("flex");
+  currentReservation = null;
+}
+
+function allocateCurrentReservation() {
+  if (!currentReservation) return;
+  var sel = document.getElementById("reservationPartnerSelect");
+  if (!sel) return;
+  var val = sel.value;
+  if (!val) {
+    alert("Selectează partenerul căruia vrei să îi aloci rezervarea.");
+    return;
+  }
+  var pid = parseInt(val, 10);
+  if (!isNaN(pid)) {
+    currentReservation.partnerId = pid;
+    currentReservation.status = "Confirmată";
+  }
+  if (typeof renderReservationsTable === "function" && typeof filterReservations === "function") {
+    renderReservationsTable(filterReservations());
+  }
+  closeReservationModal();
+}
+
+function cancelCurrentReservation() {
+  if (!currentReservation) return;
+  if (!confirm("Sigur vrei să anulezi această rezervare?")) return;
+
+  var oldStatus = currentReservation.status || "—";
+  currentReservation.status = "Anulată";
+
+  // logăm în istoric anularea cu status vechi → nou
+  var msg = "Status: " + oldStatus + " → Anulată";
+  addReservationHistoryEntry(currentReservation, "cancel", msg);
+
+  if (typeof renderReservationsTable === "function" && typeof filterReservations === "function") {
+    renderReservationsTable(filterReservations());
+  }
+  closeReservationModal();
+}
+
+
+function showFullEditPanel() {
+  if (!currentReservation) return;
+  var full = document.getElementById("reservationEditFull");
+  var ext = document.getElementById("reservationExtend");
+  if (ext) ext.classList.add("hidden");
+  if (!full) return;
+  full.classList.remove("hidden");
+
+  // snapshot înainte de modificare (pentru istoric)
+  try {
+    currentReservation._beforeFullEdit = JSON.parse(JSON.stringify(currentReservation));
+  } catch (e) {
+    currentReservation._beforeFullEdit = Object.assign({}, currentReservation);
+  }
+
+  var setVal = function(id, value) {
+    var el = document.getElementById(id);
+    if (el) el.value = value || "";
+  };
+
+  setVal("editResClient", currentReservation.client);
+  setVal("editResPhone", currentReservation.phone);
+  setVal("editResEmail", currentReservation.email);
+  setVal("editResFlightNumber", currentReservation.flightNumber);
+  setVal("editResPickupAirport", currentReservation.pickupAirport);
+  setVal("editResPickupDate", currentReservation.pickupDate);
+  setVal("editResPickupTime", currentReservation.pickupTime);
+  setVal("editResReturnAirport", currentReservation.returnAirport);
+  setVal("editResReturnDate", currentReservation.returnDate);
+  setVal("editResReturnTime", currentReservation.returnTime);
+  setVal("editResTravelCountry", currentReservation.travelCountry);
+  setVal("editResBirthDate", currentReservation.birthDate);
+  setVal("editResCnp", currentReservation.cnp);
+  setVal("editResLicense", currentReservation.licenseSeries);
+  setVal("editResIdDoc", currentReservation.idDocument);
+  setVal("editResAddress", currentReservation.address);
+  var notesEl = document.getElementById("editResNotes");
+  if (notesEl) notesEl.value = currentReservation.notes || "";
+
+  // actualizăm imediat preview-ul de total
+  updateFullEditPreview();
+}
+
+function showExtendPanel() {
+  if (!currentReservation) return;
+  var full = document.getElementById("reservationEditFull");
+  var ext = document.getElementById("reservationExtend");
+  if (full) full.classList.add("hidden");
+  if (!ext) return;
+  ext.classList.remove("hidden");
+
+  // memorăm totalul de bază înainte de prelungire, pentru a calcula diferența
+  ensureOriginalDailyRate(currentReservation);
+  currentReservation.baseTotalBeforeExtend = currentReservation.total != null ? currentReservation.total : 0;
+
+  // snapshot înainte de prelungire (pentru istoric, ca la Modifică rezervarea)
+  try {
+    currentReservation._beforeExtend = JSON.parse(JSON.stringify(currentReservation));
+  } catch (e) {
+    currentReservation._beforeExtend = Object.assign({}, currentReservation);
+  }
+
+  var setVal = function(id, value) {
+    var el = document.getElementById(id);
+    if (el) el.value = value || "";
+  };
+  setVal("extResReturnAirport", currentReservation.returnAirport);
+  setVal("extResReturnDate", currentReservation.returnDate);
+  setVal("extResReturnTime", currentReservation.returnTime);
+
+  // actualizăm imediat preview-ul de prelungire
+  updateExtendPreview();
+}
+
+
+function saveFullEdit() {
+  if (!currentReservation) return;
+  var getVal = function(id) {
+    var el = document.getElementById(id);
+    return el ? el.value : "";
+  };
+
+  currentReservation.client = getVal("editResClient");
+  currentReservation.phone = getVal("editResPhone");
+  currentReservation.email = getVal("editResEmail");
+  currentReservation.flightNumber = getVal("editResFlightNumber");
+  currentReservation.pickupAirport = getVal("editResPickupAirport");
+  currentReservation.pickupDate = getVal("editResPickupDate");
+  currentReservation.pickupTime = getVal("editResPickupTime");
+  currentReservation.returnAirport = getVal("editResReturnAirport");
+  currentReservation.returnDate = getVal("editResReturnDate");
+  currentReservation.returnTime = getVal("editResReturnTime");
+  currentReservation.travelCountry = getVal("editResTravelCountry");
+  currentReservation.birthDate = getVal("editResBirthDate");
+  currentReservation.cnp = getVal("editResCnp");
+  currentReservation.licenseSeries = getVal("editResLicense");
+  currentReservation.idDocument = getVal("editResIdDoc");
+  currentReservation.address = getVal("editResAddress");
+  currentReservation.notes = getVal("editResNotes");
+
+  // recalculează totalul păstrând tariful pe zi de la momentul rezervării
+  recalcReservationTotal(currentReservation);
+
+  // construim un mesaj detaliat cu ce s-a schimbat (vechea valoare → valoarea nouă)
+  var before = currentReservation._beforeFullEdit || {};
+  var fieldMap = {
+    client: { label: "Nume client" },
+    phone: { label: "Telefon" },
+    email: { label: "Email" },
+    pickupDate: { label: "Data preluare", format: formatDateDMY },
+    pickupTime: { label: "Ora preluare" },
+    returnDate: { label: "Data returnare", format: formatDateDMY },
+    returnTime: { label: "Ora returnare" },
+    pickupAirport: { label: "Aeroport preluare" },
+    returnAirport: { label: "Aeroport returnare" },
+    travelCountry: { label: "Țara de călătorie" },
+    flightNumber: { label: "Număr zbor" },
+    cnp: { label: "CNP" },
+    birthDate: { label: "Data nașterii", format: formatDateDMY },
+    address: { label: "Adresă" },
+    licenseSeries: { label: "Permis" },
+    idDocument: { label: "Act identitate" },
+    notes: { label: "Observații" },
+    car: { label: "Mașină" },
+    status: { label: "Status" },
+    total: { label: "Preț", format: function(v) { return v + " €"; } }
+  };
+  var diffMsg = buildFieldDiffMessage(before, currentReservation, fieldMap);
+  if (!diffMsg) {
+    diffMsg = "Modificare fără câmpuri schimbate.";
+  }
+
+  // logăm în istoric modificarea cu detalii (doar câmpurile care s-au schimbat)
+  addReservationHistoryEntry(currentReservation, "modify", diffMsg);
+
+  if (typeof renderReservationsTable === "function" && typeof filterReservations === "function") {
+    renderReservationsTable(filterReservations());
+  }
+  openReservationModal(currentReservation);
+}
+function saveExtendEdit() {
+  if (!currentReservation) return;
+  var getVal = function(id) {
+    var el = document.getElementById(id);
+    return el ? el.value : "";
+  };
+
+  // păstrăm vechiul total pentru a putea calcula diferența de plată
+  ensureOriginalDailyRate(currentReservation);
+  var oldTotal = currentReservation.total != null ? currentReservation.total : 0;
+
+  currentReservation.returnAirport = getVal("extResReturnAirport");
+  currentReservation.returnDate = getVal("extResReturnDate");
+  currentReservation.returnTime = getVal("extResReturnTime");
+
+  // recalculează totalul pe baza noii date/orei de returnare
+  recalcReservationTotal(currentReservation);
+
+  var newTotal = currentReservation.total != null ? currentReservation.total : 0;
+  var extra = newTotal - oldTotal;
+  if (extra < 0) extra = 0;
+
+  // pentru demo: arătăm clar cât trebuie să mai achite clientul
+  if (extra > 0) {
+    alert("Clientul trebuie să mai achite aproximativ €" + extra + " (" + currentReservation.lastComputedDays + " zile în total, tarif inițial ~€" + Math.round(currentReservation.originalDailyRate) + "/zi).");
+  } else {
+    alert("Nu rezultă diferențe de plată față de totalul inițial.");
+  }
+
+  // construim mesaj detaliat pentru istoric (prelungire), în același format ca la Modifică rezervarea
+  var beforeExt = currentReservation._beforeExtend || {};
+  var fieldMapExt = {
+    returnDate:   { label: "Data returnare",   format: formatDateDMY },
+    returnTime:   { label: "Ora returnare" },
+    returnAirport:{ label: "Aeroport returnare" },
+    total:        { label: "Preț",            format: function(v) { return v + " €"; } }
+  };
+  var diffMsgExt = buildFieldDiffMessage(beforeExt, currentReservation, fieldMapExt);
+
+  // dacă nu s-a schimbat nimic, mesaj fallback
+  if (!diffMsgExt) {
+    diffMsgExt = "Prelungire efectuată, fără schimbări de câmpuri relevante.";
+  }
+
+  // dacă există diferență de plată > 0, o adăugăm separat
+  if (extra > 0) {
+    diffMsgExt += "; Diferență de plată: " + extra + " €";
+  }
+
+  // logăm în istoric prelungirea perioadei cu detalii
+  addReservationHistoryEntry(currentReservation, "extend", diffMsgExt);
+
+  if (typeof renderReservationsTable === "function" && typeof filterReservations === "function") {
+    renderReservationsTable(filterReservations());
+  }
+  openReservationModal(currentReservation);
+}
+// Rezervări init + detalii simple
+document.addEventListener("DOMContentLoaded", function() {
+  renderReservationsTable(reservationsDemo);
+
+  var applyBtn = document.getElementById("resApplyFilter");
+  var resetBtn = document.getElementById("resResetFilter");
+
+  if (applyBtn) applyBtn.addEventListener("click", function() {
+    renderReservationsTable(filterReservations());
+  });
+
+  if (resetBtn) resetBtn.addEventListener("click", function() {
+    document.getElementById("resFilterValue").value = "";
+    document.getElementById("resFilterField").value = "all";
+    renderReservationsTable(reservationsDemo);
+  });
+
+  var tbody = document.getElementById("reservationsTableBody");
+  if (tbody) {
+    tbody.addEventListener("click", function(e) {
+      var btn = e.target.closest(".btnReservationDetails");
+      if (!btn) return;
+      var id = btn.getAttribute("data-id");
+      var res = reservationsDemo.find(function(r) { return r.id === id; });
+      if (!res) return;
+      openReservationModal(res);
+    });
+  }
+});
+
+
+document.addEventListener("DOMContentLoaded", function() {
+  var modal = document.getElementById("reservationModal");
+  if (modal) {
+    modal.addEventListener("click", function(e) {
+      if (e.target === modal) closeReservationModal();
+    });
+  }
+  var closeBtns = document.querySelectorAll("[data-reservation-modal-close]");
+  closeBtns.forEach(function(btn) {
+    btn.addEventListener("click", function() {
+      closeReservationModal();
+    });
+  });
+
+  var btnAlloc = document.getElementById("btnAllocateReservation");
+  if (btnAlloc) btnAlloc.addEventListener("click", allocateCurrentReservation);
+
+  var btnCancel = document.getElementById("btnCancelReservation");
+  if (btnCancel) btnCancel.addEventListener("click", cancelCurrentReservation);
+
+  var btnModify = document.getElementById("btnModifyReservation");
+  if (btnModify) btnModify.addEventListener("click", showFullEditPanel);
+
+  var btnExtend = document.getElementById("btnExtendReservation");
+  if (btnExtend) btnExtend.addEventListener("click", showExtendPanel);
+
+  var btnCancelEditFull = document.getElementById("btnCancelEditFull");
+  if (btnCancelEditFull) btnCancelEditFull.addEventListener("click", function() {
+    var full = document.getElementById("reservationEditFull");
+    if (full) full.classList.add("hidden");
+  });
+
+  var btnCancelExtend = document.getElementById("btnCancelExtend");
+  if (btnCancelExtend) btnCancelExtend.addEventListener("click", function() {
+    var ext = document.getElementById("reservationExtend");
+    if (ext) ext.classList.add("hidden");
+  });
+
+  var btnSaveEditFull = document.getElementById("btnSaveEditFull");
+  if (btnSaveEditFull) btnSaveEditFull.addEventListener("click", saveFullEdit);
+
+  var btnSaveExtend = document.getElementById("btnSaveExtend");
+  if (btnSaveExtend) btnSaveExtend.addEventListener("click", saveExtendEdit);
+
+
+  // live preview pentru total nou (modificare)
+  var pDate = document.getElementById("editResPickupDate");
+  var pTime = document.getElementById("editResPickupTime");
+  var rDate = document.getElementById("editResReturnDate");
+  var rTime = document.getElementById("editResReturnTime");
+  [pDate, pTime, rDate, rTime].forEach(function(el) {
+    if (!el) return;
+    el.addEventListener("change", updateFullEditPreview);
+    el.addEventListener("input", updateFullEditPreview);
+  });
+
+  // live preview pentru prelungire (diferență de plată)
+  var extRDate = document.getElementById("extResReturnDate");
+  var extRTime = document.getElementById("extResReturnTime");
+  [extRDate, extRTime].forEach(function(el) {
+    if (!el) return;
+    el.addEventListener("change", updateExtendPreview);
+    el.addEventListener("input", updateExtendPreview);
+  });
+});
+
+
+// --- Parteneri demo ---
+var partnersDemo = [
+  {
+    id: 1,
+    name: "AutoRent București",
+    city: "București",
+    phone: "+40 721 000 111",
+    email: "office@autorent-bucuresti.ro",
+    website: "https://autorent-bucuresti.ro",
+    commission: 15,
+    status: "activ"
+  },
+  {
+    id: 2,
+    name: "Transilvania Rent a Car",
+    city: "Cluj-Napoca",
+    phone: "+40 744 222 333",
+    email: "contact@transilvania-rent.ro",
+    website: "https://transilvania-rent.ro",
+    commission: 12,
+    status: "activ"
+  },
+  {
+    id: 3,
+    name: "Moldova Auto",
+    city: "Iași",
+    phone: "+40 733 444 555",
+    email: "rezervari@moldova-auto.ro",
+    website: "",
+    commission: 10,
+    status: "inactiv"
+  }
+];
+
+function renderPartnersTable(list) {
+  var tbody = document.getElementById("partnersTableBody");
+  if (!tbody) return;
+  tbody.innerHTML = "";
+  if (!list || !list.length) {
+    tbody.innerHTML = '<tr><td colspan="6" class="py-4 px-3 text-center text-[0.8rem] text-slate-400">Nu există parteneri.</td></tr>';
+    return;
+  }
+  list.forEach(function(p) {
+    var statusClass = p.status === "activ"
+      ? "bg-emerald-500/15 text-emerald-200 ring-1 ring-emerald-500/40"
+      : "bg-slate-800 text-slate-300";
+
+    var tr = document.createElement("tr");
+    tr.className = "hover:bg-slate-900/70 transition-colors";
+    tr.innerHTML =
+      '<td class="py-3 px-3 text-[0.8rem] text-slate-200">' + p.name + '</td>' +
+      '<td class="py-3 px-3 text-[0.8rem] text-slate-200">' + p.city + '</td>' +
+      '<td class="py-3 px-3 text-[0.8rem] text-slate-200">' +
+        '<div>' + p.phone + '</div>' +
+        '<div class="text-[0.7rem] text-slate-400">' + (p.email || "") + '</div>' +
+      '</td>' +
+      '<td class="py-3 px-3 text-[0.8rem] text-slate-200">' + p.commission + '%</td>' +
+      '<td class="py-3 px-3 text-[0.8rem]">' +
+        '<span class="inline-flex items-center rounded-full px-2.5 py-0.5 text-[0.7rem] font-medium ' + statusClass + '">' +
+          (p.status === "activ" ? "Activ" : "Inactiv") +
+        '</span>' +
+      '</td>' +
+      '<td class="py-3 px-3 text-[0.8rem]">' +
+        '<div class="flex flex-wrap gap-2">' +
+          '<button class="btnPartnerDetails rounded-full border border-slate-700 bg-slate-950/80 px-3 py-1.5 text-[0.75rem] text-slate-100 hover:bg-slate-50 hover:text-slate-900" data-id="' + p.id + '">Vezi detalii</button>' +
+          '<button class="btnPartnerBookings rounded-full border border-slate-700 bg-slate-950/80 px-3 py-1.5 text-[0.75rem] text-slate-100 hover:bg-sky-500/90 hover:border-sky-400 hover:text-slate-950" data-id="' + p.id + '">Vezi rezervări</button>' +
+        '</div>' +
+      '</td>';
+    tbody.appendChild(tr);
+  });
+}
+
+
+// --- Parteneri: detalii & rezervări allocate ---
+var currentPartner = null;
+var currentPartnerBookings = null;
+var isNewPartner = false;
+
+
+function openPartnerDetailsModal(p, isNew) {
+  currentPartner = p || {};
+  isNewPartner = !!isNew;
+  var modal = document.getElementById("partnerDetailsModal");
+  if (!modal) return;
+
+  var title = document.getElementById("partnerDetailsTitle");
+  if (title) {
+    title.textContent = isNewPartner ? "Adaugă partener" : "Detalii partener";
+  }
+
+  var nameInput = document.getElementById("partnerModalNameInput");
+  var cityInput = document.getElementById("partnerModalCityInput");
+  var phoneInput = document.getElementById("partnerModalPhoneInput");
+  var emailInput = document.getElementById("partnerModalEmailInput");
+  var websiteInput = document.getElementById("partnerModalWebsiteInput");
+  var usernameInput = document.getElementById("partnerModalUsername");
+  var passwordInput = document.getElementById("partnerModalPassword");
+  var commInput = document.getElementById("partnerModalCommission");
+  var statusSel = document.getElementById("partnerModalStatus");
+
+  if (nameInput) nameInput.value = p.name || "";
+  if (cityInput) cityInput.value = p.city || "";
+  if (phoneInput) phoneInput.value = p.phone || "";
+  if (emailInput) emailInput.value = p.email || "";
+  if (websiteInput) websiteInput.value = p.website || "";
+  if (usernameInput) usernameInput.value = p.username || "";
+  if (passwordInput) passwordInput.value = p.password || "";
+  if (commInput) commInput.value = p.commission != null ? p.commission : "";
+  if (statusSel) statusSel.value = p.status || "activ";
+
+  modal.classList.remove("hidden");
+  modal.classList.add("flex");
+}
+
+
+function closePartnerDetailsModal() {
+  var modal = document.getElementById("partnerDetailsModal");
+  if (!modal) return;
+  modal.classList.add("hidden");
+  modal.classList.remove("flex");
+  currentPartner = null;
+}
+
+
+function saveCurrentPartnerDetails() {
+  if (!currentPartner) currentPartner = {};
+
+  var nameInput = document.getElementById("partnerModalNameInput");
+  var cityInput = document.getElementById("partnerModalCityInput");
+  var phoneInput = document.getElementById("partnerModalPhoneInput");
+  var emailInput = document.getElementById("partnerModalEmailInput");
+  var websiteInput = document.getElementById("partnerModalWebsiteInput");
+  var usernameInput = document.getElementById("partnerModalUsername");
+  var passwordInput = document.getElementById("partnerModalPassword");
+  var commInput = document.getElementById("partnerModalCommission");
+  var statusSel = document.getElementById("partnerModalStatus");
+
+  currentPartner.name = nameInput ? nameInput.value.trim() : currentPartner.name;
+  currentPartner.city = cityInput ? cityInput.value.trim() : currentPartner.city;
+  currentPartner.phone = phoneInput ? phoneInput.value.trim() : currentPartner.phone;
+  currentPartner.email = emailInput ? emailInput.value.trim() : currentPartner.email;
+  currentPartner.website = websiteInput ? websiteInput.value.trim() : currentPartner.website;
+  currentPartner.username = usernameInput ? usernameInput.value.trim() : currentPartner.username;
+  currentPartner.password = passwordInput ? passwordInput.value.trim() : currentPartner.password;
+
+  if (commInput) {
+    var v = parseInt(commInput.value, 10);
+    if (!isNaN(v)) currentPartner.commission = v;
+  }
+  if (statusSel) {
+    currentPartner.status = statusSel.value || "activ";
+  }
+
+  if (isNewPartner) {
+    var maxId = partnersDemo.reduce(function(max, p) { return Math.max(max, p.id); }, 0);
+    currentPartner.id = maxId + 1;
+    partnersDemo.push(currentPartner);
+    isNewPartner = false;
+  }
+
+  if (typeof renderPartnersTable === "function") {
+    renderPartnersTable(partnersDemo.slice());
+  }
+  closePartnerDetailsModal();
+}
+
+
+function classifyReservationForPartner(res) {
+  if (res.status === "Anulată") return "anulata";
+  var today = new Date();
+  var pickup = res.pickupDate ? new Date(res.pickupDate) : null;
+  if (pickup && pickup <= today) return "finalizata";
+  return "in_curs";
+}
+
+function openPartnerBookingsModal(p) {
+  currentPartnerBookings = p;
+  var modal = document.getElementById("partnerBookingsModal");
+  if (!modal) return;
+
+  var titleEl = document.getElementById("partnerBookingsTitle");
+  if (titleEl) titleEl.textContent = "Rezervări alocate – " + p.name;
+
+  // populăm selecte lună/an
+  var monthSel = document.getElementById("partnerBookingsMonth");
+  var yearSel = document.getElementById("partnerBookingsYear");
+  if (monthSel) {
+    monthSel.innerHTML = "";
+    var optAll = document.createElement("option");
+    optAll.value = "";
+    optAll.textContent = "Toate lunile";
+    monthSel.appendChild(optAll);
+    var months = ["01","02","03","04","05","06","07","08","09","10","11","12"];
+    months.forEach(function(m) {
+      var o = document.createElement("option");
+      o.value = m;
+      o.textContent = m;
+      monthSel.appendChild(o);
+    });
+  }
+  if (yearSel) {
+    yearSel.innerHTML = "";
+    var optAllY = document.createElement("option");
+    optAllY.value = "";
+    optAllY.textContent = "Toți anii";
+    yearSel.appendChild(optAllY);
+    var years = [];
+    for (var y = 2025; y <= 2065; y++) {
+      years.push(String(y));
+    }
+    years.forEach(function(y) {
+      var oy = document.createElement("option");
+      oy.value = y;
+      oy.textContent = y;
+      yearSel.appendChild(oy);
+    });
+  }
+
+  renderPartnerBookingsTable();
+
+  modal.classList.remove("hidden");
+  modal.classList.add("flex");
+}
+
+function closePartnerBookingsModal() {
+  var modal = document.getElementById("partnerBookingsModal");
+  if (!modal) return;
+  modal.classList.add("hidden");
+  modal.classList.remove("flex");
+  currentPartnerBookings = null;
+}
+
+function renderPartnerBookingsTable() {
+  if (!currentPartnerBookings) return;
+  var p = currentPartnerBookings;
+  var tbody = document.getElementById("partnerBookingsTableBody");
+  if (!tbody) return;
+
+  var monthSel = document.getElementById("partnerBookingsMonth");
+  var yearSel = document.getElementById("partnerBookingsYear");
+  var monthVal = monthSel ? monthSel.value : "";
+  var yearVal = yearSel ? yearSel.value : "";
+
+  var rows = [];
+  if (typeof reservationsDemo !== "undefined") {
+    rows = reservationsDemo.filter(function(r) {
+      return r.partnerId === p.id;
+    });
+  }
+
+  if (monthVal) {
+    rows = rows.filter(function(r) {
+      return r.pickupDate && r.pickupDate.slice(5,7) === monthVal;
+    });
+  }
+  if (yearVal) {
+    rows = rows.filter(function(r) {
+      return r.pickupDate && r.pickupDate.slice(0,4) === yearVal;
+    });
+  }
+
+  var sumFinalizate = 0;
+  var sumInCurs = 0;
+  var sumAnulate = 0;
+
+  tbody.innerHTML = "";
+
+  if (!rows.length) {
+    tbody.innerHTML = '<tr><td colspan="7" class="py-4 px-3 text-center text-[0.8rem] text-slate-400">Nu există rezervări alocate acestui partener pentru filtrul selectat.</td></tr>';
+  } else {
+    rows.forEach(function(r) {
+      var grp = classifyReservationForPartner(r);
+      var comm = (r.total || 0) * (p.commission || 0) / 100;
+      if (grp === "finalizata") sumFinalizate += comm;
+      if (grp === "in_curs") sumInCurs += comm;
+      if (grp === "anulata") sumAnulate += comm;
+
+      var tr = document.createElement("tr");
+      tr.className = "border-b border-slate-800";
+      tr.innerHTML =
+        '<td class="px-3 py-2 text-[0.8rem] text-slate-200">' + (r.id || "") + '</td>' +
+        '<td class="px-3 py-2 text-[0.8rem] text-slate-200">' + (r.client || "") + '</td>' +
+        '<td class="px-3 py-2 text-[0.8rem] text-slate-200">' + (r.car || "") + '</td>' +
+        '<td class="px-3 py-2 text-[0.8rem] text-slate-200">' + (r.pickupDate || "") + '</td>' +
+        '<td class="px-3 py-2 text-[0.8rem] text-slate-200">' + (r.returnDate || "") + '</td>' +
+        '<td class="px-3 py-2 text-[0.8rem] text-slate-200">€' + (r.total != null ? r.total : "") + '</td>' +
+        '<td class="px-3 py-2 text-[0.8rem] text-emerald-200">€' + comm.toFixed(0) + '</td>';
+      tbody.appendChild(tr);
+    });
+  }
+
+  var elF = document.getElementById("partnerCommFinalizate");
+  var elC = document.getElementById("partnerCommInCurs");
+  var elA = document.getElementById("partnerCommAnulate");
+  if (elF) elF.textContent = "€" + sumFinalizate.toFixed(0);
+  if (elC) elC.textContent = "€" + sumInCurs.toFixed(0);
+  if (elA) elA.textContent = "€" + sumAnulate.toFixed(0);
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+  renderPartnersTable(partnersDemo);
+
+  var sortField = document.getElementById("partnerSortField");
+  var searchInput = document.getElementById("partnerSearch");
+  if (sortField) sortField.addEventListener("change", function() {
+    var field = sortField.value;
+    var list = partnersDemo.slice();
+    if (field === "name") list.sort(function(a,b) { return a.name.localeCompare(b.name); });
+    if (field === "city") list.sort(function(a,b) { return a.city.localeCompare(b.city); });
+    if (field === "status") list.sort(function(a,b) { return a.status.localeCompare(b.status); });
+    renderPartnersTable(list);
+  });
+  if (searchInput) searchInput.addEventListener("input", function() {
+    var v = searchInput.value.toLowerCase().trim();
+    var filtered = partnersDemo.filter(function(p) {
+      return (
+        (p.name || "").toLowerCase().includes(v) ||
+        (p.city || "").toLowerCase().includes(v) ||
+        (p.email || "").toLowerCase().includes(v) ||
+        (p.phone || "").toLowerCase().includes(v)
+      );
+    });
+    renderPartnersTable(filtered);
+  });
+
+  var tbody = document.getElementById("partnersTableBody");
+  if (tbody) {
+    tbody.addEventListener("click", function(e) {
+      var btnDetails = e.target.closest(".btnPartnerDetails");
+      var btnBookings = e.target.closest(".btnPartnerBookings");
+      if (btnDetails) {
+        var id = parseInt(btnDetails.getAttribute("data-id"), 10);
+        var p = partnersDemo.find(function(x) { return x.id === id; });
+        if (!p) return;
+        openPartnerDetailsModal(p, false);
+      } else if (btnBookings) {
+        var id2 = parseInt(btnBookings.getAttribute("data-id"), 10);
+        var p2 = partnersDemo.find(function(x) { return x.id === id2; });
+        if (!p2) return;
+        openPartnerBookingsModal(p2);
+      }
+    });
+  }
+
+  var btnAddPartner = document.getElementById("btnAddPartner");
+  if (btnAddPartner) btnAddPartner.addEventListener("click", function() {
+    var newPartner = {
+      id: null,
+      name: "",
+      city: "",
+      phone: "",
+      email: "",
+      website: "",
+      commission: 10,
+      status: "activ",
+      username: "",
+      password: ""
+    };
+    openPartnerDetailsModal(newPartner, true);
+  });
+});
+
+// --- Mașini demo ---
+// folosim allCars din scriptul de Pricing ca punct de plecare, dacă există
+var carsList = (typeof allCars !== "undefined" ? allCars.slice() : []);
+var isNewCarForm = false;
+
+
+function renderCarsTable() {
+  var tbody = document.getElementById("carsTableBody");
+  if (!tbody) return;
+  tbody.innerHTML = "";
+  if (!carsList.length) {
+    tbody.innerHTML = '<tr><td colspan="4" class="py-4 px-3 text-center text-[0.8rem] text-slate-400">Nu există mașini în listă.</td></tr>';
+    return;
+  }
+  carsList.forEach(function(c, idx) {
+    var status = c.status || "activ";
+    var statusClass = status === "activ"
+      ? "bg-emerald-500/15 text-emerald-200 ring-1 ring-emerald-500/40"
+      : "bg-slate-800 text-slate-300";
+
+    var tr = document.createElement("tr");
+    tr.className = "hover:bg-slate-900/70 transition-colors cursor-pointer";
+    tr.setAttribute("data-index", idx);
+    tr.innerHTML =
+      '<td class="py-3 px-3 text-[0.8rem] text-slate-200">' + (c.brand || "") + " " + (c.model || "") + '</td>' +
+      '<td class="py-3 px-3 text-[0.8rem] text-slate-200">' + (c.segment || "-") + '</td>' +
+      '<td class="py-3 px-3 text-[0.8rem] text-slate-200">' +
+        (c.transmission === "automata" ? "Automată" : "Manuală") +
+      '</td>' +
+      '<td class="py-3 px-3 text-[0.8rem]">' +
+        '<span class="inline-flex items-center rounded-full px-2.5 py-0.5 text-[0.7rem] font-medium ' + statusClass + '">' +
+          (status === "activ" ? "Activă" : "Inactivă") +
+        '</span>' +
+      '</td>';
+    tbody.appendChild(tr);
+  });
+}
+
+
+function loadCarIntoForm(car) {
+  var deleteBtn = document.getElementById("btnDeleteCar");
+  if (!car) {
+    document.getElementById("carBrand").value = "";
+    document.getElementById("carModel").value = "";
+    document.getElementById("carSegment").value = "";
+    document.getElementById("carSeats").value = "";
+    document.getElementById("carTransmission").value = "automata";
+    document.getElementById("carFuel").value = "benzina";
+    document.getElementById("carStatus").value = "activ";
+    document.getElementById("price_1_day").value = "";
+    document.getElementById("price_2_days").value = "";
+    document.getElementById("price_3_days").value = "";
+    document.getElementById("price_4_6_days").value = "";
+    document.getElementById("price_7_14_days").value = "";
+    document.getElementById("price_15_23_days").value = "";
+    document.getElementById("price_24_plus_days").value = "";
+    if (deleteBtn) deleteBtn.classList.add("hidden");
+    return;
+  }
+
+  document.getElementById("carBrand").value = car.brand || "";
+  document.getElementById("carModel").value = car.model || "";
+  document.getElementById("carSegment").value = car.segment || "";
+  document.getElementById("carSeats").value = car.seats || "";
+  document.getElementById("carTransmission").value = car.transmission || "automata";
+  document.getElementById("carFuel").value = car.fuel || "benzina";
+  document.getElementById("carStatus").value = car.status || "activ";
+  document.getElementById("price_1_day").value = car.price_1_day || "";
+  document.getElementById("price_2_days").value = car.price_2_days || "";
+  document.getElementById("price_3_days").value = car.price_3_days || "";
+  document.getElementById("price_4_6_days").value = car.price_4_6_days || "";
+  document.getElementById("price_7_14_days").value = car.price_7_14_days || "";
+  document.getElementById("price_15_23_days").value = car.price_15_23_days || "";
+  document.getElementById("price_24_plus_days").value = car.price_24_plus_days || "";
+
+  // Dacă mașina există în listă, arătăm butonul de ștergere
+  var exists = carsList && carsList.some(function(c) {
+    return c.brand === (car.brand || "") && c.model === (car.model || "");
+  });
+  if (deleteBtn) {
+    if (exists) deleteBtn.classList.remove("hidden");
+    else deleteBtn.classList.add("hidden");
+  }
+}
+
+
+function readCarFromForm(existing) {
+  var c = existing || {};
+  c.brand = document.getElementById("carBrand").value.trim();
+  c.model = document.getElementById("carModel").value.trim();
+  c.segment = document.getElementById("carSegment").value.trim();
+  c.seats = parseInt(document.getElementById("carSeats").value || "0", 10) || 0;
+  c.transmission = document.getElementById("carTransmission").value;
+  c.fuel = document.getElementById("carFuel").value;
+  c.status = document.getElementById("carStatus").value;
+  c.price_1_day = parseInt(document.getElementById("price_1_day").value || "0", 10) || 0;
+  c.price_2_days = parseInt(document.getElementById("price_2_days").value || "0", 10) || 0;
+  c.price_3_days = parseInt(document.getElementById("price_3_days").value || "0", 10) || 0;
+  c.price_4_6_days = parseInt(document.getElementById("price_4_6_days").value || "0", 10) || 0;
+  c.price_7_14_days = parseInt(document.getElementById("price_7_14_days").value || "0", 10) || 0;
+  c.price_15_23_days = parseInt(document.getElementById("price_15_23_days").value || "0", 10) || 0;
+  c.price_24_plus_days = parseInt(document.getElementById("price_24_plus_days").value || "0", 10) || 0;
+  if (!c.id) {
+    c.id = carsList.length ? Math.max.apply(null, carsList.map(function(x){return x.id||0;})) + 1 : 1;
+  }
+  return c;
+}
+
+
+document.addEventListener("DOMContentLoaded", function() {
+  renderCarsTable();
+  if (carsList.length) loadCarIntoForm(carsList[0]);
+
+  var carFormWrapper = document.getElementById("carFormWrapper");
+  if (carFormWrapper) carFormWrapper.classList.add("hidden");
+
+  var tbody = document.getElementById("carsTableBody");
+  if (tbody) {
+    tbody.addEventListener("click", function(e) {
+      var tr = e.target.closest("tr[data-index]");
+      if (!tr) return;
+      var idx = parseInt(tr.getAttribute("data-index"), 10);
+      var car = carsList[idx];
+      isNewCarForm = false;
+      loadCarIntoForm(car);
+      if (carFormWrapper) carFormWrapper.classList.remove("hidden");
+    });
+  }
+
+  var btnNewCar = document.getElementById("btnNewCar");
+  if (btnNewCar) btnNewCar.addEventListener("click", function() {
+    if (isNewCarForm && carFormWrapper && !carFormWrapper.classList.contains("hidden")) {
+      carFormWrapper.classList.add("hidden");
+      isNewCarForm = false;
+      return;
+    }
+    isNewCarForm = true;
+    loadCarIntoForm({});
+    if (carFormWrapper) carFormWrapper.classList.remove("hidden");
+  });
+
+  var btnSaveCar = document.getElementById("btnSaveCar");
+  if (btnSaveCar) btnSaveCar.addEventListener("click", function() {
+    var existingIndex = -1;
+    if (carsList.length) {
+      var currentBrand = document.getElementById("carBrand").value.trim();
+      var currentModel = document.getElementById("carModel").value.trim();
+      existingIndex = carsList.findIndex(function(c) {
+        return c.brand === currentBrand && c.model === currentModel;
+      });
+    }
+    if (existingIndex >= 0) {
+      carsList[existingIndex] = readCarFromForm(carsList[existingIndex]);
+    } else {
+      carsList.push(readCarFromForm(null));
+    }
+    renderCarsTable();
+    alert("Mașina a fost salvată în listă (demo local). În implementarea finală, aici se va apela backend-ul.");
+  });
+
+  var btnDeleteCar = document.getElementById("btnDeleteCar");
+  if (btnDeleteCar) btnDeleteCar.addEventListener("click", function() {
+    var currentBrand = document.getElementById("carBrand").value.trim();
+    var currentModel = document.getElementById("carModel").value.trim();
+    if (!currentBrand && !currentModel) {
+      alert("Selectează mai întâi o mașină din listă pentru a o șterge.");
+      return;
+    }
+    var idx = carsList.findIndex(function(c) {
+      return c.brand === currentBrand && c.model === currentModel;
+    });
+    if (idx === -1) {
+      alert("Mașina selectată nu a fost găsită în listă.");
+      return;
+    }
+    if (!confirm("Sigur vrei să ștergi această mașină din listă?")) return;
+    carsList.splice(idx, 1);
+    renderCarsTable();
+    if (carsList.length) {
+      loadCarIntoForm(carsList[0]);
+    } else {
+      loadCarIntoForm({});
+    }
+  });
+});
+
+document.addEventListener("DOMContentLoaded", function() {
+  var detModal = document.getElementById("partnerDetailsModal");
+  if (detModal) {
+    detModal.addEventListener("click", function(e) {
+      if (e.target === detModal) closePartnerDetailsModal();
+    });
+  }
+  var detCloseBtns = document.querySelectorAll("[data-partner-details-close]");
+  detCloseBtns.forEach(function(btn) {
+    btn.addEventListener("click", function() {
+      closePartnerDetailsModal();
+    });
+  });
+  var btnSavePartner = document.getElementById("btnSavePartnerDetails");
+  if (btnSavePartner) btnSavePartner.addEventListener("click", saveCurrentPartnerDetails);
+
+  var bookModal = document.getElementById("partnerBookingsModal");
+  if (bookModal) {
+    bookModal.addEventListener("click", function(e) {
+      if (e.target === bookModal) closePartnerBookingsModal();
+    });
+  }
+  var bookCloseBtns = document.querySelectorAll("[data-partner-bookings-close]");
+  bookCloseBtns.forEach(function(btn) {
+    btn.addEventListener("click", function() {
+      closePartnerBookingsModal();
+    });
+  });
+
+  var monthSel = document.getElementById("partnerBookingsMonth");
+  var yearSel = document.getElementById("partnerBookingsYear");
+  if (monthSel) monthSel.addEventListener("change", renderPartnerBookingsTable);
+  if (yearSel) yearSel.addEventListener("change", renderPartnerBookingsTable);
+});
+
+
+
+function openDocumentPreview(index) {
+  if (!currentReservationDocs || !currentReservationDocs.length) return;
+  if (index < 0 || index >= currentReservationDocs.length) index = 0;
+  currentDocIndex = index;
+
+  var modal = document.getElementById("documentPreviewModal");
+  if (!modal) return;
+
+  // Ascundem temporar modalul de detalii rezervare, ca să nu acopere preview-ul documentelor
+  var resModal = document.getElementById("reservationModal");
+  if (resModal && !resModal.classList.contains("hidden")) {
+    resModal.dataset.wasOpenBeforeDoc = "1";
+    resModal.classList.add("hidden");
+    resModal.classList.remove("flex");
+  }
+
+  var fileName = currentReservationDocs[currentDocIndex] || "Document";
+  var titleEl = document.getElementById("docPreviewTitle");
+  if (titleEl) titleEl.textContent = fileName;
+
+  var ext = "";
+  var parts = fileName.split(".");
+  if (parts.length > 1) {
+    ext = parts[parts.length - 1].toLowerCase();
+  }
+
+  var imgEl = document.getElementById("docPreviewImage");
+  var fb = document.getElementById("docPreviewFallback");
+  var dl = document.getElementById("docPreviewDownload");
+
+  var url = "/uploads/documents/" + fileName;
+
+  if (["jpg","jpeg","png","gif","webp","bmp"].indexOf(ext) !== -1) {
+    if (imgEl) {
+      imgEl.src = url;
+      imgEl.classList.remove("hidden");
+    }
+    if (fb) fb.classList.add("hidden");
+  } else {
+    if (imgEl) {
+      imgEl.src = "";
+      imgEl.classList.add("hidden");
+    }
+    if (fb) fb.classList.remove("hidden");
+    if (dl) dl.href = url;
+  }
+
+  modal.classList.remove("hidden");
+  modal.classList.add("flex");
+}
+
+function closeDocumentPreview() {
+  var modal = document.getElementById("documentPreviewModal");
+  if (!modal) return;
+  modal.classList.add("hidden");
+  modal.classList.remove("flex");
+
+  // Dacă modalul de detalii era deschis înainte de preview, îl redeschidem automat
+  var resModal = document.getElementById("reservationModal");
+  if (resModal && resModal.dataset.wasOpenBeforeDoc === "1") {
+    resModal.dataset.wasOpenBeforeDoc = "";
+    resModal.classList.remove("hidden");
+    resModal.classList.add("flex");
+  }
+}
+
+function navigateDocPreview(delta) {
+  if (!currentReservationDocs || !currentReservationDocs.length) return;
+  var next = currentDocIndex + delta;
+  if (next < 0) next = currentReservationDocs.length - 1;
+  if (next >= currentReservationDocs.length) next = 0;
+  openDocumentPreview(next);
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+  var docModal = document.getElementById("documentPreviewModal");
+  if (docModal) {
+    docModal.addEventListener("click", function(e) {
+      if (e.target === docModal) closeDocumentPreview();
+    });
+  }
+  var closeBtns = document.querySelectorAll("[data-doc-preview-close]");
+  closeBtns.forEach(function(btn) {
+    btn.addEventListener("click", function() {
+      closeDocumentPreview();
+    });
+  });
+
+  var btnPrev = document.getElementById("docPrevBtn");
+  var btnNext = document.getElementById("docNextBtn");
+  if (btnPrev) btnPrev.addEventListener("click", function(e) {
+    e.stopPropagation();
+    navigateDocPreview(-1);
+  });
+  if (btnNext) btnNext.addEventListener("click", function(e) {
+    e.stopPropagation();
+    navigateDocPreview(1);
+  });
+});
+
+
+</script>
+
+
+<!-- Modal Detalii Rezervare -->
+<div id="reservationModal" class="fixed inset-0 z-40 hidden items-center justify-center bg-black/60 backdrop-blur-sm">
+  <div class="max-w-5xl w-full mx-4 max-h-[90vh] overflow-auto rounded-3xl border border-slate-800 bg-slate-950 shadow-soft">
+    <div class="sticky top-0 z-10 flex items-center justify-between border-b border-slate-800 bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 px-5 py-3">
+      <div>
+        <h2 class="text-sm font-semibold tracking-tight text-slate-50">Detalii rezervare <span id="resModalId" class="text-sky-300"></span></h2>
+        <p class="text-[0.7rem] text-slate-400">
+          Vezi toate detaliile și alocă rezervarea unui partener.
+        </p>
+      </div>
+      <button type="button" data-reservation-modal-close
+              class="rounded-full bg-slate-900/70 px-2 py-1 text-xl leading-none text-slate-400 hover:bg-slate-800 hover:text-slate-100">
+        &times;
+      </button>
+    </div>
+    <div class="px-5 py-4 space-y-4 text-sm text-slate-100">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="space-y-2">
+          <h3 class="text-xs font-semibold tracking-[0.16em] uppercase text-slate-400">Client & contact</h3>
+          <div class="rounded-2xl border border-slate-800 bg-slate-950/80 p-3 space-y-1.5">
+            <div class="flex justify-between text-[0.8rem]">
+              <span class="text-slate-400">Nume client</span>
+              <span id="resModalClient" class="font-medium text-slate-50"></span>
+            </div>
+            <div class="flex justify-between text-[0.8rem]">
+              <span class="text-slate-400">Telefon</span>
+              <span id="resModalPhone" class="font-medium text-slate-50"></span>
+            </div>
+            <div class="flex justify-between text-[0.8rem]">
+              <span class="text-slate-400">Email</span>
+              <span id="resModalEmail" class="font-medium text-slate-50"></span>
+            </div>
+          </div>
+        </div>
+        <div class="space-y-2">
+          <h3 class="text-xs font-semibold tracking-[0.16em] uppercase text-slate-400">Rezervare</h3>
+          <div class="rounded-2xl border border-slate-800 bg-slate-950/80 p-3 space-y-1.5">
+            <div class="flex justify-between text-[0.8rem]">
+              <span class="text-slate-400">Mașină</span>
+              <span id="resModalCar" class="font-medium text-slate-50"></span>
+            </div>
+            <div class="flex justify-between text-[0.8rem]">
+              <span class="text-slate-400">Preluare</span>
+              <span id="resModalPickup" class="font-medium text-slate-50 text-right"></span>
+            </div>
+            <div class="flex justify-between text-[0.8rem]">
+              <span class="text-slate-400">Returnare</span>
+              <span id="resModalReturn" class="font-medium text-slate-50 text-right"></span>
+            </div>
+            <div class="flex justify-between text-[0.8rem]">
+              <span class="text-slate-400">Total</span>
+              <span id="resModalTotal" class="font-semibold text-emerald-300"></span>
+            </div>
+            <div class="flex justify-between text-[0.8rem]">
+              <span class="text-slate-400">Status</span>
+              <span id="resModalStatus" class="inline-flex items-center rounded-full bg-slate-800 px-2.5 py-0.5 text-[0.7rem] font-medium"></span>
+            </div>
+            <div class="flex justify-between text-[0.8rem]">
+              <span class="text-slate-400">Creată la</span>
+              <span id="resModalCreatedAt" class="font-medium text-slate-50"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="space-y-2">
+          <h3 class="text-xs font-semibold tracking-[0.16em] uppercase text-slate-400">Documente identitate</h3>
+          <div class="rounded-2xl border border-slate-800 bg-slate-950/80 p-3 space-y-1.5">
+            <div class="flex justify-between text-[0.8rem]">
+              <span class="text-slate-400">Serie și număr permis</span>
+              <span id="resModalLicense" class="font-medium text-slate-50"></span>
+            </div>
+            <div class="flex justify-between text-[0.8rem]">
+              <span class="text-slate-400">Serie și număr CI / Pașaport</span>
+              <span id="resModalIdDoc" class="font-medium text-slate-50 text-right"></span>
+            </div>
+            <div class="flex justify-between text-[0.8rem]">
+              <span class="text-slate-400">CNP</span>
+              <span id="resModalCnp" class="font-medium text-slate-50"></span>
+            </div>
+            <div class="flex justify-between text-[0.8rem]">
+              <span class="text-slate-400">Data nașterii</span>
+              <span id="resModalBirthDate" class="font-medium text-slate-50"></span>
+            </div>
+            <div class="space-y-1 mt-2">
+              <div class="text-[0.75rem] text-slate-400">Adresa de domiciliu</div>
+              <div id="resModalAddress" class="text-[0.8rem] font-medium text-slate-50"></div>
+            </div>
+          </div>
+        </div>
+        <div class="space-y-2">
+          <h3 class="text-xs font-semibold tracking-[0.16em] uppercase text-slate-400">Călătorie & observații</h3>
+          <div class="rounded-2xl border border-slate-800 bg-slate-950/80 p-3 space-y-1.5">
+            <div class="flex justify-between text-[0.8rem]">
+              <span class="text-slate-400">Număr zbor</span>
+              <span id="resModalFlightNumber" class="font-medium text-slate-50"></span>
+            </div>
+            <div class="flex justify-between text-[0.8rem]">
+              <span class="text-slate-400">Țara din care călătorește</span>
+              <span id="resModalTravelCountry" class="font-medium text-slate-50 text-right"></span>
+            </div>
+            <div class="space-y-1 mt-2">
+              <div class="text-[0.75rem] text-slate-400">Observații</div>
+              <div id="resModalNotes" class="text-[0.8rem] text-slate-50"></div>
+            </div>
+            <div class="space-y-1 mt-3">
+              <div class="text-[0.75rem] text-slate-400">Documente încărcate de client</div>
+              <div id="resModalDocuments" class="text-[0.8rem] text-slate-50">
+                Niciun document încărcat în acest demo. În implementarea finală, aici vor apărea fișierele reale.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Formulare editare / prelungire -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="reservationEditPanels">
+        <div id="reservationEditFull" class="hidden rounded-2xl border border-slate-800 bg-slate-950/80 p-3 space-y-2">
+          <div class="flex items-center justify-between">
+            <h3 class="text-xs font-semibold tracking-[0.16em] uppercase text-slate-400">Modifică rezervarea</h3>
+            <button type="button" id="btnCancelEditFull" class="text-[0.7rem] text-slate-400 hover:text-slate-100">
+              Anulează
+            </button>
+          </div>
+          <p class="text-[0.75rem] text-slate-400">
+            Poți ajusta toate câmpurile completate de client. Modificările se aplică doar în acest demo în memoria locală.
+          </p>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-[0.8rem]">
+            <div class="space-y-1">
+              <label class="block text-[0.7rem] text-slate-300">Nume client</label>
+              <input id="editResClient" type="text" class="w-full rounded-xl border border-slate-700 bg-slate-950/80 px-2 py-1" />
+            </div>
+            <div class="space-y-1">
+              <label class="block text-[0.7rem] text-slate-300">Telefon</label>
+              <input id="editResPhone" type="text" class="w-full rounded-xl border border-slate-700 bg-slate-950/80 px-2 py-1" />
+            </div>
+            <div class="space-y-1">
+              <label class="block text-[0.7rem] text-slate-300">Email</label>
+              <input id="editResEmail" type="email" class="w-full rounded-xl border border-slate-700 bg-slate-950/80 px-2 py-1" />
+            </div>
+            <div class="space-y-1">
+              <label class="block text-[0.7rem] text-slate-300">Număr zbor</label>
+              <input id="editResFlightNumber" type="text" class="w-full rounded-xl border border-slate-700 bg-slate-950/80 px-2 py-1" />
+            </div>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-[0.8rem]">
+            <div class="space-y-1">
+              <label class="block text-[0.7rem] text-slate-300">Aeroport preluare</label>
+              <input id="editResPickupAirport" type="text" class="w-full rounded-xl border border-slate-700 bg-slate-950/80 px-2 py-1" />
+            </div>
+            <div class="space-y-1 grid grid-cols-[1.1fr_0.9fr] gap-2">
+              <div>
+                <label class="block text-[0.7rem] text-slate-300">Data preluare</label>
+                <input id="editResPickupDate" type="date" class="w-full rounded-xl border border-slate-700 bg-slate-950/80 px-2 py-1" />
+              </div>
+              <div>
+                <label class="block text-[0.7rem] text-slate-300">Ora preluare</label>
+                <input id="editResPickupTime" type="time" class="w-full rounded-xl border border-slate-700 bg-slate-950/80 px-2 py-1" />
+              </div>
+            </div>
+            <div class="space-y-1">
+              <label class="block text-[0.7rem] text-slate-300">Aeroport returnare</label>
+              <input id="editResReturnAirport" type="text" class="w-full rounded-xl border border-slate-700 bg-slate-950/80 px-2 py-1" />
+            </div>
+            <div class="space-y-1 grid grid-cols-[1.1fr_0.9fr] gap-2">
+              <div>
+                <label class="block text-[0.7rem] text-slate-300">Data returnare</label>
+                <input id="editResReturnDate" type="date" class="w-full rounded-xl border border-slate-700 bg-slate-950/80 px-2 py-1" />
+              </div>
+              <div>
+                <label class="block text-[0.7rem] text-slate-300">Ora returnare</label>
+                <input id="editResReturnTime" type="time" class="w-full rounded-xl border border-slate-700 bg-slate-950/80 px-2 py-1" />
+              </div>
+            </div>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-[0.8rem]">
+            <div class="space-y-1">
+              <label class="block text-[0.7rem] text-slate-300">Țara din care călătorește</label>
+              <input id="editResTravelCountry" type="text" class="w-full rounded-xl border border-slate-700 bg-slate-950/80 px-2 py-1" />
+            </div>
+            <div class="space-y-1">
+              <label class="block text-[0.7rem] text-slate-300">Data nașterii</label>
+              <input id="editResBirthDate" type="date" class="w-full rounded-xl border border-slate-700 bg-slate-950/80 px-2 py-1" />
+            </div>
+            <div class="space-y-1">
+              <label class="block text-[0.7rem] text-slate-300">CNP</label>
+              <input id="editResCnp" type="text" class="w-full rounded-xl border border-slate-700 bg-slate-950/80 px-2 py-1" />
+            </div>
+            <div class="space-y-1">
+              <label class="block text-[0.7rem] text-slate-300">Serie și număr permis</label>
+              <input id="editResLicense" type="text" class="w-full rounded-xl border border-slate-700 bg-slate-950/80 px-2 py-1" />
+            </div>
+            <div class="space-y-1 md:col-span-2">
+              <label class="block text-[0.7rem] text-slate-300">Serie și număr CI / Pașaport</label>
+              <input id="editResIdDoc" type="text" class="w-full rounded-xl border border-slate-700 bg-slate-950/80 px-2 py-1" />
+            </div>
+          </div>
+          <div class="space-y-1 text-[0.8rem]">
+            <label class="block text-[0.7rem] text-slate-300">Adresa de domiciliu</label>
+            <input id="editResAddress" type="text" class="w-full rounded-xl border border-slate-700 bg-slate-950/80 px-2 py-1" />
+          </div>
+          <div class="space-y-1 text-[0.8rem]">
+            <label class="block text-[0.7rem] text-slate-300">Observații</label>
+            <textarea id="editResNotes" rows="2" class="w-full rounded-xl border border-slate-700 bg-slate-950/80 px-2 py-1"></textarea>
+          </div>
+          
+          <div class="flex items-center justify-between gap-2 pt-1 text-[0.8rem]">
+            <div class="text-[0.75rem] text-slate-400">
+              Noul total (preview):
+              <span id="editResTotalPreview" class="ml-1 font-semibold text-emerald-300">—</span>
+            </div>
+            <div class="flex gap-2">
+              <button type="button" id="btnSaveEditFull"
+                      class="rounded-full bg-slate-50 px-3 py-1.5 text-[0.7rem] font-semibold text-slate-900 shadow-soft hover:bg-white/90">
+                Salvează modificările
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div id="reservationExtend" class="hidden rounded-2xl border border-slate-800 bg-slate-950/80 p-3 space-y-2">
+          <div class="flex items-center justify-between">
+            <h3 class="text-xs font-semibold tracking-[0.16em] uppercase text-slate-400">Prelungire rezervare</h3>
+            <button type="button" id="btnCancelExtend" class="text-[0.7rem] text-slate-400 hover:text-slate-100">
+              Anulează
+            </button>
+          </div>
+          <p class="text-[0.75rem] text-slate-400">
+            Poți modifica aeroportul, data și ora de returnare. Prețul final va fi recalculat în implementarea cu backend.
+          </p>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-[0.8rem]">
+            <div class="space-y-1">
+              <label class="block text-[0.7rem] text-slate-300">Aeroport returnare</label>
+              <input id="extResReturnAirport" type="text" class="w-full rounded-xl border border-slate-700 bg-slate-950/80 px-2 py-1" />
+            </div>
+            <div class="space-y-1 grid grid-cols-[1.1fr_0.9fr] gap-2">
+              <div>
+                <label class="block text-[0.7rem] text-slate-300">Data returnare</label>
+                <input id="extResReturnDate" type="date" class="w-full rounded-xl border border-slate-700 bg-slate-950/80 px-2 py-1" />
+              </div>
+              <div>
+                <label class="block text-[0.7rem] text-slate-300">Ora returnare</label>
+                <input id="extResReturnTime" type="time" class="w-full rounded-xl border border-slate-700 bg-slate-950/80 px-2 py-1" />
+              </div>
+            </div>
+          </div>
+          
+          <div class="flex items-center justify-between gap-2 pt-1 text-[0.8rem]">
+            <div class="text-[0.75rem] text-slate-400 space-x-2">
+              <span>Total nou (preview): <span id="extResNewTotalPreview" class="font-semibold text-emerald-300">—</span></span>
+              <span>Diferență de plată: <span id="extResExtraPreview" class="font-semibold text-amber-300">—</span></span>
+            </div>
+            <div class="flex gap-2">
+              <button type="button" id="btnSaveExtend"
+                      class="rounded-full bg-slate-50 px-3 py-1.5 text-[0.7rem] font-semibold text-slate-900 shadow-soft hover:bg-white/90">
+                Salvează prelungirea
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-[minmax(0,1.2fr)_minmax(0,1.1fr)] gap-4">
+        <div class="space-y-2">
+          <h3 class="text-xs font-semibold tracking-[0.16em] uppercase text-slate-400">Alocare partener</h3>
+          <div class="rounded-2xl border border-slate-800 bg-slate-950/80 p-3 space-y-3">
+            <div class="text-[0.8rem] text-slate-400">
+              Alege partenerul căruia îi aloci această rezervare. La salvare, statusul va deveni <span class="font-semibold text-emerald-300">Confirmată</span>.
+            </div>
+            <div class="space-y-1.5">
+              <label class="block text-[0.7rem] font-medium text-slate-300">Partener alocat</label>
+              <div class="text-[0.8rem] font-medium text-slate-100" id="resModalPartnerName">—</div>
+            </div>
+            <div class="space-y-1.5">
+              <label class="block text-[0.7rem] font-medium text-slate-300">Selectează partener</label>
+              <select id="reservationPartnerSelect"
+                      class="w-full rounded-full border border-slate-700 bg-slate-950/80 px-3 py-1.5 text-[0.8rem] text-slate-50 focus:outline-none focus:ring-1 focus:ring-sky-500">
+              </select>
+            </div>
+            <div class="flex justify-end">
+              <button id="btnAllocateReservation"
+                      class="reservation-action-btn rounded-full bg-emerald-500 px-3 py-1.5 text-[0.8rem] font-semibold text-emerald-950 shadow-soft hover:bg-emerald-400">
+                Alocă rezervarea
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="space-y-2">
+          <h3 class="text-xs font-semibold tracking-[0.16em] uppercase text-slate-400">Acțiuni rapide</h3>
+          <div class="rounded-2xl border border-slate-800 bg-slate-950/80 p-3 space-y-2">
+            <p class="text-[0.75rem] text-slate-400">
+              Poți modifica, prelungi sau anula rezervarea. Pentru rezervările anulate, butoanele vor fi dezactivate.
+            </p>
+            <div class="flex flex-wrap gap-2">
+              <button id="btnModifyReservation"
+                      class="reservation-action-btn rounded-full border border-slate-700 bg-slate-900/80 px-3 py-1.5 text-[0.8rem] font-medium text-slate-100 hover:bg-slate-50 hover:text-slate-900">
+                Modifică rezervarea
+              </button>
+              <button id="btnExtendReservation"
+                      class="reservation-action-btn rounded-full border border-slate-700 bg-slate-900/80 px-3 py-1.5 text-[0.8rem] font-medium text-slate-100 hover:bg-slate-50 hover:text-slate-900">
+                Prelungește
+              </button>
+              <button id="btnCancelReservation"
+                      class="reservation-action-btn rounded-full border border-rose-500/60 bg-rose-500/10 px-3 py-1.5 text-[0.8rem] font-medium text-rose-100 hover:bg-rose-500/80 hover:text-rose-950">
+                Anulează rezervarea
+              </button>
+            </div>
+          </div>
+        </div>
+ 
+        <div class="space-y-2">
+          <h3 class="text-xs font-semibold tracking-[0.16em] uppercase text-slate-400">Istoric modificări</h3>
+          <div class="rounded-2xl border border-slate-800 bg-slate-950/80 p-3 space-y-2 max-h-64 overflow-auto">
+            <div id="resModalHistory" class="space-y-1 text-[0.78rem] text-slate-200">
+              <!-- Istoric acțiuni va fi randat dinamic -->
+            </div>
+          </div>
+        </div>
+     </div>
+
+      <div class="flex justify-end">
+        <button type="button" data-reservation-modal-close
+                class="rounded-full border border-slate-700 bg-slate-900/80 px-3 py-1.5 text-[0.8rem] text-slate-100 hover:bg-slate-50 hover:text-slate-900">
+          Închide
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Detalii Partener -->
+<div 
+id="partnerDetailsModal" class="fixed inset-0 z-40 hidden items-center justify-center bg-black/60 backdrop-blur-sm">
+  <div class="max-w-3xl w-full mx-4 max-h-[90vh] overflow-auto rounded-3xl border border-slate-800 bg-slate-950 shadow-soft">
+    <div class="sticky top-0 z-10 flex items-center justify-between border-b border-slate-800 bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 px-5 py-3">
+      <div>
+        <h2 id="partnerDetailsTitle" class="text-sm font-semibold tracking-tight text-slate-50">Detalii partener</h2>
+        <p class="text-[0.7rem] text-slate-400">Editează datele partenerului, comisionul și contul de acces la portal.</p>
+      </div>
+      <button type="button" data-partner-details-close
+              class="rounded-full bg-slate-900/70 px-2 py-1 text-xl leading-none text-slate-400 hover:bg-slate-800 hover:text-slate-100">
+        &times;
+      </button>
+    </div>
+    <div class="px-5 py-4 space-y-4 text-sm text-slate-100">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="space-y-2">
+          <label class="block text-[0.7rem] font-medium text-slate-300">Nume partener</label>
+          <input id="partnerModalNameInput" type="text"
+                 class="w-full rounded-xl border border-slate-700 bg-slate-950/80 px-3 py-1.5 text-[0.8rem] text-slate-50 focus:outline-none focus:ring-1 focus:ring-sky-500" />
+        </div>
+        <div class="space-y-2">
+          <label class="block text-[0.7rem] font-medium text-slate-300">Oraș</label>
+          <input id="partnerModalCityInput" type="text"
+                 class="w-full rounded-xl border border-slate-700 bg-slate-950/80 px-3 py-1.5 text-[0.8rem] text-slate-50 focus:outline-none focus:ring-1 focus:ring-sky-500" />
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="space-y-2">
+          <label class="block text-[0.7rem] font-medium text-slate-300">Telefon</label>
+          <input id="partnerModalPhoneInput" type="text"
+                 class="w-full rounded-xl border border-slate-700 bg-slate-950/80 px-3 py-1.5 text-[0.8rem] text-slate-50 focus:outline-none focus:ring-1 focus:ring-sky-500" />
+        </div>
+        <div class="space-y-2">
+          <label class="block text-[0.7rem] font-medium text-slate-300">Email</label>
+          <input id="partnerModalEmailInput" type="email"
+                 class="w-full rounded-xl border border-slate-700 bg-slate-950/80 px-3 py-1.5 text-[0.8rem] text-slate-50 focus:outline-none focus:ring-1 focus:ring-sky-500" />
+        </div>
+      </div>
+
+      <div class="space-y-2">
+        <label class="block text-[0.7rem] font-medium text-slate-300">Site partener</label>
+        <input id="partnerModalWebsiteInput" type="text"
+               class="w-full rounded-xl border border-slate-700 bg-slate-950/80 px-3 py-1.5 text-[0.8rem] text-slate-50 focus:outline-none focus:ring-1 focus:ring-sky-500" />
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="space-y-2">
+          <label class="block text-[0.7rem] font-medium text-slate-300">Comision (% din rezervări)</label>
+          <input id="partnerModalCommission" type="number" min="0" max="100" step="1"
+                 class="w-full rounded-xl border border-slate-700 bg-slate-950/80 px-3 py-1.5 text-[0.8rem] text-slate-50 focus:outline-none focus:ring-1 focus:ring-sky-500" />
+        </div>
+        <div class="space-y-2">
+          <label class="block text-[0.7rem] font-medium text-slate-300">Status</label>
+          <select id="partnerModalStatus"
+                  class="w-full rounded-full border border-slate-700 bg-slate-950/80 px-3 py-1.5 text-[0.8rem] text-slate-50 focus:outline-none focus:ring-1 focus:ring-sky-500">
+            <option value="activ">Activ</option>
+            <option value="inactiv">Inactiv</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="rounded-2xl border border-slate-800 bg-slate-950/80 p-3 space-y-3">
+        <div class="flex items-center justify-between">
+          <div>
+            <div class="text-[0.7rem] font-semibold tracking-[0.16em] uppercase text-slate-400">Cont portal partener</div>
+            <div class="text-[0.75rem] text-slate-400">User & parolă pentru acces în portalul lor de rezervări.</div>
+          </div>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="space-y-2">
+            <label class="block text-[0.7rem] font-medium text-slate-300">Username</label>
+            <input id="partnerModalUsername" type="text"
+                   class="w-full rounded-xl border border-slate-700 bg-slate-950/80 px-3 py-1.5 text-[0.8rem] text-slate-50 focus:outline-none focus:ring-1 focus:ring-sky-500" />
+          </div>
+          <div class="space-y-2">
+            <label class="block text-[0.7rem] font-medium text-slate-300">Parolă</label>
+            <input id="partnerModalPassword" type="text"
+                   class="w-full rounded-xl border border-slate-700 bg-slate-950/80 px-3 py-1.5 text-[0.8rem] text-slate-50 focus:outline-none focus:ring-1 focus:ring-sky-500" />
+          </div>
+        </div>
+      </div>
+
+      <div class="flex justify-end gap-2">
+        <button type="button" data-partner-details-close
+                class="rounded-full border border-slate-700 bg-slate-900/80 px-3 py-1.5 text-[0.8rem] text-slate-100 hover:bg-slate-50 hover:text-slate-900">
+          Anulează
+        </button>
+        <button id="btnSavePartnerDetails" type="button"
+                class="rounded-full bg-slate-50 px-3 py-1.5 text-[0.8rem] font-semibold text-slate-900 shadow-soft hover:bg-white/90">
+          Salvează
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+  <div class="max-w-5xl w-full mx-4 max-h-[90vh] overflow-auto rounded-3xl border border-slate-800 bg-slate-950 shadow-soft">
+    <div class="sticky top-0 z-10 flex items-center justify-between border-b border-slate-800 bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 px-5 py-3">
+      <div id="partnerBookingsModal" class="fixed inset-0 z-40 hidden items-center justify-center bg-black/60 backdrop-blur-sm">
+  <div class="max-w-5xl w-full mx-4 max-h-[90vh] overflow-auto rounded-3xl border border-slate-800 bg-slate-950 shadow-soft">
+    <div class="sticky top-0 z-10 flex items-center justify-between border-b border-slate-800 bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 px-5 py-3">
+      <div>
+        <h2 id="partnerBookingsTitle" class="text-sm font-semibold tracking-tight text-slate-50">Rezervări alocate</h2>
+        <p class="text-[0.7rem] text-slate-400">Vezi rezervările alocate acestui partener și comisioanele corespunzătoare.</p>
+      </div>
+      <button type="button" data-partner-bookings-close
+              class="rounded-full bg-slate-900/70 px-2 py-1 text-xl leading-none text-slate-400 hover:bg-slate-800 hover:text-slate-100">
+        &times;
+      </button>
+    </div>
+    <div class="px-5 py-4 space-y-4 text-sm text-slate-100">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+        <div class="space-y-1.5">
+          <label class="block text-[0.7rem] font-medium text-slate-300">Luna (după data de preluare)</label>
+          <select id="partnerBookingsMonth"
+                  class="w-full rounded-full border border-slate-700 bg-slate-950/80 px-3 py-1.5 text-[0.8rem] text-slate-50 focus:outline-none focus:ring-1 focus:ring-sky-500">
+          </select>
+        </div>
+        <div class="space-y-1.5">
+          <label class="block text-[0.7rem] font-medium text-slate-300">An</label>
+          <select id="partnerBookingsYear"
+                  class="w-full rounded-full border border-slate-700 bg-slate-950/80 px-3 py-1.5 text-[0.8rem] text-slate-50 focus:outline-none focus:ring-1 focus:ring-sky-500">
+          </select>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+        <div class="rounded-2xl border border-slate-800 bg-slate-950/80 p-3">
+          <div class="text-[0.7rem] text-slate-400">Comision rezervări finalizate</div>
+          <div id="partnerCommFinalizate" class="mt-1 text-lg font-semibold text-emerald-300">€0</div>
+        </div>
+        <div class="rounded-2xl border border-slate-800 bg-slate-950/80 p-3">
+          <div class="text-[0.7rem] text-slate-400">Comision rezervări în curs</div>
+          <div id="partnerCommInCurs" class="mt-1 text-lg font-semibold text-sky-300">€0</div>
+        </div>
+        <div class="rounded-2xl border border-slate-800 bg-slate-950/80 p-3">
+          <div class="text-[0.7rem] text-slate-400">Comision rezervări anulate</div>
+          <div id="partnerCommAnulate" class="mt-1 text-lg font-semibold text-rose-300">€0</div>
+        </div>
+      </div>
+
+      <div class="rounded-2xl border border-slate-800 bg-slate-950/80 overflow-auto">
+        <table class="min-w-full text-xs">
+          <thead class="bg-slate-900/80 text-slate-400">
+            <tr>
+              <th class="px-3 py-2 text-left text-[0.7rem] font-semibold uppercase tracking-[0.16em]">ID rezervare</th>
+              <th class="px-3 py-2 text-left text-[0.7rem] font-semibold uppercase tracking-[0.16em]">Client</th>
+              <th class="px-3 py-2 text-left text-[0.7rem] font-semibold uppercase tracking-[0.16em]">Mașină</th>
+              <th class="px-3 py-2 text-left text-[0.7rem] font-semibold uppercase tracking-[0.16em]">Preluare</th>
+              <th class="px-3 py-2 text-left text-[0.7rem] font-semibold uppercase tracking-[0.16em]">Returnare</th>
+              <th class="px-3 py-2 text-left text-[0.7rem] font-semibold uppercase tracking-[0.16em]">Preț rezervare</th>
+              <th class="px-3 py-2 text-left text-[0.7rem] font-semibold uppercase tracking-[0.16em]">Comision Gatevion</th>
+            </tr>
+          </thead>
+          <tbody id="partnerBookingsTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal preview documente -->
+<div id="documentPreviewModal" class="fixed inset-0 hidden items-center justify-center bg-black/70 backdrop-blur-sm" style="z-index:2147483647;">
+  <div class="max-w-3xl w-full mx-4">
+    <div class="relative rounded-3xl border border-slate-800 bg-slate-950 shadow-soft p-4 space-y-3">
+      <button type="button" data-doc-preview-close
+              class="absolute right-3 top-3 rounded-full bg-slate-900/80 px-2 py-1 text-lg leading-none text-slate-300 hover:bg-slate-800 hover:text-slate-50">
+        &times;
+      </button>
+      <div class="flex items-center justify-between gap-3">
+        <div class="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">Document client</div>
+        <div class="flex items-center gap-2 text-[0.75rem] text-slate-300">
+          <button type="button" id="docPrevBtn"
+                  class="rounded-full border border-slate-700 bg-slate-900/80 px-2 py-1 hover:bg-slate-800">
+            Anterior
+          </button>
+          <button type="button" id="docNextBtn"
+                  class="rounded-full border border-slate-700 bg-slate-900/80 px-2 py-1 hover:bg-slate-800">
+            Următor
+          </button>
+        </div>
+      </div>
+      <div id="docPreviewTitle" class="text-[0.8rem] font-medium text-slate-100 truncate"></div>
+      <div class="rounded-2xl bg-slate-900/80 flex items-center justify-center overflow-hidden min-h-[240px] max-h-[70vh]">
+        <img id="docPreviewImage" src="" alt="Document client" class="max-h-[70vh] w-auto object-contain" />
+        <div id="docPreviewFallback" class="hidden text-[0.8rem] text-slate-200 text-center px-6 py-8">
+          Preview indisponibil pentru acest tip de fișier.
+          <br />
+          <a id="docPreviewDownload" href="#" class="text-sky-300 hover:text-sky-200 underline underline-offset-2">
+            Descarcă documentul
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 </body>
 </html>

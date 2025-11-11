@@ -1139,168 +1139,267 @@ const y = document.getElementById('y');
   if(y) y.textContent = new Date().getFullYear();
 
   // Booking page: hydrate summary from query params
-  if(window.location.pathname && window.location.pathname.indexOf('alegere-masina') !== -1){
-    const params = new URLSearchParams(window.location.search || '');
-    const carName = params.get('carName') || '[Nume mașină]';
-    const carAlt = params.get('carAlt') || '[Variantă / motorizare]';
-    const carPrice = params.get('carPrice') || '[preț]';
-    const segment = params.get('segment') || '';
-    const gear = params.get('gear') || '';
-    const arrLabel = params.get('arrLabel') || params.get('arr') || '';
-    const depLabel = params.get('depLabel') || params.get('dep') || '';
-    const sd = params.get('sd') || '';
-    const st = params.get('st') || '';
-    const ed = params.get('ed') || '';
-    const et = params.get('et') || '';
+if(window.location.pathname && window.location.pathname.indexOf('alegere-masina') !== -1){
+  const params = new URLSearchParams(window.location.search || '');
+  const carName = params.get('carName') || '[Nume mașină]';
+  const carAlt = params.get('carAlt') || '[Variantă / motorizare]';
+  const carPrice = params.get('carPrice') || '[preț]';
+  const segment = params.get('segment') || '';
+  const gear = params.get('gear') || '';
 
-    const fmtDate = (iso)=>{
-      if(!iso) return '';
-      const parts = iso.split('-');
-      if(parts.length!==3) return iso;
-      const [y,m,d] = parts;
-      return `${d}.${m}.${y}`;
-    };
+  const arrCode = params.get('arr') || '';
+  const depCode = params.get('dep') || '';
+  const arrLabel = params.get('arrLabel') || arrCode || '';
+  const depLabel = params.get('depLabel') || depCode || '';
 
-    const routeText = (arrLabel || '—') + (depLabel ? ` → ${depLabel}` : '');
-    const pickupText = (sd ? fmtDate(sd) : '—') + (st ? ` • ${st}` : '');
-    const returnText = (ed ? fmtDate(ed) : '—') + (et ? ` • ${et}` : '');
+  const sd = params.get('sd') || '';
+  const st = params.get('st') || '';
+  const ed = params.get('ed') || '';
+  const et = params.get('et') || '';
 
-    const setText = (id, value)=>{
-      const el = document.getElementById(id);
-      if(el && value) el.textContent = value;
-    };
+  const startIso = params.get('start') || (sd && st ? `${sd}T${st}` : '');
+  const endIso   = params.get('end') || (ed && et ? `${ed}T${et}` : '');
 
-    setText('bkCarName', carName);
-    setText('bkCarNameAlt', carAlt);
-    setText('bkCarPrice', carPrice ? `€${carPrice}` : '');
-    setText('bkSegment', segment || 'Clasă flotă');
-    setText('bkGear', gear ? (gear === 'automata' ? 'Automată' : 'Manuală') : '');
+  const fmtDate = (iso)=>{
+    if(!iso) return '';
+    const parts = iso.split('-');
+    if(parts.length!==3) return iso;
+    const [y,m,d] = parts;
+    return `${d}.${m}.${y}`;
+  };
 
-    setText('bkRoute', routeText);
-    setText('bkPickup', pickupText);
-    setText('bkReturn', returnText);
+  const routeText = (arrLabel || '—') + (depLabel ? ` → ${depLabel}` : '');
+  const pickupText = (sd ? fmtDate(sd) : '—') + (st ? ` • ${st}` : '');
+  const returnText = (ed ? fmtDate(ed) : '—') + (et ? ` • ${et}` : '');
 
-    // Build URLs based on query params
-    const baseParams = new URLSearchParams(window.location.search || '');
-    const backParams = new URLSearchParams(baseParams.toString());
-    ['carName','carAlt','carPrice','segment','gear'].forEach((k)=> backParams.delete(k));
-    const backQs = backParams.toString();
-    const backUrl = './rezultate.html' + (backQs ? `?${backQs}` : '');
+  const setText = (id, value)=>{
+    const el = document.getElementById(id);
+    if(el && value) el.textContent = value;
+  };
 
-    // Hook back-to-results button & step 1 nav
-    const backBtn = document.getElementById('backToResultsBtn');
-    if(backBtn){ backBtn.href = backUrl; }
+  setText('bkCarName', carName);
+  setText('bkCarNameAlt', carAlt);
+  setText('bkCarPrice', carPrice ? `€${carPrice}` : '');
+  setText('bkSegment', segment || 'Clasă flotă');
+  setText('bkGear', gear ? (gear === 'automata' ? 'Automată' : 'Manuală') : '');
 
-    const step1Desktop = document.querySelector('.main-nav .nav-step[data-step="1"]');
-    if(step1Desktop && step1Desktop.tagName === 'A'){ step1Desktop.href = backUrl; }
+  setText('bkRoute', routeText);
+  setText('bkPickup', pickupText);
+  setText('bkReturn', returnText);
 
-    const step1Mobile = document.querySelector('#mobileNav .mnav-step[data-step="1"]');
-    if(step1Mobile && step1Mobile.tagName === 'A'){ step1Mobile.href = backUrl; }
-
-    // Final submit: trimite datele spre pagina de mulțumire (backend-ul se va lega ulterior aici)
-    
-const bookingForm = document.getElementById('bookingForm');
-    if(bookingForm){
-
-      // Marcare vizuală pentru fișiere încărcate (CI, permis, bilet avion)
-      const uploadInputs = bookingForm.querySelectorAll('.upload-drop input[type="file"]');
-      uploadInputs.forEach((input)=>{
-        const drop = input.closest('.upload-drop');
-        if(!drop) return;
-        const main = drop.querySelector('.upload-main');
-        const hint = drop.querySelector('.upload-hint');
-        const defaultMain = main ? main.textContent : '';
-        const defaultHint = hint ? hint.textContent : '';
-
-        const syncUploadState = ()=>{
-          const hasFile = input.files && input.files.length > 0;
-          if(hasFile){
-            drop.classList.add('upload-drop--filled');
-            const fileName = input.files[0].name;
-            if(main) main.textContent = 'Fișier încărcat';
-            if(hint) hint.textContent = fileName;
-          }else{
-            drop.classList.remove('upload-drop--filled');
-            if(main) main.textContent = defaultMain || 'Alege fișier sau trage aici';
-            if(hint) hint.textContent = defaultHint || 'JPG, PNG sau PDF';
-          }
-        };
-
-        // Inițializare (în cazul în care browserul reține fișierele)
-        syncUploadState();
-
-        input.addEventListener('change', syncUploadState);
-      });
-
-      bookingForm.addEventListener('submit', (e)=>{
-
-        e.preventDefault();
-
-        // Validează toate câmpurile obligatorii, inclusiv fișierele și checkbox-ul de consimțământ
-        if(!bookingForm.checkValidity()){
-          bookingForm.reportValidity();
-          return;
-        }
-
-        const termsCheckbox = bookingForm.querySelector('input[name="agreeTerms"]');
-        if(!termsCheckbox || !termsCheckbox.checked){
-          alert('Te rugăm să confirmi că ești de acord cu Termenii & Condițiile pentru a continua.');
-          return;
-        }
-
-        const submitParams = new URLSearchParams(baseParams.toString());
-
-        const getVal = (selector)=>{
-          const el = bookingForm.querySelector(selector);
-          return el && el.value ? el.value.trim() : '';
-        };
-
-        const fullName = getVal('input[name="fullName"]');
-        const email = getVal('input[name="email"]');
-        const travelCountry = getVal('#travelCountry');
-        const flightNumber = getVal('input[name="flightNumber"]');
-
-        const phoneCountryEl = document.getElementById('phoneCountry');
-        const phoneNumberEl = document.getElementById('phoneNumber');
-        const phoneCountryVal = phoneCountryEl && phoneCountryEl.value ? phoneCountryEl.value : '';
-        let phoneNumberVal = phoneNumberEl && phoneNumberEl.value ? phoneNumberEl.value.trim() : '';
-
-        // Normalizăm numărul de telefon astfel încât în query param să ajungă doar numărul național (fără prefix)
-        if(phoneNumberVal){
-          let digits = phoneNumberVal.replace(/\D/g,'');
-          const cc = phoneCountryVal || '+40';
-          const ccDigits = cc.replace('+','');
-
-          // Accept forme de tip 00 + prefix + număr
-          while(digits.startsWith('00')){
-            digits = digits.slice(2);
-          }
-
-          // Dacă utilizatorul a introdus deja prefixul țării, îl eliminăm din zona de număr
-          if(ccDigits && digits.startsWith(ccDigits)){
-            digits = digits.slice(ccDigits.length);
-          }
-
-          // Eliminăm un 0 inițial de tip prefix național (ex: 07xx -> 7xx)
-          if(digits.startsWith('0')){
-            digits = digits.slice(1);
-          }
-
-          phoneNumberVal = digits;
-        }
-
-        if(fullName) submitParams.set('fullName', fullName);
-        if(email) submitParams.set('email', email);
-        if(travelCountry) submitParams.set('travelCountry', travelCountry);
-        if(flightNumber) submitParams.set('flightNumber', flightNumber);
-        if(phoneCountryVal) submitParams.set('phoneCountry', phoneCountryVal);
-        if(phoneNumberVal) submitParams.set('phoneNumber', phoneNumberVal);
-
-        const qs = submitParams.toString();
-        // TODO: aici vom trimite datele către backend / API când baza de date este implementată
-        window.location.href = './multumire.html' + (qs ? `?${qs}` : '');
-      });
+  // Populează hidden-urile din formular cu metadatele rezervării (folosite în admin)
+  const setValue = (id, value)=>{
+    const el = document.getElementById(id);
+    if(el != null && value != null){
+      el.value = value;
     }
+  };
+
+  setValue('pickupAirportCode', arrCode);
+  setValue('pickupAirportName', arrLabel);
+  setValue('dropoffAirportCode', depCode);
+  setValue('dropoffAirportName', depLabel);
+
+  setValue('pickupDate', sd);
+  setValue('pickupTime', st);
+  setValue('returnDate', ed);
+  setValue('returnTime', et);
+
+  setValue('rentalStartIso', startIso);
+  setValue('rentalEndIso', endIso);
+
+  setValue('metaCarName', carName);
+  setValue('metaCarVariant', carAlt);
+  setValue('metaCarSegment', segment);
+  setValue('metaCarGearbox', gear);
+  setValue('metaTotalPrice', carPrice);
+  // metaCurrency și metaStatus au deja valori default din HTML (EUR / PENDING)
+
+  // Build URLs based on query params
+  const baseParams = new URLSearchParams(window.location.search || '');
+  const backParams = new URLSearchParams(baseParams.toString());
+  ['carName','carAlt','carPrice','segment','gear'].forEach((k)=> backParams.delete(k));
+  const backQs = backParams.toString();
+  const backUrl = './rezultate.html' + (backQs ? `?${backQs}` : '');
+
+  // Hook back-to-results button & step 1 nav
+  const backBtn = document.getElementById('backToResultsBtn');
+  if(backBtn){ backBtn.href = backUrl; }
+
+  const step1Desktop = document.querySelector('.main-nav .nav-step[data-step="1"]');
+  if(step1Desktop && step1Desktop.tagName === 'A'){ step1Desktop.href = backUrl; }
+
+  const step1Mobile = document.querySelector('#mobileNav .mnav-step[data-step="1"]');
+  if(step1Mobile && step1Mobile.tagName === 'A'){ step1Mobile.href = backUrl; }
+
+  // Final submit: trimite datele și le salvează local pentru pagina de admin
+  const bookingForm = document.getElementById('bookingForm');
+  if(bookingForm){
+
+    // Marcare vizuală pentru fișiere încărcate (CI, permis, bilet avion)
+    const uploadInputs = bookingForm.querySelectorAll('.upload-drop input[type="file"]');
+    uploadInputs.forEach((input)=>{
+      const drop = input.closest('.upload-drop');
+      if(!drop) return;
+      const main = drop.querySelector('.upload-main');
+      const hint = drop.querySelector('.upload-hint');
+      const defaultMain = main ? main.textContent : '';
+      const defaultHint = hint ? hint.textContent : '';
+
+      const syncUploadState = ()=>{
+        const hasFile = input.files && input.files.length > 0;
+        if(hasFile){
+          drop.classList.add('upload-drop--filled');
+          const fileName = input.files[0].name;
+          if(main) main.textContent = 'Fișier încărcat';
+          if(hint) hint.textContent = fileName;
+        }else{
+          drop.classList.remove('upload-drop--filled');
+          if(main) main.textContent = defaultMain || 'Alege fișier sau trage aici';
+          if(hint) hint.textContent = defaultHint || 'JPG, PNG sau PDF';
+        }
+      };
+
+      // Inițializare (în cazul în care browserul reține fișierele)
+      syncUploadState();
+
+      input.addEventListener('change', syncUploadState);
+    });
+
+    bookingForm.addEventListener('submit', (e)=>{
+
+      e.preventDefault();
+
+      // Validează toate câmpurile obligatorii, inclusiv fișierele și checkbox-ul de consimțământ
+      if(!bookingForm.checkValidity()){
+        bookingForm.reportValidity();
+        return;
+      }
+
+      const termsCheckbox = bookingForm.querySelector('input[name="agreeTerms"]');
+      if(!termsCheckbox || !termsCheckbox.checked){
+        alert('Te rugăm să confirmi că ești de acord cu Termenii & Condițiile pentru a continua.');
+        return;
+      }
+
+      const submitParams = new URLSearchParams(baseParams.toString());
+
+      const getVal = (selector)=>{
+        const el = bookingForm.querySelector(selector);
+        return el && el.value ? el.value.trim() : '';
+      };
+
+      const fullName = getVal('input[name="fullName"]');
+      const email = getVal('input[name="email"]');
+      const travelCountry = getVal('#travelCountry');
+      const flightNumber = getVal('input[name="flightNumber"]');
+
+      const phoneCountryEl = document.getElementById('phoneCountry');
+      const phoneNumberEl = document.getElementById('phoneNumber');
+      const phoneCountryVal = phoneCountryEl && phoneCountryEl.value ? phoneCountryEl.value : '';
+      let phoneNumberVal = phoneNumberEl && phoneNumberEl.value ? phoneNumberEl.value.trim() : '';
+
+      // Normalizăm numărul de telefon astfel încât în query param să ajungă doar numărul național (fără prefix)
+      if(phoneNumberVal){
+        let digits = phoneNumberVal.replace(/\D/g,'');
+        const cc = phoneCountryVal || '+40';
+        const ccDigits = cc.replace('+','');
+
+        // Accept forme de tip 00 + prefix + număr
+        while(digits.startsWith('00')){
+          digits = digits.slice(2);
+        }
+
+        // Dacă utilizatorul a introdus deja prefixul țării, îl eliminăm din zona de număr
+        if(ccDigits && digits.startsWith(ccDigits)){
+          digits = digits.slice(ccDigits.length);
+        }
+
+        // Eliminăm un 0 inițial de tip prefix național (ex: 07xx -> 7xx)
+        if(digits.startsWith('0')){
+          digits = digits.slice(1);
+        }
+
+        phoneNumberVal = digits;
+      }
+
+      if(fullName) submitParams.set('fullName', fullName);
+      if(email) submitParams.set('email', email);
+      if(travelCountry) submitParams.set('travelCountry', travelCountry);
+      if(flightNumber) submitParams.set('flightNumber', flightNumber);
+      if(phoneCountryVal) submitParams.set('phoneCountry', phoneCountryVal);
+      if(phoneNumberVal) submitParams.set('phoneNumber', phoneNumberVal);
+
+      // Construim obiectul de rezervare care va fi vizibil în pagina de admin
+      const reservation = {
+        id: 'RES-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2,7).toUpperCase(),
+        createdAt: new Date().toISOString(),
+
+        // Trip & mașină
+        pickupAirportCode: document.getElementById('pickupAirportCode')?.value || arrCode,
+        pickupAirportName: document.getElementById('pickupAirportName')?.value || arrLabel,
+        dropoffAirportCode: document.getElementById('dropoffAirportCode')?.value || depCode,
+        dropoffAirportName: document.getElementById('dropoffAirportName')?.value || depLabel,
+        pickupDate: document.getElementById('pickupDate')?.value || sd,
+        pickupTime: document.getElementById('pickupTime')?.value || st,
+        returnDate: document.getElementById('returnDate')?.value || ed,
+        returnTime: document.getElementById('returnTime')?.value || et,
+        rentalStartIso: document.getElementById('rentalStartIso')?.value || startIso,
+        rentalEndIso: document.getElementById('rentalEndIso')?.value || endIso,
+
+        carName: document.getElementById('metaCarName')?.value || carName,
+        carVariant: document.getElementById('metaCarVariant')?.value || carAlt,
+        carSegment: document.getElementById('metaCarSegment')?.value || segment,
+        carGearbox: document.getElementById('metaCarGearbox')?.value || gear,
+        totalPrice: document.getElementById('metaTotalPrice')?.value || carPrice,
+        currency: document.getElementById('metaCurrency')?.value || 'EUR',
+        status: document.getElementById('metaStatus')?.value || 'PENDING',
+
+        // Date client
+        fullName,
+        email,
+        phoneCountry: phoneCountryVal,
+        phoneNumber: phoneNumberVal,
+        travelCountry,
+        flightNumber,
+        birthday: getVal('input[name="birthday"]'),
+        birthCountry: getVal('select[name="birthCountry"]'),
+        documentNumber: getVal('input[name="documentNumber"]'),
+        documentIssuer: getVal('input[name="documentIssuer"]'),
+        documentExpiry: getVal('input[name="documentExpiry"]'),
+        extraNotes: getVal('textarea[name="extraNotes"]'),
+
+        agreeTerms: !!termsCheckbox && termsCheckbox.checked,
+        agreeMarketing: !!bookingForm.querySelector('input[name="agreeMarketing"]:checked'),
+
+        // Doar numele fișierelor, nu conținutul
+        files: {
+          idFront: bookingForm.querySelector('#idFront')?.files?.[0]?.name || '',
+          idBack: bookingForm.querySelector('#idBack')?.files?.[0]?.name || '',
+          licenseFront: bookingForm.querySelector('#licenseFront')?.files?.[0]?.name || '',
+          licenseBack: bookingForm.querySelector('#licenseBack')?.files?.[0]?.name || '',
+          flightTicket: bookingForm.querySelector('#flightTicket')?.files?.[0]?.name || ''
+        }
+      };
+
+      // Salvăm rezervarea local; admin.html va citi din `gvReservations`
+      try{
+        if(window.localStorage){
+          const raw = localStorage.getItem('gvReservations');
+          const list = raw ? JSON.parse(raw) : [];
+          list.push(reservation);
+          localStorage.setItem('gvReservations', JSON.stringify(list));
+        }
+      }catch(_e){
+        // nu blocăm fluxul dacă localStorage nu e disponibil
+      }
+
+      const qs = submitParams.toString();
+      window.location.href = './multumire.html' + (qs ? `?${qs}` : '');
+    });
+  }
+}
+
 const phoneCountry = document.getElementById('phoneCountry');
     const phoneInput = document.getElementById('phoneNumber');
 

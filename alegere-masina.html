@@ -14,7 +14,15 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
-      theme: { extend: { colors: { primary: '#0f172a' }, fontFamily: { sans: ['Manrope','Inter','system-ui','Segoe UI','Roboto','Helvetica','Arial','sans-serif'] }, boxShadow:{ soft:'0 10px 30px rgba(0,0,0,.08)' } } }
+      theme: {
+        extend: {
+          colors: { primary: '#0f172a' },
+          fontFamily: {
+            sans: ['Manrope','Inter','system-ui','Segoe UI','Roboto','Helvetica','Arial','sans-serif']
+          },
+          boxShadow:{ soft:'0 10px 30px rgba(0,0,0,.08)' }
+        }
+      }
     }
   </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -162,6 +170,26 @@
           </header>
 
           <form id="bookingForm" class="booking-form-body" action="#" method="post" enctype="multipart/form-data" novalidate>
+
+            <!-- Hidden booking metadata – completate automat din query params (app.js) -->
+            <input type="hidden" name="pickupAirportCode" id="pickupAirportCode" />
+            <input type="hidden" name="pickupAirportName" id="pickupAirportName" />
+            <input type="hidden" name="dropoffAirportCode" id="dropoffAirportCode" />
+            <input type="hidden" name="dropoffAirportName" id="dropoffAirportName" />
+            <input type="hidden" name="pickupDate" id="pickupDate" />
+            <input type="hidden" name="pickupTime" id="pickupTime" />
+            <input type="hidden" name="returnDate" id="returnDate" />
+            <input type="hidden" name="returnTime" id="returnTime" />
+            <input type="hidden" name="rentalStartIso" id="rentalStartIso" />
+            <input type="hidden" name="rentalEndIso" id="rentalEndIso" />
+            <input type="hidden" name="carName" id="metaCarName" />
+            <input type="hidden" name="carVariant" id="metaCarVariant" />
+            <input type="hidden" name="carSegment" id="metaCarSegment" />
+            <input type="hidden" name="carGearbox" id="metaCarGearbox" />
+            <input type="hidden" name="totalPrice" id="metaTotalPrice" />
+            <input type="hidden" name="currency" id="metaCurrency" value="EUR" />
+            <input type="hidden" name="status" id="metaStatus" value="PENDING" />
+
             <!-- Date personale -->
             <div class="form-section">
               <h3 class="form-section-title">Date de identificare</h3>
@@ -199,8 +227,6 @@
                         <option value="+387">🇧🇦 Bosnia și Herțegovina +387</option>
                         <option value="+55">🇧🇷 Brazilia +55</option>
                         <option value="+359">🇧🇬 Bulgaria +359</option>
-                        <option value="+855">🇰🇭 Cambodgia +855</option>
-                        <option value="+237">🇨🇲 Camerun +237</option>
                         <option value="+1">🇨🇦 Canada +1</option>
                         <option value="+56">🇨🇱 Chile +56</option>
                         <option value="+86">🇨🇳 China +86</option>
@@ -211,7 +237,6 @@
                         <option value="+420">🇨🇿 Cehia +420</option>
                         <option value="+45">🇩🇰 Danemarca +45</option>
                         <option value="+20">🇪🇬 Egipt +20</option>
-                        <option value="+503">🇸🇻 El Salvador +503</option>
                         <option value="+372">🇪🇪 Estonia +372</option>
                         <option value="+251">🇪🇹 Etiopia +251</option>
                         <option value="+358">🇫🇮 Finlanda +358</option>
@@ -219,10 +244,6 @@
                         <option value="+995">🇬🇪 Georgia +995</option>
                         <option value="+49">🇩🇪 Germania +49</option>
                         <option value="+30">🇬🇷 Grecia +30</option>
-                        <option value="+502">🇬🇹 Guatemala +502</option>
-                        <option value="+509">🇭🇹 Haiti +509</option>
-                        <option value="+504">🇭🇳 Honduras +504</option>
-                        <option value="+852">🇭🇰 Hong Kong +852</option>
                         <option value="+36">🇭🇺 Ungaria +36</option>
                         <option value="+354">🇮🇸 Islanda +354</option>
                         <option value="+91">🇮🇳 India +91</option>
@@ -233,32 +254,19 @@
                         <option value="+81">🇯🇵 Japonia +81</option>
                         <option value="+962">🇯🇴 Iordania +962</option>
                         <option value="+7">🇰🇿 Kazahstan +7</option>
-                        <option value="+254">🇰🇪 Kenya +254</option>
                         <option value="+82">🇰🇷 Coreea de Sud +82</option>
-                        <option value="+965">🇰🇼 Kuweit +965</option>
-                        <option value="+996">🇰🇬 Kârgâzstan +996</option>
                         <option value="+371">🇱🇻 Letonia +371</option>
-                        <option value="+961">🇱🇧 Liban +961</option>
-                        <option value="+218">🇱🇾 Libia +218</option>
-                        <option value="+423">🇱🇮 Liechtenstein +423</option>
                         <option value="+370">🇱🇹 Lituania +370</option>
                         <option value="+352">🇱🇺 Luxemburg +352</option>
-                        <option value="+853">🇲🇴 Macao +853</option>
-                        <option value="+389">🇲🇰 Macedonia de Nord +389</option>
-                        <option value="+261">🇲🇬 Madagascar +261</option>
-                        <option value="+60">🇲🇾 Malaysia +60</option>
                         <option value="+356">🇲🇹 Malta +356</option>
                         <option value="+52">🇲🇽 Mexic +52</option>
                         <option value="+373">🇲🇩 Moldova +373</option>
                         <option value="+377">🇲🇨 Monaco +377</option>
-                        <option value="+212">🇲🇦 Maroc +212</option>
                         <option value="+31">🇳🇱 Olanda +31</option>
                         <option value="+64">🇳🇿 Noua Zeelandă +64</option>
-                        <option value="+234">🇳🇬 Nigeria +234</option>
                         <option value="+47">🇳🇴 Norvegia +47</option>
                         <option value="+92">🇵🇰 Pakistan +92</option>
                         <option value="+507">🇵🇦 Panama +507</option>
-                        <option value="+595">🇵🇾 Paraguay +595</option>
                         <option value="+51">🇵🇪 Peru +51</option>
                         <option value="+63">🇵🇭 Filipine +63</option>
                         <option value="+48">🇵🇱 Polonia +48</option>
@@ -266,14 +274,12 @@
                         <option value="+974">🇶🇦 Qatar +974</option>
                         <option value="+40" selected>🇷🇴 România +40</option>
                         <option value="+7">🇷🇺 Rusia +7</option>
-                        <option value="+966">🇸🇦 Arabia Saudită +966</option>
                         <option value="+381">🇷🇸 Serbia +381</option>
                         <option value="+65">🇸🇬 Singapore +65</option>
                         <option value="+421">🇸🇰 Slovacia +421</option>
                         <option value="+386">🇸🇮 Slovenia +386</option>
                         <option value="+27">🇿🇦 Africa de Sud +27</option>
                         <option value="+34">🇪🇸 Spania +34</option>
-                        <option value="+94">🇱🇰 Sri Lanka +94</option>
                         <option value="+46">🇸🇪 Suedia +46</option>
                         <option value="+41">🇨🇭 Elveția +41</option>
                         <option value="+886">🇹🇼 Taiwan +886</option>
@@ -360,24 +366,23 @@
     <option value="Bulgaria">🇧🇬 Bulgaria</option>
     <option value="Burkina Faso">🇧🇫 Burkina Faso</option>
     <option value="Burundi">🇧🇮 Burundi</option>
-    <option value="Cabo Verde">🇨🇻 Cabo Verde</option>
     <option value="Cambodia">🇰🇭 Cambodia</option>
     <option value="Cameroon">🇨🇲 Cameroon</option>
     <option value="Canada">🇨🇦 Canada</option>
+    <option value="Cape Verde">🇨🇻 Cape Verde</option>
     <option value="Central African Republic">🇨🇫 Central African Republic</option>
     <option value="Chad">🇹🇩 Chad</option>
     <option value="Chile">🇨🇱 Chile</option>
     <option value="China">🇨🇳 China</option>
     <option value="Colombia">🇨🇴 Colombia</option>
     <option value="Comoros">🇰🇲 Comoros</option>
-    <option value="Congo, Democratic Republic of the">🇨🇩 Congo, Democratic Republic of the</option>
-    <option value="Congo, Republic of the">🇨🇬 Congo, Republic of the</option>
+    <option value="Congo (Congo-Brazzaville)">🇨🇬 Congo (Congo-Brazzaville)</option>
     <option value="Costa Rica">🇨🇷 Costa Rica</option>
     <option value="Croatia">🇭🇷 Croatia</option>
     <option value="Cuba">🇨🇺 Cuba</option>
     <option value="Cyprus">🇨🇾 Cyprus</option>
     <option value="Czech Republic">🇨🇿 Czech Republic</option>
-    <option value="Côte d’Ivoire">🇨🇮 Côte d’Ivoire</option>
+    <option value="Democratic Republic of the Congo">🇨🇩 Democratic Republic of the Congo</option>
     <option value="Denmark">🇩🇰 Denmark</option>
     <option value="Djibouti">🇩🇯 Djibouti</option>
     <option value="Dominica">🇩🇲 Dominica</option>
@@ -388,7 +393,6 @@
     <option value="Equatorial Guinea">🇬🇶 Equatorial Guinea</option>
     <option value="Eritrea">🇪🇷 Eritrea</option>
     <option value="Estonia">🇪🇪 Estonia</option>
-    <option value="Eswatini">🇸🇿 Eswatini</option>
     <option value="Ethiopia">🇪🇹 Ethiopia</option>
     <option value="Fiji">🇫🇯 Fiji</option>
     <option value="Finland">🇫🇮 Finland</option>
@@ -421,9 +425,6 @@
     <option value="Kazakhstan">🇰🇿 Kazakhstan</option>
     <option value="Kenya">🇰🇪 Kenya</option>
     <option value="Kiribati">🇰🇮 Kiribati</option>
-    <option value="Korea, North">🇰🇵 Korea, North</option>
-    <option value="Korea, South">🇰🇷 Korea, South</option>
-    <option value="Kosovo">🇽🇰 Kosovo</option>
     <option value="Kuwait">🇰🇼 Kuwait</option>
     <option value="Kyrgyzstan">🇰🇬 Kyrgyzstan</option>
     <option value="Laos">🇱🇦 Laos</option>
@@ -452,7 +453,7 @@
     <option value="Montenegro">🇲🇪 Montenegro</option>
     <option value="Morocco">🇲🇦 Morocco</option>
     <option value="Mozambique">🇲🇿 Mozambique</option>
-    <option value="Myanmar">🇲🇲 Myanmar</option>
+    <option value="Myanmar (Burma)">🇲🇲 Myanmar (Burma)</option>
     <option value="Namibia">🇳🇦 Namibia</option>
     <option value="Nauru">🇳🇷 Nauru</option>
     <option value="Nepal">🇳🇵 Nepal</option>
@@ -461,11 +462,13 @@
     <option value="Nicaragua">🇳🇮 Nicaragua</option>
     <option value="Niger">🇳🇪 Niger</option>
     <option value="Nigeria">🇳🇬 Nigeria</option>
+    <option value="North Korea">🇰🇵 North Korea</option>
     <option value="North Macedonia">🇲🇰 North Macedonia</option>
     <option value="Norway">🇳🇴 Norway</option>
     <option value="Oman">🇴🇲 Oman</option>
     <option value="Pakistan">🇵🇰 Pakistan</option>
     <option value="Palau">🇵🇼 Palau</option>
+    <option value="Palestine">🇵🇸 Palestine</option>
     <option value="Panama">🇵🇦 Panama</option>
     <option value="Papua New Guinea">🇵🇬 Papua New Guinea</option>
     <option value="Paraguay">🇵🇾 Paraguay</option>
@@ -494,6 +497,7 @@
     <option value="Solomon Islands">🇸🇧 Solomon Islands</option>
     <option value="Somalia">🇸🇴 Somalia</option>
     <option value="South Africa">🇿🇦 South Africa</option>
+    <option value="South Korea">🇰🇷 South Korea</option>
     <option value="South Sudan">🇸🇸 South Sudan</option>
     <option value="Spain">🇪🇸 Spain</option>
     <option value="Sri Lanka">🇱🇰 Sri Lanka</option>
@@ -639,10 +643,13 @@
           <g>
             <circle cx="16" cy="16" r="12" fill="#0f172a" fill-opacity="0.18"></circle>
             <path d="M16 8c-4.4 0-8 3.6-8 8s3.6 8 8 8c3 0 5.7-1.7 7.1-4.3l-2.9-1.2c-.8 1.5-2.3 2.5-4.2 2.5-2.5 0-4.5-2-4.5-4.5s2-4.5 4.5-4.5c1.2 0 2.3.5 3.1 1.2H16v3h7.5c.1-.4.1-.8.1-1.3 0-4.4-3.6-8-7.6-8z" fill="#0f172a"></path>
-            <text x="36" y="22" font-family="Manrope, Inter, Segoe UI, Roboto, Arial, sans-serif" font-weight="700" font-size="16" fill="#e5e7eb" letter-spacing=".5">Gatevion</text>
+            <text x="36" y="22" font-family="Manrope, Inter, Segoe UI, Roboto, Arial, sans-serif" font-weight="700" font-size="16" fill="#0f172a" letter-spacing=".5">Gatevion</text>
           </g>
         </svg>
-        <p class="mt-3 text-sm text-slate-300">Broker premium de închirieri auto, cu solicitări PENDING și confirmare directă de la parteneri.</p>
+      </div>
+      <div class="text-sm text-slate-500">
+        <p>Gatevion conectează călătorii care ajung pe aeroport cu firme locale de rent-a-car, într-un mod simplu, direct și sigur.</p>
+        <p class="mt-2">Fără comisioane ascunse. Fără garanții blocate pe card. Doar rezervări cu solicitări PENDING și confirmare directă de la parteneri.</p>
       </div>
       <div>
         <h4 class="font-semibold text-slate-100">Legal</h4>
@@ -656,7 +663,7 @@
         <h4 class="font-semibold text-slate-100">Asistență</h4>
         <ul class="mt-3 space-y-2 text-slate-400">
           <li><a href="mailto:hello@gatevion.ro" class="hover:text-slate-100">hello@gatevion.ro</a></li>
-          <li><a href="tel:+40" class="hover:text-slate-100">+40 ...</a></li>
+          <li><a href="tel:+40" class="hover:text-slate-100">+40 .</a></li>
         </ul>
       </div>
       <div>
