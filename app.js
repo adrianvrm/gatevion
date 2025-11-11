@@ -1689,10 +1689,6 @@ const phoneCountry = document.getElementById('phoneCountry');
     if(email) setText('tyEmail', email);
     if(phoneDisplay) setText('tyPhone', phoneDisplay);
   }
-
-
-  }
-  }
 });
 
 document.addEventListener('DOMContentLoaded', () => {
